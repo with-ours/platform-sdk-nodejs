@@ -1,12 +1,12 @@
 {
-  "name": "ours-privacy-platform",
+  "name": "@oursprivacy/platform-sdk",
   "version": "0.0.1",
   "description": "The official TypeScript library for the Ours Privacy Platform API",
-  "author": "Ours Privacy Platform <>",
+  "author": "Ours Privacy Platform <support@oursprivacy.com>",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "type": "commonjs",
-  "repository": "github:stainless-sdks/ours-privacy-platform-typescript",
+  "repository": "github:with-ours/platform-sdk-nodejs",
   "license": "Apache-2.0",
   "packageManager": "pnpm@10.27.0",
   "files": [

@@ -5,8 +5,8 @@
   "compilerOptions": {
     "rootDir": "./dist/src",
     "paths": {
-      "ours-privacy-platform/*": ["./dist/src/*"],
-      "ours-privacy-platform": ["./dist/src/index.ts"]
+      "@oursprivacy/platform-sdk/*": ["./dist/src/*"],
+      "@oursprivacy/platform-sdk": ["./dist/src/index.ts"]
     },
     "noEmit": false,
     "declaration": true,
