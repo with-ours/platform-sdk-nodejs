@@ -1,5 +1,9 @@
 import { inspect } from 'node:util';
-import { buildHeaders, type HeadersLike, type NullableHeaders } from 'ours-privacy-platform/internal/headers';
+import {
+  buildHeaders,
+  type HeadersLike,
+  type NullableHeaders,
+} from '@oursprivacy/platform-sdk/internal/headers';
 
 function inspectNullableHeaders(headers: NullableHeaders) {
   return `NullableHeaders {${[

@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { OursPrivacyPlatform } from 'ours-privacy-platform';
+import { OursPrivacyPlatform } from '@oursprivacy/platform-sdk';
 
 const { stringifyQuery } = OursPrivacyPlatform.prototype as any;
 

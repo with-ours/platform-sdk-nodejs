@@ -1,16 +1,15 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import OursPrivacyPlatform from 'ours-privacy-platform';
+import OursPrivacyPlatform from '@oursprivacy/platform-sdk';
 
 const client = new OursPrivacyPlatform({
   apiKey: 'My API Key',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource allowedEvents', () => {
-  // Mock server tests are disabled
-  test.skip('create', async () => {
-    const responsePromise = client.rest.v1.allowedEvents.create({});
+describe('resource globalDispatchCenters', () => {
+  test('create', async () => {
+    const responsePromise = client.globalDispatchCenters.create({});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -20,9 +19,8 @@ describe('resource allowedEvents', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Mock server tests are disabled
-  test.skip('retrieve', async () => {
-    const responsePromise = client.rest.v1.allowedEvents.retrieve('id');
+  test('retrieve', async () => {
+    const responsePromise = client.globalDispatchCenters.retrieve('id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -32,9 +30,8 @@ describe('resource allowedEvents', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Mock server tests are disabled
-  test.skip('list', async () => {
-    const responsePromise = client.rest.v1.allowedEvents.list();
+  test('update', async () => {
+    const responsePromise = client.globalDispatchCenters.update('id', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -44,9 +41,19 @@ describe('resource allowedEvents', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Mock server tests are disabled
-  test.skip('delete', async () => {
-    const responsePromise = client.rest.v1.allowedEvents.delete('id');
+  test('list', async () => {
+    const responsePromise = client.globalDispatchCenters.list();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('delete', async () => {
+    const responsePromise = client.globalDispatchCenters.delete('id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

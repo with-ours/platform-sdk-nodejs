@@ -16,7 +16,73 @@ import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { Rest } from './resources/rest/rest';
+import {
+  AllowedEventCreateParams,
+  AllowedEventCreateResponse,
+  AllowedEventDeleteResponse,
+  AllowedEventListResponse,
+  AllowedEventRetrieveResponse,
+  AllowedEvents,
+} from './resources/allowed-events';
+import {
+  ConsentSettingCreateParams,
+  ConsentSettingCreateResponse,
+  ConsentSettingDeleteResponse,
+  ConsentSettingListResponse,
+  ConsentSettingRetrieveResponse,
+  ConsentSettingUpdateParams,
+  ConsentSettingUpdateResponse,
+  ConsentSettings,
+} from './resources/consent-settings';
+import {
+  DestinationCreateParams,
+  DestinationCreateResponse,
+  DestinationDeleteResponse,
+  DestinationListResponse,
+  DestinationRetrieveResponse,
+  DestinationUpdateParams,
+  DestinationUpdateResponse,
+  Destinations,
+} from './resources/destinations';
+import {
+  GlobalDispatchCenterCreateParams,
+  GlobalDispatchCenterCreateResponse,
+  GlobalDispatchCenterDeleteResponse,
+  GlobalDispatchCenterListResponse,
+  GlobalDispatchCenterRetrieveResponse,
+  GlobalDispatchCenterUpdateParams,
+  GlobalDispatchCenterUpdateResponse,
+  GlobalDispatchCenters,
+} from './resources/global-dispatch-centers';
+import {
+  ReplaySettingCreateParams,
+  ReplaySettingCreateResponse,
+  ReplaySettingDeleteResponse,
+  ReplaySettingListResponse,
+  ReplaySettingRetrieveResponse,
+  ReplaySettingUpdateParams,
+  ReplaySettingUpdateResponse,
+  ReplaySettings,
+} from './resources/replay-settings';
+import {
+  SourceCreateParams,
+  SourceCreateResponse,
+  SourceDeleteResponse,
+  SourceListResponse,
+  SourceRetrieveResponse,
+  SourceUpdateParams,
+  SourceUpdateResponse,
+  Sources,
+} from './resources/sources';
+import {
+  VersionCreateParams,
+  VersionCreateResponse,
+  VersionListResponse,
+  VersionRetrieveResponse,
+  VersionUpdateParams,
+  VersionUpdateResponse,
+  Versions,
+} from './resources/versions';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -32,7 +98,7 @@ import { isEmptyObj } from './internal/utils/values';
 
 export interface ClientOptions {
   /**
-   * Clerk Organization API key
+   * Defaults to process.env['OURS_PRIVACY_API_KEY'].
    */
   apiKey?: string | undefined;
 
@@ -126,7 +192,7 @@ export class OursPrivacyPlatform {
   /**
    * API Client for interfacing with the Ours Privacy Platform API.
    *
-   * @param {string | undefined} [opts.apiKey=process.env['OURS_PRIVACY_PLATFORM_API_KEY'] ?? undefined]
+   * @param {string | undefined} [opts.apiKey=process.env['OURS_PRIVACY_API_KEY'] ?? undefined]
    * @param {string} [opts.baseURL=process.env['OURS_PRIVACY_PLATFORM_BASE_URL'] ?? https://app.oursprivacy.com] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
@@ -137,12 +203,12 @@ export class OursPrivacyPlatform {
    */
   constructor({
     baseURL = readEnv('OURS_PRIVACY_PLATFORM_BASE_URL'),
-    apiKey = readEnv('OURS_PRIVACY_PLATFORM_API_KEY'),
+    apiKey = readEnv('OURS_PRIVACY_API_KEY'),
     ...opts
   }: ClientOptions = {}) {
     if (apiKey === undefined) {
       throw new Errors.OursPrivacyPlatformError(
-        "The OURS_PRIVACY_PLATFORM_API_KEY environment variable is missing or empty; either provide it, or instantiate the OursPrivacyPlatform client with an apiKey option, like new OursPrivacyPlatform({ apiKey: 'My API Key' }).",
+        "The OURS_PRIVACY_API_KEY environment variable is missing or empty; either provide it, or instantiate the OursPrivacyPlatform client with an apiKey option, like new OursPrivacyPlatform({ apiKey: 'My API Key' }).",
       );
     }
 
@@ -729,13 +795,97 @@ export class OursPrivacyPlatform {
 
   static toFile = Uploads.toFile;
 
-  rest: API.Rest = new API.Rest(this);
+  destinations: API.Destinations = new API.Destinations(this);
+  sources: API.Sources = new API.Sources(this);
+  allowedEvents: API.AllowedEvents = new API.AllowedEvents(this);
+  consentSettings: API.ConsentSettings = new API.ConsentSettings(this);
+  globalDispatchCenters: API.GlobalDispatchCenters = new API.GlobalDispatchCenters(this);
+  replaySettings: API.ReplaySettings = new API.ReplaySettings(this);
+  versions: API.Versions = new API.Versions(this);
 }
 
-OursPrivacyPlatform.Rest = Rest;
+OursPrivacyPlatform.Destinations = Destinations;
+OursPrivacyPlatform.Sources = Sources;
+OursPrivacyPlatform.AllowedEvents = AllowedEvents;
+OursPrivacyPlatform.ConsentSettings = ConsentSettings;
+OursPrivacyPlatform.GlobalDispatchCenters = GlobalDispatchCenters;
+OursPrivacyPlatform.ReplaySettings = ReplaySettings;
+OursPrivacyPlatform.Versions = Versions;
 
 export declare namespace OursPrivacyPlatform {
   export type RequestOptions = Opts.RequestOptions;
 
-  export { Rest as Rest };
+  export {
+    Destinations as Destinations,
+    type DestinationCreateResponse as DestinationCreateResponse,
+    type DestinationRetrieveResponse as DestinationRetrieveResponse,
+    type DestinationUpdateResponse as DestinationUpdateResponse,
+    type DestinationListResponse as DestinationListResponse,
+    type DestinationDeleteResponse as DestinationDeleteResponse,
+    type DestinationCreateParams as DestinationCreateParams,
+    type DestinationUpdateParams as DestinationUpdateParams,
+  };
+
+  export {
+    Sources as Sources,
+    type SourceCreateResponse as SourceCreateResponse,
+    type SourceRetrieveResponse as SourceRetrieveResponse,
+    type SourceUpdateResponse as SourceUpdateResponse,
+    type SourceListResponse as SourceListResponse,
+    type SourceDeleteResponse as SourceDeleteResponse,
+    type SourceCreateParams as SourceCreateParams,
+    type SourceUpdateParams as SourceUpdateParams,
+  };
+
+  export {
+    AllowedEvents as AllowedEvents,
+    type AllowedEventCreateResponse as AllowedEventCreateResponse,
+    type AllowedEventRetrieveResponse as AllowedEventRetrieveResponse,
+    type AllowedEventListResponse as AllowedEventListResponse,
+    type AllowedEventDeleteResponse as AllowedEventDeleteResponse,
+    type AllowedEventCreateParams as AllowedEventCreateParams,
+  };
+
+  export {
+    ConsentSettings as ConsentSettings,
+    type ConsentSettingCreateResponse as ConsentSettingCreateResponse,
+    type ConsentSettingRetrieveResponse as ConsentSettingRetrieveResponse,
+    type ConsentSettingUpdateResponse as ConsentSettingUpdateResponse,
+    type ConsentSettingListResponse as ConsentSettingListResponse,
+    type ConsentSettingDeleteResponse as ConsentSettingDeleteResponse,
+    type ConsentSettingCreateParams as ConsentSettingCreateParams,
+    type ConsentSettingUpdateParams as ConsentSettingUpdateParams,
+  };
+
+  export {
+    GlobalDispatchCenters as GlobalDispatchCenters,
+    type GlobalDispatchCenterCreateResponse as GlobalDispatchCenterCreateResponse,
+    type GlobalDispatchCenterRetrieveResponse as GlobalDispatchCenterRetrieveResponse,
+    type GlobalDispatchCenterUpdateResponse as GlobalDispatchCenterUpdateResponse,
+    type GlobalDispatchCenterListResponse as GlobalDispatchCenterListResponse,
+    type GlobalDispatchCenterDeleteResponse as GlobalDispatchCenterDeleteResponse,
+    type GlobalDispatchCenterCreateParams as GlobalDispatchCenterCreateParams,
+    type GlobalDispatchCenterUpdateParams as GlobalDispatchCenterUpdateParams,
+  };
+
+  export {
+    ReplaySettings as ReplaySettings,
+    type ReplaySettingCreateResponse as ReplaySettingCreateResponse,
+    type ReplaySettingRetrieveResponse as ReplaySettingRetrieveResponse,
+    type ReplaySettingUpdateResponse as ReplaySettingUpdateResponse,
+    type ReplaySettingListResponse as ReplaySettingListResponse,
+    type ReplaySettingDeleteResponse as ReplaySettingDeleteResponse,
+    type ReplaySettingCreateParams as ReplaySettingCreateParams,
+    type ReplaySettingUpdateParams as ReplaySettingUpdateParams,
+  };
+
+  export {
+    Versions as Versions,
+    type VersionCreateResponse as VersionCreateResponse,
+    type VersionRetrieveResponse as VersionRetrieveResponse,
+    type VersionUpdateResponse as VersionUpdateResponse,
+    type VersionListResponse as VersionListResponse,
+    type VersionCreateParams as VersionCreateParams,
+    type VersionUpdateParams as VersionUpdateParams,
+  };
 }

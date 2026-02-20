@@ -1,10 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIPromise } from 'ours-privacy-platform/core/api-promise';
+import { APIPromise } from '@oursprivacy/platform-sdk/core/api-promise';
 
 import util from 'node:util';
-import OursPrivacyPlatform from 'ours-privacy-platform';
-import { APIUserAbortError } from 'ours-privacy-platform';
+import OursPrivacyPlatform from '@oursprivacy/platform-sdk';
+import { APIUserAbortError } from '@oursprivacy/platform-sdk';
 const defaultFetch = fetch;
 
 describe('instantiate client', () => {
@@ -450,14 +450,14 @@ describe('instantiate client', () => {
 
   test('with environment variable arguments', () => {
     // set options via env var
-    process.env['OURS_PRIVACY_PLATFORM_API_KEY'] = 'My API Key';
+    process.env['OURS_PRIVACY_API_KEY'] = 'My API Key';
     const client = new OursPrivacyPlatform();
     expect(client.apiKey).toBe('My API Key');
   });
 
   test('with overridden environment variable arguments', () => {
     // set options via env var
-    process.env['OURS_PRIVACY_PLATFORM_API_KEY'] = 'another My API Key';
+    process.env['OURS_PRIVACY_API_KEY'] = 'another My API Key';
     const client = new OursPrivacyPlatform({ apiKey: 'My API Key' });
     expect(client.apiKey).toBe('My API Key');
   });
