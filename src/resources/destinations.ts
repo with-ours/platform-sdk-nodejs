@@ -47,28 +47,431 @@ export class Destinations extends APIResource {
 }
 
 export interface DestinationCreateResponse {
-  data?: unknown;
+  id: string;
+
+  createdAt: string;
+
+  status: 'Disabled' | 'Enabled';
+
+  type:
+    | 'AWSEventBridge'
+    | 'AWSKinesis'
+    | 'AWSLambda'
+    | 'AWSS3'
+    | 'AWSSNS'
+    | 'ActiveCampaignApi'
+    | 'AmazonDSP'
+    | 'Amplitude'
+    | 'AppLovin'
+    | 'ArtsAI'
+    | 'Audiohook'
+    | 'AzureBlob'
+    | 'BasisPostback'
+    | 'BingAds'
+    | 'BingAdsWeb'
+    | 'Braze'
+    | 'ConvertABTestingEvent'
+    | 'Customerio'
+    | 'DomoWarehouse'
+    | 'Facebook'
+    | 'FullContact'
+    | 'G4Analytics'
+    | 'GA4MeasurementProtocol'
+    | 'GA4ServerProxy'
+    | 'Google'
+    | 'GoogleAds360'
+    | 'GoogleAdsServerContainer'
+    | 'GoogleBigQuery'
+    | 'GoogleBigQueryWarehouse'
+    | 'GoogleDataManagerEventIngest'
+    | 'GooglePubSub'
+    | 'GoogleStorage'
+    | 'HTTPCustomRequest'
+    | 'HTTPDestination'
+    | 'Hubspot'
+    | 'IHeartMediaMagellan'
+    | 'Impact'
+    | 'Iterable'
+    | 'Klaviyo'
+    | 'LinkedInAdsCAPI'
+    | 'LiveIntent'
+    | 'LiveRampWarehouse'
+    | 'Mailchimp'
+    | 'Mixpanel'
+    | 'NextdoorAds'
+    | 'OursSyntheticData'
+    | 'Partnerize'
+    | 'Pinterest'
+    | 'Podscribe'
+    | 'QuantcastCAPI'
+    | 'QuoraAds'
+    | 'Reddit'
+    | 'SnapchatAdsCapi'
+    | 'Spotify'
+    | 'StackAdaptAPI'
+    | 'Taboola'
+    | 'Tatari'
+    | 'TheTradeDesk'
+    | 'TikTok'
+    | 'Viant'
+    | 'Vibe'
+    | 'Woopra'
+    | 'XAds'
+    | 'Zendesk'
+    | 'ZoomInfo';
+
+  name?: string | null;
+
+  updatedAt?: string | null;
 }
 
 export interface DestinationRetrieveResponse {
-  data?: unknown;
+  id: string;
+
+  createdAt: string;
+
+  status: 'Disabled' | 'Enabled';
+
+  type:
+    | 'AWSEventBridge'
+    | 'AWSKinesis'
+    | 'AWSLambda'
+    | 'AWSS3'
+    | 'AWSSNS'
+    | 'ActiveCampaignApi'
+    | 'AmazonDSP'
+    | 'Amplitude'
+    | 'AppLovin'
+    | 'ArtsAI'
+    | 'Audiohook'
+    | 'AzureBlob'
+    | 'BasisPostback'
+    | 'BingAds'
+    | 'BingAdsWeb'
+    | 'Braze'
+    | 'ConvertABTestingEvent'
+    | 'Customerio'
+    | 'DomoWarehouse'
+    | 'Facebook'
+    | 'FullContact'
+    | 'G4Analytics'
+    | 'GA4MeasurementProtocol'
+    | 'GA4ServerProxy'
+    | 'Google'
+    | 'GoogleAds360'
+    | 'GoogleAdsServerContainer'
+    | 'GoogleBigQuery'
+    | 'GoogleBigQueryWarehouse'
+    | 'GoogleDataManagerEventIngest'
+    | 'GooglePubSub'
+    | 'GoogleStorage'
+    | 'HTTPCustomRequest'
+    | 'HTTPDestination'
+    | 'Hubspot'
+    | 'IHeartMediaMagellan'
+    | 'Impact'
+    | 'Iterable'
+    | 'Klaviyo'
+    | 'LinkedInAdsCAPI'
+    | 'LiveIntent'
+    | 'LiveRampWarehouse'
+    | 'Mailchimp'
+    | 'Mixpanel'
+    | 'NextdoorAds'
+    | 'OursSyntheticData'
+    | 'Partnerize'
+    | 'Pinterest'
+    | 'Podscribe'
+    | 'QuantcastCAPI'
+    | 'QuoraAds'
+    | 'Reddit'
+    | 'SnapchatAdsCapi'
+    | 'Spotify'
+    | 'StackAdaptAPI'
+    | 'Taboola'
+    | 'Tatari'
+    | 'TheTradeDesk'
+    | 'TikTok'
+    | 'Viant'
+    | 'Vibe'
+    | 'Woopra'
+    | 'XAds'
+    | 'Zendesk'
+    | 'ZoomInfo';
+
+  name?: string | null;
+
+  updatedAt?: string | null;
 }
 
 export interface DestinationUpdateResponse {
-  data?: unknown;
+  id: string;
+
+  createdAt: string;
+
+  status: 'Disabled' | 'Enabled';
+
+  type:
+    | 'AWSEventBridge'
+    | 'AWSKinesis'
+    | 'AWSLambda'
+    | 'AWSS3'
+    | 'AWSSNS'
+    | 'ActiveCampaignApi'
+    | 'AmazonDSP'
+    | 'Amplitude'
+    | 'AppLovin'
+    | 'ArtsAI'
+    | 'Audiohook'
+    | 'AzureBlob'
+    | 'BasisPostback'
+    | 'BingAds'
+    | 'BingAdsWeb'
+    | 'Braze'
+    | 'ConvertABTestingEvent'
+    | 'Customerio'
+    | 'DomoWarehouse'
+    | 'Facebook'
+    | 'FullContact'
+    | 'G4Analytics'
+    | 'GA4MeasurementProtocol'
+    | 'GA4ServerProxy'
+    | 'Google'
+    | 'GoogleAds360'
+    | 'GoogleAdsServerContainer'
+    | 'GoogleBigQuery'
+    | 'GoogleBigQueryWarehouse'
+    | 'GoogleDataManagerEventIngest'
+    | 'GooglePubSub'
+    | 'GoogleStorage'
+    | 'HTTPCustomRequest'
+    | 'HTTPDestination'
+    | 'Hubspot'
+    | 'IHeartMediaMagellan'
+    | 'Impact'
+    | 'Iterable'
+    | 'Klaviyo'
+    | 'LinkedInAdsCAPI'
+    | 'LiveIntent'
+    | 'LiveRampWarehouse'
+    | 'Mailchimp'
+    | 'Mixpanel'
+    | 'NextdoorAds'
+    | 'OursSyntheticData'
+    | 'Partnerize'
+    | 'Pinterest'
+    | 'Podscribe'
+    | 'QuantcastCAPI'
+    | 'QuoraAds'
+    | 'Reddit'
+    | 'SnapchatAdsCapi'
+    | 'Spotify'
+    | 'StackAdaptAPI'
+    | 'Taboola'
+    | 'Tatari'
+    | 'TheTradeDesk'
+    | 'TikTok'
+    | 'Viant'
+    | 'Vibe'
+    | 'Woopra'
+    | 'XAds'
+    | 'Zendesk'
+    | 'ZoomInfo';
+
+  name?: string | null;
+
+  updatedAt?: string | null;
 }
 
 export interface DestinationListResponse {
-  data?: unknown;
+  entities: Array<DestinationListResponse.Entity>;
 }
 
-export interface DestinationDeleteResponse {
-  data?: unknown;
+export namespace DestinationListResponse {
+  export interface Entity {
+    id: string;
+
+    createdAt: string;
+
+    status: 'Disabled' | 'Enabled';
+
+    type:
+      | 'AWSEventBridge'
+      | 'AWSKinesis'
+      | 'AWSLambda'
+      | 'AWSS3'
+      | 'AWSSNS'
+      | 'ActiveCampaignApi'
+      | 'AmazonDSP'
+      | 'Amplitude'
+      | 'AppLovin'
+      | 'ArtsAI'
+      | 'Audiohook'
+      | 'AzureBlob'
+      | 'BasisPostback'
+      | 'BingAds'
+      | 'BingAdsWeb'
+      | 'Braze'
+      | 'ConvertABTestingEvent'
+      | 'Customerio'
+      | 'DomoWarehouse'
+      | 'Facebook'
+      | 'FullContact'
+      | 'G4Analytics'
+      | 'GA4MeasurementProtocol'
+      | 'GA4ServerProxy'
+      | 'Google'
+      | 'GoogleAds360'
+      | 'GoogleAdsServerContainer'
+      | 'GoogleBigQuery'
+      | 'GoogleBigQueryWarehouse'
+      | 'GoogleDataManagerEventIngest'
+      | 'GooglePubSub'
+      | 'GoogleStorage'
+      | 'HTTPCustomRequest'
+      | 'HTTPDestination'
+      | 'Hubspot'
+      | 'IHeartMediaMagellan'
+      | 'Impact'
+      | 'Iterable'
+      | 'Klaviyo'
+      | 'LinkedInAdsCAPI'
+      | 'LiveIntent'
+      | 'LiveRampWarehouse'
+      | 'Mailchimp'
+      | 'Mixpanel'
+      | 'NextdoorAds'
+      | 'OursSyntheticData'
+      | 'Partnerize'
+      | 'Pinterest'
+      | 'Podscribe'
+      | 'QuantcastCAPI'
+      | 'QuoraAds'
+      | 'Reddit'
+      | 'SnapchatAdsCapi'
+      | 'Spotify'
+      | 'StackAdaptAPI'
+      | 'Taboola'
+      | 'Tatari'
+      | 'TheTradeDesk'
+      | 'TikTok'
+      | 'Viant'
+      | 'Vibe'
+      | 'Woopra'
+      | 'XAds'
+      | 'Zendesk'
+      | 'ZoomInfo';
+
+    name?: string | null;
+
+    updatedAt?: string | null;
+  }
 }
 
-export interface DestinationCreateParams {}
+export type DestinationDeleteResponse = boolean;
 
-export interface DestinationUpdateParams {}
+export interface DestinationCreateParams {
+  type:
+    | 'AWSEventBridge'
+    | 'AWSKinesis'
+    | 'AWSLambda'
+    | 'AWSS3'
+    | 'AWSSNS'
+    | 'ActiveCampaignApi'
+    | 'AmazonDSP'
+    | 'Amplitude'
+    | 'AppLovin'
+    | 'ArtsAI'
+    | 'Audiohook'
+    | 'AzureBlob'
+    | 'BasisPostback'
+    | 'BingAds'
+    | 'BingAdsWeb'
+    | 'Braze'
+    | 'ConvertABTestingEvent'
+    | 'Customerio'
+    | 'DomoWarehouse'
+    | 'Facebook'
+    | 'FullContact'
+    | 'G4Analytics'
+    | 'GA4MeasurementProtocol'
+    | 'GA4ServerProxy'
+    | 'Google'
+    | 'GoogleAds360'
+    | 'GoogleAdsServerContainer'
+    | 'GoogleBigQuery'
+    | 'GoogleBigQueryWarehouse'
+    | 'GoogleDataManagerEventIngest'
+    | 'GooglePubSub'
+    | 'GoogleStorage'
+    | 'HTTPCustomRequest'
+    | 'HTTPDestination'
+    | 'Hubspot'
+    | 'IHeartMediaMagellan'
+    | 'Impact'
+    | 'Iterable'
+    | 'Klaviyo'
+    | 'LinkedInAdsCAPI'
+    | 'LiveIntent'
+    | 'LiveRampWarehouse'
+    | 'Mailchimp'
+    | 'Mixpanel'
+    | 'NextdoorAds'
+    | 'OursSyntheticData'
+    | 'Partnerize'
+    | 'Pinterest'
+    | 'Podscribe'
+    | 'QuantcastCAPI'
+    | 'QuoraAds'
+    | 'Reddit'
+    | 'SnapchatAdsCapi'
+    | 'Spotify'
+    | 'StackAdaptAPI'
+    | 'Taboola'
+    | 'Tatari'
+    | 'TheTradeDesk'
+    | 'TikTok'
+    | 'Viant'
+    | 'Vibe'
+    | 'Woopra'
+    | 'XAds'
+    | 'Zendesk'
+    | 'ZoomInfo';
+
+  name?: string | null;
+}
+
+export interface DestinationUpdateParams {
+  status: 'Disabled' | 'Enabled';
+
+  facebookConversionAPIKey?: string | null;
+
+  facebookPixelId?: string | null;
+
+  g4AnalyticsApiKey?: string | null;
+
+  g4AnalyticsMeasurementId?: string | null;
+
+  g4AnalyticsTrackOnPage?: boolean | null;
+
+  hashingSalt?: string | null;
+
+  httpDestinationUrl?: string | null;
+
+  limitedToSourceIds?: Array<string> | null;
+
+  managerGoogleCustomerId?: string | null;
+
+  name?: string | null;
+
+  projectAPIKey?: string | null;
+
+  projectToken?: string | null;
+
+  selectedAccountId?: string | null;
+
+  settings?: { [key: string]: unknown } | null;
+}
 
 export declare namespace Destinations {
   export {

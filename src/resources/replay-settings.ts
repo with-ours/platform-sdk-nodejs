@@ -16,7 +16,7 @@ export class ReplaySettings extends APIResource {
   /**
    * Find a single replay setting by ID. Requires scope: replaySettings:find
    */
-  retrieve(id: string, options?: RequestOptions): APIPromise<ReplaySettingRetrieveResponse> {
+  retrieve(id: string, options?: RequestOptions): APIPromise<ReplaySettingRetrieveResponse | null> {
     return this._client.get(path`/rest/v1/replay-settings/${id}`, options);
   }
 
@@ -47,28 +47,120 @@ export class ReplaySettings extends APIResource {
 }
 
 export interface ReplaySettingCreateResponse {
-  data?: unknown;
+  isSuccess: boolean;
+
+  cause?: string | null;
+
+  replaySettings?: ReplaySettingCreateResponse.ReplaySettings | null;
+}
+
+export namespace ReplaySettingCreateResponse {
+  export interface ReplaySettings {
+    id: string;
+
+    createdAt: string;
+
+    name: string;
+
+    status: 'Disabled' | 'Enabled';
+
+    updatedAt?: string | null;
+  }
 }
 
 export interface ReplaySettingRetrieveResponse {
-  data?: unknown;
+  id: string;
+
+  createdAt: string;
+
+  name: string;
+
+  status: 'Disabled' | 'Enabled';
+
+  updatedAt?: string | null;
 }
 
 export interface ReplaySettingUpdateResponse {
-  data?: unknown;
+  isSuccess: boolean;
+
+  cause?: string | null;
+
+  replaySettings?: ReplaySettingUpdateResponse.ReplaySettings | null;
+}
+
+export namespace ReplaySettingUpdateResponse {
+  export interface ReplaySettings {
+    id: string;
+
+    createdAt: string;
+
+    name: string;
+
+    status: 'Disabled' | 'Enabled';
+
+    updatedAt?: string | null;
+  }
 }
 
 export interface ReplaySettingListResponse {
-  data?: unknown;
+  entities: Array<ReplaySettingListResponse.Entity>;
+}
+
+export namespace ReplaySettingListResponse {
+  export interface Entity {
+    id: string;
+
+    createdAt: string;
+
+    name: string;
+
+    status: 'Disabled' | 'Enabled';
+
+    updatedAt?: string | null;
+  }
 }
 
 export interface ReplaySettingDeleteResponse {
-  data?: unknown;
+  isSuccess: boolean;
+
+  cause?: string | null;
+
+  replaySettings?: ReplaySettingDeleteResponse.ReplaySettings | null;
 }
 
-export interface ReplaySettingCreateParams {}
+export namespace ReplaySettingDeleteResponse {
+  export interface ReplaySettings {
+    id: string;
 
-export interface ReplaySettingUpdateParams {}
+    createdAt: string;
+
+    name: string;
+
+    status: 'Disabled' | 'Enabled';
+
+    updatedAt?: string | null;
+  }
+}
+
+export interface ReplaySettingCreateParams {
+  customDomain?: string | null;
+
+  name?: string | null;
+
+  status?: 'Disabled' | 'Enabled' | null;
+
+  whitelistDomains?: Array<string> | null;
+}
+
+export interface ReplaySettingUpdateParams {
+  customDomain?: string | null;
+
+  name?: string | null;
+
+  status?: 'Disabled' | 'Enabled' | null;
+
+  whitelistDomains?: Array<string> | null;
+}
 
 export declare namespace ReplaySettings {
   export {

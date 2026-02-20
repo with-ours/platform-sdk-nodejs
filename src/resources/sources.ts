@@ -43,28 +43,241 @@ export class Sources extends APIResource {
 }
 
 export interface SourceCreateResponse {
-  data?: unknown;
+  id: string;
+
+  createdAt: string;
+
+  status: 'Disabled' | 'Enabled';
+
+  type:
+    | 'AlchemerWebhook'
+    | 'AndroidNativeApi'
+    | 'CSharpApi'
+    | 'CalComWebhooks'
+    | 'CalendlyWebhook'
+    | 'CallRail'
+    | 'CallTrackingMetrics'
+    | 'DotNetApi'
+    | 'FacebookLeadAds'
+    | 'FormsortWebhooks'
+    | 'Formstack'
+    | 'GoLangApi'
+    | 'HTTPApiSource'
+    | 'Healthie'
+    | 'HubspotAppActions'
+    | 'HubspotFormWebhook'
+    | 'JotFormWebhooks'
+    | 'KotlinApi'
+    | 'NodejsApi'
+    | 'PHPApi'
+    | 'PixelImage'
+    | 'PythonApi'
+    | 'ReactNativeApi'
+    | 'RedirectSource'
+    | 'RubyApi'
+    | 'SegmentWebPlugin'
+    | 'TypeformWebhooks'
+    | 'WebSource'
+    | 'Webhook'
+    | 'WhatConverts'
+    | 'iOSNativeApi';
+
+  name?: string | null;
 }
 
 export interface SourceRetrieveResponse {
-  data?: unknown;
+  id: string;
+
+  createdAt: string;
+
+  status: 'Disabled' | 'Enabled';
+
+  type:
+    | 'AlchemerWebhook'
+    | 'AndroidNativeApi'
+    | 'CSharpApi'
+    | 'CalComWebhooks'
+    | 'CalendlyWebhook'
+    | 'CallRail'
+    | 'CallTrackingMetrics'
+    | 'DotNetApi'
+    | 'FacebookLeadAds'
+    | 'FormsortWebhooks'
+    | 'Formstack'
+    | 'GoLangApi'
+    | 'HTTPApiSource'
+    | 'Healthie'
+    | 'HubspotAppActions'
+    | 'HubspotFormWebhook'
+    | 'JotFormWebhooks'
+    | 'KotlinApi'
+    | 'NodejsApi'
+    | 'PHPApi'
+    | 'PixelImage'
+    | 'PythonApi'
+    | 'ReactNativeApi'
+    | 'RedirectSource'
+    | 'RubyApi'
+    | 'SegmentWebPlugin'
+    | 'TypeformWebhooks'
+    | 'WebSource'
+    | 'Webhook'
+    | 'WhatConverts'
+    | 'iOSNativeApi';
+
+  name?: string | null;
 }
 
 export interface SourceUpdateResponse {
-  data?: unknown;
+  id: string;
+
+  createdAt: string;
+
+  status: 'Disabled' | 'Enabled';
+
+  type:
+    | 'AlchemerWebhook'
+    | 'AndroidNativeApi'
+    | 'CSharpApi'
+    | 'CalComWebhooks'
+    | 'CalendlyWebhook'
+    | 'CallRail'
+    | 'CallTrackingMetrics'
+    | 'DotNetApi'
+    | 'FacebookLeadAds'
+    | 'FormsortWebhooks'
+    | 'Formstack'
+    | 'GoLangApi'
+    | 'HTTPApiSource'
+    | 'Healthie'
+    | 'HubspotAppActions'
+    | 'HubspotFormWebhook'
+    | 'JotFormWebhooks'
+    | 'KotlinApi'
+    | 'NodejsApi'
+    | 'PHPApi'
+    | 'PixelImage'
+    | 'PythonApi'
+    | 'ReactNativeApi'
+    | 'RedirectSource'
+    | 'RubyApi'
+    | 'SegmentWebPlugin'
+    | 'TypeformWebhooks'
+    | 'WebSource'
+    | 'Webhook'
+    | 'WhatConverts'
+    | 'iOSNativeApi';
+
+  name?: string | null;
 }
 
 export interface SourceListResponse {
-  data?: unknown;
+  entities: Array<SourceListResponse.Entity>;
 }
 
-export interface SourceDeleteResponse {
-  data?: unknown;
+export namespace SourceListResponse {
+  export interface Entity {
+    id: string;
+
+    createdAt: string;
+
+    status: 'Disabled' | 'Enabled';
+
+    type:
+      | 'AlchemerWebhook'
+      | 'AndroidNativeApi'
+      | 'CSharpApi'
+      | 'CalComWebhooks'
+      | 'CalendlyWebhook'
+      | 'CallRail'
+      | 'CallTrackingMetrics'
+      | 'DotNetApi'
+      | 'FacebookLeadAds'
+      | 'FormsortWebhooks'
+      | 'Formstack'
+      | 'GoLangApi'
+      | 'HTTPApiSource'
+      | 'Healthie'
+      | 'HubspotAppActions'
+      | 'HubspotFormWebhook'
+      | 'JotFormWebhooks'
+      | 'KotlinApi'
+      | 'NodejsApi'
+      | 'PHPApi'
+      | 'PixelImage'
+      | 'PythonApi'
+      | 'ReactNativeApi'
+      | 'RedirectSource'
+      | 'RubyApi'
+      | 'SegmentWebPlugin'
+      | 'TypeformWebhooks'
+      | 'WebSource'
+      | 'Webhook'
+      | 'WhatConverts'
+      | 'iOSNativeApi';
+
+    name?: string | null;
+  }
 }
 
-export interface SourceCreateParams {}
+export type SourceDeleteResponse = boolean;
 
-export interface SourceUpdateParams {}
+export interface SourceCreateParams {
+  type:
+    | 'AlchemerWebhook'
+    | 'AndroidNativeApi'
+    | 'CSharpApi'
+    | 'CalComWebhooks'
+    | 'CalendlyWebhook'
+    | 'CallRail'
+    | 'CallTrackingMetrics'
+    | 'DotNetApi'
+    | 'FacebookLeadAds'
+    | 'FormsortWebhooks'
+    | 'Formstack'
+    | 'GoLangApi'
+    | 'HTTPApiSource'
+    | 'Healthie'
+    | 'HubspotAppActions'
+    | 'HubspotFormWebhook'
+    | 'JotFormWebhooks'
+    | 'KotlinApi'
+    | 'NodejsApi'
+    | 'PHPApi'
+    | 'PixelImage'
+    | 'PythonApi'
+    | 'ReactNativeApi'
+    | 'RedirectSource'
+    | 'RubyApi'
+    | 'SegmentWebPlugin'
+    | 'TypeformWebhooks'
+    | 'WebSource'
+    | 'Webhook'
+    | 'WhatConverts'
+    | 'iOSNativeApi';
+
+  name?: string | null;
+}
+
+export interface SourceUpdateParams {
+  status: 'Disabled' | 'Enabled';
+
+  botControlMode?: 'Allow' | 'Block' | null;
+
+  excludeRequestContext?: boolean | null;
+
+  name?: string | null;
+
+  projectAPIKey?: string | null;
+
+  redirectUrl?: string | null;
+
+  selectedAccountId?: string | null;
+
+  whitelistDomains?: Array<unknown> | null;
+
+  whitelistIps?: Array<string> | null;
+}
 
 export declare namespace Sources {
   export {

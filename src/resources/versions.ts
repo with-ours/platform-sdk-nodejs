@@ -36,24 +36,94 @@ export class Versions extends APIResource {
 }
 
 export interface VersionCreateResponse {
-  data?: unknown;
+  success: boolean;
+
+  error?: string | null;
 }
 
 export interface VersionRetrieveResponse {
-  data?: unknown;
+  id: string;
+
+  createdAt: string;
+
+  isPublished: boolean;
+
+  versionNumber: number;
+
+  name?: string | null;
+
+  notes?: string | null;
+
+  publishedAt?: string | null;
 }
 
 export interface VersionUpdateResponse {
-  data?: unknown;
+  id: string;
+
+  createdAt: string;
+
+  isPublished: boolean;
+
+  versionNumber: number;
+
+  name?: string | null;
+
+  notes?: string | null;
+
+  publishedAt?: string | null;
 }
 
-export interface VersionListResponse {
-  data?: unknown;
+export type VersionListResponse = Array<VersionListResponse.VersionListResponseItem>;
+
+export namespace VersionListResponse {
+  export interface VersionListResponseItem {
+    id: string;
+
+    createdAt: string;
+
+    isPublished: boolean;
+
+    versionNumber: number;
+
+    name?: string | null;
+
+    publishedAt?: string | null;
+  }
 }
 
-export interface VersionCreateParams {}
+export interface VersionCreateParams {
+  includeAllowedEvents?: Array<string> | null;
 
-export interface VersionUpdateParams {}
+  includeConsentSettings?: Array<string> | null;
+
+  includeDestinations?: Array<string> | null;
+
+  includeExternalAllowedEventData?: Array<string> | null;
+
+  includeGlobalDispatchCenters?: Array<string> | null;
+
+  includeMappings?: Array<string> | null;
+
+  includeReplaySettings?: Array<string> | null;
+
+  includeSources?: Array<string> | null;
+
+  includeTagManagerTags?: Array<string> | null;
+
+  includeTagManagerTriggers?: Array<string> | null;
+
+  includeTagManagerVariables?: Array<string> | null;
+
+  name?: string | null;
+
+  notes?: string | null;
+}
+
+export interface VersionUpdateParams {
+  name?: string | null;
+
+  notes?: string | null;
+}
 
 export declare namespace Versions {
   export {

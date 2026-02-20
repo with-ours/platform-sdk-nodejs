@@ -28,7 +28,7 @@ const client = new OursPrivacyPlatform({
 
 const sources = await client.sources.list();
 
-console.log(sources.data);
+console.log(sources.entities);
 ```
 
 ### Request & Response types
@@ -142,7 +142,7 @@ console.log(response.statusText); // access the underlying Response object
 
 const { data: sources, response: raw } = await client.sources.list().withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(sources.data);
+console.log(sources.entities);
 ```
 
 ### Logging

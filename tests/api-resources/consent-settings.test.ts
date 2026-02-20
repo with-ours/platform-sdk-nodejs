@@ -9,7 +9,7 @@ const client = new OursPrivacyPlatform({
 
 describe('resource consentSettings', () => {
   test('create', async () => {
-    const responsePromise = client.consentSettings.create({});
+    const responsePromise = client.consentSettings.create();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -30,8 +30,14 @@ describe('resource consentSettings', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('update', async () => {
-    const responsePromise = client.consentSettings.update('id', {});
+  test('update: only required params', async () => {
+    const responsePromise = client.consentSettings.update('id', {
+      categories: [{}],
+      name: 'name',
+      regions: [{}],
+      services: [{}],
+      status: 'Disabled',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -39,6 +45,23 @@ describe('resource consentSettings', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('update: required and optional params', async () => {
+    const response = await client.consentSettings.update('id', {
+      categories: [{}],
+      name: 'name',
+      regions: [{}],
+      services: [{}],
+      status: 'Disabled',
+      consentCookieName: 'consentCookieName',
+      customDomain: {},
+      default: {},
+      revision: 0,
+      skipBlockingClassNames: ['string'],
+      webSDKToken: 'webSDKToken',
+      whitelistDomains: [{}],
+    });
   });
 
   test('list', async () => {

@@ -10,9 +10,9 @@ Types:
 
 Methods:
 
-- <code title="post /rest/v1/destinations">client.destinations.<a href="./src/resources/destinations.ts">create</a>() -> DestinationCreateResponse</code>
+- <code title="post /rest/v1/destinations">client.destinations.<a href="./src/resources/destinations.ts">create</a>({ ...params }) -> DestinationCreateResponse</code>
 - <code title="get /rest/v1/destinations/{id}">client.destinations.<a href="./src/resources/destinations.ts">retrieve</a>(id) -> DestinationRetrieveResponse</code>
-- <code title="patch /rest/v1/destinations/{id}">client.destinations.<a href="./src/resources/destinations.ts">update</a>(id) -> DestinationUpdateResponse</code>
+- <code title="patch /rest/v1/destinations/{id}">client.destinations.<a href="./src/resources/destinations.ts">update</a>(id, { ...params }) -> DestinationUpdateResponse</code>
 - <code title="get /rest/v1/destinations">client.destinations.<a href="./src/resources/destinations.ts">list</a>() -> DestinationListResponse</code>
 - <code title="delete /rest/v1/destinations/{id}">client.destinations.<a href="./src/resources/destinations.ts">delete</a>(id) -> DestinationDeleteResponse</code>
 
@@ -28,9 +28,9 @@ Types:
 
 Methods:
 
-- <code title="post /rest/v1/sources">client.sources.<a href="./src/resources/sources.ts">create</a>() -> SourceCreateResponse</code>
+- <code title="post /rest/v1/sources">client.sources.<a href="./src/resources/sources.ts">create</a>({ ...params }) -> SourceCreateResponse</code>
 - <code title="get /rest/v1/sources/{id}">client.sources.<a href="./src/resources/sources.ts">retrieve</a>(id) -> SourceRetrieveResponse</code>
-- <code title="patch /rest/v1/sources/{id}">client.sources.<a href="./src/resources/sources.ts">update</a>(id) -> SourceUpdateResponse</code>
+- <code title="patch /rest/v1/sources/{id}">client.sources.<a href="./src/resources/sources.ts">update</a>(id, { ...params }) -> SourceUpdateResponse</code>
 - <code title="get /rest/v1/sources">client.sources.<a href="./src/resources/sources.ts">list</a>() -> SourceListResponse</code>
 - <code title="delete /rest/v1/sources/{id}">client.sources.<a href="./src/resources/sources.ts">delete</a>(id) -> SourceDeleteResponse</code>
 
@@ -45,7 +45,7 @@ Types:
 
 Methods:
 
-- <code title="post /rest/v1/allowed-events">client.allowedEvents.<a href="./src/resources/allowed-events.ts">create</a>() -> AllowedEventCreateResponse</code>
+- <code title="post /rest/v1/allowed-events">client.allowedEvents.<a href="./src/resources/allowed-events.ts">create</a>({ ...params }) -> AllowedEventCreateResponse</code>
 - <code title="get /rest/v1/allowed-events/{id}">client.allowedEvents.<a href="./src/resources/allowed-events.ts">retrieve</a>(id) -> AllowedEventRetrieveResponse</code>
 - <code title="get /rest/v1/allowed-events">client.allowedEvents.<a href="./src/resources/allowed-events.ts">list</a>() -> AllowedEventListResponse</code>
 - <code title="delete /rest/v1/allowed-events/{id}">client.allowedEvents.<a href="./src/resources/allowed-events.ts">delete</a>(id) -> AllowedEventDeleteResponse</code>
@@ -63,8 +63,8 @@ Types:
 Methods:
 
 - <code title="post /rest/v1/consent-settings">client.consentSettings.<a href="./src/resources/consent-settings.ts">create</a>() -> ConsentSettingCreateResponse</code>
-- <code title="get /rest/v1/consent-settings/{id}">client.consentSettings.<a href="./src/resources/consent-settings.ts">retrieve</a>(id) -> ConsentSettingRetrieveResponse</code>
-- <code title="patch /rest/v1/consent-settings/{id}">client.consentSettings.<a href="./src/resources/consent-settings.ts">update</a>(id) -> ConsentSettingUpdateResponse</code>
+- <code title="get /rest/v1/consent-settings/{id}">client.consentSettings.<a href="./src/resources/consent-settings.ts">retrieve</a>(id) -> ConsentSettingRetrieveResponse | null</code>
+- <code title="patch /rest/v1/consent-settings/{id}">client.consentSettings.<a href="./src/resources/consent-settings.ts">update</a>(id, { ...params }) -> ConsentSettingUpdateResponse</code>
 - <code title="get /rest/v1/consent-settings">client.consentSettings.<a href="./src/resources/consent-settings.ts">list</a>() -> ConsentSettingListResponse</code>
 - <code title="delete /rest/v1/consent-settings/{id}">client.consentSettings.<a href="./src/resources/consent-settings.ts">delete</a>(id) -> ConsentSettingDeleteResponse</code>
 
@@ -81,8 +81,8 @@ Types:
 Methods:
 
 - <code title="post /rest/v1/global-dispatch-centers">client.globalDispatchCenters.<a href="./src/resources/global-dispatch-centers.ts">create</a>() -> GlobalDispatchCenterCreateResponse</code>
-- <code title="get /rest/v1/global-dispatch-centers/{id}">client.globalDispatchCenters.<a href="./src/resources/global-dispatch-centers.ts">retrieve</a>(id) -> GlobalDispatchCenterRetrieveResponse</code>
-- <code title="patch /rest/v1/global-dispatch-centers/{id}">client.globalDispatchCenters.<a href="./src/resources/global-dispatch-centers.ts">update</a>(id) -> GlobalDispatchCenterUpdateResponse</code>
+- <code title="get /rest/v1/global-dispatch-centers/{id}">client.globalDispatchCenters.<a href="./src/resources/global-dispatch-centers.ts">retrieve</a>(id) -> GlobalDispatchCenterRetrieveResponse | null</code>
+- <code title="patch /rest/v1/global-dispatch-centers/{id}">client.globalDispatchCenters.<a href="./src/resources/global-dispatch-centers.ts">update</a>(id, { ...params }) -> GlobalDispatchCenterUpdateResponse</code>
 - <code title="get /rest/v1/global-dispatch-centers">client.globalDispatchCenters.<a href="./src/resources/global-dispatch-centers.ts">list</a>() -> GlobalDispatchCenterListResponse</code>
 - <code title="delete /rest/v1/global-dispatch-centers/{id}">client.globalDispatchCenters.<a href="./src/resources/global-dispatch-centers.ts">delete</a>(id) -> GlobalDispatchCenterDeleteResponse</code>
 
@@ -98,9 +98,9 @@ Types:
 
 Methods:
 
-- <code title="post /rest/v1/replay-settings">client.replaySettings.<a href="./src/resources/replay-settings.ts">create</a>() -> ReplaySettingCreateResponse</code>
-- <code title="get /rest/v1/replay-settings/{id}">client.replaySettings.<a href="./src/resources/replay-settings.ts">retrieve</a>(id) -> ReplaySettingRetrieveResponse</code>
-- <code title="patch /rest/v1/replay-settings/{id}">client.replaySettings.<a href="./src/resources/replay-settings.ts">update</a>(id) -> ReplaySettingUpdateResponse</code>
+- <code title="post /rest/v1/replay-settings">client.replaySettings.<a href="./src/resources/replay-settings.ts">create</a>({ ...params }) -> ReplaySettingCreateResponse</code>
+- <code title="get /rest/v1/replay-settings/{id}">client.replaySettings.<a href="./src/resources/replay-settings.ts">retrieve</a>(id) -> ReplaySettingRetrieveResponse | null</code>
+- <code title="patch /rest/v1/replay-settings/{id}">client.replaySettings.<a href="./src/resources/replay-settings.ts">update</a>(id, { ...params }) -> ReplaySettingUpdateResponse</code>
 - <code title="get /rest/v1/replay-settings">client.replaySettings.<a href="./src/resources/replay-settings.ts">list</a>() -> ReplaySettingListResponse</code>
 - <code title="delete /rest/v1/replay-settings/{id}">client.replaySettings.<a href="./src/resources/replay-settings.ts">delete</a>(id) -> ReplaySettingDeleteResponse</code>
 
@@ -115,7 +115,7 @@ Types:
 
 Methods:
 
-- <code title="post /rest/v1/versions">client.versions.<a href="./src/resources/versions.ts">create</a>() -> VersionCreateResponse</code>
+- <code title="post /rest/v1/versions">client.versions.<a href="./src/resources/versions.ts">create</a>({ ...params }) -> VersionCreateResponse</code>
 - <code title="get /rest/v1/versions/{id}">client.versions.<a href="./src/resources/versions.ts">retrieve</a>(id) -> VersionRetrieveResponse</code>
-- <code title="patch /rest/v1/versions/{id}">client.versions.<a href="./src/resources/versions.ts">update</a>(id) -> VersionUpdateResponse</code>
+- <code title="patch /rest/v1/versions/{id}">client.versions.<a href="./src/resources/versions.ts">update</a>(id, { ...params }) -> VersionUpdateResponse</code>
 - <code title="get /rest/v1/versions">client.versions.<a href="./src/resources/versions.ts">list</a>() -> VersionListResponse</code>
