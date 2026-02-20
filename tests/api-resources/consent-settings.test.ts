@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import OursPrivacyPlatform from 'ours-privacy-platform';
+import OursPrivacyPlatform from '@oursprivacy/platform-sdk';
 
 const client = new OursPrivacyPlatform({
   apiKey: 'My API Key',
@@ -8,9 +8,8 @@ const client = new OursPrivacyPlatform({
 });
 
 describe('resource consentSettings', () => {
-  // Mock server tests are disabled
-  test.skip('create', async () => {
-    const responsePromise = client.rest.v1.consentSettings.create({});
+  test('create', async () => {
+    const responsePromise = client.consentSettings.create({});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -20,9 +19,8 @@ describe('resource consentSettings', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Mock server tests are disabled
-  test.skip('retrieve', async () => {
-    const responsePromise = client.rest.v1.consentSettings.retrieve('id');
+  test('retrieve', async () => {
+    const responsePromise = client.consentSettings.retrieve('id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -32,9 +30,8 @@ describe('resource consentSettings', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Mock server tests are disabled
-  test.skip('update', async () => {
-    const responsePromise = client.rest.v1.consentSettings.update('id', {});
+  test('update', async () => {
+    const responsePromise = client.consentSettings.update('id', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -44,9 +41,8 @@ describe('resource consentSettings', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Mock server tests are disabled
-  test.skip('list', async () => {
-    const responsePromise = client.rest.v1.consentSettings.list();
+  test('list', async () => {
+    const responsePromise = client.consentSettings.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -56,9 +52,8 @@ describe('resource consentSettings', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Mock server tests are disabled
-  test.skip('delete', async () => {
-    const responsePromise = client.rest.v1.consentSettings.delete('id');
+  test('delete', async () => {
+    const responsePromise = client.consentSettings.delete('id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

@@ -1,21 +1,21 @@
 # Ours Privacy Platform TypeScript API Library
 
-[![NPM version](<https://img.shields.io/npm/v/ours-privacy-platform.svg?label=npm%20(stable)>)](https://npmjs.org/package/ours-privacy-platform) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/ours-privacy-platform)
+[![NPM version](<https://img.shields.io/npm/v/@oursprivacy/platform-sdk.svg?label=npm%20(stable)>)](https://npmjs.org/package/@oursprivacy/platform-sdk) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@oursprivacy/platform-sdk)
 
 This library provides convenient access to the Ours Privacy Platform REST API from server-side TypeScript or JavaScript.
 
-The full API of this library can be found in [api.md](api.md).
+The REST API documentation can be found on [docs.oursprivacy.com](https://docs.oursprivacy.com/docs/api). The full API of this library can be found in [api.md](api.md).
 
 It is generated with [Stainless](https://www.stainless.com/).
 
 ## Installation
 
 ```sh
-npm install git+ssh://git@github.com:stainless-sdks/ours-privacy-platform-typescript.git
+npm install git+ssh://git@github.com:with-ours/platform-sdk-nodejs.git
 ```
 
 > [!NOTE]
-> Once this package is [published to npm](https://www.stainless.com/docs/guides/publish), this will become: `npm install ours-privacy-platform`
+> Once this package is [published to npm](https://www.stainless.com/docs/guides/publish), this will become: `npm install @oursprivacy/platform-sdk`
 
 ## Usage
 
@@ -23,15 +23,13 @@ The full API of this library can be found in [api.md](api.md).
 
 <!-- prettier-ignore -->
 ```js
-import OursPrivacyPlatform from 'ours-privacy-platform';
+import OursPrivacyPlatform from '@oursprivacy/platform-sdk';
 
-const client = new OursPrivacyPlatform({
-  apiKey: process.env['OURS_PRIVACY_PLATFORM_API_KEY'], // This is the default and can be omitted
-});
+const client = new OursPrivacyPlatform();
 
-const destinations = await client.rest.v1.destinations.list();
+const sources = await client.sources.list();
 
-console.log(destinations.data);
+console.log(sources.data);
 ```
 
 ### Request & Response types
@@ -40,14 +38,11 @@ This library includes TypeScript definitions for all request params and response
 
 <!-- prettier-ignore -->
 ```ts
-import OursPrivacyPlatform from 'ours-privacy-platform';
+import OursPrivacyPlatform from '@oursprivacy/platform-sdk';
 
-const client = new OursPrivacyPlatform({
-  apiKey: process.env['OURS_PRIVACY_PLATFORM_API_KEY'], // This is the default and can be omitted
-});
+const client = new OursPrivacyPlatform();
 
-const destinations: OursPrivacyPlatform.Rest.V1.DestinationListResponse =
-  await client.rest.v1.destinations.list();
+const sources: OursPrivacyPlatform.SourceListResponse = await client.sources.list();
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -60,7 +55,7 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const destinations = await client.rest.v1.destinations.list().catch(async (err) => {
+const sources = await client.sources.list().catch(async (err) => {
   if (err instanceof OursPrivacyPlatform.APIError) {
     console.log(err.status); // 400
     console.log(err.name); // BadRequestError
@@ -96,11 +91,12 @@ You can use the `maxRetries` option to configure or disable this:
 ```js
 // Configure the default for all requests:
 const client = new OursPrivacyPlatform({
+  apiKey: 'My API Key',
   maxRetries: 0, // default is 2
 });
 
 // Or, configure per-request:
-await client.rest.v1.destinations.list({
+await client.sources.list({
   maxRetries: 5,
 });
 ```
@@ -113,11 +109,12 @@ Requests time out after 1 minute by default. You can configure this with a `time
 ```ts
 // Configure the default for all requests:
 const client = new OursPrivacyPlatform({
+  apiKey: 'My API Key',
   timeout: 20 * 1000, // 20 seconds (default is 1 minute)
 });
 
 // Override per-request:
-await client.rest.v1.destinations.list({
+await client.sources.list({
   timeout: 5 * 1000,
 });
 ```
@@ -140,15 +137,13 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new OursPrivacyPlatform();
 
-const response = await client.rest.v1.destinations.list().asResponse();
+const response = await client.sources.list().asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: destinations, response: raw } = await client.rest.v1.destinations
-  .list()
-  .withResponse();
+const { data: sources, response: raw } = await client.sources.list().withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(destinations.data);
+console.log(sources.data);
 ```
 
 ### Logging
@@ -165,7 +160,7 @@ The log level can be configured in two ways:
 2. Using the `logLevel` client option (overrides the environment variable if set)
 
 ```ts
-import OursPrivacyPlatform from 'ours-privacy-platform';
+import OursPrivacyPlatform from '@oursprivacy/platform-sdk';
 
 const client = new OursPrivacyPlatform({
   logLevel: 'debug', // Show all log messages
@@ -193,7 +188,7 @@ When providing a custom logger, the `logLevel` option still controls which messa
 below the configured level will not be sent to your logger.
 
 ```ts
-import OursPrivacyPlatform from 'ours-privacy-platform';
+import OursPrivacyPlatform from '@oursprivacy/platform-sdk';
 import pino from 'pino';
 
 const logger = pino();
@@ -228,7 +223,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.rest.v1.destinations.list({
+client.sources.list({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',
@@ -262,7 +257,7 @@ globalThis.fetch = fetch;
 Or pass it to the client:
 
 ```ts
-import OursPrivacyPlatform from 'ours-privacy-platform';
+import OursPrivacyPlatform from '@oursprivacy/platform-sdk';
 import fetch from 'my-fetch';
 
 const client = new OursPrivacyPlatform({ fetch });
@@ -273,7 +268,7 @@ const client = new OursPrivacyPlatform({ fetch });
 If you want to set custom `fetch` options without overriding the `fetch` function, you can provide a `fetchOptions` object when instantiating the client or making a request. (Request-specific options override client options.)
 
 ```ts
-import OursPrivacyPlatform from 'ours-privacy-platform';
+import OursPrivacyPlatform from '@oursprivacy/platform-sdk';
 
 const client = new OursPrivacyPlatform({
   fetchOptions: {
@@ -290,7 +285,7 @@ options to requests:
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/node.svg" align="top" width="18" height="21"> **Node** <sup>[[docs](https://github.com/nodejs/undici/blob/main/docs/docs/api/ProxyAgent.md#example---proxyagent-with-fetch)]</sup>
 
 ```ts
-import OursPrivacyPlatform from 'ours-privacy-platform';
+import OursPrivacyPlatform from '@oursprivacy/platform-sdk';
 import * as undici from 'undici';
 
 const proxyAgent = new undici.ProxyAgent('http://localhost:8888');
@@ -304,7 +299,7 @@ const client = new OursPrivacyPlatform({
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/bun.svg" align="top" width="18" height="21"> **Bun** <sup>[[docs](https://bun.sh/guides/http/proxy)]</sup>
 
 ```ts
-import OursPrivacyPlatform from 'ours-privacy-platform';
+import OursPrivacyPlatform from '@oursprivacy/platform-sdk';
 
 const client = new OursPrivacyPlatform({
   fetchOptions: {
@@ -316,7 +311,7 @@ const client = new OursPrivacyPlatform({
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/deno.svg" align="top" width="18" height="21"> **Deno** <sup>[[docs](https://docs.deno.com/api/deno/~/Deno.createHttpClient)]</sup>
 
 ```ts
-import OursPrivacyPlatform from 'npm:ours-privacy-platform';
+import OursPrivacyPlatform from 'npm:@oursprivacy/platform-sdk';
 
 const httpClient = Deno.createHttpClient({ proxy: { url: 'http://localhost:8888' } });
 const client = new OursPrivacyPlatform({
@@ -338,7 +333,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/ours-privacy-platform-typescript/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/with-ours/platform-sdk-nodejs/issues) with questions, bugs, or suggestions.
 
 ## Requirements
 
