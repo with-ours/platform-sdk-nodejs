@@ -36,22 +36,54 @@ export class AllowedEvents extends APIResource {
 }
 
 export interface AllowedEventCreateResponse {
-  data?: unknown;
+  id: string;
+
+  createdAt: string;
+
+  destinationIds: Array<string>;
+
+  name: string;
+
+  updatedAt?: string | null;
 }
 
 export interface AllowedEventRetrieveResponse {
-  data?: unknown;
+  id: string;
+
+  createdAt: string;
+
+  destinationIds: Array<string>;
+
+  name: string;
+
+  updatedAt?: string | null;
 }
 
 export interface AllowedEventListResponse {
-  data?: unknown;
+  entities: Array<AllowedEventListResponse.Entity>;
 }
 
-export interface AllowedEventDeleteResponse {
-  data?: unknown;
+export namespace AllowedEventListResponse {
+  export interface Entity {
+    id: string;
+
+    createdAt: string;
+
+    destinationIds: Array<string>;
+
+    name: string;
+
+    updatedAt?: string | null;
+  }
 }
 
-export interface AllowedEventCreateParams {}
+export type AllowedEventDeleteResponse = boolean;
+
+export interface AllowedEventCreateParams {
+  name: string;
+
+  destinationIds?: Array<string> | string | null;
+}
 
 export declare namespace AllowedEvents {
   export {

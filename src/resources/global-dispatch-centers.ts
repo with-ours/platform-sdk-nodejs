@@ -9,17 +9,14 @@ export class GlobalDispatchCenters extends APIResource {
   /**
    * Create a new global dispatch center. Requires scope: globalDispatch:create
    */
-  create(
-    body: GlobalDispatchCenterCreateParams,
-    options?: RequestOptions,
-  ): APIPromise<GlobalDispatchCenterCreateResponse> {
-    return this._client.post('/rest/v1/global-dispatch-centers', { body, ...options });
+  create(options?: RequestOptions): APIPromise<GlobalDispatchCenterCreateResponse> {
+    return this._client.post('/rest/v1/global-dispatch-centers', options);
   }
 
   /**
    * Find a single global dispatch center by ID. Requires scope: globalDispatch:find
    */
-  retrieve(id: string, options?: RequestOptions): APIPromise<GlobalDispatchCenterRetrieveResponse> {
+  retrieve(id: string, options?: RequestOptions): APIPromise<GlobalDispatchCenterRetrieveResponse | null> {
     return this._client.get(path`/rest/v1/global-dispatch-centers/${id}`, options);
   }
 
@@ -50,28 +47,92 @@ export class GlobalDispatchCenters extends APIResource {
 }
 
 export interface GlobalDispatchCenterCreateResponse {
-  data?: unknown;
+  id: string;
+
+  createdAt: string;
+
+  isEnabled: boolean;
+
+  kind: string;
+
+  name?: string | null;
+
+  updatedAt?: string | null;
 }
 
 export interface GlobalDispatchCenterRetrieveResponse {
-  data?: unknown;
+  id: string;
+
+  createdAt: string;
+
+  isEnabled: boolean;
+
+  kind: string;
+
+  name?: string | null;
+
+  updatedAt?: string | null;
 }
 
 export interface GlobalDispatchCenterUpdateResponse {
-  data?: unknown;
+  id: string;
+
+  createdAt: string;
+
+  isEnabled: boolean;
+
+  kind: string;
+
+  name?: string | null;
+
+  updatedAt?: string | null;
 }
 
 export interface GlobalDispatchCenterListResponse {
-  data?: unknown;
+  entities: Array<GlobalDispatchCenterListResponse.Entity>;
 }
 
-export interface GlobalDispatchCenterDeleteResponse {
-  data?: unknown;
+export namespace GlobalDispatchCenterListResponse {
+  export interface Entity {
+    id: string;
+
+    createdAt: string;
+
+    isEnabled: boolean;
+
+    kind: string;
+
+    name?: string | null;
+
+    updatedAt?: string | null;
+  }
 }
 
-export interface GlobalDispatchCenterCreateParams {}
+export type GlobalDispatchCenterDeleteResponse = boolean;
 
-export interface GlobalDispatchCenterUpdateParams {}
+export interface GlobalDispatchCenterUpdateParams {
+  categories?: Array<GlobalDispatchCenterUpdateParams.Category> | null;
+
+  isEnabled?: boolean | null;
+
+  name?: string | null;
+
+  notes?: string | null;
+}
+
+export namespace GlobalDispatchCenterUpdateParams {
+  export interface Category {
+    description?: string | null;
+
+    destinationIds?: Array<string> | null;
+
+    logic?: unknown;
+
+    name?: string | null;
+
+    priority?: number | null;
+  }
+}
 
 export declare namespace GlobalDispatchCenters {
   export {
@@ -80,7 +141,6 @@ export declare namespace GlobalDispatchCenters {
     type GlobalDispatchCenterUpdateResponse as GlobalDispatchCenterUpdateResponse,
     type GlobalDispatchCenterListResponse as GlobalDispatchCenterListResponse,
     type GlobalDispatchCenterDeleteResponse as GlobalDispatchCenterDeleteResponse,
-    type GlobalDispatchCenterCreateParams as GlobalDispatchCenterCreateParams,
     type GlobalDispatchCenterUpdateParams as GlobalDispatchCenterUpdateParams,
   };
 }

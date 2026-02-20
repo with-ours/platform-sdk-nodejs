@@ -25,7 +25,6 @@ import {
   AllowedEvents,
 } from './resources/allowed-events';
 import {
-  ConsentSettingCreateParams,
   ConsentSettingCreateResponse,
   ConsentSettingDeleteResponse,
   ConsentSettingListResponse,
@@ -45,7 +44,6 @@ import {
   Destinations,
 } from './resources/destinations';
 import {
-  GlobalDispatchCenterCreateParams,
   GlobalDispatchCenterCreateResponse,
   GlobalDispatchCenterDeleteResponse,
   GlobalDispatchCenterListResponse,
@@ -853,7 +851,6 @@ export declare namespace OursPrivacyPlatform {
     type ConsentSettingUpdateResponse as ConsentSettingUpdateResponse,
     type ConsentSettingListResponse as ConsentSettingListResponse,
     type ConsentSettingDeleteResponse as ConsentSettingDeleteResponse,
-    type ConsentSettingCreateParams as ConsentSettingCreateParams,
     type ConsentSettingUpdateParams as ConsentSettingUpdateParams,
   };
 
@@ -864,7 +861,6 @@ export declare namespace OursPrivacyPlatform {
     type GlobalDispatchCenterUpdateResponse as GlobalDispatchCenterUpdateResponse,
     type GlobalDispatchCenterListResponse as GlobalDispatchCenterListResponse,
     type GlobalDispatchCenterDeleteResponse as GlobalDispatchCenterDeleteResponse,
-    type GlobalDispatchCenterCreateParams as GlobalDispatchCenterCreateParams,
     type GlobalDispatchCenterUpdateParams as GlobalDispatchCenterUpdateParams,
   };
 

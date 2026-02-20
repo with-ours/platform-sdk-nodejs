@@ -15,7 +15,6 @@ export {
   type ConsentSettingUpdateResponse,
   type ConsentSettingListResponse,
   type ConsentSettingDeleteResponse,
-  type ConsentSettingCreateParams,
   type ConsentSettingUpdateParams,
 } from './consent-settings';
 export {
@@ -35,7 +34,6 @@ export {
   type GlobalDispatchCenterUpdateResponse,
   type GlobalDispatchCenterListResponse,
   type GlobalDispatchCenterDeleteResponse,
-  type GlobalDispatchCenterCreateParams,
   type GlobalDispatchCenterUpdateParams,
 } from './global-dispatch-centers';
 export {

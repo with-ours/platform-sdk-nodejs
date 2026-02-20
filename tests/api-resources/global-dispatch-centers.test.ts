@@ -9,7 +9,7 @@ const client = new OursPrivacyPlatform({
 
 describe('resource globalDispatchCenters', () => {
   test('create', async () => {
-    const responsePromise = client.globalDispatchCenters.create({});
+    const responsePromise = client.globalDispatchCenters.create();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
