@@ -60,7 +60,7 @@ $ yarn link @oursprivacy/platform-sdk
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global @oursprivacy/platform-sdk
+$ pnpm link --global @oursprivacy/platform-sdk
 ```
 
 ## Running tests
