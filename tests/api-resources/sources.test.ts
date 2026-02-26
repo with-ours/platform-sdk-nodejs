@@ -49,6 +49,7 @@ describe('resource sources', () => {
     const response = await client.sources.update('id', {
       status: 'Disabled',
       botControlMode: 'Allow',
+      botScoreThreshold: 0,
       excludeRequestContext: true,
       name: 'name',
       projectAPIKey: 'projectAPIKey',

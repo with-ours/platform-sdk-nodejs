@@ -262,7 +262,9 @@ export interface SourceCreateParams {
 export interface SourceUpdateParams {
   status: 'Disabled' | 'Enabled';
 
-  botControlMode?: 'Allow' | 'Block' | null;
+  botControlMode?: 'Allow' | 'Block' | 'Threshold' | null;
+
+  botScoreThreshold?: number | null;
 
   excludeRequestContext?: boolean | null;
 
