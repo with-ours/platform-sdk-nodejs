@@ -52,6 +52,11 @@ describe('resource sources', () => {
       botScoreThreshold: 0,
       excludeRequestContext: true,
       name: 'name',
+      probabilisticIdentity: {
+        enabled: true,
+        matchWindowMinutes: 1,
+        maxMatchesPerIp: 1,
+      },
       projectAPIKey: 'projectAPIKey',
       redirectUrl: 'redirectUrl',
       selectedAccountId: 'selectedAccountId',

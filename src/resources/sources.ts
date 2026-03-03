@@ -270,6 +270,8 @@ export interface SourceUpdateParams {
 
   name?: string | null;
 
+  probabilisticIdentity?: SourceUpdateParams.ProbabilisticIdentity | null;
+
   projectAPIKey?: string | null;
 
   redirectUrl?: string | null;
@@ -279,6 +281,16 @@ export interface SourceUpdateParams {
   whitelistDomains?: Array<unknown> | null;
 
   whitelistIps?: Array<string> | null;
+}
+
+export namespace SourceUpdateParams {
+  export interface ProbabilisticIdentity {
+    enabled: boolean;
+
+    matchWindowMinutes?: number | null;
+
+    maxMatchesPerIp?: number | null;
+  }
 }
 
 export declare namespace Sources {
