@@ -262,11 +262,15 @@ export interface SourceCreateParams {
 export interface SourceUpdateParams {
   status: 'Disabled' | 'Enabled';
 
-  botControlMode?: 'Allow' | 'Block' | null;
+  botControlMode?: 'Allow' | 'Block' | 'Threshold' | null;
+
+  botScoreThreshold?: number | null;
 
   excludeRequestContext?: boolean | null;
 
   name?: string | null;
+
+  probabilisticIdentity?: SourceUpdateParams.ProbabilisticIdentity | null;
 
   projectAPIKey?: string | null;
 
@@ -277,6 +281,16 @@ export interface SourceUpdateParams {
   whitelistDomains?: Array<unknown> | null;
 
   whitelistIps?: Array<string> | null;
+}
+
+export namespace SourceUpdateParams {
+  export interface ProbabilisticIdentity {
+    enabled: boolean;
+
+    matchWindowMinutes?: number | null;
+
+    maxMatchesPerIp?: number | null;
+  }
 }
 
 export declare namespace Sources {

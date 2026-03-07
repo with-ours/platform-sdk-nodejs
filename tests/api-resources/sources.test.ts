@@ -49,8 +49,14 @@ describe('resource sources', () => {
     const response = await client.sources.update('id', {
       status: 'Disabled',
       botControlMode: 'Allow',
+      botScoreThreshold: 0,
       excludeRequestContext: true,
       name: 'name',
+      probabilisticIdentity: {
+        enabled: true,
+        matchWindowMinutes: 1,
+        maxMatchesPerIp: 1,
+      },
       projectAPIKey: 'projectAPIKey',
       redirectUrl: 'redirectUrl',
       selectedAccountId: 'selectedAccountId',

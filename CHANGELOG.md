@@ -1,5 +1,30 @@
 # Changelog
 
+## 1.2.0 (2026-03-07)
+
+Full Changelog: [v1.1.0...v1.2.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.1.0...v1.2.0)
+
+### Features
+
+* **api:** api update ([19aed90](https://github.com/with-ours/platform-sdk-nodejs/commit/19aed901d76be3b95e4795ae022701a336754bfd))
+* **api:** api update ([b7fe9af](https://github.com/with-ours/platform-sdk-nodejs/commit/b7fe9afcd52b0a82d7cae7744f58049051d77448))
+* **api:** api update ([65fa8d1](https://github.com/with-ours/platform-sdk-nodejs/commit/65fa8d132e85500a4623ceeaa6995058628b23a9))
+
+
+### Bug Fixes
+
+* **client:** preserve URL params already embedded in path ([a698163](https://github.com/with-ours/platform-sdk-nodejs/commit/a698163caead275d011d757d57207c1ff7992ef1))
+* **docs/contributing:** correct pnpm link command ([0e875e6](https://github.com/with-ours/platform-sdk-nodejs/commit/0e875e62034d6cf02bffc7d91154b1f0ad356524))
+* fix request delays for retrying to be more respectful of high requested delays ([0bfa6ea](https://github.com/with-ours/platform-sdk-nodejs/commit/0bfa6eae0e4f52dfb2ad5f1a5c8afa59cf5d2c7f))
+
+
+### Chores
+
+* **ci:** skip uploading artifacts on stainless-internal branches ([15d3f51](https://github.com/with-ours/platform-sdk-nodejs/commit/15d3f51b2468fc94a1637efddb39ea95302ff9f5))
+* **internal:** move stringifyQuery implementation to internal function ([d11f2fe](https://github.com/with-ours/platform-sdk-nodejs/commit/d11f2fe88cb060bcd23278ff028c825b35c4adae))
+* **internal:** upgrade pnpm version ([24af327](https://github.com/with-ours/platform-sdk-nodejs/commit/24af327fec91ac745c1201364854a5dccc75c9b0))
+* **test:** do not count install time for mock server timeout ([089bffd](https://github.com/with-ours/platform-sdk-nodejs/commit/089bffdc350a81ff30cc551f00f3118ec3c17d15))
+
 ## 1.1.0 (2026-02-20)
 
 Full Changelog: [v1.0.0...v1.1.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.0.0...v1.1.0)
