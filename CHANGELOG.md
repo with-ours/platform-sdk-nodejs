@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.1 (2026-03-10)
+
+Full Changelog: [v1.3.0...v1.3.1](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.3.0...v1.3.1)
+
+### Chores
+
+* **internal:** update dependencies to address dependabot vulnerabilities ([73285bf](https://github.com/with-ours/platform-sdk-nodejs/commit/73285bf661c09e55b8c1f64e28b50def185e6eb5))
+
 ## 1.3.0 (2026-03-07)
 
 Full Changelog: [v1.2.0...v1.3.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.2.0...v1.3.0)
