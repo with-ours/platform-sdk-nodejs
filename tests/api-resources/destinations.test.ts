@@ -61,7 +61,7 @@ describe('resource destinations', () => {
       projectAPIKey: 'projectAPIKey',
       projectToken: 'projectToken',
       selectedAccountId: 'selectedAccountId',
-      settings: { foo: 'bar' },
+      settings: { foo: 'string' },
     });
   });
 

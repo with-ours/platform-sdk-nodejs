@@ -475,7 +475,7 @@ export interface DestinationUpdateParams {
 
   selectedAccountId?: string | null;
 
-  settings?: { [key: string]: unknown } | null;
+  settings?: { [key: string]: string | number | boolean | null } | null;
 }
 
 export declare namespace Destinations {
