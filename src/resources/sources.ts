@@ -278,7 +278,7 @@ export interface SourceUpdateParams {
 
   selectedAccountId?: string | null;
 
-  whitelistDomains?: Array<unknown> | null;
+  whitelistDomains?: Array<string> | null;
 
   whitelistIps?: Array<string> | null;
 }

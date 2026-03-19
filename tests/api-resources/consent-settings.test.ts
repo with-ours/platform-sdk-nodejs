@@ -32,10 +32,52 @@ describe('resource consentSettings', () => {
 
   test('update: only required params', async () => {
     const responsePromise = client.consentSettings.update('id', {
-      categories: [{}],
+      categories: [
+        {
+          label: 'label',
+          priority: 0,
+          value: 'value',
+        },
+      ],
+      default: {
+        categories: [
+          {
+            key: 'key',
+            value: { enabled: true },
+          },
+        ],
+        language: 'language',
+        mode: 'opt_in',
+        translations: [
+          {
+            language: 'language',
+            value: {},
+          },
+        ],
+      },
       name: 'name',
-      regions: [{}],
-      services: [{}],
+      regions: [
+        {
+          regionCode: 'regionCode',
+          rule: {
+            categories: [
+              {
+                key: 'key',
+                value: { enabled: true },
+              },
+            ],
+            language: 'language',
+            mode: 'opt_in',
+            translations: [
+              {
+                language: 'language',
+                value: {},
+              },
+            ],
+          },
+        },
+      ],
+      services: [{ internalNotes: 'internalNotes', label: 'label' }],
       status: 'Disabled',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -49,18 +91,236 @@ describe('resource consentSettings', () => {
 
   test('update: required and optional params', async () => {
     const response = await client.consentSettings.update('id', {
-      categories: [{}],
+      categories: [
+        {
+          label: 'label',
+          priority: 0,
+          value: 'value',
+        },
+      ],
+      default: {
+        categories: [
+          {
+            key: 'key',
+            value: {
+              enabled: true,
+              autoDisableOnGPC: true,
+              readOnly: true,
+              reloadPage: true,
+            },
+          },
+        ],
+        language: 'language',
+        mode: 'opt_in',
+        translations: [
+          {
+            language: 'language',
+            value: {
+              consentModal: {
+                acceptAllBtn: 'acceptAllBtn',
+                description: 'description',
+                rejectAllBtn: 'rejectAllBtn',
+                showPreferencesBtn: 'showPreferencesBtn',
+                title: 'title',
+                closeIconLabel: 'closeIconLabel',
+                footer: 'footer',
+                gpcNotification: 'gpcNotification',
+                privacyPolicyLabel: 'privacyPolicyLabel',
+                privacyPolicyUrl: 'privacyPolicyUrl',
+                revisionMessage: 'revisionMessage',
+                termsOfServiceLabel: 'termsOfServiceLabel',
+                termsOfServiceUrl: 'termsOfServiceUrl',
+              },
+              preferencesModal: {
+                acceptAllBtn: 'acceptAllBtn',
+                closeIconLabel: 'closeIconLabel',
+                rejectAllBtn: 'rejectAllBtn',
+                savePreferencesBtn: 'savePreferencesBtn',
+                sections: [
+                  {
+                    description: 'description',
+                    title: 'title',
+                    cookieTable: {
+                      body: [{ key: 'key', value: 'value' }],
+                      headers: [{ key: 'key', value: 'value' }],
+                      caption: 'caption',
+                    },
+                    linkedCategory: 'linkedCategory',
+                  },
+                ],
+                title: 'title',
+                serviceCounterLabel: 'serviceCounterLabel',
+              },
+            },
+          },
+        ],
+        autoShow: true,
+        autoShowDismissConfig: { pageCount: 0, seconds: 0 },
+        autoShowDismissMode: 'after_pages',
+        disablePageInteraction: true,
+        guiOptions: {
+          consentModal: {
+            buttonLayout: 'AcceptAllNecessaryPreferences',
+            equalWeightButtons: true,
+            flipButtons: true,
+            layout: 'bar',
+            position: 'bottom',
+            showCloseIcon: true,
+          },
+          cssVariables: {
+            buttonBorderRadius: 'buttonBorderRadius',
+            footerBg: 'footerBg',
+            footerColor: 'footerColor',
+            footerLinkColor: 'footerLinkColor',
+            footerLinkHoverColor: 'footerLinkHoverColor',
+            modalBg: 'modalBg',
+            modalBorderRadius: 'modalBorderRadius',
+            primaryButtonBg: 'primaryButtonBg',
+            primaryButtonColor: 'primaryButtonColor',
+            primaryButtonHoverBg: 'primaryButtonHoverBg',
+            primaryButtonHoverColor: 'primaryButtonHoverColor',
+            primaryTextColor: 'primaryTextColor',
+            secondaryButtonBg: 'secondaryButtonBg',
+            secondaryButtonColor: 'secondaryButtonColor',
+            secondaryButtonHoverBg: 'secondaryButtonHoverBg',
+            secondaryButtonHoverColor: 'secondaryButtonHoverColor',
+            secondaryTextColor: 'secondaryTextColor',
+            toggleOnBg: 'toggleOnBg',
+          },
+          preferencesModal: {
+            buttonLayout: 'AcceptAllRejectAllSave',
+            equalWeightButtons: true,
+            flipButtons: true,
+            layout: 'bar',
+            position: 'left',
+          },
+        },
+        hideFromBots: true,
+        showVendorsInPreferences: true,
+      },
       name: 'name',
-      regions: [{}],
-      services: [{}],
+      regions: [
+        {
+          regionCode: 'regionCode',
+          rule: {
+            categories: [
+              {
+                key: 'key',
+                value: {
+                  enabled: true,
+                  autoDisableOnGPC: true,
+                  readOnly: true,
+                  reloadPage: true,
+                },
+              },
+            ],
+            language: 'language',
+            mode: 'opt_in',
+            translations: [
+              {
+                language: 'language',
+                value: {
+                  consentModal: {
+                    acceptAllBtn: 'acceptAllBtn',
+                    description: 'description',
+                    rejectAllBtn: 'rejectAllBtn',
+                    showPreferencesBtn: 'showPreferencesBtn',
+                    title: 'title',
+                    closeIconLabel: 'closeIconLabel',
+                    footer: 'footer',
+                    gpcNotification: 'gpcNotification',
+                    privacyPolicyLabel: 'privacyPolicyLabel',
+                    privacyPolicyUrl: 'privacyPolicyUrl',
+                    revisionMessage: 'revisionMessage',
+                    termsOfServiceLabel: 'termsOfServiceLabel',
+                    termsOfServiceUrl: 'termsOfServiceUrl',
+                  },
+                  preferencesModal: {
+                    acceptAllBtn: 'acceptAllBtn',
+                    closeIconLabel: 'closeIconLabel',
+                    rejectAllBtn: 'rejectAllBtn',
+                    savePreferencesBtn: 'savePreferencesBtn',
+                    sections: [
+                      {
+                        description: 'description',
+                        title: 'title',
+                        cookieTable: {
+                          body: [{ key: 'key', value: 'value' }],
+                          headers: [{ key: 'key', value: 'value' }],
+                          caption: 'caption',
+                        },
+                        linkedCategory: 'linkedCategory',
+                      },
+                    ],
+                    title: 'title',
+                    serviceCounterLabel: 'serviceCounterLabel',
+                  },
+                },
+              },
+            ],
+            autoShow: true,
+            autoShowDismissConfig: { pageCount: 0, seconds: 0 },
+            autoShowDismissMode: 'after_pages',
+            disablePageInteraction: true,
+            guiOptions: {
+              consentModal: {
+                buttonLayout: 'AcceptAllNecessaryPreferences',
+                equalWeightButtons: true,
+                flipButtons: true,
+                layout: 'bar',
+                position: 'bottom',
+                showCloseIcon: true,
+              },
+              cssVariables: {
+                buttonBorderRadius: 'buttonBorderRadius',
+                footerBg: 'footerBg',
+                footerColor: 'footerColor',
+                footerLinkColor: 'footerLinkColor',
+                footerLinkHoverColor: 'footerLinkHoverColor',
+                modalBg: 'modalBg',
+                modalBorderRadius: 'modalBorderRadius',
+                primaryButtonBg: 'primaryButtonBg',
+                primaryButtonColor: 'primaryButtonColor',
+                primaryButtonHoverBg: 'primaryButtonHoverBg',
+                primaryButtonHoverColor: 'primaryButtonHoverColor',
+                primaryTextColor: 'primaryTextColor',
+                secondaryButtonBg: 'secondaryButtonBg',
+                secondaryButtonColor: 'secondaryButtonColor',
+                secondaryButtonHoverBg: 'secondaryButtonHoverBg',
+                secondaryButtonHoverColor: 'secondaryButtonHoverColor',
+                secondaryTextColor: 'secondaryTextColor',
+                toggleOnBg: 'toggleOnBg',
+              },
+              preferencesModal: {
+                buttonLayout: 'AcceptAllRejectAllSave',
+                equalWeightButtons: true,
+                flipButtons: true,
+                layout: 'bar',
+                position: 'left',
+              },
+            },
+            hideFromBots: true,
+            showVendorsInPreferences: true,
+          },
+          additionalRegions: ['string'],
+        },
+      ],
+      services: [
+        {
+          internalNotes: 'internalNotes',
+          label: 'label',
+          additionalCategories: ['string'],
+          category: 'category',
+          domainPatterns: ['string'],
+        },
+      ],
       status: 'Disabled',
       consentCookieName: 'consentCookieName',
-      customDomain: {},
-      default: {},
+      customDomain: 'customDomain',
       revision: 0,
       skipBlockingClassNames: ['string'],
       webSDKToken: 'webSDKToken',
-      whitelistDomains: [{}],
+      whitelistDomains: ['string'],
     });
   });
 

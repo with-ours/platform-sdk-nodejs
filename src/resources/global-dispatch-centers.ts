@@ -126,11 +126,622 @@ export namespace GlobalDispatchCenterUpdateParams {
 
     destinationIds?: Array<string> | null;
 
-    logic?: unknown;
+    logic?: Category.Logic | null;
 
     name?: string | null;
 
     priority?: number | null;
+  }
+
+  export namespace Category {
+    export interface Logic {
+      AND?: Array<Logic.And> | null;
+
+      condition?: Logic.Condition | null;
+
+      NOT?: Logic.Not | null;
+
+      OR?: Array<Logic.Or> | null;
+    }
+
+    export namespace Logic {
+      export interface And {
+        AND?: Array<And.And> | null;
+
+        condition?: And.Condition | null;
+
+        NOT?: And.Not | null;
+
+        OR?: Array<And.Or> | null;
+      }
+
+      export namespace And {
+        export interface And {
+          condition?: And.Condition | null;
+        }
+
+        export namespace And {
+          export interface Condition {
+            operator:
+              | 'Contains'
+              | 'DoesNotContain'
+              | 'DoesNotMatchRegex'
+              | 'DoesNotMatchRegexIgnoreCase'
+              | 'EndsWith'
+              | 'Is'
+              | 'IsAfter'
+              | 'IsBefore'
+              | 'IsBetween'
+              | 'IsFalse'
+              | 'IsFalsy'
+              | 'IsFoundIn'
+              | 'IsGreaterThan'
+              | 'IsGreaterThanOrEqual'
+              | 'IsIn'
+              | 'IsLessThan'
+              | 'IsLessThanOrEqual'
+              | 'IsNot'
+              | 'IsNotFoundIn'
+              | 'IsNotIn'
+              | 'IsNotNull'
+              | 'IsNotUndefined'
+              | 'IsNull'
+              | 'IsOnOrAfter'
+              | 'IsOnOrBefore'
+              | 'IsTrue'
+              | 'IsTruthy'
+              | 'IsUndefined'
+              | 'MatchesRegex'
+              | 'MatchesRegexIgnoreCase'
+              | 'StartsWith';
+
+            property: string;
+
+            value: string;
+          }
+        }
+
+        export interface Condition {
+          operator:
+            | 'Contains'
+            | 'DoesNotContain'
+            | 'DoesNotMatchRegex'
+            | 'DoesNotMatchRegexIgnoreCase'
+            | 'EndsWith'
+            | 'Is'
+            | 'IsAfter'
+            | 'IsBefore'
+            | 'IsBetween'
+            | 'IsFalse'
+            | 'IsFalsy'
+            | 'IsFoundIn'
+            | 'IsGreaterThan'
+            | 'IsGreaterThanOrEqual'
+            | 'IsIn'
+            | 'IsLessThan'
+            | 'IsLessThanOrEqual'
+            | 'IsNot'
+            | 'IsNotFoundIn'
+            | 'IsNotIn'
+            | 'IsNotNull'
+            | 'IsNotUndefined'
+            | 'IsNull'
+            | 'IsOnOrAfter'
+            | 'IsOnOrBefore'
+            | 'IsTrue'
+            | 'IsTruthy'
+            | 'IsUndefined'
+            | 'MatchesRegex'
+            | 'MatchesRegexIgnoreCase'
+            | 'StartsWith';
+
+          property: string;
+
+          value: string;
+        }
+
+        export interface Not {
+          condition?: Not.Condition | null;
+        }
+
+        export namespace Not {
+          export interface Condition {
+            operator:
+              | 'Contains'
+              | 'DoesNotContain'
+              | 'DoesNotMatchRegex'
+              | 'DoesNotMatchRegexIgnoreCase'
+              | 'EndsWith'
+              | 'Is'
+              | 'IsAfter'
+              | 'IsBefore'
+              | 'IsBetween'
+              | 'IsFalse'
+              | 'IsFalsy'
+              | 'IsFoundIn'
+              | 'IsGreaterThan'
+              | 'IsGreaterThanOrEqual'
+              | 'IsIn'
+              | 'IsLessThan'
+              | 'IsLessThanOrEqual'
+              | 'IsNot'
+              | 'IsNotFoundIn'
+              | 'IsNotIn'
+              | 'IsNotNull'
+              | 'IsNotUndefined'
+              | 'IsNull'
+              | 'IsOnOrAfter'
+              | 'IsOnOrBefore'
+              | 'IsTrue'
+              | 'IsTruthy'
+              | 'IsUndefined'
+              | 'MatchesRegex'
+              | 'MatchesRegexIgnoreCase'
+              | 'StartsWith';
+
+            property: string;
+
+            value: string;
+          }
+        }
+
+        export interface Or {
+          condition?: Or.Condition | null;
+        }
+
+        export namespace Or {
+          export interface Condition {
+            operator:
+              | 'Contains'
+              | 'DoesNotContain'
+              | 'DoesNotMatchRegex'
+              | 'DoesNotMatchRegexIgnoreCase'
+              | 'EndsWith'
+              | 'Is'
+              | 'IsAfter'
+              | 'IsBefore'
+              | 'IsBetween'
+              | 'IsFalse'
+              | 'IsFalsy'
+              | 'IsFoundIn'
+              | 'IsGreaterThan'
+              | 'IsGreaterThanOrEqual'
+              | 'IsIn'
+              | 'IsLessThan'
+              | 'IsLessThanOrEqual'
+              | 'IsNot'
+              | 'IsNotFoundIn'
+              | 'IsNotIn'
+              | 'IsNotNull'
+              | 'IsNotUndefined'
+              | 'IsNull'
+              | 'IsOnOrAfter'
+              | 'IsOnOrBefore'
+              | 'IsTrue'
+              | 'IsTruthy'
+              | 'IsUndefined'
+              | 'MatchesRegex'
+              | 'MatchesRegexIgnoreCase'
+              | 'StartsWith';
+
+            property: string;
+
+            value: string;
+          }
+        }
+      }
+
+      export interface Condition {
+        operator:
+          | 'Contains'
+          | 'DoesNotContain'
+          | 'DoesNotMatchRegex'
+          | 'DoesNotMatchRegexIgnoreCase'
+          | 'EndsWith'
+          | 'Is'
+          | 'IsAfter'
+          | 'IsBefore'
+          | 'IsBetween'
+          | 'IsFalse'
+          | 'IsFalsy'
+          | 'IsFoundIn'
+          | 'IsGreaterThan'
+          | 'IsGreaterThanOrEqual'
+          | 'IsIn'
+          | 'IsLessThan'
+          | 'IsLessThanOrEqual'
+          | 'IsNot'
+          | 'IsNotFoundIn'
+          | 'IsNotIn'
+          | 'IsNotNull'
+          | 'IsNotUndefined'
+          | 'IsNull'
+          | 'IsOnOrAfter'
+          | 'IsOnOrBefore'
+          | 'IsTrue'
+          | 'IsTruthy'
+          | 'IsUndefined'
+          | 'MatchesRegex'
+          | 'MatchesRegexIgnoreCase'
+          | 'StartsWith';
+
+        property: string;
+
+        value: string;
+      }
+
+      export interface Not {
+        AND?: Array<Not.And> | null;
+
+        condition?: Not.Condition | null;
+
+        NOT?: Not.Not | null;
+
+        OR?: Array<Not.Or> | null;
+      }
+
+      export namespace Not {
+        export interface And {
+          condition?: And.Condition | null;
+        }
+
+        export namespace And {
+          export interface Condition {
+            operator:
+              | 'Contains'
+              | 'DoesNotContain'
+              | 'DoesNotMatchRegex'
+              | 'DoesNotMatchRegexIgnoreCase'
+              | 'EndsWith'
+              | 'Is'
+              | 'IsAfter'
+              | 'IsBefore'
+              | 'IsBetween'
+              | 'IsFalse'
+              | 'IsFalsy'
+              | 'IsFoundIn'
+              | 'IsGreaterThan'
+              | 'IsGreaterThanOrEqual'
+              | 'IsIn'
+              | 'IsLessThan'
+              | 'IsLessThanOrEqual'
+              | 'IsNot'
+              | 'IsNotFoundIn'
+              | 'IsNotIn'
+              | 'IsNotNull'
+              | 'IsNotUndefined'
+              | 'IsNull'
+              | 'IsOnOrAfter'
+              | 'IsOnOrBefore'
+              | 'IsTrue'
+              | 'IsTruthy'
+              | 'IsUndefined'
+              | 'MatchesRegex'
+              | 'MatchesRegexIgnoreCase'
+              | 'StartsWith';
+
+            property: string;
+
+            value: string;
+          }
+        }
+
+        export interface Condition {
+          operator:
+            | 'Contains'
+            | 'DoesNotContain'
+            | 'DoesNotMatchRegex'
+            | 'DoesNotMatchRegexIgnoreCase'
+            | 'EndsWith'
+            | 'Is'
+            | 'IsAfter'
+            | 'IsBefore'
+            | 'IsBetween'
+            | 'IsFalse'
+            | 'IsFalsy'
+            | 'IsFoundIn'
+            | 'IsGreaterThan'
+            | 'IsGreaterThanOrEqual'
+            | 'IsIn'
+            | 'IsLessThan'
+            | 'IsLessThanOrEqual'
+            | 'IsNot'
+            | 'IsNotFoundIn'
+            | 'IsNotIn'
+            | 'IsNotNull'
+            | 'IsNotUndefined'
+            | 'IsNull'
+            | 'IsOnOrAfter'
+            | 'IsOnOrBefore'
+            | 'IsTrue'
+            | 'IsTruthy'
+            | 'IsUndefined'
+            | 'MatchesRegex'
+            | 'MatchesRegexIgnoreCase'
+            | 'StartsWith';
+
+          property: string;
+
+          value: string;
+        }
+
+        export interface Not {
+          condition?: Not.Condition | null;
+        }
+
+        export namespace Not {
+          export interface Condition {
+            operator:
+              | 'Contains'
+              | 'DoesNotContain'
+              | 'DoesNotMatchRegex'
+              | 'DoesNotMatchRegexIgnoreCase'
+              | 'EndsWith'
+              | 'Is'
+              | 'IsAfter'
+              | 'IsBefore'
+              | 'IsBetween'
+              | 'IsFalse'
+              | 'IsFalsy'
+              | 'IsFoundIn'
+              | 'IsGreaterThan'
+              | 'IsGreaterThanOrEqual'
+              | 'IsIn'
+              | 'IsLessThan'
+              | 'IsLessThanOrEqual'
+              | 'IsNot'
+              | 'IsNotFoundIn'
+              | 'IsNotIn'
+              | 'IsNotNull'
+              | 'IsNotUndefined'
+              | 'IsNull'
+              | 'IsOnOrAfter'
+              | 'IsOnOrBefore'
+              | 'IsTrue'
+              | 'IsTruthy'
+              | 'IsUndefined'
+              | 'MatchesRegex'
+              | 'MatchesRegexIgnoreCase'
+              | 'StartsWith';
+
+            property: string;
+
+            value: string;
+          }
+        }
+
+        export interface Or {
+          condition?: Or.Condition | null;
+        }
+
+        export namespace Or {
+          export interface Condition {
+            operator:
+              | 'Contains'
+              | 'DoesNotContain'
+              | 'DoesNotMatchRegex'
+              | 'DoesNotMatchRegexIgnoreCase'
+              | 'EndsWith'
+              | 'Is'
+              | 'IsAfter'
+              | 'IsBefore'
+              | 'IsBetween'
+              | 'IsFalse'
+              | 'IsFalsy'
+              | 'IsFoundIn'
+              | 'IsGreaterThan'
+              | 'IsGreaterThanOrEqual'
+              | 'IsIn'
+              | 'IsLessThan'
+              | 'IsLessThanOrEqual'
+              | 'IsNot'
+              | 'IsNotFoundIn'
+              | 'IsNotIn'
+              | 'IsNotNull'
+              | 'IsNotUndefined'
+              | 'IsNull'
+              | 'IsOnOrAfter'
+              | 'IsOnOrBefore'
+              | 'IsTrue'
+              | 'IsTruthy'
+              | 'IsUndefined'
+              | 'MatchesRegex'
+              | 'MatchesRegexIgnoreCase'
+              | 'StartsWith';
+
+            property: string;
+
+            value: string;
+          }
+        }
+      }
+
+      export interface Or {
+        AND?: Array<Or.And> | null;
+
+        condition?: Or.Condition | null;
+
+        NOT?: Or.Not | null;
+
+        OR?: Array<Or.Or> | null;
+      }
+
+      export namespace Or {
+        export interface And {
+          condition?: And.Condition | null;
+        }
+
+        export namespace And {
+          export interface Condition {
+            operator:
+              | 'Contains'
+              | 'DoesNotContain'
+              | 'DoesNotMatchRegex'
+              | 'DoesNotMatchRegexIgnoreCase'
+              | 'EndsWith'
+              | 'Is'
+              | 'IsAfter'
+              | 'IsBefore'
+              | 'IsBetween'
+              | 'IsFalse'
+              | 'IsFalsy'
+              | 'IsFoundIn'
+              | 'IsGreaterThan'
+              | 'IsGreaterThanOrEqual'
+              | 'IsIn'
+              | 'IsLessThan'
+              | 'IsLessThanOrEqual'
+              | 'IsNot'
+              | 'IsNotFoundIn'
+              | 'IsNotIn'
+              | 'IsNotNull'
+              | 'IsNotUndefined'
+              | 'IsNull'
+              | 'IsOnOrAfter'
+              | 'IsOnOrBefore'
+              | 'IsTrue'
+              | 'IsTruthy'
+              | 'IsUndefined'
+              | 'MatchesRegex'
+              | 'MatchesRegexIgnoreCase'
+              | 'StartsWith';
+
+            property: string;
+
+            value: string;
+          }
+        }
+
+        export interface Condition {
+          operator:
+            | 'Contains'
+            | 'DoesNotContain'
+            | 'DoesNotMatchRegex'
+            | 'DoesNotMatchRegexIgnoreCase'
+            | 'EndsWith'
+            | 'Is'
+            | 'IsAfter'
+            | 'IsBefore'
+            | 'IsBetween'
+            | 'IsFalse'
+            | 'IsFalsy'
+            | 'IsFoundIn'
+            | 'IsGreaterThan'
+            | 'IsGreaterThanOrEqual'
+            | 'IsIn'
+            | 'IsLessThan'
+            | 'IsLessThanOrEqual'
+            | 'IsNot'
+            | 'IsNotFoundIn'
+            | 'IsNotIn'
+            | 'IsNotNull'
+            | 'IsNotUndefined'
+            | 'IsNull'
+            | 'IsOnOrAfter'
+            | 'IsOnOrBefore'
+            | 'IsTrue'
+            | 'IsTruthy'
+            | 'IsUndefined'
+            | 'MatchesRegex'
+            | 'MatchesRegexIgnoreCase'
+            | 'StartsWith';
+
+          property: string;
+
+          value: string;
+        }
+
+        export interface Not {
+          condition?: Not.Condition | null;
+        }
+
+        export namespace Not {
+          export interface Condition {
+            operator:
+              | 'Contains'
+              | 'DoesNotContain'
+              | 'DoesNotMatchRegex'
+              | 'DoesNotMatchRegexIgnoreCase'
+              | 'EndsWith'
+              | 'Is'
+              | 'IsAfter'
+              | 'IsBefore'
+              | 'IsBetween'
+              | 'IsFalse'
+              | 'IsFalsy'
+              | 'IsFoundIn'
+              | 'IsGreaterThan'
+              | 'IsGreaterThanOrEqual'
+              | 'IsIn'
+              | 'IsLessThan'
+              | 'IsLessThanOrEqual'
+              | 'IsNot'
+              | 'IsNotFoundIn'
+              | 'IsNotIn'
+              | 'IsNotNull'
+              | 'IsNotUndefined'
+              | 'IsNull'
+              | 'IsOnOrAfter'
+              | 'IsOnOrBefore'
+              | 'IsTrue'
+              | 'IsTruthy'
+              | 'IsUndefined'
+              | 'MatchesRegex'
+              | 'MatchesRegexIgnoreCase'
+              | 'StartsWith';
+
+            property: string;
+
+            value: string;
+          }
+        }
+
+        export interface Or {
+          condition?: Or.Condition | null;
+        }
+
+        export namespace Or {
+          export interface Condition {
+            operator:
+              | 'Contains'
+              | 'DoesNotContain'
+              | 'DoesNotMatchRegex'
+              | 'DoesNotMatchRegexIgnoreCase'
+              | 'EndsWith'
+              | 'Is'
+              | 'IsAfter'
+              | 'IsBefore'
+              | 'IsBetween'
+              | 'IsFalse'
+              | 'IsFalsy'
+              | 'IsFoundIn'
+              | 'IsGreaterThan'
+              | 'IsGreaterThanOrEqual'
+              | 'IsIn'
+              | 'IsLessThan'
+              | 'IsLessThanOrEqual'
+              | 'IsNot'
+              | 'IsNotFoundIn'
+              | 'IsNotIn'
+              | 'IsNotNull'
+              | 'IsNotUndefined'
+              | 'IsNull'
+              | 'IsOnOrAfter'
+              | 'IsOnOrBefore'
+              | 'IsTrue'
+              | 'IsTruthy'
+              | 'IsUndefined'
+              | 'MatchesRegex'
+              | 'MatchesRegexIgnoreCase'
+              | 'StartsWith';
+
+            property: string;
+
+            value: string;
+          }
+        }
+      }
+    }
   }
 }
 

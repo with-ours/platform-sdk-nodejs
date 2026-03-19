@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.4.0 (2026-03-17)
+
+Full Changelog: [v1.3.1...v1.4.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.3.1...v1.4.0)
+
+### Features
+
+* **api:** api update ([b283191](https://github.com/with-ours/platform-sdk-nodejs/commit/b283191a58b1bf0300bacaef8b7cacd1a4c127ef))
+
+
+### Chores
+
+* **internal:** tweak CI branches ([d0f8052](https://github.com/with-ours/platform-sdk-nodejs/commit/d0f8052591b9c9a8f76995a042262c4b76a88e9e))
+
 ## 1.3.1 (2026-03-10)
 
 Full Changelog: [v1.3.0...v1.3.1](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.3.0...v1.3.1)
