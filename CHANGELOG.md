@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.4.1 (2026-03-20)
+
+Full Changelog: [v1.4.0...v1.4.1](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.4.0...v1.4.1)
+
+### Refactors
+
+* **tests:** switch from prism to steady ([eecf2e2](https://github.com/with-ours/platform-sdk-nodejs/commit/eecf2e2a336181395f3309f5d8888f7f6113083d))
+
 ## 1.4.0 (2026-03-17)
 
 Full Changelog: [v1.3.1...v1.4.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.3.1...v1.4.0)
