@@ -169,6 +169,8 @@ describe('resource consentSettings', () => {
           },
           cssVariables: {
             buttonBorderRadius: 'buttonBorderRadius',
+            cookieCategoryBlockBg: 'cookieCategoryBlockBg',
+            cookieCategoryBlockHoverBg: 'cookieCategoryBlockHoverBg',
             footerBg: 'footerBg',
             footerColor: 'footerColor',
             footerLinkColor: 'footerLinkColor',
@@ -273,6 +275,8 @@ describe('resource consentSettings', () => {
               },
               cssVariables: {
                 buttonBorderRadius: 'buttonBorderRadius',
+                cookieCategoryBlockBg: 'cookieCategoryBlockBg',
+                cookieCategoryBlockHoverBg: 'cookieCategoryBlockHoverBg',
                 footerBg: 'footerBg',
                 footerColor: 'footerColor',
                 footerLinkColor: 'footerLinkColor',
