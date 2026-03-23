@@ -367,6 +367,10 @@ export namespace ConsentSettingUpdateParams {
       export interface CssVariables {
         buttonBorderRadius?: string | null;
 
+        cookieCategoryBlockBg?: string | null;
+
+        cookieCategoryBlockHoverBg?: string | null;
+
         footerBg?: string | null;
 
         footerColor?: string | null;
@@ -614,6 +618,10 @@ export namespace ConsentSettingUpdateParams {
 
         export interface CssVariables {
           buttonBorderRadius?: string | null;
+
+          cookieCategoryBlockBg?: string | null;
+
+          cookieCategoryBlockHoverBg?: string | null;
 
           footerBg?: string | null;
 
