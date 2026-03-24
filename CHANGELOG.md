@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.5.1 (2026-03-24)
+
+Full Changelog: [v1.5.0...v1.5.1](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.5.0...v1.5.1)
+
+### Chores
+
+* **internal:** update gitignore ([3663904](https://github.com/with-ours/platform-sdk-nodejs/commit/36639045b170e36aa7c9b38b325d259fee4add85))
+* **tests:** bump steady to v0.19.6 ([fa7dc09](https://github.com/with-ours/platform-sdk-nodejs/commit/fa7dc09c5375cefae6be3522effd24f8dbb3d44d))
+
 ## 1.5.0 (2026-03-21)
 
 Full Changelog: [v1.4.1...v1.5.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.4.1...v1.5.0)
