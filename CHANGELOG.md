@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.5.2 (2026-03-25)
+
+Full Changelog: [v1.5.1...v1.5.2](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.5.1...v1.5.2)
+
+### Chores
+
+* **ci:** skip lint on metadata-only changes ([a4e66b0](https://github.com/with-ours/platform-sdk-nodejs/commit/a4e66b02d263f9d17d5a5e168bc6626a984e307f))
+* **tests:** bump steady to v0.19.7 ([5c0b527](https://github.com/with-ours/platform-sdk-nodejs/commit/5c0b5273cfb15e49c50df524881265a9ba93f3f1))
+
 ## 1.5.1 (2026-03-24)
 
 Full Changelog: [v1.5.0...v1.5.1](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.5.0...v1.5.1)
