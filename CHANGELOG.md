@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.6.0 (2026-03-27)
+
+Full Changelog: [v1.5.2...v1.6.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.5.2...v1.6.0)
+
+### Features
+
+* **api:** api update ([09ddd46](https://github.com/with-ours/platform-sdk-nodejs/commit/09ddd46f144105b87dbc080d703938946083daaf))
+
+
+### Chores
+
+* **internal:** update multipart form array serialization ([4d9b29a](https://github.com/with-ours/platform-sdk-nodejs/commit/4d9b29a858565d43e6cf88f155a5856b8caa2f49))
+
 ## 1.5.2 (2026-03-25)
 
 Full Changelog: [v1.5.1...v1.5.2](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.5.1...v1.5.2)
