@@ -1,6 +1,6 @@
 {
   "name": "@oursprivacy/platform-sdk",
-  "version": "1.5.2",
+  "version": "1.6.0",
   "description": "The official TypeScript library for the Ours Privacy Platform API",
   "author": "Ours Privacy Platform <support@oursprivacy.com>",
   "types": "dist/index.d.ts",
