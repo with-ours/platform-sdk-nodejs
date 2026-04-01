@@ -20,7 +20,7 @@ describe('resource allowedEvents', () => {
   });
 
   test('create: required and optional params', async () => {
-    const response = await client.allowedEvents.create({ name: 'name', destinationIds: ['string'] });
+    const response = await client.allowedEvents.create({ name: 'name', destinationIds: [{}] });
   });
 
   test('retrieve', async () => {

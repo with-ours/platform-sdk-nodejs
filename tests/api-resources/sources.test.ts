@@ -48,20 +48,16 @@ describe('resource sources', () => {
   test('update: required and optional params', async () => {
     const response = await client.sources.update('id', {
       status: 'Disabled',
-      botControlMode: 'Allow',
+      botControlMode: 'botControlMode',
       botScoreThreshold: 0,
       excludeRequestContext: true,
       name: 'name',
-      probabilisticIdentity: {
-        enabled: true,
-        matchWindowMinutes: 1,
-        maxMatchesPerIp: 1,
-      },
+      probabilisticIdentity: {},
       projectAPIKey: 'projectAPIKey',
       redirectUrl: 'redirectUrl',
       selectedAccountId: 'selectedAccountId',
-      whitelistDomains: ['string'],
-      whitelistIps: ['string'],
+      whitelistDomains: [{}],
+      whitelistIps: [{}],
     });
   });
 
