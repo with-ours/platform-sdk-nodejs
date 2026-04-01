@@ -55,13 +55,13 @@ describe('resource destinations', () => {
       g4AnalyticsTrackOnPage: true,
       hashingSalt: 'hashingSalt',
       httpDestinationUrl: 'httpDestinationUrl',
-      limitedToSourceIds: ['string'],
+      limitedToSourceIds: [{}],
       managerGoogleCustomerId: 'managerGoogleCustomerId',
       name: 'name',
       projectAPIKey: 'projectAPIKey',
       projectToken: 'projectToken',
       selectedAccountId: 'selectedAccountId',
-      settings: { foo: 'string' },
+      settings: {},
     });
   });
 
