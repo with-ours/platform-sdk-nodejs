@@ -63,7 +63,7 @@ Types:
 Methods:
 
 - <code title="post /rest/v1/consent-settings">client.consentSettings.<a href="./src/resources/consent-settings.ts">create</a>() -> ConsentSettingCreateResponse</code>
-- <code title="get /rest/v1/consent-settings/{id}">client.consentSettings.<a href="./src/resources/consent-settings.ts">retrieve</a>(id) -> ConsentSettingRetrieveResponse | null</code>
+- <code title="get /rest/v1/consent-settings/{id}">client.consentSettings.<a href="./src/resources/consent-settings.ts">retrieve</a>(id) -> unknown</code>
 - <code title="patch /rest/v1/consent-settings/{id}">client.consentSettings.<a href="./src/resources/consent-settings.ts">update</a>(id, { ...params }) -> ConsentSettingUpdateResponse</code>
 - <code title="get /rest/v1/consent-settings">client.consentSettings.<a href="./src/resources/consent-settings.ts">list</a>() -> ConsentSettingListResponse</code>
 - <code title="delete /rest/v1/consent-settings/{id}">client.consentSettings.<a href="./src/resources/consent-settings.ts">delete</a>(id) -> ConsentSettingDeleteResponse</code>
@@ -81,7 +81,7 @@ Types:
 Methods:
 
 - <code title="post /rest/v1/global-dispatch-centers">client.globalDispatchCenters.<a href="./src/resources/global-dispatch-centers.ts">create</a>() -> GlobalDispatchCenterCreateResponse</code>
-- <code title="get /rest/v1/global-dispatch-centers/{id}">client.globalDispatchCenters.<a href="./src/resources/global-dispatch-centers.ts">retrieve</a>(id) -> GlobalDispatchCenterRetrieveResponse | null</code>
+- <code title="get /rest/v1/global-dispatch-centers/{id}">client.globalDispatchCenters.<a href="./src/resources/global-dispatch-centers.ts">retrieve</a>(id) -> unknown</code>
 - <code title="patch /rest/v1/global-dispatch-centers/{id}">client.globalDispatchCenters.<a href="./src/resources/global-dispatch-centers.ts">update</a>(id, { ...params }) -> GlobalDispatchCenterUpdateResponse</code>
 - <code title="get /rest/v1/global-dispatch-centers">client.globalDispatchCenters.<a href="./src/resources/global-dispatch-centers.ts">list</a>() -> GlobalDispatchCenterListResponse</code>
 - <code title="delete /rest/v1/global-dispatch-centers/{id}">client.globalDispatchCenters.<a href="./src/resources/global-dispatch-centers.ts">delete</a>(id) -> GlobalDispatchCenterDeleteResponse</code>
@@ -99,7 +99,7 @@ Types:
 Methods:
 
 - <code title="post /rest/v1/replay-settings">client.replaySettings.<a href="./src/resources/replay-settings.ts">create</a>({ ...params }) -> ReplaySettingCreateResponse</code>
-- <code title="get /rest/v1/replay-settings/{id}">client.replaySettings.<a href="./src/resources/replay-settings.ts">retrieve</a>(id) -> ReplaySettingRetrieveResponse | null</code>
+- <code title="get /rest/v1/replay-settings/{id}">client.replaySettings.<a href="./src/resources/replay-settings.ts">retrieve</a>(id) -> unknown</code>
 - <code title="patch /rest/v1/replay-settings/{id}">client.replaySettings.<a href="./src/resources/replay-settings.ts">update</a>(id, { ...params }) -> ReplaySettingUpdateResponse</code>
 - <code title="get /rest/v1/replay-settings">client.replaySettings.<a href="./src/resources/replay-settings.ts">list</a>() -> ReplaySettingListResponse</code>
 - <code title="delete /rest/v1/replay-settings/{id}">client.replaySettings.<a href="./src/resources/replay-settings.ts">delete</a>(id) -> ReplaySettingDeleteResponse</code>

@@ -468,7 +468,7 @@ export interface DestinationUpdateParams {
 
   httpDestinationUrl?: string | null;
 
-  limitedToSourceIds?: Array<string> | null;
+  limitedToSourceIds?: Array<unknown> | null;
 
   managerGoogleCustomerId?: string | null;
 
@@ -480,7 +480,7 @@ export interface DestinationUpdateParams {
 
   selectedAccountId?: string | null;
 
-  settings?: { [key: string]: string | number | boolean | null } | null;
+  settings?: unknown | null;
 }
 
 export declare namespace Destinations {

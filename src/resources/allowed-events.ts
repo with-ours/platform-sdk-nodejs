@@ -82,7 +82,7 @@ export type AllowedEventDeleteResponse = boolean;
 export interface AllowedEventCreateParams {
   name: string;
 
-  destinationIds?: Array<string> | string | null;
+  destinationIds?: Array<unknown> | null;
 }
 
 export declare namespace AllowedEvents {

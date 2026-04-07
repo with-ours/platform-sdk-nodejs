@@ -16,7 +16,7 @@ export class ConsentSettings extends APIResource {
   /**
    * Find a single consent setting by ID. Requires scope: consentSettings:find
    */
-  retrieve(id: string, options?: RequestOptions): APIPromise<ConsentSettingRetrieveResponse | null> {
+  retrieve(id: string, options?: RequestOptions): APIPromise<unknown> {
     return this._client.get(path`/rest/v1/consent-settings/${id}`, options);
   }
 
@@ -51,61 +51,17 @@ export interface ConsentSettingCreateResponse {
 
   cause?: string | null;
 
-  consentSettings?: ConsentSettingCreateResponse.ConsentSettings | null;
+  consentSettings?: unknown | null;
 }
 
-export namespace ConsentSettingCreateResponse {
-  export interface ConsentSettings {
-    id: string;
-
-    createdAt: string;
-
-    kind: string;
-
-    name: string;
-
-    status: 'Disabled' | 'Enabled';
-
-    updatedAt?: string | null;
-  }
-}
-
-export interface ConsentSettingRetrieveResponse {
-  id: string;
-
-  createdAt: string;
-
-  kind: string;
-
-  name: string;
-
-  status: 'Disabled' | 'Enabled';
-
-  updatedAt?: string | null;
-}
+export type ConsentSettingRetrieveResponse = unknown;
 
 export interface ConsentSettingUpdateResponse {
   isSuccess: boolean;
 
   cause?: string | null;
 
-  consentSettings?: ConsentSettingUpdateResponse.ConsentSettings | null;
-}
-
-export namespace ConsentSettingUpdateResponse {
-  export interface ConsentSettings {
-    id: string;
-
-    createdAt: string;
-
-    kind: string;
-
-    name: string;
-
-    status: 'Disabled' | 'Enabled';
-
-    updatedAt?: string | null;
-  }
+  consentSettings?: unknown | null;
 }
 
 export interface ConsentSettingListResponse {
@@ -161,11 +117,11 @@ export interface ConsentSettingUpdateParams {
 
   revision?: number | null;
 
-  skipBlockingClassNames?: Array<string> | null;
+  skipBlockingClassNames?: Array<unknown> | null;
 
   webSDKToken?: string | null;
 
-  whitelistDomains?: Array<string> | null;
+  whitelistDomains?: Array<unknown> | null;
 }
 
 export namespace ConsentSettingUpdateParams {
@@ -188,13 +144,13 @@ export namespace ConsentSettingUpdateParams {
 
     autoShow?: boolean | null;
 
-    autoShowDismissConfig?: Default.AutoShowDismissConfig | null;
+    autoShowDismissConfig?: unknown | null;
 
-    autoShowDismissMode?: 'after_pages' | 'after_seconds' | 'never' | null;
+    autoShowDismissMode?: string | null;
 
     disablePageInteraction?: boolean | null;
 
-    guiOptions?: Default.GuiOptions | null;
+    guiOptions?: unknown | null;
 
     hideFromBots?: boolean | null;
 
@@ -228,194 +184,9 @@ export namespace ConsentSettingUpdateParams {
 
     export namespace Translation {
       export interface Value {
-        consentModal?: Value.ConsentModal | null;
+        consentModal?: unknown | null;
 
-        preferencesModal?: Value.PreferencesModal | null;
-      }
-
-      export namespace Value {
-        export interface ConsentModal {
-          acceptAllBtn: string;
-
-          description: string;
-
-          rejectAllBtn: string;
-
-          showPreferencesBtn: string;
-
-          title: string;
-
-          closeIconLabel?: string | null;
-
-          footer?: string | null;
-
-          gpcNotification?: string | null;
-
-          privacyPolicyLabel?: string | null;
-
-          privacyPolicyUrl?: string | null;
-
-          revisionMessage?: string | null;
-
-          termsOfServiceLabel?: string | null;
-
-          termsOfServiceUrl?: string | null;
-        }
-
-        export interface PreferencesModal {
-          acceptAllBtn: string;
-
-          closeIconLabel: string;
-
-          rejectAllBtn: string;
-
-          savePreferencesBtn: string;
-
-          sections: Array<PreferencesModal.Section>;
-
-          title: string;
-
-          serviceCounterLabel?: string | null;
-        }
-
-        export namespace PreferencesModal {
-          export interface Section {
-            description: string;
-
-            title: string;
-
-            cookieTable?: Section.CookieTable | null;
-
-            linkedCategory?: string | null;
-          }
-
-          export namespace Section {
-            export interface CookieTable {
-              body: Array<CookieTable.Body>;
-
-              headers: Array<CookieTable.Header>;
-
-              caption?: string | null;
-            }
-
-            export namespace CookieTable {
-              export interface Body {
-                key: string;
-
-                value: string;
-              }
-
-              export interface Header {
-                key: string;
-
-                value: string;
-              }
-            }
-          }
-        }
-      }
-    }
-
-    export interface AutoShowDismissConfig {
-      pageCount?: number | null;
-
-      seconds?: number | null;
-    }
-
-    export interface GuiOptions {
-      consentModal?: GuiOptions.ConsentModal | null;
-
-      cssVariables?: GuiOptions.CssVariables | null;
-
-      preferencesModal?: GuiOptions.PreferencesModal | null;
-    }
-
-    export namespace GuiOptions {
-      export interface ConsentModal {
-        buttonLayout?:
-          | 'AcceptAllNecessaryPreferences'
-          | 'AcceptAllPreferences'
-          | 'AcceptOnly'
-          | 'InformationOnly'
-          | 'PreferencesOnly'
-          | null;
-
-        equalWeightButtons?: boolean | null;
-
-        flipButtons?: boolean | null;
-
-        layout?: 'bar' | 'bar_inline' | 'box' | 'box_inline' | 'box_wide' | 'cloud' | 'cloud_inline' | null;
-
-        position?:
-          | 'bottom'
-          | 'bottom_center'
-          | 'bottom_left'
-          | 'bottom_right'
-          | 'middle'
-          | 'middle_center'
-          | 'middle_left'
-          | 'middle_right'
-          | 'top'
-          | 'top_center'
-          | 'top_left'
-          | 'top_right'
-          | null;
-
-        showCloseIcon?: boolean | null;
-      }
-
-      export interface CssVariables {
-        buttonBorderRadius?: string | null;
-
-        cookieCategoryBlockBg?: string | null;
-
-        cookieCategoryBlockHoverBg?: string | null;
-
-        footerBg?: string | null;
-
-        footerColor?: string | null;
-
-        footerLinkColor?: string | null;
-
-        footerLinkHoverColor?: string | null;
-
-        modalBg?: string | null;
-
-        modalBorderRadius?: string | null;
-
-        primaryButtonBg?: string | null;
-
-        primaryButtonColor?: string | null;
-
-        primaryButtonHoverBg?: string | null;
-
-        primaryButtonHoverColor?: string | null;
-
-        primaryTextColor?: string | null;
-
-        secondaryButtonBg?: string | null;
-
-        secondaryButtonColor?: string | null;
-
-        secondaryButtonHoverBg?: string | null;
-
-        secondaryButtonHoverColor?: string | null;
-
-        secondaryTextColor?: string | null;
-
-        toggleOnBg?: string | null;
-      }
-
-      export interface PreferencesModal {
-        buttonLayout?: 'AcceptAllRejectAllSave' | 'AcceptAllSave' | null;
-
-        equalWeightButtons?: boolean | null;
-
-        flipButtons?: boolean | null;
-
-        layout?: 'bar' | 'bar_wide' | 'box' | null;
-
-        position?: 'left' | 'right' | null;
+        preferencesModal?: unknown | null;
       }
     }
   }
@@ -425,7 +196,7 @@ export namespace ConsentSettingUpdateParams {
 
     rule: Region.Rule;
 
-    additionalRegions?: Array<string> | null;
+    additionalRegions?: Array<unknown> | null;
   }
 
   export namespace Region {
@@ -440,13 +211,13 @@ export namespace ConsentSettingUpdateParams {
 
       autoShow?: boolean | null;
 
-      autoShowDismissConfig?: Rule.AutoShowDismissConfig | null;
+      autoShowDismissConfig?: unknown | null;
 
-      autoShowDismissMode?: 'after_pages' | 'after_seconds' | 'never' | null;
+      autoShowDismissMode?: string | null;
 
       disablePageInteraction?: boolean | null;
 
-      guiOptions?: Rule.GuiOptions | null;
+      guiOptions?: unknown | null;
 
       hideFromBots?: boolean | null;
 
@@ -480,194 +251,9 @@ export namespace ConsentSettingUpdateParams {
 
       export namespace Translation {
         export interface Value {
-          consentModal?: Value.ConsentModal | null;
+          consentModal?: unknown | null;
 
-          preferencesModal?: Value.PreferencesModal | null;
-        }
-
-        export namespace Value {
-          export interface ConsentModal {
-            acceptAllBtn: string;
-
-            description: string;
-
-            rejectAllBtn: string;
-
-            showPreferencesBtn: string;
-
-            title: string;
-
-            closeIconLabel?: string | null;
-
-            footer?: string | null;
-
-            gpcNotification?: string | null;
-
-            privacyPolicyLabel?: string | null;
-
-            privacyPolicyUrl?: string | null;
-
-            revisionMessage?: string | null;
-
-            termsOfServiceLabel?: string | null;
-
-            termsOfServiceUrl?: string | null;
-          }
-
-          export interface PreferencesModal {
-            acceptAllBtn: string;
-
-            closeIconLabel: string;
-
-            rejectAllBtn: string;
-
-            savePreferencesBtn: string;
-
-            sections: Array<PreferencesModal.Section>;
-
-            title: string;
-
-            serviceCounterLabel?: string | null;
-          }
-
-          export namespace PreferencesModal {
-            export interface Section {
-              description: string;
-
-              title: string;
-
-              cookieTable?: Section.CookieTable | null;
-
-              linkedCategory?: string | null;
-            }
-
-            export namespace Section {
-              export interface CookieTable {
-                body: Array<CookieTable.Body>;
-
-                headers: Array<CookieTable.Header>;
-
-                caption?: string | null;
-              }
-
-              export namespace CookieTable {
-                export interface Body {
-                  key: string;
-
-                  value: string;
-                }
-
-                export interface Header {
-                  key: string;
-
-                  value: string;
-                }
-              }
-            }
-          }
-        }
-      }
-
-      export interface AutoShowDismissConfig {
-        pageCount?: number | null;
-
-        seconds?: number | null;
-      }
-
-      export interface GuiOptions {
-        consentModal?: GuiOptions.ConsentModal | null;
-
-        cssVariables?: GuiOptions.CssVariables | null;
-
-        preferencesModal?: GuiOptions.PreferencesModal | null;
-      }
-
-      export namespace GuiOptions {
-        export interface ConsentModal {
-          buttonLayout?:
-            | 'AcceptAllNecessaryPreferences'
-            | 'AcceptAllPreferences'
-            | 'AcceptOnly'
-            | 'InformationOnly'
-            | 'PreferencesOnly'
-            | null;
-
-          equalWeightButtons?: boolean | null;
-
-          flipButtons?: boolean | null;
-
-          layout?: 'bar' | 'bar_inline' | 'box' | 'box_inline' | 'box_wide' | 'cloud' | 'cloud_inline' | null;
-
-          position?:
-            | 'bottom'
-            | 'bottom_center'
-            | 'bottom_left'
-            | 'bottom_right'
-            | 'middle'
-            | 'middle_center'
-            | 'middle_left'
-            | 'middle_right'
-            | 'top'
-            | 'top_center'
-            | 'top_left'
-            | 'top_right'
-            | null;
-
-          showCloseIcon?: boolean | null;
-        }
-
-        export interface CssVariables {
-          buttonBorderRadius?: string | null;
-
-          cookieCategoryBlockBg?: string | null;
-
-          cookieCategoryBlockHoverBg?: string | null;
-
-          footerBg?: string | null;
-
-          footerColor?: string | null;
-
-          footerLinkColor?: string | null;
-
-          footerLinkHoverColor?: string | null;
-
-          modalBg?: string | null;
-
-          modalBorderRadius?: string | null;
-
-          primaryButtonBg?: string | null;
-
-          primaryButtonColor?: string | null;
-
-          primaryButtonHoverBg?: string | null;
-
-          primaryButtonHoverColor?: string | null;
-
-          primaryTextColor?: string | null;
-
-          secondaryButtonBg?: string | null;
-
-          secondaryButtonColor?: string | null;
-
-          secondaryButtonHoverBg?: string | null;
-
-          secondaryButtonHoverColor?: string | null;
-
-          secondaryTextColor?: string | null;
-
-          toggleOnBg?: string | null;
-        }
-
-        export interface PreferencesModal {
-          buttonLayout?: 'AcceptAllRejectAllSave' | 'AcceptAllSave' | null;
-
-          equalWeightButtons?: boolean | null;
-
-          flipButtons?: boolean | null;
-
-          layout?: 'bar' | 'bar_wide' | 'box' | null;
-
-          position?: 'left' | 'right' | null;
+          preferencesModal?: unknown | null;
         }
       }
     }
@@ -678,11 +264,11 @@ export namespace ConsentSettingUpdateParams {
 
     label: string;
 
-    additionalCategories?: Array<string> | null;
+    additionalCategories?: Array<unknown> | null;
 
     category?: string | null;
 
-    domainPatterns?: Array<string> | null;
+    domainPatterns?: Array<unknown> | null;
   }
 }
 
