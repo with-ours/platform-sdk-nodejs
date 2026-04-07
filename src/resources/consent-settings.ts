@@ -142,6 +142,8 @@ export namespace ConsentSettingUpdateParams {
 
     translations: Array<Default.Translation>;
 
+    autoblockUnknown?: boolean | null;
+
     autoShow?: boolean | null;
 
     autoShowDismissConfig?: unknown | null;
@@ -208,6 +210,8 @@ export namespace ConsentSettingUpdateParams {
       mode: 'opt_in' | 'opt_out';
 
       translations: Array<Rule.Translation>;
+
+      autoblockUnknown?: boolean | null;
 
       autoShow?: boolean | null;
 
