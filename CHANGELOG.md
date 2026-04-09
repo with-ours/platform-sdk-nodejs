@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.8.0 (2026-04-09)
+
+Full Changelog: [v1.7.0...v1.8.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.7.0...v1.8.0)
+
+### Features
+
+* **api:** api update ([0e97ec0](https://github.com/with-ours/platform-sdk-nodejs/commit/0e97ec0214c7a20668a3d3c037c2d3c4520be77c))
+
+
+### Chores
+
+* **internal:** codegen related update ([74cc468](https://github.com/with-ours/platform-sdk-nodejs/commit/74cc46834e9fc5e6e642bd8a24fa8e9ce0183366))
+
 ## 1.7.0 (2026-04-01)
 
 Full Changelog: [v1.6.0...v1.7.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.6.0...v1.7.0)
