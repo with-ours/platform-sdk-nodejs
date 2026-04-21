@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.8.1 (2026-04-18)
+
+Full Changelog: [v1.8.0...v1.8.1](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.8.0...v1.8.1)
+
+### Chores
+
+* **tests:** bump steady to v0.22.1 ([d6b7566](https://github.com/with-ours/platform-sdk-nodejs/commit/d6b7566ee75d4de9b82bdd9c63afb40695699445))
+
 ## 1.8.0 (2026-04-09)
 
 Full Changelog: [v1.7.0...v1.8.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.7.0...v1.8.0)
