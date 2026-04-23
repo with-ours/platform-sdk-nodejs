@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.8.2 (2026-04-23)
+
+Full Changelog: [v1.8.1...v1.8.2](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.8.1...v1.8.2)
+
+### Chores
+
+* **internal:** more robust bootstrap script ([ef1af13](https://github.com/with-ours/platform-sdk-nodejs/commit/ef1af13e10b7f4ca9d6130964e2f79ed2f2e37e1))
+
 ## 1.8.1 (2026-04-18)
 
 Full Changelog: [v1.8.0...v1.8.1](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.8.0...v1.8.1)
