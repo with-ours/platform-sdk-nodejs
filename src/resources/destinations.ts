@@ -60,10 +60,12 @@ export interface DestinationCreateResponse {
     | 'AWSS3'
     | 'AWSSNS'
     | 'ActiveCampaignApi'
+    | 'Admitad'
     | 'AmazonDSP'
     | 'Amplitude'
     | 'AppLovin'
     | 'ArtsAI'
+    | 'Attentive'
     | 'Audiohook'
     | 'AzureBlob'
     | 'BasisPostback'
@@ -103,6 +105,7 @@ export interface DestinationCreateResponse {
     | 'OursSyntheticData'
     | 'Partnerize'
     | 'Pinterest'
+    | 'Plausible'
     | 'Podscribe'
     | 'QuantcastCAPI'
     | 'QuoraAds'
@@ -141,10 +144,12 @@ export interface DestinationRetrieveResponse {
     | 'AWSS3'
     | 'AWSSNS'
     | 'ActiveCampaignApi'
+    | 'Admitad'
     | 'AmazonDSP'
     | 'Amplitude'
     | 'AppLovin'
     | 'ArtsAI'
+    | 'Attentive'
     | 'Audiohook'
     | 'AzureBlob'
     | 'BasisPostback'
@@ -184,6 +189,7 @@ export interface DestinationRetrieveResponse {
     | 'OursSyntheticData'
     | 'Partnerize'
     | 'Pinterest'
+    | 'Plausible'
     | 'Podscribe'
     | 'QuantcastCAPI'
     | 'QuoraAds'
@@ -203,7 +209,33 @@ export interface DestinationRetrieveResponse {
     | 'Zendesk'
     | 'ZoomInfo';
 
+  facebookConversionAPIKey?: string | null;
+
+  facebookPixelId?: string | null;
+
+  g4AnalyticsApiKey?: string | null;
+
+  g4AnalyticsMeasurementId?: string | null;
+
+  g4AnalyticsTrackOnPage?: boolean | null;
+
+  hashingSalt?: string | null;
+
+  httpDestinationUrl?: string | null;
+
+  limitedToSourceIds?: Array<unknown> | null;
+
+  managerGoogleCustomerId?: string | null;
+
   name?: string | null;
+
+  projectAPIKey?: string | null;
+
+  projectToken?: string | null;
+
+  selectedAccountId?: string | null;
+
+  settings?: unknown | null;
 
   updatedAt?: string | null;
 }
@@ -222,10 +254,12 @@ export interface DestinationUpdateResponse {
     | 'AWSS3'
     | 'AWSSNS'
     | 'ActiveCampaignApi'
+    | 'Admitad'
     | 'AmazonDSP'
     | 'Amplitude'
     | 'AppLovin'
     | 'ArtsAI'
+    | 'Attentive'
     | 'Audiohook'
     | 'AzureBlob'
     | 'BasisPostback'
@@ -265,6 +299,7 @@ export interface DestinationUpdateResponse {
     | 'OursSyntheticData'
     | 'Partnerize'
     | 'Pinterest'
+    | 'Plausible'
     | 'Podscribe'
     | 'QuantcastCAPI'
     | 'QuoraAds'
@@ -308,10 +343,12 @@ export namespace DestinationListResponse {
       | 'AWSS3'
       | 'AWSSNS'
       | 'ActiveCampaignApi'
+      | 'Admitad'
       | 'AmazonDSP'
       | 'Amplitude'
       | 'AppLovin'
       | 'ArtsAI'
+      | 'Attentive'
       | 'Audiohook'
       | 'AzureBlob'
       | 'BasisPostback'
@@ -351,6 +388,7 @@ export namespace DestinationListResponse {
       | 'OursSyntheticData'
       | 'Partnerize'
       | 'Pinterest'
+      | 'Plausible'
       | 'Podscribe'
       | 'QuantcastCAPI'
       | 'QuoraAds'
@@ -386,10 +424,12 @@ export interface DestinationCreateParams {
     | 'AWSS3'
     | 'AWSSNS'
     | 'ActiveCampaignApi'
+    | 'Admitad'
     | 'AmazonDSP'
     | 'Amplitude'
     | 'AppLovin'
     | 'ArtsAI'
+    | 'Attentive'
     | 'Audiohook'
     | 'AzureBlob'
     | 'BasisPostback'
@@ -429,6 +469,7 @@ export interface DestinationCreateParams {
     | 'OursSyntheticData'
     | 'Partnerize'
     | 'Pinterest'
+    | 'Plausible'
     | 'Podscribe'
     | 'QuantcastCAPI'
     | 'QuoraAds'
