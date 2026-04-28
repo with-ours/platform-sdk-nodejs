@@ -107,6 +107,7 @@ export interface DestinationCreateResponse {
     | 'Pinterest'
     | 'Plausible'
     | 'Podscribe'
+    | 'PostHog'
     | 'QuantcastCAPI'
     | 'QuoraAds'
     | 'Reddit'
@@ -191,6 +192,7 @@ export interface DestinationRetrieveResponse {
     | 'Pinterest'
     | 'Plausible'
     | 'Podscribe'
+    | 'PostHog'
     | 'QuantcastCAPI'
     | 'QuoraAds'
     | 'Reddit'
@@ -301,6 +303,7 @@ export interface DestinationUpdateResponse {
     | 'Pinterest'
     | 'Plausible'
     | 'Podscribe'
+    | 'PostHog'
     | 'QuantcastCAPI'
     | 'QuoraAds'
     | 'Reddit'
@@ -390,6 +393,7 @@ export namespace DestinationListResponse {
       | 'Pinterest'
       | 'Plausible'
       | 'Podscribe'
+      | 'PostHog'
       | 'QuantcastCAPI'
       | 'QuoraAds'
       | 'Reddit'
@@ -408,7 +412,33 @@ export namespace DestinationListResponse {
       | 'Zendesk'
       | 'ZoomInfo';
 
+    facebookConversionAPIKey?: string | null;
+
+    facebookPixelId?: string | null;
+
+    g4AnalyticsApiKey?: string | null;
+
+    g4AnalyticsMeasurementId?: string | null;
+
+    g4AnalyticsTrackOnPage?: boolean | null;
+
+    hashingSalt?: string | null;
+
+    httpDestinationUrl?: string | null;
+
+    limitedToSourceIds?: Array<unknown> | null;
+
+    managerGoogleCustomerId?: string | null;
+
     name?: string | null;
+
+    projectAPIKey?: string | null;
+
+    projectToken?: string | null;
+
+    selectedAccountId?: string | null;
+
+    settings?: unknown | null;
 
     updatedAt?: string | null;
   }
@@ -471,6 +501,7 @@ export interface DestinationCreateParams {
     | 'Pinterest'
     | 'Plausible'
     | 'Podscribe'
+    | 'PostHog'
     | 'QuantcastCAPI'
     | 'QuoraAds'
     | 'Reddit'

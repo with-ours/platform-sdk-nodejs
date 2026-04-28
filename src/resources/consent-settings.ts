@@ -72,15 +72,187 @@ export namespace ConsentSettingListResponse {
   export interface Entity {
     id: string;
 
+    categories: Array<Entity.Category>;
+
     createdAt: string;
+
+    default: Entity.Default;
 
     kind: string;
 
     name: string;
 
+    regions: Array<Entity.Region>;
+
+    services: Array<Entity.Service>;
+
     status: 'Disabled' | 'Enabled';
 
+    consentCookieName?: string | null;
+
+    customDomain?: string | null;
+
+    revision?: number | null;
+
+    skipBlockingClassNames?: Array<unknown> | null;
+
     updatedAt?: string | null;
+
+    webSDKToken?: string | null;
+
+    whitelistDomains?: Array<unknown> | null;
+  }
+
+  export namespace Entity {
+    export interface Category {
+      label: string;
+
+      priority: number;
+
+      value: string;
+    }
+
+    export interface Default {
+      categories: Array<Default.Category>;
+
+      language: string;
+
+      mode: 'opt_in' | 'opt_out';
+
+      translations: Array<Default.Translation>;
+
+      autoblockUnknown?: boolean | null;
+
+      autoShow?: boolean | null;
+
+      autoShowDismissConfig?: unknown | null;
+
+      autoShowDismissMode?: string | null;
+
+      disablePageInteraction?: boolean | null;
+
+      guiOptions?: unknown | null;
+
+      hideFromBots?: boolean | null;
+
+      showVendorsInPreferences?: boolean | null;
+    }
+
+    export namespace Default {
+      export interface Category {
+        key: string;
+
+        value: Category.Value;
+      }
+
+      export namespace Category {
+        export interface Value {
+          enabled: boolean;
+
+          autoDisableOnGPC?: boolean | null;
+
+          readOnly?: boolean | null;
+
+          reloadPage?: boolean | null;
+        }
+      }
+
+      export interface Translation {
+        language: string;
+
+        value: Translation.Value;
+      }
+
+      export namespace Translation {
+        export interface Value {
+          consentModal?: unknown | null;
+
+          preferencesModal?: unknown | null;
+        }
+      }
+    }
+
+    export interface Region {
+      regionCode: string;
+
+      rule: Region.Rule;
+
+      additionalRegions?: Array<unknown> | null;
+    }
+
+    export namespace Region {
+      export interface Rule {
+        categories: Array<Rule.Category>;
+
+        language: string;
+
+        mode: 'opt_in' | 'opt_out';
+
+        translations: Array<Rule.Translation>;
+
+        autoblockUnknown?: boolean | null;
+
+        autoShow?: boolean | null;
+
+        autoShowDismissConfig?: unknown | null;
+
+        autoShowDismissMode?: string | null;
+
+        disablePageInteraction?: boolean | null;
+
+        guiOptions?: unknown | null;
+
+        hideFromBots?: boolean | null;
+
+        showVendorsInPreferences?: boolean | null;
+      }
+
+      export namespace Rule {
+        export interface Category {
+          key: string;
+
+          value: Category.Value;
+        }
+
+        export namespace Category {
+          export interface Value {
+            enabled: boolean;
+
+            autoDisableOnGPC?: boolean | null;
+
+            readOnly?: boolean | null;
+
+            reloadPage?: boolean | null;
+          }
+        }
+
+        export interface Translation {
+          language: string;
+
+          value: Translation.Value;
+        }
+
+        export namespace Translation {
+          export interface Value {
+            consentModal?: unknown | null;
+
+            preferencesModal?: unknown | null;
+          }
+        }
+      }
+    }
+
+    export interface Service {
+      internalNotes: string;
+
+      label: string;
+
+      additionalCategories?: Array<unknown> | null;
+
+      category?: string | null;
+
+      domainPatterns?: Array<unknown> | null;
+    }
   }
 }
 

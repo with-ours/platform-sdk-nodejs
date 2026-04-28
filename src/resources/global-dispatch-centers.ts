@@ -90,7 +90,11 @@ export namespace GlobalDispatchCenterListResponse {
 
     kind: string;
 
+    categories?: Array<unknown> | null;
+
     name?: string | null;
+
+    notes?: string | null;
 
     updatedAt?: string | null;
   }
