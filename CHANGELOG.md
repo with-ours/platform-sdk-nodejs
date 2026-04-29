@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.9.0 (2026-04-29)
+
+Full Changelog: [v1.8.2...v1.9.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.8.2...v1.9.0)
+
+### Features
+
+* **api:** api update ([c6c4c66](https://github.com/with-ours/platform-sdk-nodejs/commit/c6c4c66c7c9e214bdf2e70d02771e0fa997b8b20))
+* **api:** api update ([6ceb329](https://github.com/with-ours/platform-sdk-nodejs/commit/6ceb3293e9de157a9e92fa0ef0546ea1a8388065))
+* support setting headers via env ([100a1b8](https://github.com/with-ours/platform-sdk-nodejs/commit/100a1b89c0f36b1012233191a02f0cc37cb3beab))
+
+
+### Chores
+
+* **format:** run eslint and prettier separately ([037d949](https://github.com/with-ours/platform-sdk-nodejs/commit/037d94905b74d201d8580be99f380f4619d40888))
+* **internal:** codegen related update ([9946416](https://github.com/with-ours/platform-sdk-nodejs/commit/99464165e640ef175502f3e07ccbae6c001080ad))
+
 ## 1.8.2 (2026-04-23)
 
 Full Changelog: [v1.8.1...v1.8.2](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.8.1...v1.8.2)

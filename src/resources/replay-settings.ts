@@ -78,7 +78,11 @@ export namespace ReplaySettingListResponse {
 
     status: 'Disabled' | 'Enabled';
 
+    customDomain?: string | null;
+
     updatedAt?: string | null;
+
+    whitelistDomains?: Array<unknown> | null;
   }
 }
 

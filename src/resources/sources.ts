@@ -125,7 +125,25 @@ export interface SourceRetrieveResponse {
     | 'WhatConverts'
     | 'iOSNativeApi';
 
+  botControlMode?: string | null;
+
+  botScoreThreshold?: number | null;
+
+  excludeRequestContext?: boolean | null;
+
   name?: string | null;
+
+  probabilisticIdentity?: unknown | null;
+
+  projectAPIKey?: string | null;
+
+  redirectUrl?: string | null;
+
+  selectedAccountId?: string | null;
+
+  whitelistDomains?: Array<unknown> | null;
+
+  whitelistIps?: Array<unknown> | null;
 }
 
 export interface SourceUpdateResponse {
@@ -216,7 +234,25 @@ export namespace SourceListResponse {
       | 'WhatConverts'
       | 'iOSNativeApi';
 
+    botControlMode?: string | null;
+
+    botScoreThreshold?: number | null;
+
+    excludeRequestContext?: boolean | null;
+
     name?: string | null;
+
+    probabilisticIdentity?: unknown | null;
+
+    projectAPIKey?: string | null;
+
+    redirectUrl?: string | null;
+
+    selectedAccountId?: string | null;
+
+    whitelistDomains?: Array<unknown> | null;
+
+    whitelistIps?: Array<unknown> | null;
   }
 }
 
