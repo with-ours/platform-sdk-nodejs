@@ -45,6 +45,7 @@ import {
   Destinations,
 } from './resources/destinations';
 import {
+  GlobalDispatchCenterCreateParams,
   GlobalDispatchCenterCreateResponse,
   GlobalDispatchCenterDeleteResponse,
   GlobalDispatchCenterListResponse,
@@ -862,6 +863,7 @@ export declare namespace OursPrivacyPlatform {
     type GlobalDispatchCenterUpdateResponse as GlobalDispatchCenterUpdateResponse,
     type GlobalDispatchCenterListResponse as GlobalDispatchCenterListResponse,
     type GlobalDispatchCenterDeleteResponse as GlobalDispatchCenterDeleteResponse,
+    type GlobalDispatchCenterCreateParams as GlobalDispatchCenterCreateParams,
     type GlobalDispatchCenterUpdateParams as GlobalDispatchCenterUpdateParams,
   };
 
