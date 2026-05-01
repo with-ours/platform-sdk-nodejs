@@ -16,7 +16,7 @@ export class ReplaySettings extends APIResource {
   /**
    * Find a single replay setting by ID. Requires scope: replaySettings:find
    */
-  retrieve(id: string, options?: RequestOptions): APIPromise<unknown> {
+  retrieve(id: string, options?: RequestOptions): APIPromise<ReplaySettingRetrieveResponse | null> {
     return this._client.get(path`/rest/v1/replay-settings/${id}`, options);
   }
 
@@ -54,7 +54,21 @@ export interface ReplaySettingCreateResponse {
   replaySettings?: unknown | null;
 }
 
-export type ReplaySettingRetrieveResponse = unknown;
+export interface ReplaySettingRetrieveResponse {
+  id: string;
+
+  createdAt: string;
+
+  name: string;
+
+  status: 'Disabled' | 'Enabled';
+
+  customDomain?: string | null;
+
+  updatedAt?: string | null;
+
+  whitelistDomains?: Array<string> | null;
+}
 
 export interface ReplaySettingUpdateResponse {
   isSuccess: boolean;
@@ -82,7 +96,7 @@ export namespace ReplaySettingListResponse {
 
     updatedAt?: string | null;
 
-    whitelistDomains?: Array<unknown> | null;
+    whitelistDomains?: Array<string> | null;
   }
 }
 
@@ -101,7 +115,7 @@ export interface ReplaySettingCreateParams {
 
   status?: string | null;
 
-  whitelistDomains?: Array<unknown> | null;
+  whitelistDomains?: Array<string> | null;
 }
 
 export interface ReplaySettingUpdateParams {
@@ -111,7 +125,7 @@ export interface ReplaySettingUpdateParams {
 
   status?: string | null;
 
-  whitelistDomains?: Array<unknown> | null;
+  whitelistDomains?: Array<string> | null;
 }
 
 export declare namespace ReplaySettings {
