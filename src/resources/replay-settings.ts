@@ -7,21 +7,27 @@ import { path } from '../internal/utils/path';
 
 export class ReplaySettings extends APIResource {
   /**
-   * Create a new replay setting. Requires scope: replaySettings:create
+   * Create the replay configuration for this account. Each account is limited to one
+   * replay configuration — calls made when one already exists return HTTP 409 with
+   * the reason in the response `error` field. Requires scope: replaySettings:create
    */
   create(body: ReplaySettingCreateParams, options?: RequestOptions): APIPromise<ReplaySettingCreateResponse> {
     return this._client.post('/rest/v1/replay-settings', { body, ...options });
   }
 
   /**
-   * Find a single replay setting by ID. Requires scope: replaySettings:find
+   * Fetch a single replay configuration by ID, including its whitelisted domains and
+   * custom domain. Requires scope: replaySettings:find
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<ReplaySettingRetrieveResponse | null> {
     return this._client.get(path`/rest/v1/replay-settings/${id}`, options);
   }
 
   /**
-   * Update a replay setting. Requires scope: replaySettings:update
+   * Update one or more fields on an existing replay configuration. Only the fields
+   * you send are changed; omitted fields keep their current value. Note that
+   * `whitelistDomains` is replaced wholesale (not merged with the existing list).
+   * Requires scope: replaySettings:update
    */
   update(
     id: string,
@@ -32,14 +38,17 @@ export class ReplaySettings extends APIResource {
   }
 
   /**
-   * List all replay settings. Requires scope: replaySettings:list
+   * List the replay configurations on this account. Replay settings control which
+   * domains may capture session replays and where the capture script is hosted.
+   * Requires scope: replaySettings:list
    */
   list(options?: RequestOptions): APIPromise<ReplaySettingListResponse> {
     return this._client.get('/rest/v1/replay-settings', options);
   }
 
   /**
-   * Delete a replay setting. Requires scope: replaySettings:delete
+   * Delete the replay configuration. Capture stops immediately for all whitelisted
+   * domains. Requires scope: replaySettings:delete
    */
   delete(id: string, options?: RequestOptions): APIPromise<ReplaySettingDeleteResponse> {
     return this._client.delete(path`/rest/v1/replay-settings/${id}`, options);
@@ -55,18 +64,45 @@ export interface ReplaySettingCreateResponse {
 }
 
 export interface ReplaySettingRetrieveResponse {
+  /**
+   * Stable identifier (UUID) for this replay configuration.
+   */
   id: string;
 
+  /**
+   * ISO-8601 timestamp when this configuration was created.
+   */
   createdAt: string;
 
+  /**
+   * Human-readable label for this replay configuration. Shown in the dashboard. May
+   * be empty.
+   */
   name: string;
 
+  /**
+   * Whether session replay capture is currently active. Set to "Enabled" to start
+   * capturing replays from whitelisted domains, or "Disabled" to pause capture
+   * without losing the configuration.
+   */
   status: 'Disabled' | 'Enabled';
 
+  /**
+   * Optional custom domain (CNAME) for hosting the replay capture script. Leave null
+   * to use the default Ours Privacy domain.
+   */
   customDomain?: string | null;
 
+  /**
+   * ISO-8601 timestamp of the most recent update, or null if never updated.
+   */
   updatedAt?: string | null;
 
+  /**
+   * Hostnames where session replay capture is permitted. Replays initiated from any
+   * host not in this list are dropped. PATCH replaces the list — partial updates are
+   * not merged.
+   */
   whitelistDomains?: Array<string> | null;
 }
 
@@ -84,18 +120,45 @@ export interface ReplaySettingListResponse {
 
 export namespace ReplaySettingListResponse {
   export interface Entity {
+    /**
+     * Stable identifier (UUID) for this replay configuration.
+     */
     id: string;
 
+    /**
+     * ISO-8601 timestamp when this configuration was created.
+     */
     createdAt: string;
 
+    /**
+     * Human-readable label for this replay configuration. Shown in the dashboard. May
+     * be empty.
+     */
     name: string;
 
+    /**
+     * Whether session replay capture is currently active. Set to "Enabled" to start
+     * capturing replays from whitelisted domains, or "Disabled" to pause capture
+     * without losing the configuration.
+     */
     status: 'Disabled' | 'Enabled';
 
+    /**
+     * Optional custom domain (CNAME) for hosting the replay capture script. Leave null
+     * to use the default Ours Privacy domain.
+     */
     customDomain?: string | null;
 
+    /**
+     * ISO-8601 timestamp of the most recent update, or null if never updated.
+     */
     updatedAt?: string | null;
 
+    /**
+     * Hostnames where session replay capture is permitted. Replays initiated from any
+     * host not in this list are dropped. PATCH replaces the list — partial updates are
+     * not merged.
+     */
     whitelistDomains?: Array<string> | null;
   }
 }
@@ -109,22 +172,58 @@ export interface ReplaySettingDeleteResponse {
 }
 
 export interface ReplaySettingCreateParams {
+  /**
+   * Optional custom domain (CNAME) for hosting the replay capture script. Leave null
+   * to use the default Ours Privacy domain.
+   */
   customDomain?: string | null;
 
+  /**
+   * Human-readable label for this replay configuration. Shown in the dashboard. May
+   * be empty.
+   */
   name?: string | null;
 
-  status?: string | null;
+  /**
+   * Whether session replay capture is currently active. Set to "Enabled" to start
+   * capturing replays from whitelisted domains, or "Disabled" to pause capture
+   * without losing the configuration.
+   */
+  status?: 'Disabled' | 'Enabled' | null;
 
+  /**
+   * Hostnames where session replay capture is permitted. Replays initiated from any
+   * host not in this list are dropped. PATCH replaces the list — partial updates are
+   * not merged.
+   */
   whitelistDomains?: Array<string> | null;
 }
 
 export interface ReplaySettingUpdateParams {
+  /**
+   * Optional custom domain (CNAME) for hosting the replay capture script. Leave null
+   * to use the default Ours Privacy domain.
+   */
   customDomain?: string | null;
 
+  /**
+   * Human-readable label for this replay configuration. Shown in the dashboard. May
+   * be empty.
+   */
   name?: string | null;
 
-  status?: string | null;
+  /**
+   * Whether session replay capture is currently active. Set to "Enabled" to start
+   * capturing replays from whitelisted domains, or "Disabled" to pause capture
+   * without losing the configuration.
+   */
+  status?: 'Disabled' | 'Enabled' | null;
 
+  /**
+   * Hostnames where session replay capture is permitted. Replays initiated from any
+   * host not in this list are dropped. PATCH replaces the list — partial updates are
+   * not merged.
+   */
   whitelistDomains?: Array<string> | null;
 }
 
