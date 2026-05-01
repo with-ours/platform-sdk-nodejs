@@ -227,7 +227,7 @@ export interface DestinationRetrieveResponse {
 
   httpDestinationUrl?: string | null;
 
-  limitedToSourceIds?: Array<unknown> | null;
+  limitedToSourceIds?: Array<string> | null;
 
   managerGoogleCustomerId?: string | null;
 
@@ -430,7 +430,7 @@ export namespace DestinationListResponse {
 
     httpDestinationUrl?: string | null;
 
-    limitedToSourceIds?: Array<unknown> | null;
+    limitedToSourceIds?: Array<string> | null;
 
     managerGoogleCustomerId?: string | null;
 
@@ -545,7 +545,7 @@ export interface DestinationUpdateParams {
 
   httpDestinationUrl?: string | null;
 
-  limitedToSourceIds?: Array<unknown> | null;
+  limitedToSourceIds?: Array<string> | null;
 
   managerGoogleCustomerId?: string | null;
 
