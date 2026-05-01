@@ -56,8 +56,8 @@ describe('resource sources', () => {
       projectAPIKey: 'projectAPIKey',
       redirectUrl: 'redirectUrl',
       selectedAccountId: 'selectedAccountId',
-      whitelistDomains: [{}],
-      whitelistIps: [{}],
+      whitelistDomains: ['string'],
+      whitelistIps: ['string'],
     });
   });
 

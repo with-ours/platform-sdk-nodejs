@@ -141,9 +141,9 @@ export interface SourceRetrieveResponse {
 
   selectedAccountId?: string | null;
 
-  whitelistDomains?: Array<unknown> | null;
+  whitelistDomains?: Array<string> | null;
 
-  whitelistIps?: Array<unknown> | null;
+  whitelistIps?: Array<string> | null;
 }
 
 export interface SourceUpdateResponse {
@@ -250,9 +250,9 @@ export namespace SourceListResponse {
 
     selectedAccountId?: string | null;
 
-    whitelistDomains?: Array<unknown> | null;
+    whitelistDomains?: Array<string> | null;
 
-    whitelistIps?: Array<unknown> | null;
+    whitelistIps?: Array<string> | null;
   }
 }
 
@@ -314,9 +314,9 @@ export interface SourceUpdateParams {
 
   selectedAccountId?: string | null;
 
-  whitelistDomains?: Array<unknown> | null;
+  whitelistDomains?: Array<string> | null;
 
-  whitelistIps?: Array<unknown> | null;
+  whitelistIps?: Array<string> | null;
 }
 
 export declare namespace Sources {

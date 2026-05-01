@@ -166,25 +166,25 @@ describe('resource consentSettings', () => {
             hideFromBots: true,
             showVendorsInPreferences: true,
           },
-          additionalRegions: [{}],
+          additionalRegions: ['string'],
         },
       ],
       services: [
         {
           internalNotes: 'internalNotes',
           label: 'label',
-          additionalCategories: [{}],
+          additionalCategories: ['string'],
           category: 'category',
-          domainPatterns: [{}],
+          domainPatterns: ['string'],
         },
       ],
       status: 'Disabled',
       consentCookieName: 'consentCookieName',
       customDomain: 'customDomain',
       revision: 0,
-      skipBlockingClassNames: [{}],
+      skipBlockingClassNames: ['string'],
       webSDKToken: 'webSDKToken',
-      whitelistDomains: [{}],
+      whitelistDomains: ['string'],
     });
   });
 

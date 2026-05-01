@@ -92,27 +92,27 @@ export namespace VersionListResponse {
 }
 
 export interface VersionCreateParams {
-  includeAllowedEvents?: Array<unknown> | null;
+  includeAllowedEvents?: Array<string> | null;
 
-  includeConsentSettings?: Array<unknown> | null;
+  includeConsentSettings?: Array<string> | null;
 
-  includeDestinations?: Array<unknown> | null;
+  includeDestinations?: Array<string> | null;
 
-  includeExternalAllowedEventData?: Array<unknown> | null;
+  includeExternalAllowedEventData?: Array<string> | null;
 
-  includeGlobalDispatchCenters?: Array<unknown> | null;
+  includeGlobalDispatchCenters?: Array<string> | null;
 
-  includeMappings?: Array<unknown> | null;
+  includeMappings?: Array<string> | null;
 
-  includeReplaySettings?: Array<unknown> | null;
+  includeReplaySettings?: Array<string> | null;
 
-  includeSources?: Array<unknown> | null;
+  includeSources?: Array<string> | null;
 
-  includeTagManagerTags?: Array<unknown> | null;
+  includeTagManagerTags?: Array<string> | null;
 
-  includeTagManagerTriggers?: Array<unknown> | null;
+  includeTagManagerTriggers?: Array<string> | null;
 
-  includeTagManagerVariables?: Array<unknown> | null;
+  includeTagManagerVariables?: Array<string> | null;
 
   name?: string | null;
 

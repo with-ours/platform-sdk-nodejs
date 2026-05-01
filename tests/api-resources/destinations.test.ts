@@ -55,7 +55,7 @@ describe('resource destinations', () => {
       g4AnalyticsTrackOnPage: true,
       hashingSalt: 'hashingSalt',
       httpDestinationUrl: 'httpDestinationUrl',
-      limitedToSourceIds: [{}],
+      limitedToSourceIds: ['string'],
       managerGoogleCustomerId: 'managerGoogleCustomerId',
       name: 'name',
       projectAPIKey: 'projectAPIKey',

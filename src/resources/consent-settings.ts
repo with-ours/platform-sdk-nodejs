@@ -16,7 +16,7 @@ export class ConsentSettings extends APIResource {
   /**
    * Find a single consent setting by ID. Requires scope: consentSettings:find
    */
-  retrieve(id: string, options?: RequestOptions): APIPromise<unknown> {
+  retrieve(id: string, options?: RequestOptions): APIPromise<ConsentSettingRetrieveResponse | null> {
     return this._client.get(path`/rest/v1/consent-settings/${id}`, options);
   }
 
@@ -54,7 +54,191 @@ export interface ConsentSettingCreateResponse {
   consentSettings?: unknown | null;
 }
 
-export type ConsentSettingRetrieveResponse = unknown;
+export interface ConsentSettingRetrieveResponse {
+  id: string;
+
+  categories: Array<ConsentSettingRetrieveResponse.Category>;
+
+  createdAt: string;
+
+  default: ConsentSettingRetrieveResponse.Default;
+
+  kind: string;
+
+  name: string;
+
+  regions: Array<ConsentSettingRetrieveResponse.Region>;
+
+  services: Array<ConsentSettingRetrieveResponse.Service>;
+
+  status: 'Disabled' | 'Enabled';
+
+  consentCookieName?: string | null;
+
+  customDomain?: string | null;
+
+  revision?: number | null;
+
+  skipBlockingClassNames?: Array<string> | null;
+
+  updatedAt?: string | null;
+
+  webSDKToken?: string | null;
+
+  whitelistDomains?: Array<string> | null;
+}
+
+export namespace ConsentSettingRetrieveResponse {
+  export interface Category {
+    label: string;
+
+    priority: number;
+
+    value: string;
+  }
+
+  export interface Default {
+    categories: Array<Default.Category>;
+
+    language: string;
+
+    mode: 'opt_in' | 'opt_out';
+
+    translations: Array<Default.Translation>;
+
+    autoblockUnknown?: boolean | null;
+
+    autoShow?: boolean | null;
+
+    autoShowDismissConfig?: unknown | null;
+
+    autoShowDismissMode?: string | null;
+
+    disablePageInteraction?: boolean | null;
+
+    guiOptions?: unknown | null;
+
+    hideFromBots?: boolean | null;
+
+    showVendorsInPreferences?: boolean | null;
+  }
+
+  export namespace Default {
+    export interface Category {
+      key: string;
+
+      value: Category.Value;
+    }
+
+    export namespace Category {
+      export interface Value {
+        enabled: boolean;
+
+        autoDisableOnGPC?: boolean | null;
+
+        readOnly?: boolean | null;
+
+        reloadPage?: boolean | null;
+      }
+    }
+
+    export interface Translation {
+      language: string;
+
+      value: Translation.Value;
+    }
+
+    export namespace Translation {
+      export interface Value {
+        consentModal?: unknown | null;
+
+        preferencesModal?: unknown | null;
+      }
+    }
+  }
+
+  export interface Region {
+    regionCode: string;
+
+    rule: Region.Rule;
+
+    additionalRegions?: Array<string> | null;
+  }
+
+  export namespace Region {
+    export interface Rule {
+      categories: Array<Rule.Category>;
+
+      language: string;
+
+      mode: 'opt_in' | 'opt_out';
+
+      translations: Array<Rule.Translation>;
+
+      autoblockUnknown?: boolean | null;
+
+      autoShow?: boolean | null;
+
+      autoShowDismissConfig?: unknown | null;
+
+      autoShowDismissMode?: string | null;
+
+      disablePageInteraction?: boolean | null;
+
+      guiOptions?: unknown | null;
+
+      hideFromBots?: boolean | null;
+
+      showVendorsInPreferences?: boolean | null;
+    }
+
+    export namespace Rule {
+      export interface Category {
+        key: string;
+
+        value: Category.Value;
+      }
+
+      export namespace Category {
+        export interface Value {
+          enabled: boolean;
+
+          autoDisableOnGPC?: boolean | null;
+
+          readOnly?: boolean | null;
+
+          reloadPage?: boolean | null;
+        }
+      }
+
+      export interface Translation {
+        language: string;
+
+        value: Translation.Value;
+      }
+
+      export namespace Translation {
+        export interface Value {
+          consentModal?: unknown | null;
+
+          preferencesModal?: unknown | null;
+        }
+      }
+    }
+  }
+
+  export interface Service {
+    internalNotes: string;
+
+    label: string;
+
+    additionalCategories?: Array<string> | null;
+
+    category?: string | null;
+
+    domainPatterns?: Array<string> | null;
+  }
+}
 
 export interface ConsentSettingUpdateResponse {
   isSuccess: boolean;
@@ -94,13 +278,13 @@ export namespace ConsentSettingListResponse {
 
     revision?: number | null;
 
-    skipBlockingClassNames?: Array<unknown> | null;
+    skipBlockingClassNames?: Array<string> | null;
 
     updatedAt?: string | null;
 
     webSDKToken?: string | null;
 
-    whitelistDomains?: Array<unknown> | null;
+    whitelistDomains?: Array<string> | null;
   }
 
   export namespace Entity {
@@ -177,7 +361,7 @@ export namespace ConsentSettingListResponse {
 
       rule: Region.Rule;
 
-      additionalRegions?: Array<unknown> | null;
+      additionalRegions?: Array<string> | null;
     }
 
     export namespace Region {
@@ -247,11 +431,11 @@ export namespace ConsentSettingListResponse {
 
       label: string;
 
-      additionalCategories?: Array<unknown> | null;
+      additionalCategories?: Array<string> | null;
 
       category?: string | null;
 
-      domainPatterns?: Array<unknown> | null;
+      domainPatterns?: Array<string> | null;
     }
   }
 }
@@ -289,11 +473,11 @@ export interface ConsentSettingUpdateParams {
 
   revision?: number | null;
 
-  skipBlockingClassNames?: Array<unknown> | null;
+  skipBlockingClassNames?: Array<string> | null;
 
   webSDKToken?: string | null;
 
-  whitelistDomains?: Array<unknown> | null;
+  whitelistDomains?: Array<string> | null;
 }
 
 export namespace ConsentSettingUpdateParams {
@@ -370,7 +554,7 @@ export namespace ConsentSettingUpdateParams {
 
     rule: Region.Rule;
 
-    additionalRegions?: Array<unknown> | null;
+    additionalRegions?: Array<string> | null;
   }
 
   export namespace Region {
@@ -440,11 +624,11 @@ export namespace ConsentSettingUpdateParams {
 
     label: string;
 
-    additionalCategories?: Array<unknown> | null;
+    additionalCategories?: Array<string> | null;
 
     category?: string | null;
 
-    domainPatterns?: Array<unknown> | null;
+    domainPatterns?: Array<string> | null;
   }
 }
 
