@@ -65,4 +65,5 @@ export {
   type VersionListResponse,
   type VersionCreateParams,
   type VersionUpdateParams,
+  type VersionListParams,
 } from './versions';

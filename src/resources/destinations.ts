@@ -21,7 +21,8 @@ export class Destinations extends APIResource {
   }
 
   /**
-   * Update a destination. Requires scope: destination:update
+   * Partially update a destination. Only the fields you send are changed. Requires
+   * scope: destination:update
    */
   update(
     id: string,
