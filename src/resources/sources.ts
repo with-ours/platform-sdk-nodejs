@@ -21,7 +21,8 @@ export class Sources extends APIResource {
   }
 
   /**
-   * Update a source. Requires scope: source:update
+   * Partially update a source. Only the fields you send are changed. Requires scope:
+   * source:update
    */
   update(id: string, body: SourceUpdateParams, options?: RequestOptions): APIPromise<SourceUpdateResponse> {
     return this._client.patch(path`/rest/v1/sources/${id}`, { body, ...options });

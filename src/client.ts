@@ -77,6 +77,7 @@ import {
 import {
   VersionCreateParams,
   VersionCreateResponse,
+  VersionListParams,
   VersionListResponse,
   VersionRetrieveResponse,
   VersionUpdateParams,
@@ -886,5 +887,6 @@ export declare namespace OursPrivacyPlatform {
     type VersionListResponse as VersionListResponse,
     type VersionCreateParams as VersionCreateParams,
     type VersionUpdateParams as VersionUpdateParams,
+    type VersionListParams as VersionListParams,
   };
 }

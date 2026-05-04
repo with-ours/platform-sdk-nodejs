@@ -24,7 +24,8 @@ export class GlobalDispatchCenters extends APIResource {
   }
 
   /**
-   * Update a global dispatch center. Requires scope: globalDispatch:update
+   * Partially update a global dispatch center. Only the fields you send are changed.
+   * Requires scope: globalDispatch:update
    */
   update(
     id: string,
@@ -71,15 +72,55 @@ export interface GlobalDispatchCenterCreateResponse {
   kind: string;
 
   /**
+   * Routing categories in priority order (1..N).
+   */
+  categories?: Array<GlobalDispatchCenterCreateResponse.Category> | null;
+
+  /**
    * Human-readable name shown in the dashboard.
    */
   name?: string | null;
+
+  /**
+   * Free-form notes for this center.
+   */
+  notes?: string | null;
 
   /**
    * ISO 8601 timestamp of the last write. Equal to createdAt on a freshly created
    * center; advances on every PATCH.
    */
   updatedAt?: string | null;
+}
+
+export namespace GlobalDispatchCenterCreateResponse {
+  export interface Category {
+    /**
+     * Display name for the category.
+     */
+    name: string;
+
+    /**
+     * 1-indexed sort position. Always equals (sorted index + 1) — see PATCH for
+     * details.
+     */
+    priority: number;
+
+    /**
+     * Optional human-readable description.
+     */
+    description?: string | null;
+
+    /**
+     * Destinations that receive events matching this category.
+     */
+    destinationIds?: Array<string> | null;
+
+    /**
+     * Optional condition tree gating which events match this category.
+     */
+    logic?: unknown | null;
+  }
 }
 
 export interface GlobalDispatchCenterRetrieveResponse {
@@ -177,15 +218,55 @@ export interface GlobalDispatchCenterUpdateResponse {
   kind: string;
 
   /**
+   * Routing categories in priority order (1..N).
+   */
+  categories?: Array<GlobalDispatchCenterUpdateResponse.Category> | null;
+
+  /**
    * Human-readable name shown in the dashboard.
    */
   name?: string | null;
+
+  /**
+   * Free-form notes for this center.
+   */
+  notes?: string | null;
 
   /**
    * ISO 8601 timestamp of the last write. Equal to createdAt on a freshly created
    * center; advances on every PATCH.
    */
   updatedAt?: string | null;
+}
+
+export namespace GlobalDispatchCenterUpdateResponse {
+  export interface Category {
+    /**
+     * Display name for the category.
+     */
+    name: string;
+
+    /**
+     * 1-indexed sort position. Always equals (sorted index + 1) — see PATCH for
+     * details.
+     */
+    priority: number;
+
+    /**
+     * Optional human-readable description.
+     */
+    description?: string | null;
+
+    /**
+     * Destinations that receive events matching this category.
+     */
+    destinationIds?: Array<string> | null;
+
+    /**
+     * Optional condition tree gating which events match this category.
+     */
+    logic?: unknown | null;
+  }
 }
 
 export interface GlobalDispatchCenterListResponse {

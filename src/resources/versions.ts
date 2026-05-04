@@ -7,7 +7,12 @@ import { path } from '../internal/utils/path';
 
 export class Versions extends APIResource {
   /**
-   * Create a new version. Requires scope: version:publish
+   * Publish the current draft (i.e. all unpublished entity changes) as a new
+   * version. Returns the full Version on success. Returns HTTP 409 with the reason
+   * in the response `error` field when there are no draft changes to publish, when
+   * another publish is already in flight, or when the action otherwise conflicts
+   * with current state. To re-publish an existing version, use POST
+   * /rest/v1/versions/{id}/publish instead. Requires scope: version:publish
    */
   create(body: VersionCreateParams, options?: RequestOptions): APIPromise<VersionCreateResponse> {
     return this._client.post('/rest/v1/versions', { body, ...options });
@@ -21,24 +26,46 @@ export class Versions extends APIResource {
   }
 
   /**
-   * Update a version. Requires scope: version:update
+   * Partially update a version. Only the fields you send are changed. Requires
+   * scope: version:update
    */
   update(id: string, body: VersionUpdateParams, options?: RequestOptions): APIPromise<VersionUpdateResponse> {
     return this._client.patch(path`/rest/v1/versions/${id}`, { body, ...options });
   }
 
   /**
-   * List all versions. Requires scope: version:list
+   * List versions for this account, newest first. Supports cursor pagination and
+   * filtering by `isPublished`, `nameContains`, and `notesContains`. Combine filters
+   * with AND semantics. Requires scope: version:list
    */
-  list(options?: RequestOptions): APIPromise<VersionListResponse> {
-    return this._client.get('/rest/v1/versions', options);
+  list(
+    query: VersionListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<VersionListResponse> {
+    return this._client.get('/rest/v1/versions', { query, ...options });
   }
 }
 
 export interface VersionCreateResponse {
-  success: boolean;
+  id: string;
 
-  error?: string | null;
+  createdAt: string;
+
+  isPublished: boolean;
+
+  versionNumber: number;
+
+  name?: string | null;
+
+  notes?: string | null;
+
+  /**
+   * When this version was most recently published. NOT cleared when a newer version
+   * is published — `publishedAt` reflects the most recent successful publish of this
+   * row, regardless of whether `isPublished` is currently true. Use `isPublished` to
+   * determine the current live version.
+   */
+  publishedAt?: string | null;
 }
 
 export interface VersionRetrieveResponse {
@@ -54,6 +81,12 @@ export interface VersionRetrieveResponse {
 
   notes?: string | null;
 
+  /**
+   * When this version was most recently published. NOT cleared when a newer version
+   * is published — `publishedAt` reflects the most recent successful publish of this
+   * row, regardless of whether `isPublished` is currently true. Use `isPublished` to
+   * determine the current live version.
+   */
   publishedAt?: string | null;
 }
 
@@ -70,13 +103,23 @@ export interface VersionUpdateResponse {
 
   notes?: string | null;
 
+  /**
+   * When this version was most recently published. NOT cleared when a newer version
+   * is published — `publishedAt` reflects the most recent successful publish of this
+   * row, regardless of whether `isPublished` is currently true. Use `isPublished` to
+   * determine the current live version.
+   */
   publishedAt?: string | null;
 }
 
-export type VersionListResponse = Array<VersionListResponse.VersionListResponseItem>;
+export interface VersionListResponse {
+  entities: Array<VersionListResponse.Entity>;
+
+  pagination: VersionListResponse.Pagination;
+}
 
 export namespace VersionListResponse {
-  export interface VersionListResponseItem {
+  export interface Entity {
     id: string;
 
     createdAt: string;
@@ -87,7 +130,19 @@ export namespace VersionListResponse {
 
     name?: string | null;
 
+    /**
+     * When this version was most recently published. NOT cleared when a newer version
+     * is published — `publishedAt` reflects the most recent successful publish of this
+     * row, regardless of whether `isPublished` is currently true. Use `isPublished` to
+     * determine the current live version.
+     */
     publishedAt?: string | null;
+  }
+
+  export interface Pagination {
+    hasMore: boolean;
+
+    nextCursor?: string | null;
   }
 }
 
@@ -125,6 +180,35 @@ export interface VersionUpdateParams {
   notes?: string | null;
 }
 
+export interface VersionListParams {
+  /**
+   * Opaque pagination cursor from pagination.nextCursor in the previous response. Do
+   * not decode or modify it. Malformed cursors return 400 Bad Request.
+   */
+  cursor?: string;
+
+  /**
+   * Filter to only published or unpublished versions.
+   */
+  isPublished?: 'true' | 'false';
+
+  /**
+   * Maximum number of versions to return. Defaults to 25; values below 1 are clamped
+   * to 1 and values above 100 are clamped to 100.
+   */
+  limit?: number | null;
+
+  /**
+   * Case-insensitive substring match on the version name.
+   */
+  nameContains?: string;
+
+  /**
+   * Case-insensitive substring match on the version notes.
+   */
+  notesContains?: string;
+}
+
 export declare namespace Versions {
   export {
     type VersionCreateResponse as VersionCreateResponse,
@@ -133,5 +217,6 @@ export declare namespace Versions {
     type VersionListResponse as VersionListResponse,
     type VersionCreateParams as VersionCreateParams,
     type VersionUpdateParams as VersionUpdateParams,
+    type VersionListParams as VersionListParams,
   };
 }

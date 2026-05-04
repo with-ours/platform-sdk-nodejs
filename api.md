@@ -118,4 +118,4 @@ Methods:
 - <code title="post /rest/v1/versions">client.versions.<a href="./src/resources/versions.ts">create</a>({ ...params }) -> VersionCreateResponse</code>
 - <code title="get /rest/v1/versions/{id}">client.versions.<a href="./src/resources/versions.ts">retrieve</a>(id) -> VersionRetrieveResponse</code>
 - <code title="patch /rest/v1/versions/{id}">client.versions.<a href="./src/resources/versions.ts">update</a>(id, { ...params }) -> VersionUpdateResponse</code>
-- <code title="get /rest/v1/versions">client.versions.<a href="./src/resources/versions.ts">list</a>() -> VersionListResponse</code>
+- <code title="get /rest/v1/versions">client.versions.<a href="./src/resources/versions.ts">list</a>({ ...params }) -> VersionListResponse</code>
