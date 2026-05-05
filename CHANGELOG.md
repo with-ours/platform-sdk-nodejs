@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.13.0 (2026-05-05)
+
+Full Changelog: [v1.12.0...v1.13.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.12.0...v1.13.0)
+
+### Features
+
+* **api:** api update ([5779a75](https://github.com/with-ours/platform-sdk-nodejs/commit/5779a753ebc70b29f232d1be9b3cf320a59231e5))
+* **api:** manual updates ([413e399](https://github.com/with-ours/platform-sdk-nodejs/commit/413e39903f106346ce7059a10a140099126dcd32))
+* **api:** manual updates ([c0538dc](https://github.com/with-ours/platform-sdk-nodejs/commit/c0538dcc4ed626cf91474237b33b1fa64914d89e))
+* **api:** manual updates ([f405e25](https://github.com/with-ours/platform-sdk-nodejs/commit/f405e257c70d517be62c1edf23e1db74022efe4a))
+
+
+### Chores
+
+* configure new SDK language ([e484fde](https://github.com/with-ours/platform-sdk-nodejs/commit/e484fde3a2d1769a2567df7ac23e5538a37cb954))
+
 ## 1.12.0 (2026-05-01)
 
 Full Changelog: [v1.11.0...v1.12.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.11.0...v1.12.0)

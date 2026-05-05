@@ -8,6 +8,17 @@ const client = new OursPrivacyPlatform({
 });
 
 describe('resource consentSettings', () => {
+  test('list', async () => {
+    const responsePromise = client.consentSettings.list();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
   test('create', async () => {
     const responsePromise = client.consentSettings.create();
     const rawResponse = await responsePromise.asResponse();
@@ -30,8 +41,8 @@ describe('resource consentSettings', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('update: only required params', async () => {
-    const responsePromise = client.consentSettings.update('id', {
+  test('replace: only required params', async () => {
+    const responsePromise = client.consentSettings.replace('id', {
       categories: [
         {
           label: 'label',
@@ -46,11 +57,11 @@ describe('resource consentSettings', () => {
             value: { enabled: true },
           },
         ],
-        language: 'language',
+        language: 'en',
         mode: 'opt_in',
         translations: [
           {
-            language: 'language',
+            language: 'en',
             value: {},
           },
         ],
@@ -58,7 +69,7 @@ describe('resource consentSettings', () => {
       name: 'name',
       regions: [
         {
-          regionCode: 'regionCode',
+          regionCode: 'US-CA',
           rule: {
             categories: [
               {
@@ -66,11 +77,11 @@ describe('resource consentSettings', () => {
                 value: { enabled: true },
               },
             ],
-            language: 'language',
+            language: 'en',
             mode: 'opt_in',
             translations: [
               {
-                language: 'language',
+                language: 'en',
                 value: {},
               },
             ],
@@ -89,8 +100,8 @@ describe('resource consentSettings', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('update: required and optional params', async () => {
-    const response = await client.consentSettings.update('id', {
+  test('replace: required and optional params', async () => {
+    const response = await client.consentSettings.replace('id', {
       categories: [
         {
           label: 'label',
@@ -110,11 +121,11 @@ describe('resource consentSettings', () => {
             },
           },
         ],
-        language: 'language',
+        language: 'en',
         mode: 'opt_in',
         translations: [
           {
-            language: 'language',
+            language: 'en',
             value: {
               consentModal: {},
               preferencesModal: {},
@@ -133,7 +144,7 @@ describe('resource consentSettings', () => {
       name: 'name',
       regions: [
         {
-          regionCode: 'regionCode',
+          regionCode: 'US-CA',
           rule: {
             categories: [
               {
@@ -146,11 +157,11 @@ describe('resource consentSettings', () => {
                 },
               },
             ],
-            language: 'language',
+            language: 'en',
             mode: 'opt_in',
             translations: [
               {
-                language: 'language',
+                language: 'en',
                 value: {
                   consentModal: {},
                   preferencesModal: {},
@@ -188,8 +199,8 @@ describe('resource consentSettings', () => {
     });
   });
 
-  test('list', async () => {
-    const responsePromise = client.consentSettings.list();
+  test('update', async () => {
+    const responsePromise = client.consentSettings.update('id', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

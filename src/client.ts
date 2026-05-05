@@ -14,6 +14,8 @@ import * as Opts from './internal/request-options';
 import { stringifyQuery } from './internal/utils/query';
 import { VERSION } from './version';
 import * as Errors from './core/error';
+import * as Pagination from './core/pagination';
+import { AbstractPage, type CursorParams, CursorResponse } from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
@@ -29,6 +31,8 @@ import {
   ConsentSettingCreateResponse,
   ConsentSettingDeleteResponse,
   ConsentSettingListResponse,
+  ConsentSettingReplaceParams,
+  ConsentSettingReplaceResponse,
   ConsentSettingRetrieveResponse,
   ConsentSettingUpdateParams,
   ConsentSettingUpdateResponse,
@@ -45,20 +49,80 @@ import {
   Destinations,
 } from './resources/destinations';
 import {
+  ExperimentSettingCreateParams,
+  ExperimentSettingCreateResponse,
+  ExperimentSettingDeleteResponse,
+  ExperimentSettingListResponse,
+  ExperimentSettingRetrieveResponse,
+  ExperimentSettingUpdateParams,
+  ExperimentSettingUpdateResponse,
+  ExperimentSettings,
+} from './resources/experiment-settings';
+import {
+  ExperimentVariantCreateParams,
+  ExperimentVariantCreateResponse,
+  ExperimentVariantDeleteResponse,
+  ExperimentVariantListParams,
+  ExperimentVariantListResponse,
+  ExperimentVariantRetrieveResponse,
+  ExperimentVariantUpdateParams,
+  ExperimentVariantUpdateResponse,
+  ExperimentVariants,
+} from './resources/experiment-variants';
+import {
+  ExperimentCreateParams,
+  ExperimentCreateResponse,
+  ExperimentDeleteResponse,
+  ExperimentListParams,
+  ExperimentListResponse,
+  ExperimentListResponsesCursor,
+  ExperimentPauseParams,
+  ExperimentPauseResponse,
+  ExperimentResultsParams,
+  ExperimentResultsResponse,
+  ExperimentResultsTimeSeriesParams,
+  ExperimentResultsTimeSeriesResponse,
+  ExperimentResumeParams,
+  ExperimentResumeResponse,
+  ExperimentRetrieveResponse,
+  ExperimentStartParams,
+  ExperimentStartResponse,
+  ExperimentStopParams,
+  ExperimentStopResponse,
+  ExperimentUpdateParams,
+  ExperimentUpdateResponse,
+  Experiments,
+} from './resources/experiments';
+import {
   GlobalDispatchCenterCreateParams,
   GlobalDispatchCenterCreateResponse,
   GlobalDispatchCenterDeleteResponse,
+  GlobalDispatchCenterListParams,
   GlobalDispatchCenterListResponse,
+  GlobalDispatchCenterListResponsesCursor,
   GlobalDispatchCenterRetrieveResponse,
   GlobalDispatchCenterUpdateParams,
   GlobalDispatchCenterUpdateResponse,
   GlobalDispatchCenters,
 } from './resources/global-dispatch-centers';
 import {
+  MappingCreateParams,
+  MappingCreateResponse,
+  MappingDeleteResponse,
+  MappingListParams,
+  MappingListResponse,
+  MappingRetrieveResponse,
+  MappingUpdateParams,
+  MappingUpdateResponse,
+  Mappings,
+} from './resources/mappings';
+import {
   ReplaySettingCreateParams,
   ReplaySettingCreateResponse,
   ReplaySettingDeleteResponse,
+  ReplaySettingListParams,
   ReplaySettingListResponse,
+  ReplaySettingListResponsesCursor,
   ReplaySettingRetrieveResponse,
   ReplaySettingUpdateParams,
   ReplaySettingUpdateResponse,
@@ -70,6 +134,7 @@ import {
   SourceDeleteResponse,
   SourceListResponse,
   SourceRetrieveResponse,
+  SourceTokensResponse,
   SourceUpdateParams,
   SourceUpdateResponse,
   Sources,
@@ -77,8 +142,13 @@ import {
 import {
   VersionCreateParams,
   VersionCreateResponse,
+  VersionDiffResponse,
+  VersionListParams,
   VersionListResponse,
+  VersionListResponsesCursor,
+  VersionPublishResponse,
   VersionRetrieveResponse,
+  VersionSnapshotResponse,
   VersionUpdateParams,
   VersionUpdateResponse,
   Versions,
@@ -548,6 +618,30 @@ export class OursPrivacyPlatform {
     return { response, options, controller, requestLogID, retryOfRequestLogID, startTime };
   }
 
+  getAPIList<Item, PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>>(
+    path: string,
+    Page: new (...args: any[]) => PageClass,
+    opts?: PromiseOrValue<RequestOptions>,
+  ): Pagination.PagePromise<PageClass, Item> {
+    return this.requestAPIList(
+      Page,
+      opts && 'then' in opts ?
+        opts.then((opts) => ({ method: 'get', path, ...opts }))
+      : { method: 'get', path, ...opts },
+    );
+  }
+
+  requestAPIList<
+    Item = unknown,
+    PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>,
+  >(
+    Page: new (...args: ConstructorParameters<typeof Pagination.AbstractPage>) => PageClass,
+    options: PromiseOrValue<FinalRequestOptions>,
+  ): Pagination.PagePromise<PageClass, Item> {
+    const request = this.makeRequest(options, null, undefined);
+    return new Pagination.PagePromise<PageClass, Item>(this as any as OursPrivacyPlatform, request, Page);
+  }
+
   async fetchWithTimeout(
     url: RequestInfo,
     init: RequestInit | undefined,
@@ -795,95 +889,178 @@ export class OursPrivacyPlatform {
 
   static toFile = Uploads.toFile;
 
-  destinations: API.Destinations = new API.Destinations(this);
-  sources: API.Sources = new API.Sources(this);
   allowedEvents: API.AllowedEvents = new API.AllowedEvents(this);
   consentSettings: API.ConsentSettings = new API.ConsentSettings(this);
+  destinations: API.Destinations = new API.Destinations(this);
+  experimentSettings: API.ExperimentSettings = new API.ExperimentSettings(this);
+  experimentVariants: API.ExperimentVariants = new API.ExperimentVariants(this);
+  experiments: API.Experiments = new API.Experiments(this);
   globalDispatchCenters: API.GlobalDispatchCenters = new API.GlobalDispatchCenters(this);
+  mappings: API.Mappings = new API.Mappings(this);
   replaySettings: API.ReplaySettings = new API.ReplaySettings(this);
+  sources: API.Sources = new API.Sources(this);
   versions: API.Versions = new API.Versions(this);
 }
 
-OursPrivacyPlatform.Destinations = Destinations;
-OursPrivacyPlatform.Sources = Sources;
 OursPrivacyPlatform.AllowedEvents = AllowedEvents;
 OursPrivacyPlatform.ConsentSettings = ConsentSettings;
+OursPrivacyPlatform.Destinations = Destinations;
+OursPrivacyPlatform.ExperimentSettings = ExperimentSettings;
+OursPrivacyPlatform.ExperimentVariants = ExperimentVariants;
+OursPrivacyPlatform.Experiments = Experiments;
 OursPrivacyPlatform.GlobalDispatchCenters = GlobalDispatchCenters;
+OursPrivacyPlatform.Mappings = Mappings;
 OursPrivacyPlatform.ReplaySettings = ReplaySettings;
+OursPrivacyPlatform.Sources = Sources;
 OursPrivacyPlatform.Versions = Versions;
 
 export declare namespace OursPrivacyPlatform {
   export type RequestOptions = Opts.RequestOptions;
 
-  export {
-    Destinations as Destinations,
-    type DestinationCreateResponse as DestinationCreateResponse,
-    type DestinationRetrieveResponse as DestinationRetrieveResponse,
-    type DestinationUpdateResponse as DestinationUpdateResponse,
-    type DestinationListResponse as DestinationListResponse,
-    type DestinationDeleteResponse as DestinationDeleteResponse,
-    type DestinationCreateParams as DestinationCreateParams,
-    type DestinationUpdateParams as DestinationUpdateParams,
-  };
-
-  export {
-    Sources as Sources,
-    type SourceCreateResponse as SourceCreateResponse,
-    type SourceRetrieveResponse as SourceRetrieveResponse,
-    type SourceUpdateResponse as SourceUpdateResponse,
-    type SourceListResponse as SourceListResponse,
-    type SourceDeleteResponse as SourceDeleteResponse,
-    type SourceCreateParams as SourceCreateParams,
-    type SourceUpdateParams as SourceUpdateParams,
-  };
+  export import Cursor = Pagination.Cursor;
+  export { type CursorParams as CursorParams, type CursorResponse as CursorResponse };
 
   export {
     AllowedEvents as AllowedEvents,
+    type AllowedEventListResponse as AllowedEventListResponse,
     type AllowedEventCreateResponse as AllowedEventCreateResponse,
     type AllowedEventRetrieveResponse as AllowedEventRetrieveResponse,
-    type AllowedEventListResponse as AllowedEventListResponse,
     type AllowedEventDeleteResponse as AllowedEventDeleteResponse,
     type AllowedEventCreateParams as AllowedEventCreateParams,
   };
 
   export {
     ConsentSettings as ConsentSettings,
+    type ConsentSettingListResponse as ConsentSettingListResponse,
     type ConsentSettingCreateResponse as ConsentSettingCreateResponse,
     type ConsentSettingRetrieveResponse as ConsentSettingRetrieveResponse,
+    type ConsentSettingReplaceResponse as ConsentSettingReplaceResponse,
     type ConsentSettingUpdateResponse as ConsentSettingUpdateResponse,
-    type ConsentSettingListResponse as ConsentSettingListResponse,
     type ConsentSettingDeleteResponse as ConsentSettingDeleteResponse,
+    type ConsentSettingReplaceParams as ConsentSettingReplaceParams,
     type ConsentSettingUpdateParams as ConsentSettingUpdateParams,
   };
 
   export {
+    Destinations as Destinations,
+    type DestinationListResponse as DestinationListResponse,
+    type DestinationCreateResponse as DestinationCreateResponse,
+    type DestinationRetrieveResponse as DestinationRetrieveResponse,
+    type DestinationUpdateResponse as DestinationUpdateResponse,
+    type DestinationDeleteResponse as DestinationDeleteResponse,
+    type DestinationCreateParams as DestinationCreateParams,
+    type DestinationUpdateParams as DestinationUpdateParams,
+  };
+
+  export {
+    ExperimentSettings as ExperimentSettings,
+    type ExperimentSettingListResponse as ExperimentSettingListResponse,
+    type ExperimentSettingCreateResponse as ExperimentSettingCreateResponse,
+    type ExperimentSettingRetrieveResponse as ExperimentSettingRetrieveResponse,
+    type ExperimentSettingUpdateResponse as ExperimentSettingUpdateResponse,
+    type ExperimentSettingDeleteResponse as ExperimentSettingDeleteResponse,
+    type ExperimentSettingCreateParams as ExperimentSettingCreateParams,
+    type ExperimentSettingUpdateParams as ExperimentSettingUpdateParams,
+  };
+
+  export {
+    ExperimentVariants as ExperimentVariants,
+    type ExperimentVariantListResponse as ExperimentVariantListResponse,
+    type ExperimentVariantCreateResponse as ExperimentVariantCreateResponse,
+    type ExperimentVariantRetrieveResponse as ExperimentVariantRetrieveResponse,
+    type ExperimentVariantUpdateResponse as ExperimentVariantUpdateResponse,
+    type ExperimentVariantDeleteResponse as ExperimentVariantDeleteResponse,
+    type ExperimentVariantListParams as ExperimentVariantListParams,
+    type ExperimentVariantCreateParams as ExperimentVariantCreateParams,
+    type ExperimentVariantUpdateParams as ExperimentVariantUpdateParams,
+  };
+
+  export {
+    Experiments as Experiments,
+    type ExperimentListResponse as ExperimentListResponse,
+    type ExperimentCreateResponse as ExperimentCreateResponse,
+    type ExperimentRetrieveResponse as ExperimentRetrieveResponse,
+    type ExperimentUpdateResponse as ExperimentUpdateResponse,
+    type ExperimentDeleteResponse as ExperimentDeleteResponse,
+    type ExperimentStartResponse as ExperimentStartResponse,
+    type ExperimentStopResponse as ExperimentStopResponse,
+    type ExperimentPauseResponse as ExperimentPauseResponse,
+    type ExperimentResumeResponse as ExperimentResumeResponse,
+    type ExperimentResultsResponse as ExperimentResultsResponse,
+    type ExperimentResultsTimeSeriesResponse as ExperimentResultsTimeSeriesResponse,
+    type ExperimentListResponsesCursor as ExperimentListResponsesCursor,
+    type ExperimentListParams as ExperimentListParams,
+    type ExperimentCreateParams as ExperimentCreateParams,
+    type ExperimentUpdateParams as ExperimentUpdateParams,
+    type ExperimentStartParams as ExperimentStartParams,
+    type ExperimentStopParams as ExperimentStopParams,
+    type ExperimentPauseParams as ExperimentPauseParams,
+    type ExperimentResumeParams as ExperimentResumeParams,
+    type ExperimentResultsParams as ExperimentResultsParams,
+    type ExperimentResultsTimeSeriesParams as ExperimentResultsTimeSeriesParams,
+  };
+
+  export {
     GlobalDispatchCenters as GlobalDispatchCenters,
+    type GlobalDispatchCenterListResponse as GlobalDispatchCenterListResponse,
     type GlobalDispatchCenterCreateResponse as GlobalDispatchCenterCreateResponse,
     type GlobalDispatchCenterRetrieveResponse as GlobalDispatchCenterRetrieveResponse,
     type GlobalDispatchCenterUpdateResponse as GlobalDispatchCenterUpdateResponse,
-    type GlobalDispatchCenterListResponse as GlobalDispatchCenterListResponse,
     type GlobalDispatchCenterDeleteResponse as GlobalDispatchCenterDeleteResponse,
+    type GlobalDispatchCenterListResponsesCursor as GlobalDispatchCenterListResponsesCursor,
+    type GlobalDispatchCenterListParams as GlobalDispatchCenterListParams,
     type GlobalDispatchCenterCreateParams as GlobalDispatchCenterCreateParams,
     type GlobalDispatchCenterUpdateParams as GlobalDispatchCenterUpdateParams,
   };
 
   export {
+    Mappings as Mappings,
+    type MappingListResponse as MappingListResponse,
+    type MappingCreateResponse as MappingCreateResponse,
+    type MappingRetrieveResponse as MappingRetrieveResponse,
+    type MappingUpdateResponse as MappingUpdateResponse,
+    type MappingDeleteResponse as MappingDeleteResponse,
+    type MappingListParams as MappingListParams,
+    type MappingCreateParams as MappingCreateParams,
+    type MappingUpdateParams as MappingUpdateParams,
+  };
+
+  export {
     ReplaySettings as ReplaySettings,
+    type ReplaySettingListResponse as ReplaySettingListResponse,
     type ReplaySettingCreateResponse as ReplaySettingCreateResponse,
     type ReplaySettingRetrieveResponse as ReplaySettingRetrieveResponse,
     type ReplaySettingUpdateResponse as ReplaySettingUpdateResponse,
-    type ReplaySettingListResponse as ReplaySettingListResponse,
     type ReplaySettingDeleteResponse as ReplaySettingDeleteResponse,
+    type ReplaySettingListResponsesCursor as ReplaySettingListResponsesCursor,
+    type ReplaySettingListParams as ReplaySettingListParams,
     type ReplaySettingCreateParams as ReplaySettingCreateParams,
     type ReplaySettingUpdateParams as ReplaySettingUpdateParams,
   };
 
   export {
+    Sources as Sources,
+    type SourceListResponse as SourceListResponse,
+    type SourceCreateResponse as SourceCreateResponse,
+    type SourceRetrieveResponse as SourceRetrieveResponse,
+    type SourceUpdateResponse as SourceUpdateResponse,
+    type SourceDeleteResponse as SourceDeleteResponse,
+    type SourceTokensResponse as SourceTokensResponse,
+    type SourceCreateParams as SourceCreateParams,
+    type SourceUpdateParams as SourceUpdateParams,
+  };
+
+  export {
     Versions as Versions,
+    type VersionListResponse as VersionListResponse,
     type VersionCreateResponse as VersionCreateResponse,
     type VersionRetrieveResponse as VersionRetrieveResponse,
     type VersionUpdateResponse as VersionUpdateResponse,
-    type VersionListResponse as VersionListResponse,
+    type VersionPublishResponse as VersionPublishResponse,
+    type VersionSnapshotResponse as VersionSnapshotResponse,
+    type VersionDiffResponse as VersionDiffResponse,
+    type VersionListResponsesCursor as VersionListResponsesCursor,
+    type VersionListParams as VersionListParams,
     type VersionCreateParams as VersionCreateParams,
     type VersionUpdateParams as VersionUpdateParams,
   };

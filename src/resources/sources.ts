@@ -7,6 +7,13 @@ import { path } from '../internal/utils/path';
 
 export class Sources extends APIResource {
   /**
+   * List all sources. Requires scope: source:list
+   */
+  list(options?: RequestOptions): APIPromise<SourceListResponse> {
+    return this._client.get('/rest/v1/sources', options);
+  }
+
+  /**
    * Create a new source. Requires scope: source:create
    */
   create(body: SourceCreateParams, options?: RequestOptions): APIPromise<SourceCreateResponse> {
@@ -21,17 +28,11 @@ export class Sources extends APIResource {
   }
 
   /**
-   * Update a source. Requires scope: source:update
+   * Partially update a source. Only the fields you send are changed. Requires scope:
+   * source:update
    */
   update(id: string, body: SourceUpdateParams, options?: RequestOptions): APIPromise<SourceUpdateResponse> {
     return this._client.patch(path`/rest/v1/sources/${id}`, { body, ...options });
-  }
-
-  /**
-   * List all sources. Requires scope: source:list
-   */
-  list(options?: RequestOptions): APIPromise<SourceListResponse> {
-    return this._client.get('/rest/v1/sources', options);
   }
 
   /**
@@ -39,6 +40,86 @@ export class Sources extends APIResource {
    */
   delete(id: string, options?: RequestOptions): APIPromise<SourceDeleteResponse> {
     return this._client.delete(path`/rest/v1/sources/${id}`, options);
+  }
+
+  /**
+   * Fetch install tokens and snippets for a source. Requires scope: source:view
+   */
+  tokens(id: string, options?: RequestOptions): APIPromise<SourceTokensResponse> {
+    return this._client.get(path`/rest/v1/sources/${id}/tokens`, options);
+  }
+}
+
+export interface SourceListResponse {
+  entities: Array<SourceListResponse.Entity>;
+}
+
+export namespace SourceListResponse {
+  export interface Entity {
+    id: string;
+
+    createdAt: string;
+
+    status: 'Disabled' | 'Enabled';
+
+    type:
+      | 'AlchemerWebhook'
+      | 'AndroidNativeApi'
+      | 'CSharpApi'
+      | 'CalComWebhooks'
+      | 'CalendlyWebhook'
+      | 'CallRail'
+      | 'CallTrackingMetrics'
+      | 'DotNetApi'
+      | 'FacebookLeadAds'
+      | 'FormsortWebhooks'
+      | 'Formstack'
+      | 'GoLangApi'
+      | 'HTTPApiSource'
+      | 'Healthie'
+      | 'HubspotAppActions'
+      | 'HubspotFormWebhook'
+      | 'JotFormWebhooks'
+      | 'KotlinApi'
+      | 'NodejsApi'
+      | 'PHPApi'
+      | 'PixelImage'
+      | 'PythonApi'
+      | 'ReactNativeApi'
+      | 'RedirectSource'
+      | 'RubyApi'
+      | 'SegmentWebPlugin'
+      | 'TypeformWebhooks'
+      | 'WebSource'
+      | 'Webhook'
+      | 'WhatConverts'
+      | 'iOSNativeApi';
+
+    botControlMode?: string | null;
+
+    botScoreThreshold?: number | null;
+
+    excludeRequestContext?: boolean | null;
+
+    name?: string | null;
+
+    probabilisticIdentity?: unknown | null;
+
+    projectAPIKey?: string | null;
+
+    redirectUrl?: string | null;
+
+    selectedAccountId?: string | null;
+
+    /**
+     * Optional domain allowlist for source event ingestion. When set, only requests
+     * from these domains are accepted for this source. This is separate from
+     * experimentation settings `whitelistDomains`, which gates experiment SDK
+     * delivery.
+     */
+    whitelistDomains?: Array<string> | null;
+
+    whitelistIps?: Array<string> | null;
   }
 }
 
@@ -141,6 +222,12 @@ export interface SourceRetrieveResponse {
 
   selectedAccountId?: string | null;
 
+  /**
+   * Optional domain allowlist for source event ingestion. When set, only requests
+   * from these domains are accepted for this source. This is separate from
+   * experimentation settings `whitelistDomains`, which gates experiment SDK
+   * delivery.
+   */
   whitelistDomains?: Array<string> | null;
 
   whitelistIps?: Array<string> | null;
@@ -189,74 +276,31 @@ export interface SourceUpdateResponse {
   name?: string | null;
 }
 
-export interface SourceListResponse {
-  entities: Array<SourceListResponse.Entity>;
-}
-
-export namespace SourceListResponse {
-  export interface Entity {
-    id: string;
-
-    createdAt: string;
-
-    status: 'Disabled' | 'Enabled';
-
-    type:
-      | 'AlchemerWebhook'
-      | 'AndroidNativeApi'
-      | 'CSharpApi'
-      | 'CalComWebhooks'
-      | 'CalendlyWebhook'
-      | 'CallRail'
-      | 'CallTrackingMetrics'
-      | 'DotNetApi'
-      | 'FacebookLeadAds'
-      | 'FormsortWebhooks'
-      | 'Formstack'
-      | 'GoLangApi'
-      | 'HTTPApiSource'
-      | 'Healthie'
-      | 'HubspotAppActions'
-      | 'HubspotFormWebhook'
-      | 'JotFormWebhooks'
-      | 'KotlinApi'
-      | 'NodejsApi'
-      | 'PHPApi'
-      | 'PixelImage'
-      | 'PythonApi'
-      | 'ReactNativeApi'
-      | 'RedirectSource'
-      | 'RubyApi'
-      | 'SegmentWebPlugin'
-      | 'TypeformWebhooks'
-      | 'WebSource'
-      | 'Webhook'
-      | 'WhatConverts'
-      | 'iOSNativeApi';
-
-    botControlMode?: string | null;
-
-    botScoreThreshold?: number | null;
-
-    excludeRequestContext?: boolean | null;
-
-    name?: string | null;
-
-    probabilisticIdentity?: unknown | null;
-
-    projectAPIKey?: string | null;
-
-    redirectUrl?: string | null;
-
-    selectedAccountId?: string | null;
-
-    whitelistDomains?: Array<string> | null;
-
-    whitelistIps?: Array<string> | null;
-  }
-}
-
 export type SourceDeleteResponse = boolean;
+
+export interface SourceTokensResponse {
+  /**
+   * Install token for the source.
+   */
+  token: string;
+
+  /**
+   * Ready-to-paste install snippet for the production token, including linked
+   * runtime tokens for supported modules.
+   */
+  installScript: string;
+
+  /**
+   * Ready-to-paste install snippet for the test token, suitable for validation
+   * before a live install.
+   */
+  testInstallScript: string;
+
+  /**
+   * Test-mode token derived from `token`.
+   */
+  testToken: string;
+}
 
 export interface SourceCreateParams {
   type:
@@ -321,11 +365,12 @@ export interface SourceUpdateParams {
 
 export declare namespace Sources {
   export {
+    type SourceListResponse as SourceListResponse,
     type SourceCreateResponse as SourceCreateResponse,
     type SourceRetrieveResponse as SourceRetrieveResponse,
     type SourceUpdateResponse as SourceUpdateResponse,
-    type SourceListResponse as SourceListResponse,
     type SourceDeleteResponse as SourceDeleteResponse,
+    type SourceTokensResponse as SourceTokensResponse,
     type SourceCreateParams as SourceCreateParams,
     type SourceUpdateParams as SourceUpdateParams,
   };
