@@ -8,6 +8,17 @@ const client = new OursPrivacyPlatform({
 });
 
 describe('resource consentSettings', () => {
+  test('list', async () => {
+    const responsePromise = client.consentSettings.list();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
   test('create', async () => {
     const responsePromise = client.consentSettings.create();
     const rawResponse = await responsePromise.asResponse();
@@ -30,8 +41,56 @@ describe('resource consentSettings', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('update', async () => {
-    const responsePromise = client.consentSettings.update('id', {});
+  test('replace: only required params', async () => {
+    const responsePromise = client.consentSettings.replace('id', {
+      categories: [
+        {
+          label: 'label',
+          priority: 0,
+          value: 'value',
+        },
+      ],
+      default: {
+        categories: [
+          {
+            key: 'key',
+            value: { enabled: true },
+          },
+        ],
+        language: 'en',
+        mode: 'opt_in',
+        translations: [
+          {
+            language: 'en',
+            value: {},
+          },
+        ],
+      },
+      name: 'name',
+      regions: [
+        {
+          regionCode: 'US-CA',
+          rule: {
+            categories: [
+              {
+                key: 'key',
+                value: { enabled: true },
+              },
+            ],
+            language: 'en',
+            mode: 'opt_in',
+            translations: [
+              {
+                language: 'en',
+                value: {},
+              },
+            ],
+          },
+        },
+      ],
+      services: [{ internalNotes: 'internalNotes', label: 'label' }],
+      status: 'Disabled',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -41,8 +100,107 @@ describe('resource consentSettings', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('list', async () => {
-    const responsePromise = client.consentSettings.list();
+  test('replace: required and optional params', async () => {
+    const response = await client.consentSettings.replace('id', {
+      categories: [
+        {
+          label: 'label',
+          priority: 0,
+          value: 'value',
+        },
+      ],
+      default: {
+        categories: [
+          {
+            key: 'key',
+            value: {
+              enabled: true,
+              autoDisableOnGPC: true,
+              readOnly: true,
+              reloadPage: true,
+            },
+          },
+        ],
+        language: 'en',
+        mode: 'opt_in',
+        translations: [
+          {
+            language: 'en',
+            value: {
+              consentModal: {},
+              preferencesModal: {},
+            },
+          },
+        ],
+        autoblockUnknown: true,
+        autoShow: true,
+        autoShowDismissConfig: {},
+        autoShowDismissMode: 'autoShowDismissMode',
+        disablePageInteraction: true,
+        guiOptions: {},
+        hideFromBots: true,
+        showVendorsInPreferences: true,
+      },
+      name: 'name',
+      regions: [
+        {
+          regionCode: 'US-CA',
+          rule: {
+            categories: [
+              {
+                key: 'key',
+                value: {
+                  enabled: true,
+                  autoDisableOnGPC: true,
+                  readOnly: true,
+                  reloadPage: true,
+                },
+              },
+            ],
+            language: 'en',
+            mode: 'opt_in',
+            translations: [
+              {
+                language: 'en',
+                value: {
+                  consentModal: {},
+                  preferencesModal: {},
+                },
+              },
+            ],
+            autoblockUnknown: true,
+            autoShow: true,
+            autoShowDismissConfig: {},
+            autoShowDismissMode: 'autoShowDismissMode',
+            disablePageInteraction: true,
+            guiOptions: {},
+            hideFromBots: true,
+            showVendorsInPreferences: true,
+          },
+          additionalRegions: ['string'],
+        },
+      ],
+      services: [
+        {
+          internalNotes: 'internalNotes',
+          label: 'label',
+          additionalCategories: ['string'],
+          category: 'category',
+          domainPatterns: ['string'],
+        },
+      ],
+      status: 'Disabled',
+      consentCookieName: 'consentCookieName',
+      customDomain: 'customDomain',
+      revision: 0,
+      skipBlockingClassNames: ['string'],
+      webSDKToken: 'webSDKToken',
+      whitelistDomains: ['string'],
+    });
+  });
+
+  test('update', async () => {
+    const responsePromise = client.consentSettings.update('id', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

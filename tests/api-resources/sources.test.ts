@@ -8,6 +8,17 @@ const client = new OursPrivacyPlatform({
 });
 
 describe('resource sources', () => {
+  test('list', async () => {
+    const responsePromise = client.sources.list();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
   test('create: only required params', async () => {
     const responsePromise = client.sources.create({ type: 'AlchemerWebhook' });
     const rawResponse = await responsePromise.asResponse();
@@ -61,8 +72,8 @@ describe('resource sources', () => {
     });
   });
 
-  test('list', async () => {
-    const responsePromise = client.sources.list();
+  test('delete', async () => {
+    const responsePromise = client.sources.delete('id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -72,8 +83,8 @@ describe('resource sources', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('delete', async () => {
-    const responsePromise = client.sources.delete('id');
+  test('tokens', async () => {
+    const responsePromise = client.sources.tokens('id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

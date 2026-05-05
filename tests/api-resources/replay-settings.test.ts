@@ -8,6 +8,24 @@ const client = new OursPrivacyPlatform({
 });
 
 describe('resource replaySettings', () => {
+  test('list', async () => {
+    const responsePromise = client.replaySettings.list();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.replaySettings.list({ cursor: 'cursor', limit: 25 }, { path: '/_stainless_unknown_path' }),
+    ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
+  });
+
   test('create', async () => {
     const responsePromise = client.replaySettings.create({});
     const rawResponse = await responsePromise.asResponse();
@@ -32,17 +50,6 @@ describe('resource replaySettings', () => {
 
   test('update', async () => {
     const responsePromise = client.replaySettings.update('id', {});
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('list', async () => {
-    const responsePromise = client.replaySettings.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

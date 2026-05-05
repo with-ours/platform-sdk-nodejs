@@ -7,9 +7,9 @@ const client = new OursPrivacyPlatform({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource versions', () => {
-  test('list', async () => {
-    const responsePromise = client.versions.list();
+describe('resource mappings', () => {
+  test('list: only required params', async () => {
+    const responsePromise = client.mappings.list({ entityId: '00000000-0000-0000-0000-000000000000' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -19,24 +19,15 @@ describe('resource versions', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.versions.list(
-        {
-          cursor: 'cursor',
-          isPublished: 'true',
-          limit: 25,
-          nameContains: 'nameContains',
-          notesContains: 'notesContains',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
+  test('list: required and optional params', async () => {
+    const response = await client.mappings.list({ entityId: '00000000-0000-0000-0000-000000000000' });
   });
 
-  test('create', async () => {
-    const responsePromise = client.versions.create({});
+  test('create: only required params', async () => {
+    const responsePromise = client.mappings.create({
+      allowedEventId: 'allowedEventId',
+      destinationId: 'destinationId',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -44,10 +35,17 @@ describe('resource versions', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('create: required and optional params', async () => {
+    const response = await client.mappings.create({
+      allowedEventId: 'allowedEventId',
+      destinationId: 'destinationId',
+    });
   });
 
   test('retrieve', async () => {
-    const responsePromise = client.versions.retrieve('id');
+    const responsePromise = client.mappings.retrieve('id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -58,7 +56,7 @@ describe('resource versions', () => {
   });
 
   test('update', async () => {
-    const responsePromise = client.versions.update('id', {});
+    const responsePromise = client.mappings.update('id', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -68,30 +66,8 @@ describe('resource versions', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('publish', async () => {
-    const responsePromise = client.versions.publish('id');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('snapshot', async () => {
-    const responsePromise = client.versions.snapshot('id');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('diff', async () => {
-    const responsePromise = client.versions.diff('draft');
+  test('delete', async () => {
+    const responsePromise = client.mappings.delete('id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

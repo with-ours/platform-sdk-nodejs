@@ -7,6 +7,17 @@ import { path } from '../internal/utils/path';
 
 export class GlobalDispatchCenters extends APIResource {
   /**
+   * List global dispatch centers for this account. Supports cursor pagination via
+   * `limit` and `cursor`. Requires scope: globalDispatch:list
+   */
+  list(
+    query: GlobalDispatchCenterListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<GlobalDispatchCenterListResponse> {
+    return this._client.get('/rest/v1/global-dispatch-centers', { query, ...options });
+  }
+
+  /**
    * Create a new global dispatch center. Requires scope: globalDispatch:create
    */
   create(
@@ -36,17 +47,97 @@ export class GlobalDispatchCenters extends APIResource {
   }
 
   /**
-   * List all global dispatch centers. Requires scope: globalDispatch:list
-   */
-  list(options?: RequestOptions): APIPromise<GlobalDispatchCenterListResponse> {
-    return this._client.get('/rest/v1/global-dispatch-centers', options);
-  }
-
-  /**
    * Delete a global dispatch center. Requires scope: globalDispatch:delete
    */
   delete(id: string, options?: RequestOptions): APIPromise<GlobalDispatchCenterDeleteResponse> {
     return this._client.delete(path`/rest/v1/global-dispatch-centers/${id}`, options);
+  }
+}
+
+export interface GlobalDispatchCenterListResponse {
+  entities: Array<GlobalDispatchCenterListResponse.Entity>;
+
+  pagination: GlobalDispatchCenterListResponse.Pagination;
+}
+
+export namespace GlobalDispatchCenterListResponse {
+  export interface Entity {
+    /**
+     * Server-assigned UUID for this dispatch center.
+     */
+    id: string;
+
+    /**
+     * ISO 8601 timestamp when the center was created.
+     */
+    createdAt: string;
+
+    /**
+     * When false, the dispatch center is configured but does not route events.
+     */
+    isEnabled: boolean;
+
+    /**
+     * Discriminator for the entity type. Always "globalDispatchCenter".
+     */
+    kind: string;
+
+    /**
+     * Routing categories in priority order (1..N).
+     */
+    categories?: Array<Entity.Category> | null;
+
+    /**
+     * Human-readable name shown in the dashboard.
+     */
+    name?: string | null;
+
+    /**
+     * Free-form notes for this center.
+     */
+    notes?: string | null;
+
+    /**
+     * ISO 8601 timestamp of the last write. Equal to createdAt on a freshly created
+     * center; advances on every PATCH.
+     */
+    updatedAt?: string | null;
+  }
+
+  export namespace Entity {
+    export interface Category {
+      /**
+       * Display name for the category.
+       */
+      name: string;
+
+      /**
+       * 1-indexed sort position. Always equals (sorted index + 1) — see PATCH for
+       * details.
+       */
+      priority: number;
+
+      /**
+       * Optional human-readable description.
+       */
+      description?: string | null;
+
+      /**
+       * Destinations that receive events matching this category.
+       */
+      destinationIds?: Array<string> | null;
+
+      /**
+       * Optional condition tree gating which events match this category.
+       */
+      logic?: unknown | null;
+    }
+  }
+
+  export interface Pagination {
+    hasMore: boolean;
+
+    nextCursor?: string | null;
   }
 }
 
@@ -269,85 +360,6 @@ export namespace GlobalDispatchCenterUpdateResponse {
   }
 }
 
-export interface GlobalDispatchCenterListResponse {
-  entities: Array<GlobalDispatchCenterListResponse.Entity>;
-}
-
-export namespace GlobalDispatchCenterListResponse {
-  export interface Entity {
-    /**
-     * Server-assigned UUID for this dispatch center.
-     */
-    id: string;
-
-    /**
-     * ISO 8601 timestamp when the center was created.
-     */
-    createdAt: string;
-
-    /**
-     * When false, the dispatch center is configured but does not route events.
-     */
-    isEnabled: boolean;
-
-    /**
-     * Discriminator for the entity type. Always "globalDispatchCenter".
-     */
-    kind: string;
-
-    /**
-     * Routing categories in priority order (1..N).
-     */
-    categories?: Array<Entity.Category> | null;
-
-    /**
-     * Human-readable name shown in the dashboard.
-     */
-    name?: string | null;
-
-    /**
-     * Free-form notes for this center.
-     */
-    notes?: string | null;
-
-    /**
-     * ISO 8601 timestamp of the last write. Equal to createdAt on a freshly created
-     * center; advances on every PATCH.
-     */
-    updatedAt?: string | null;
-  }
-
-  export namespace Entity {
-    export interface Category {
-      /**
-       * Display name for the category.
-       */
-      name: string;
-
-      /**
-       * 1-indexed sort position. Always equals (sorted index + 1) — see PATCH for
-       * details.
-       */
-      priority: number;
-
-      /**
-       * Optional human-readable description.
-       */
-      description?: string | null;
-
-      /**
-       * Destinations that receive events matching this category.
-       */
-      destinationIds?: Array<string> | null;
-
-      /**
-       * Optional condition tree gating which events match this category.
-       */
-      logic?: unknown | null;
-    }
-  }
-}
-
 export interface GlobalDispatchCenterDeleteResponse {
   /**
    * The id of the dispatch center that was deleted.
@@ -358,6 +370,20 @@ export interface GlobalDispatchCenterDeleteResponse {
    * True when the underlying mutation succeeded; the entity is gone.
    */
   deleted: boolean;
+}
+
+export interface GlobalDispatchCenterListParams {
+  /**
+   * Opaque pagination cursor from pagination.nextCursor in the previous response. Do
+   * not decode or modify it. Malformed cursors return 400 Bad Request.
+   */
+  cursor?: string;
+
+  /**
+   * Maximum number of items to return. Defaults to 25; values below 1 are clamped to
+   * 1 and values above 100 are clamped to 100.
+   */
+  limit?: number | null;
 }
 
 export interface GlobalDispatchCenterCreateParams {
@@ -438,11 +464,12 @@ export namespace GlobalDispatchCenterUpdateParams {
 
 export declare namespace GlobalDispatchCenters {
   export {
+    type GlobalDispatchCenterListResponse as GlobalDispatchCenterListResponse,
     type GlobalDispatchCenterCreateResponse as GlobalDispatchCenterCreateResponse,
     type GlobalDispatchCenterRetrieveResponse as GlobalDispatchCenterRetrieveResponse,
     type GlobalDispatchCenterUpdateResponse as GlobalDispatchCenterUpdateResponse,
-    type GlobalDispatchCenterListResponse as GlobalDispatchCenterListResponse,
     type GlobalDispatchCenterDeleteResponse as GlobalDispatchCenterDeleteResponse,
+    type GlobalDispatchCenterListParams as GlobalDispatchCenterListParams,
     type GlobalDispatchCenterCreateParams as GlobalDispatchCenterCreateParams,
     type GlobalDispatchCenterUpdateParams as GlobalDispatchCenterUpdateParams,
   };

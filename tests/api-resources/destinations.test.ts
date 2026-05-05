@@ -8,6 +8,17 @@ const client = new OursPrivacyPlatform({
 });
 
 describe('resource destinations', () => {
+  test('list', async () => {
+    const responsePromise = client.destinations.list();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
   test('create: only required params', async () => {
     const responsePromise = client.destinations.create({ type: 'AWSEventBridge' });
     const rawResponse = await responsePromise.asResponse();
@@ -63,17 +74,6 @@ describe('resource destinations', () => {
       selectedAccountId: 'selectedAccountId',
       settings: {},
     });
-  });
-
-  test('list', async () => {
-    const responsePromise = client.destinations.list();
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
   });
 
   test('delete', async () => {

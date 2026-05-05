@@ -8,6 +8,17 @@ const client = new OursPrivacyPlatform({
 });
 
 describe('resource allowedEvents', () => {
+  test('list', async () => {
+    const responsePromise = client.allowedEvents.list();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
   test('create: only required params', async () => {
     const responsePromise = client.allowedEvents.create({ name: 'name' });
     const rawResponse = await responsePromise.asResponse();
@@ -25,17 +36,6 @@ describe('resource allowedEvents', () => {
 
   test('retrieve', async () => {
     const responsePromise = client.allowedEvents.retrieve('id');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('list', async () => {
-    const responsePromise = client.allowedEvents.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
