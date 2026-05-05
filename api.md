@@ -106,7 +106,7 @@ Types:
 
 Methods:
 
-- <code title="get /rest/v1/experiments">client.experiments.<a href="./src/resources/experiments.ts">list</a>({ ...params }) -> ExperimentListResponse</code>
+- <code title="get /rest/v1/experiments">client.experiments.<a href="./src/resources/experiments.ts">list</a>({ ...params }) -> ExperimentListResponsesCursor</code>
 - <code title="post /rest/v1/experiments">client.experiments.<a href="./src/resources/experiments.ts">create</a>({ ...params }) -> ExperimentCreateResponse</code>
 - <code title="get /rest/v1/experiments/{id}">client.experiments.<a href="./src/resources/experiments.ts">retrieve</a>(id) -> ExperimentRetrieveResponse</code>
 - <code title="patch /rest/v1/experiments/{id}">client.experiments.<a href="./src/resources/experiments.ts">update</a>(id, { ...params }) -> ExperimentUpdateResponse</code>
@@ -130,7 +130,7 @@ Types:
 
 Methods:
 
-- <code title="get /rest/v1/global-dispatch-centers">client.globalDispatchCenters.<a href="./src/resources/global-dispatch-centers.ts">list</a>({ ...params }) -> GlobalDispatchCenterListResponse</code>
+- <code title="get /rest/v1/global-dispatch-centers">client.globalDispatchCenters.<a href="./src/resources/global-dispatch-centers.ts">list</a>({ ...params }) -> GlobalDispatchCenterListResponsesCursor</code>
 - <code title="post /rest/v1/global-dispatch-centers">client.globalDispatchCenters.<a href="./src/resources/global-dispatch-centers.ts">create</a>({ ...params }) -> GlobalDispatchCenterCreateResponse</code>
 - <code title="get /rest/v1/global-dispatch-centers/{id}">client.globalDispatchCenters.<a href="./src/resources/global-dispatch-centers.ts">retrieve</a>(id) -> GlobalDispatchCenterRetrieveResponse | null</code>
 - <code title="patch /rest/v1/global-dispatch-centers/{id}">client.globalDispatchCenters.<a href="./src/resources/global-dispatch-centers.ts">update</a>(id, { ...params }) -> GlobalDispatchCenterUpdateResponse</code>
@@ -166,7 +166,7 @@ Types:
 
 Methods:
 
-- <code title="get /rest/v1/replay-settings">client.replaySettings.<a href="./src/resources/replay-settings.ts">list</a>({ ...params }) -> ReplaySettingListResponse</code>
+- <code title="get /rest/v1/replay-settings">client.replaySettings.<a href="./src/resources/replay-settings.ts">list</a>({ ...params }) -> ReplaySettingListResponsesCursor</code>
 - <code title="post /rest/v1/replay-settings">client.replaySettings.<a href="./src/resources/replay-settings.ts">create</a>({ ...params }) -> ReplaySettingCreateResponse</code>
 - <code title="get /rest/v1/replay-settings/{id}">client.replaySettings.<a href="./src/resources/replay-settings.ts">retrieve</a>(id) -> ReplaySettingRetrieveResponse | null</code>
 - <code title="patch /rest/v1/replay-settings/{id}">client.replaySettings.<a href="./src/resources/replay-settings.ts">update</a>(id, { ...params }) -> ReplaySettingUpdateResponse</code>
@@ -206,7 +206,7 @@ Types:
 
 Methods:
 
-- <code title="get /rest/v1/versions">client.versions.<a href="./src/resources/versions.ts">list</a>({ ...params }) -> VersionListResponse</code>
+- <code title="get /rest/v1/versions">client.versions.<a href="./src/resources/versions.ts">list</a>({ ...params }) -> VersionListResponsesCursor</code>
 - <code title="post /rest/v1/versions">client.versions.<a href="./src/resources/versions.ts">create</a>({ ...params }) -> VersionCreateResponse</code>
 - <code title="get /rest/v1/versions/{id}">client.versions.<a href="./src/resources/versions.ts">retrieve</a>(id) -> VersionRetrieveResponse</code>
 - <code title="patch /rest/v1/versions/{id}">client.versions.<a href="./src/resources/versions.ts">update</a>(id, { ...params }) -> VersionUpdateResponse</code>

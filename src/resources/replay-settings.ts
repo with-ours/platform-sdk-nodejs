@@ -2,6 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import { APIPromise } from '../core/api-promise';
+import { Cursor, type CursorParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
@@ -15,8 +16,11 @@ export class ReplaySettings extends APIResource {
   list(
     query: ReplaySettingListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ReplaySettingListResponse> {
-    return this._client.get('/rest/v1/replay-settings', { query, ...options });
+  ): PagePromise<ReplaySettingListResponsesCursor, ReplaySettingListResponse> {
+    return this._client.getAPIList('/rest/v1/replay-settings', Cursor<ReplaySettingListResponse>, {
+      query,
+      ...options,
+    });
   }
 
   /**
@@ -59,61 +63,49 @@ export class ReplaySettings extends APIResource {
   }
 }
 
+export type ReplaySettingListResponsesCursor = Cursor<ReplaySettingListResponse>;
+
 export interface ReplaySettingListResponse {
-  entities: Array<ReplaySettingListResponse.Entity>;
+  /**
+   * Stable identifier (UUID) for this replay configuration.
+   */
+  id: string;
 
-  pagination: ReplaySettingListResponse.Pagination;
-}
+  /**
+   * ISO-8601 timestamp when this configuration was created.
+   */
+  createdAt: string;
 
-export namespace ReplaySettingListResponse {
-  export interface Entity {
-    /**
-     * Stable identifier (UUID) for this replay configuration.
-     */
-    id: string;
+  /**
+   * Human-readable label for this replay configuration. Shown in the dashboard. May
+   * be empty.
+   */
+  name: string;
 
-    /**
-     * ISO-8601 timestamp when this configuration was created.
-     */
-    createdAt: string;
+  /**
+   * Whether session replay capture is currently active. Set to "Enabled" to start
+   * capturing replays from whitelisted domains, or "Disabled" to pause capture
+   * without losing the configuration.
+   */
+  status: 'Disabled' | 'Enabled';
 
-    /**
-     * Human-readable label for this replay configuration. Shown in the dashboard. May
-     * be empty.
-     */
-    name: string;
+  /**
+   * Optional custom domain (CNAME) for hosting the replay capture script. Leave null
+   * to use the default Ours Privacy domain.
+   */
+  customDomain?: string | null;
 
-    /**
-     * Whether session replay capture is currently active. Set to "Enabled" to start
-     * capturing replays from whitelisted domains, or "Disabled" to pause capture
-     * without losing the configuration.
-     */
-    status: 'Disabled' | 'Enabled';
+  /**
+   * ISO-8601 timestamp of the most recent update, or null if never updated.
+   */
+  updatedAt?: string | null;
 
-    /**
-     * Optional custom domain (CNAME) for hosting the replay capture script. Leave null
-     * to use the default Ours Privacy domain.
-     */
-    customDomain?: string | null;
-
-    /**
-     * ISO-8601 timestamp of the most recent update, or null if never updated.
-     */
-    updatedAt?: string | null;
-
-    /**
-     * Hostnames where session replay capture is permitted. Replays initiated from any
-     * host not in this list are dropped. PATCH replaces the list — partial updates are
-     * not merged.
-     */
-    whitelistDomains?: Array<string> | null;
-  }
-
-  export interface Pagination {
-    hasMore: boolean;
-
-    nextCursor?: string | null;
-  }
+  /**
+   * Hostnames where session replay capture is permitted. Replays initiated from any
+   * host not in this list are dropped. PATCH replaces the list — partial updates are
+   * not merged.
+   */
+  whitelistDomains?: Array<string> | null;
 }
 
 export interface ReplaySettingCreateResponse {
@@ -183,19 +175,7 @@ export interface ReplaySettingDeleteResponse {
   replaySettings?: unknown | null;
 }
 
-export interface ReplaySettingListParams {
-  /**
-   * Opaque pagination cursor from pagination.nextCursor in the previous response. Do
-   * not decode or modify it. Malformed cursors return 400 Bad Request.
-   */
-  cursor?: string;
-
-  /**
-   * Maximum number of items to return. Defaults to 25; values below 1 are clamped to
-   * 1 and values above 100 are clamped to 100.
-   */
-  limit?: number | null;
-}
+export interface ReplaySettingListParams extends CursorParams {}
 
 export interface ReplaySettingCreateParams {
   /**
@@ -260,6 +240,7 @@ export declare namespace ReplaySettings {
     type ReplaySettingRetrieveResponse as ReplaySettingRetrieveResponse,
     type ReplaySettingUpdateResponse as ReplaySettingUpdateResponse,
     type ReplaySettingDeleteResponse as ReplaySettingDeleteResponse,
+    type ReplaySettingListResponsesCursor as ReplaySettingListResponsesCursor,
     type ReplaySettingListParams as ReplaySettingListParams,
     type ReplaySettingCreateParams as ReplaySettingCreateParams,
     type ReplaySettingUpdateParams as ReplaySettingUpdateParams,

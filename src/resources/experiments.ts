@@ -2,6 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import { APIPromise } from '../core/api-promise';
+import { Cursor, type CursorParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
@@ -14,14 +15,20 @@ export class Experiments extends APIResource {
    *
    * @example
    * ```ts
-   * const experiments = await client.experiments.list();
+   * // Automatically fetches more pages as needed.
+   * for await (const experimentListResponse of client.experiments.list()) {
+   *   // ...
+   * }
    * ```
    */
   list(
     query: ExperimentListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ExperimentListResponse> {
-    return this._client.get('/rest/v1/experiments', { query, ...options });
+  ): PagePromise<ExperimentListResponsesCursor, ExperimentListResponse> {
+    return this._client.getAPIList('/rest/v1/experiments', Cursor<ExperimentListResponse>, {
+      query,
+      ...options,
+    });
   }
 
   /**
@@ -198,198 +205,183 @@ export class Experiments extends APIResource {
   }
 }
 
+export type ExperimentListResponsesCursor = Cursor<ExperimentListResponse>;
+
 export interface ExperimentListResponse {
   /**
-   * Experiments ordered by most recently updated first, then most recently created.
+   * Unique identifier for the experiment.
    */
-  entities: Array<ExperimentListResponse.Entity>;
+  id: string;
 
-  pagination: ExperimentListResponse.Pagination;
+  /**
+   * ISO-8601 timestamp when the experiment was created.
+   */
+  createdAt: string;
+
+  /**
+   * Stable code-facing key for the experiment. Use this with the headless SDK
+   * `getExperimentByKey()` API instead of hard-coding opaque experiment IDs into
+   * application code.
+   */
+  key: string;
+
+  /**
+   * Short, human-readable experiment name.
+   */
+  name: string;
+
+  /**
+   * Lifecycle state. `draft` is editable, `running` is active, `paused` is
+   * temporarily inactive, and `completed` is permanently stopped.
+   */
+  status: 'completed' | 'draft' | 'paused' | 'running';
+
+  /**
+   * Percent of eligible traffic assigned into the experiment. Use 0 to fully disable
+   * enrollment without deleting the experiment.
+   */
+  trafficAllocation: number;
+
+  /**
+   * Optional human-readable hypothesis or summary. In GraphQL this is backed by the
+   * experiment hypothesis field.
+   */
+  description?: string | null;
+
+  /**
+   * For redirect variants, whether the original page query string should be
+   * forwarded onto the redirect URL.
+   */
+  includeQueryString?: boolean | null;
+
+  /**
+   * Configured success metrics. The read shape mirrors the write shape — `metrics`
+   * from a GET response can be PATCHed back without modification.
+   */
+  metrics?: ExperimentListResponse.Metrics | null;
+
+  /**
+   * ISO-8601 timestamp when the experiment most recently entered a running state.
+   */
+  startedAt?: string | null;
+
+  /**
+   * ISO-8601 timestamp when the experiment was completed, if it has been stopped.
+   */
+  stoppedAt?: string | null;
+
+  /**
+   * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
+   * visitor status, and (server-side) visitor properties. Same shape as the
+   * create/patch input.
+   */
+  targetingRules?: ExperimentListResponse.TargetingRules | null;
+
+  /**
+   * Experiment mode. `ab` and `multivariate` use traffic allocation and results;
+   * `personalization` is always-on targeting.
+   */
+  type?: 'ab' | 'multivariate' | 'personalization' | null;
+
+  /**
+   * ISO-8601 timestamp for the last persisted update, if any.
+   */
+  updatedAt?: string | null;
+
+  /**
+   * Variant ID persisted as the winner when the experiment was stopped. Set via
+   * `POST /experiments/{id}/stop` with a `winnerVariantId` body field.
+   */
+  winnerVariantId?: string | null;
 }
 
 export namespace ExperimentListResponse {
-  export interface Entity {
+  /**
+   * Configured success metrics. The read shape mirrors the write shape — `metrics`
+   * from a GET response can be PATCHed back without modification.
+   */
+  export interface Metrics {
     /**
-     * Unique identifier for the experiment.
+     * Primary success metric used in the results report.
      */
-    id: string;
+    primary?: unknown | null;
 
     /**
-     * ISO-8601 timestamp when the experiment was created.
+     * Optional secondary metrics tracked alongside the primary goal.
      */
-    createdAt: string;
-
-    /**
-     * Stable code-facing key for the experiment. Use this with the headless SDK
-     * `getExperimentByKey()` API instead of hard-coding opaque experiment IDs into
-     * application code.
-     */
-    key: string;
-
-    /**
-     * Short, human-readable experiment name.
-     */
-    name: string;
-
-    /**
-     * Lifecycle state. `draft` is editable, `running` is active, `paused` is
-     * temporarily inactive, and `completed` is permanently stopped.
-     */
-    status: 'completed' | 'draft' | 'paused' | 'running';
-
-    /**
-     * Percent of eligible traffic assigned into the experiment. Use 0 to fully disable
-     * enrollment without deleting the experiment.
-     */
-    trafficAllocation: number;
-
-    /**
-     * Optional human-readable hypothesis or summary. In GraphQL this is backed by the
-     * experiment hypothesis field.
-     */
-    description?: string | null;
-
-    /**
-     * For redirect variants, whether the original page query string should be
-     * forwarded onto the redirect URL.
-     */
-    includeQueryString?: boolean | null;
-
-    /**
-     * Configured success metrics. The read shape mirrors the write shape — `metrics`
-     * from a GET response can be PATCHed back without modification.
-     */
-    metrics?: Entity.Metrics | null;
-
-    /**
-     * ISO-8601 timestamp when the experiment most recently entered a running state.
-     */
-    startedAt?: string | null;
-
-    /**
-     * ISO-8601 timestamp when the experiment was completed, if it has been stopped.
-     */
-    stoppedAt?: string | null;
-
-    /**
-     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-     * visitor status, and (server-side) visitor properties. Same shape as the
-     * create/patch input.
-     */
-    targetingRules?: Entity.TargetingRules | null;
-
-    /**
-     * Experiment mode. `ab` and `multivariate` use traffic allocation and results;
-     * `personalization` is always-on targeting.
-     */
-    type?: 'ab' | 'multivariate' | 'personalization' | null;
-
-    /**
-     * ISO-8601 timestamp for the last persisted update, if any.
-     */
-    updatedAt?: string | null;
-
-    /**
-     * Variant ID persisted as the winner when the experiment was stopped. Set via
-     * `POST /experiments/{id}/stop` with a `winnerVariantId` body field.
-     */
-    winnerVariantId?: string | null;
+    secondary?: Array<Metrics.Secondary> | null;
   }
 
-  export namespace Entity {
-    /**
-     * Configured success metrics. The read shape mirrors the write shape — `metrics`
-     * from a GET response can be PATCHed back without modification.
-     */
-    export interface Metrics {
+  export namespace Metrics {
+    export interface Secondary {
       /**
-       * Primary success metric used in the results report.
+       * Name of the event used to measure success for this metric.
        */
-      primary?: unknown | null;
+      eventName?: string | null;
 
       /**
-       * Optional secondary metrics tracked alongside the primary goal.
+       * Optional funnel identifier when the metric is derived from an existing funnel
+       * definition.
        */
-      secondary?: Array<Metrics.Secondary> | null;
-    }
-
-    export namespace Metrics {
-      export interface Secondary {
-        /**
-         * Name of the event used to measure success for this metric.
-         */
-        eventName?: string | null;
-
-        /**
-         * Optional funnel identifier when the metric is derived from an existing funnel
-         * definition.
-         */
-        funnelId?: string | null;
-      }
-    }
-
-    /**
-     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-     * visitor status, and (server-side) visitor properties. Same shape as the
-     * create/patch input.
-     */
-    export interface TargetingRules {
-      /**
-       * Glob-style URL patterns that must match for the experiment to be eligible. Up to
-       * 200 patterns; each pattern up to 2000 characters. An empty array (or omitting
-       * the field) matches all URLs — equivalent to `["**"]`.
-       */
-      urlPatterns: Array<string>;
-
-      /**
-       * Optional audience identifier used for server-side eligibility filtering.
-       */
-      audienceId?: string | null;
-
-      /**
-       * Additional query-string conditions that must all match for the visitor to
-       * qualify.
-       */
-      queryParams?: Array<TargetingRules.QueryParam> | null;
-
-      /**
-       * Optional visitor-property matching rules. These are passed through as JSON for
-       * experimentation targeting.
-       */
-      visitorProperties?: unknown | null;
-
-      /**
-       * Whether the experiment should target new visitors, returning visitors, or any
-       * visitor.
-       */
-      visitorStatus?: string | null;
-    }
-
-    export namespace TargetingRules {
-      export interface QueryParam {
-        /**
-         * Query string key to inspect on the current page URL.
-         */
-        key: string;
-
-        /**
-         * Comparison operator applied to the query string value.
-         */
-        operator: 'contains' | 'equals' | 'exists' | 'not_equals' | 'not_exists';
-
-        /**
-         * Comparison value used by operators that require one. Omit for `exists` and
-         * `not_exists`.
-         */
-        value?: string | null;
-      }
+      funnelId?: string | null;
     }
   }
 
-  export interface Pagination {
-    hasMore: boolean;
+  /**
+   * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
+   * visitor status, and (server-side) visitor properties. Same shape as the
+   * create/patch input.
+   */
+  export interface TargetingRules {
+    /**
+     * Glob-style URL patterns that must match for the experiment to be eligible. Up to
+     * 200 patterns; each pattern up to 2000 characters. An empty array (or omitting
+     * the field) matches all URLs — equivalent to `["**"]`.
+     */
+    urlPatterns: Array<string>;
 
-    nextCursor?: string | null;
+    /**
+     * Optional audience identifier used for server-side eligibility filtering.
+     */
+    audienceId?: string | null;
+
+    /**
+     * Additional query-string conditions that must all match for the visitor to
+     * qualify.
+     */
+    queryParams?: Array<TargetingRules.QueryParam> | null;
+
+    /**
+     * Optional visitor-property matching rules. These are passed through as JSON for
+     * experimentation targeting.
+     */
+    visitorProperties?: unknown | null;
+
+    /**
+     * Whether the experiment should target new visitors, returning visitors, or any
+     * visitor.
+     */
+    visitorStatus?: string | null;
+  }
+
+  export namespace TargetingRules {
+    export interface QueryParam {
+      /**
+       * Query string key to inspect on the current page URL.
+       */
+      key: string;
+
+      /**
+       * Comparison operator applied to the query string value.
+       */
+      operator: 'contains' | 'equals' | 'exists' | 'not_equals' | 'not_exists';
+
+      /**
+       * Comparison value used by operators that require one. Omit for `exists` and
+       * `not_exists`.
+       */
+      value?: string | null;
+    }
   }
 }
 
@@ -2032,19 +2024,7 @@ export namespace ExperimentResultsTimeSeriesResponse {
   }
 }
 
-export interface ExperimentListParams {
-  /**
-   * Opaque pagination cursor from pagination.nextCursor in the previous response. Do
-   * not decode or modify it. Malformed cursors return 400 Bad Request.
-   */
-  cursor?: string;
-
-  /**
-   * Maximum number of items to return. Defaults to 25; values below 1 are clamped to
-   * 1 and values above 100 are clamped to 100.
-   */
-  limit?: number | null;
-
+export interface ExperimentListParams extends CursorParams {
   /**
    * Optional case-insensitive text search matched against experiment ID, name, and
    * description.
@@ -2452,6 +2432,7 @@ export declare namespace Experiments {
     type ExperimentResumeResponse as ExperimentResumeResponse,
     type ExperimentResultsResponse as ExperimentResultsResponse,
     type ExperimentResultsTimeSeriesResponse as ExperimentResultsTimeSeriesResponse,
+    type ExperimentListResponsesCursor as ExperimentListResponsesCursor,
     type ExperimentListParams as ExperimentListParams,
     type ExperimentCreateParams as ExperimentCreateParams,
     type ExperimentUpdateParams as ExperimentUpdateParams,
