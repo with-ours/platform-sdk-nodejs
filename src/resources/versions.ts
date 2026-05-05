@@ -2,6 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import { APIPromise } from '../core/api-promise';
+import { Cursor, type CursorParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
@@ -14,8 +15,8 @@ export class Versions extends APIResource {
   list(
     query: VersionListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<VersionListResponse> {
-    return this._client.get('/rest/v1/versions', { query, ...options });
+  ): PagePromise<VersionListResponsesCursor, VersionListResponse> {
+    return this._client.getAPIList('/rest/v1/versions', Cursor<VersionListResponse>, { query, ...options });
   }
 
   /**
@@ -80,38 +81,26 @@ export class Versions extends APIResource {
   }
 }
 
+export type VersionListResponsesCursor = Cursor<VersionListResponse>;
+
 export interface VersionListResponse {
-  entities: Array<VersionListResponse.Entity>;
+  id: string;
 
-  pagination: VersionListResponse.Pagination;
-}
+  createdAt: string;
 
-export namespace VersionListResponse {
-  export interface Entity {
-    id: string;
+  isPublished: boolean;
 
-    createdAt: string;
+  versionNumber: number;
 
-    isPublished: boolean;
+  name?: string | null;
 
-    versionNumber: number;
-
-    name?: string | null;
-
-    /**
-     * When this version was most recently published. NOT cleared when a newer version
-     * is published — `publishedAt` reflects the most recent successful publish of this
-     * row, regardless of whether `isPublished` is currently true. Use `isPublished` to
-     * determine the current live version.
-     */
-    publishedAt?: string | null;
-  }
-
-  export interface Pagination {
-    hasMore: boolean;
-
-    nextCursor?: string | null;
-  }
+  /**
+   * When this version was most recently published. NOT cleared when a newer version
+   * is published — `publishedAt` reflects the most recent successful publish of this
+   * row, regardless of whether `isPublished` is currently true. Use `isPublished` to
+   * determine the current live version.
+   */
+  publishedAt?: string | null;
 }
 
 export interface VersionCreateResponse {
@@ -1193,23 +1182,11 @@ export namespace VersionDiffResponse {
   }
 }
 
-export interface VersionListParams {
-  /**
-   * Opaque pagination cursor from pagination.nextCursor in the previous response. Do
-   * not decode or modify it. Malformed cursors return 400 Bad Request.
-   */
-  cursor?: string;
-
+export interface VersionListParams extends CursorParams {
   /**
    * Filter to only published or unpublished versions.
    */
   isPublished?: 'true' | 'false';
-
-  /**
-   * Maximum number of items to return. Defaults to 25; values below 1 are clamped to
-   * 1 and values above 100 are clamped to 100.
-   */
-  limit?: number | null;
 
   /**
    * Case-insensitive substring match on the version name.
@@ -1265,6 +1242,7 @@ export declare namespace Versions {
     type VersionPublishResponse as VersionPublishResponse,
     type VersionSnapshotResponse as VersionSnapshotResponse,
     type VersionDiffResponse as VersionDiffResponse,
+    type VersionListResponsesCursor as VersionListResponsesCursor,
     type VersionListParams as VersionListParams,
     type VersionCreateParams as VersionCreateParams,
     type VersionUpdateParams as VersionUpdateParams,
