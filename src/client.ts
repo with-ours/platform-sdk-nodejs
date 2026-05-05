@@ -14,6 +14,8 @@ import * as Opts from './internal/request-options';
 import { stringifyQuery } from './internal/utils/query';
 import { VERSION } from './version';
 import * as Errors from './core/error';
+import * as Pagination from './core/pagination';
+import { AbstractPage, type CursorParams, CursorResponse } from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
@@ -73,6 +75,7 @@ import {
   ExperimentDeleteResponse,
   ExperimentListParams,
   ExperimentListResponse,
+  ExperimentListResponsesCursor,
   ExperimentPauseParams,
   ExperimentPauseResponse,
   ExperimentResultsParams,
@@ -96,6 +99,7 @@ import {
   GlobalDispatchCenterDeleteResponse,
   GlobalDispatchCenterListParams,
   GlobalDispatchCenterListResponse,
+  GlobalDispatchCenterListResponsesCursor,
   GlobalDispatchCenterRetrieveResponse,
   GlobalDispatchCenterUpdateParams,
   GlobalDispatchCenterUpdateResponse,
@@ -118,6 +122,7 @@ import {
   ReplaySettingDeleteResponse,
   ReplaySettingListParams,
   ReplaySettingListResponse,
+  ReplaySettingListResponsesCursor,
   ReplaySettingRetrieveResponse,
   ReplaySettingUpdateParams,
   ReplaySettingUpdateResponse,
@@ -140,6 +145,7 @@ import {
   VersionDiffResponse,
   VersionListParams,
   VersionListResponse,
+  VersionListResponsesCursor,
   VersionPublishResponse,
   VersionRetrieveResponse,
   VersionSnapshotResponse,
@@ -612,6 +618,30 @@ export class OursPrivacyPlatform {
     return { response, options, controller, requestLogID, retryOfRequestLogID, startTime };
   }
 
+  getAPIList<Item, PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>>(
+    path: string,
+    Page: new (...args: any[]) => PageClass,
+    opts?: PromiseOrValue<RequestOptions>,
+  ): Pagination.PagePromise<PageClass, Item> {
+    return this.requestAPIList(
+      Page,
+      opts && 'then' in opts ?
+        opts.then((opts) => ({ method: 'get', path, ...opts }))
+      : { method: 'get', path, ...opts },
+    );
+  }
+
+  requestAPIList<
+    Item = unknown,
+    PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>,
+  >(
+    Page: new (...args: ConstructorParameters<typeof Pagination.AbstractPage>) => PageClass,
+    options: PromiseOrValue<FinalRequestOptions>,
+  ): Pagination.PagePromise<PageClass, Item> {
+    const request = this.makeRequest(options, null, undefined);
+    return new Pagination.PagePromise<PageClass, Item>(this as any as OursPrivacyPlatform, request, Page);
+  }
+
   async fetchWithTimeout(
     url: RequestInfo,
     init: RequestInit | undefined,
@@ -887,6 +917,9 @@ OursPrivacyPlatform.Versions = Versions;
 export declare namespace OursPrivacyPlatform {
   export type RequestOptions = Opts.RequestOptions;
 
+  export import Cursor = Pagination.Cursor;
+  export { type CursorParams as CursorParams, type CursorResponse as CursorResponse };
+
   export {
     AllowedEvents as AllowedEvents,
     type AllowedEventListResponse as AllowedEventListResponse,
@@ -955,6 +988,7 @@ export declare namespace OursPrivacyPlatform {
     type ExperimentResumeResponse as ExperimentResumeResponse,
     type ExperimentResultsResponse as ExperimentResultsResponse,
     type ExperimentResultsTimeSeriesResponse as ExperimentResultsTimeSeriesResponse,
+    type ExperimentListResponsesCursor as ExperimentListResponsesCursor,
     type ExperimentListParams as ExperimentListParams,
     type ExperimentCreateParams as ExperimentCreateParams,
     type ExperimentUpdateParams as ExperimentUpdateParams,
@@ -973,6 +1007,7 @@ export declare namespace OursPrivacyPlatform {
     type GlobalDispatchCenterRetrieveResponse as GlobalDispatchCenterRetrieveResponse,
     type GlobalDispatchCenterUpdateResponse as GlobalDispatchCenterUpdateResponse,
     type GlobalDispatchCenterDeleteResponse as GlobalDispatchCenterDeleteResponse,
+    type GlobalDispatchCenterListResponsesCursor as GlobalDispatchCenterListResponsesCursor,
     type GlobalDispatchCenterListParams as GlobalDispatchCenterListParams,
     type GlobalDispatchCenterCreateParams as GlobalDispatchCenterCreateParams,
     type GlobalDispatchCenterUpdateParams as GlobalDispatchCenterUpdateParams,
@@ -997,6 +1032,7 @@ export declare namespace OursPrivacyPlatform {
     type ReplaySettingRetrieveResponse as ReplaySettingRetrieveResponse,
     type ReplaySettingUpdateResponse as ReplaySettingUpdateResponse,
     type ReplaySettingDeleteResponse as ReplaySettingDeleteResponse,
+    type ReplaySettingListResponsesCursor as ReplaySettingListResponsesCursor,
     type ReplaySettingListParams as ReplaySettingListParams,
     type ReplaySettingCreateParams as ReplaySettingCreateParams,
     type ReplaySettingUpdateParams as ReplaySettingUpdateParams,
@@ -1023,6 +1059,7 @@ export declare namespace OursPrivacyPlatform {
     type VersionPublishResponse as VersionPublishResponse,
     type VersionSnapshotResponse as VersionSnapshotResponse,
     type VersionDiffResponse as VersionDiffResponse,
+    type VersionListResponsesCursor as VersionListResponsesCursor,
     type VersionListParams as VersionListParams,
     type VersionCreateParams as VersionCreateParams,
     type VersionUpdateParams as VersionUpdateParams,
