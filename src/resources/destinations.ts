@@ -7,6 +7,13 @@ import { path } from '../internal/utils/path';
 
 export class Destinations extends APIResource {
   /**
+   * List all destinations. Requires scope: destination:list
+   */
+  list(options?: RequestOptions): APIPromise<DestinationListResponse> {
+    return this._client.get('/rest/v1/destinations', options);
+  }
+
+  /**
    * Create a new destination. Requires scope: destination:create
    */
   create(body: DestinationCreateParams, options?: RequestOptions): APIPromise<DestinationCreateResponse> {
@@ -33,17 +40,128 @@ export class Destinations extends APIResource {
   }
 
   /**
-   * List all destinations. Requires scope: destination:list
-   */
-  list(options?: RequestOptions): APIPromise<DestinationListResponse> {
-    return this._client.get('/rest/v1/destinations', options);
-  }
-
-  /**
    * Delete a destination. Requires scope: destination:delete
    */
   delete(id: string, options?: RequestOptions): APIPromise<DestinationDeleteResponse> {
     return this._client.delete(path`/rest/v1/destinations/${id}`, options);
+  }
+}
+
+export interface DestinationListResponse {
+  entities: Array<DestinationListResponse.Entity>;
+}
+
+export namespace DestinationListResponse {
+  export interface Entity {
+    id: string;
+
+    createdAt: string;
+
+    status: 'Disabled' | 'Enabled';
+
+    type:
+      | 'AWSEventBridge'
+      | 'AWSKinesis'
+      | 'AWSLambda'
+      | 'AWSS3'
+      | 'AWSSNS'
+      | 'ActiveCampaignApi'
+      | 'Admitad'
+      | 'AmazonDSP'
+      | 'Amplitude'
+      | 'AppLovin'
+      | 'ArtsAI'
+      | 'Attentive'
+      | 'Audiohook'
+      | 'AzureBlob'
+      | 'BasisPostback'
+      | 'BingAds'
+      | 'BingAdsWeb'
+      | 'Braze'
+      | 'ConvertABTestingEvent'
+      | 'Customerio'
+      | 'DomoWarehouse'
+      | 'Facebook'
+      | 'FloodlightSGTM'
+      | 'FullContact'
+      | 'G4Analytics'
+      | 'GA4MeasurementProtocol'
+      | 'GA4ServerProxy'
+      | 'Google'
+      | 'GoogleAds360'
+      | 'GoogleAdsServerContainer'
+      | 'GoogleBigQuery'
+      | 'GoogleBigQueryWarehouse'
+      | 'GoogleDataManagerEventIngest'
+      | 'GooglePubSub'
+      | 'GoogleStorage'
+      | 'HTTPCustomRequest'
+      | 'HTTPDestination'
+      | 'Hubspot'
+      | 'IHeartMediaMagellan'
+      | 'Impact'
+      | 'Iterable'
+      | 'Klaviyo'
+      | 'LinkedInAdsCAPI'
+      | 'LiveIntent'
+      | 'LiveRampWarehouse'
+      | 'Mailchimp'
+      | 'Mixpanel'
+      | 'NextdoorAds'
+      | 'OursSyntheticData'
+      | 'Partnerize'
+      | 'Pinterest'
+      | 'Plausible'
+      | 'Podscribe'
+      | 'PostHog'
+      | 'QuantcastCAPI'
+      | 'QuoraAds'
+      | 'Reddit'
+      | 'RokuCAPI'
+      | 'SnapchatAdsCapi'
+      | 'Spotify'
+      | 'StackAdaptAPI'
+      | 'Taboola'
+      | 'Tatari'
+      | 'TheTradeDesk'
+      | 'TikTok'
+      | 'VWO'
+      | 'Viant'
+      | 'Vibe'
+      | 'Woopra'
+      | 'XAds'
+      | 'Zendesk'
+      | 'ZoomInfo';
+
+    facebookConversionAPIKey?: string | null;
+
+    facebookPixelId?: string | null;
+
+    g4AnalyticsApiKey?: string | null;
+
+    g4AnalyticsMeasurementId?: string | null;
+
+    g4AnalyticsTrackOnPage?: boolean | null;
+
+    hashingSalt?: string | null;
+
+    httpDestinationUrl?: string | null;
+
+    limitedToSourceIds?: Array<string> | null;
+
+    managerGoogleCustomerId?: string | null;
+
+    name?: string | null;
+
+    projectAPIKey?: string | null;
+
+    projectToken?: string | null;
+
+    selectedAccountId?: string | null;
+
+    settings?: unknown | null;
+
+    updatedAt?: string | null;
   }
 }
 
@@ -331,124 +449,6 @@ export interface DestinationUpdateResponse {
   updatedAt?: string | null;
 }
 
-export interface DestinationListResponse {
-  entities: Array<DestinationListResponse.Entity>;
-}
-
-export namespace DestinationListResponse {
-  export interface Entity {
-    id: string;
-
-    createdAt: string;
-
-    status: 'Disabled' | 'Enabled';
-
-    type:
-      | 'AWSEventBridge'
-      | 'AWSKinesis'
-      | 'AWSLambda'
-      | 'AWSS3'
-      | 'AWSSNS'
-      | 'ActiveCampaignApi'
-      | 'Admitad'
-      | 'AmazonDSP'
-      | 'Amplitude'
-      | 'AppLovin'
-      | 'ArtsAI'
-      | 'Attentive'
-      | 'Audiohook'
-      | 'AzureBlob'
-      | 'BasisPostback'
-      | 'BingAds'
-      | 'BingAdsWeb'
-      | 'Braze'
-      | 'ConvertABTestingEvent'
-      | 'Customerio'
-      | 'DomoWarehouse'
-      | 'Facebook'
-      | 'FloodlightSGTM'
-      | 'FullContact'
-      | 'G4Analytics'
-      | 'GA4MeasurementProtocol'
-      | 'GA4ServerProxy'
-      | 'Google'
-      | 'GoogleAds360'
-      | 'GoogleAdsServerContainer'
-      | 'GoogleBigQuery'
-      | 'GoogleBigQueryWarehouse'
-      | 'GoogleDataManagerEventIngest'
-      | 'GooglePubSub'
-      | 'GoogleStorage'
-      | 'HTTPCustomRequest'
-      | 'HTTPDestination'
-      | 'Hubspot'
-      | 'IHeartMediaMagellan'
-      | 'Impact'
-      | 'Iterable'
-      | 'Klaviyo'
-      | 'LinkedInAdsCAPI'
-      | 'LiveIntent'
-      | 'LiveRampWarehouse'
-      | 'Mailchimp'
-      | 'Mixpanel'
-      | 'NextdoorAds'
-      | 'OursSyntheticData'
-      | 'Partnerize'
-      | 'Pinterest'
-      | 'Plausible'
-      | 'Podscribe'
-      | 'PostHog'
-      | 'QuantcastCAPI'
-      | 'QuoraAds'
-      | 'Reddit'
-      | 'RokuCAPI'
-      | 'SnapchatAdsCapi'
-      | 'Spotify'
-      | 'StackAdaptAPI'
-      | 'Taboola'
-      | 'Tatari'
-      | 'TheTradeDesk'
-      | 'TikTok'
-      | 'VWO'
-      | 'Viant'
-      | 'Vibe'
-      | 'Woopra'
-      | 'XAds'
-      | 'Zendesk'
-      | 'ZoomInfo';
-
-    facebookConversionAPIKey?: string | null;
-
-    facebookPixelId?: string | null;
-
-    g4AnalyticsApiKey?: string | null;
-
-    g4AnalyticsMeasurementId?: string | null;
-
-    g4AnalyticsTrackOnPage?: boolean | null;
-
-    hashingSalt?: string | null;
-
-    httpDestinationUrl?: string | null;
-
-    limitedToSourceIds?: Array<string> | null;
-
-    managerGoogleCustomerId?: string | null;
-
-    name?: string | null;
-
-    projectAPIKey?: string | null;
-
-    projectToken?: string | null;
-
-    selectedAccountId?: string | null;
-
-    settings?: unknown | null;
-
-    updatedAt?: string | null;
-  }
-}
-
 export type DestinationDeleteResponse = boolean;
 
 export interface DestinationCreateParams {
@@ -563,10 +563,10 @@ export interface DestinationUpdateParams {
 
 export declare namespace Destinations {
   export {
+    type DestinationListResponse as DestinationListResponse,
     type DestinationCreateResponse as DestinationCreateResponse,
     type DestinationRetrieveResponse as DestinationRetrieveResponse,
     type DestinationUpdateResponse as DestinationUpdateResponse,
-    type DestinationListResponse as DestinationListResponse,
     type DestinationDeleteResponse as DestinationDeleteResponse,
     type DestinationCreateParams as DestinationCreateParams,
     type DestinationUpdateParams as DestinationUpdateParams,

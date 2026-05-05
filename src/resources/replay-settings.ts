@@ -7,6 +7,19 @@ import { path } from '../internal/utils/path';
 
 export class ReplaySettings extends APIResource {
   /**
+   * List the replay configurations on this account. Supports cursor pagination via
+   * `limit` and `cursor`. Replay settings control which domains may capture session
+   * replays and where the capture script is hosted. Requires scope:
+   * replaySettings:list
+   */
+  list(
+    query: ReplaySettingListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ReplaySettingListResponse> {
+    return this._client.get('/rest/v1/replay-settings', { query, ...options });
+  }
+
+  /**
    * Create the replay configuration for this account. Each account is limited to one
    * replay configuration — calls made when one already exists return HTTP 409 with
    * the reason in the response `error` field. Requires scope: replaySettings:create
@@ -38,20 +51,68 @@ export class ReplaySettings extends APIResource {
   }
 
   /**
-   * List the replay configurations on this account. Replay settings control which
-   * domains may capture session replays and where the capture script is hosted.
-   * Requires scope: replaySettings:list
-   */
-  list(options?: RequestOptions): APIPromise<ReplaySettingListResponse> {
-    return this._client.get('/rest/v1/replay-settings', options);
-  }
-
-  /**
    * Delete the replay configuration. Capture stops immediately for all whitelisted
    * domains. Requires scope: replaySettings:delete
    */
   delete(id: string, options?: RequestOptions): APIPromise<ReplaySettingDeleteResponse> {
     return this._client.delete(path`/rest/v1/replay-settings/${id}`, options);
+  }
+}
+
+export interface ReplaySettingListResponse {
+  entities: Array<ReplaySettingListResponse.Entity>;
+
+  pagination: ReplaySettingListResponse.Pagination;
+}
+
+export namespace ReplaySettingListResponse {
+  export interface Entity {
+    /**
+     * Stable identifier (UUID) for this replay configuration.
+     */
+    id: string;
+
+    /**
+     * ISO-8601 timestamp when this configuration was created.
+     */
+    createdAt: string;
+
+    /**
+     * Human-readable label for this replay configuration. Shown in the dashboard. May
+     * be empty.
+     */
+    name: string;
+
+    /**
+     * Whether session replay capture is currently active. Set to "Enabled" to start
+     * capturing replays from whitelisted domains, or "Disabled" to pause capture
+     * without losing the configuration.
+     */
+    status: 'Disabled' | 'Enabled';
+
+    /**
+     * Optional custom domain (CNAME) for hosting the replay capture script. Leave null
+     * to use the default Ours Privacy domain.
+     */
+    customDomain?: string | null;
+
+    /**
+     * ISO-8601 timestamp of the most recent update, or null if never updated.
+     */
+    updatedAt?: string | null;
+
+    /**
+     * Hostnames where session replay capture is permitted. Replays initiated from any
+     * host not in this list are dropped. PATCH replaces the list — partial updates are
+     * not merged.
+     */
+    whitelistDomains?: Array<string> | null;
+  }
+
+  export interface Pagination {
+    hasMore: boolean;
+
+    nextCursor?: string | null;
   }
 }
 
@@ -114,61 +175,26 @@ export interface ReplaySettingUpdateResponse {
   replaySettings?: unknown | null;
 }
 
-export interface ReplaySettingListResponse {
-  entities: Array<ReplaySettingListResponse.Entity>;
-}
-
-export namespace ReplaySettingListResponse {
-  export interface Entity {
-    /**
-     * Stable identifier (UUID) for this replay configuration.
-     */
-    id: string;
-
-    /**
-     * ISO-8601 timestamp when this configuration was created.
-     */
-    createdAt: string;
-
-    /**
-     * Human-readable label for this replay configuration. Shown in the dashboard. May
-     * be empty.
-     */
-    name: string;
-
-    /**
-     * Whether session replay capture is currently active. Set to "Enabled" to start
-     * capturing replays from whitelisted domains, or "Disabled" to pause capture
-     * without losing the configuration.
-     */
-    status: 'Disabled' | 'Enabled';
-
-    /**
-     * Optional custom domain (CNAME) for hosting the replay capture script. Leave null
-     * to use the default Ours Privacy domain.
-     */
-    customDomain?: string | null;
-
-    /**
-     * ISO-8601 timestamp of the most recent update, or null if never updated.
-     */
-    updatedAt?: string | null;
-
-    /**
-     * Hostnames where session replay capture is permitted. Replays initiated from any
-     * host not in this list are dropped. PATCH replaces the list — partial updates are
-     * not merged.
-     */
-    whitelistDomains?: Array<string> | null;
-  }
-}
-
 export interface ReplaySettingDeleteResponse {
   isSuccess: boolean;
 
   cause?: string | null;
 
   replaySettings?: unknown | null;
+}
+
+export interface ReplaySettingListParams {
+  /**
+   * Opaque pagination cursor from pagination.nextCursor in the previous response. Do
+   * not decode or modify it. Malformed cursors return 400 Bad Request.
+   */
+  cursor?: string;
+
+  /**
+   * Maximum number of items to return. Defaults to 25; values below 1 are clamped to
+   * 1 and values above 100 are clamped to 100.
+   */
+  limit?: number | null;
 }
 
 export interface ReplaySettingCreateParams {
@@ -229,11 +255,12 @@ export interface ReplaySettingUpdateParams {
 
 export declare namespace ReplaySettings {
   export {
+    type ReplaySettingListResponse as ReplaySettingListResponse,
     type ReplaySettingCreateResponse as ReplaySettingCreateResponse,
     type ReplaySettingRetrieveResponse as ReplaySettingRetrieveResponse,
     type ReplaySettingUpdateResponse as ReplaySettingUpdateResponse,
-    type ReplaySettingListResponse as ReplaySettingListResponse,
     type ReplaySettingDeleteResponse as ReplaySettingDeleteResponse,
+    type ReplaySettingListParams as ReplaySettingListParams,
     type ReplaySettingCreateParams as ReplaySettingCreateParams,
     type ReplaySettingUpdateParams as ReplaySettingUpdateParams,
   };

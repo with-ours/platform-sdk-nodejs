@@ -7,6 +7,13 @@ import { path } from '../internal/utils/path';
 
 export class AllowedEvents extends APIResource {
   /**
+   * List all allowed events. Requires scope: allowedEvent:list
+   */
+  list(options?: RequestOptions): APIPromise<AllowedEventListResponse> {
+    return this._client.get('/rest/v1/allowed-events', options);
+  }
+
+  /**
    * Create a new allowed event. Requires scope: allowedEvent:create
    */
   create(body: AllowedEventCreateParams, options?: RequestOptions): APIPromise<AllowedEventCreateResponse> {
@@ -21,17 +28,28 @@ export class AllowedEvents extends APIResource {
   }
 
   /**
-   * List all allowed events. Requires scope: allowedEvent:list
-   */
-  list(options?: RequestOptions): APIPromise<AllowedEventListResponse> {
-    return this._client.get('/rest/v1/allowed-events', options);
-  }
-
-  /**
-   * Delete a allowed event. Requires scope: allowedEvent:delete
+   * Delete an allowed event. Requires scope: allowedEvent:delete
    */
   delete(id: string, options?: RequestOptions): APIPromise<AllowedEventDeleteResponse> {
     return this._client.delete(path`/rest/v1/allowed-events/${id}`, options);
+  }
+}
+
+export interface AllowedEventListResponse {
+  entities: Array<AllowedEventListResponse.Entity>;
+}
+
+export namespace AllowedEventListResponse {
+  export interface Entity {
+    id: string;
+
+    createdAt: string;
+
+    destinationIds: Array<string>;
+
+    name: string;
+
+    updatedAt?: string | null;
   }
 }
 
@@ -59,24 +77,6 @@ export interface AllowedEventRetrieveResponse {
   updatedAt?: string | null;
 }
 
-export interface AllowedEventListResponse {
-  entities: Array<AllowedEventListResponse.Entity>;
-}
-
-export namespace AllowedEventListResponse {
-  export interface Entity {
-    id: string;
-
-    createdAt: string;
-
-    destinationIds: Array<string>;
-
-    name: string;
-
-    updatedAt?: string | null;
-  }
-}
-
 export type AllowedEventDeleteResponse = boolean;
 
 export interface AllowedEventCreateParams {
@@ -87,9 +87,9 @@ export interface AllowedEventCreateParams {
 
 export declare namespace AllowedEvents {
   export {
+    type AllowedEventListResponse as AllowedEventListResponse,
     type AllowedEventCreateResponse as AllowedEventCreateResponse,
     type AllowedEventRetrieveResponse as AllowedEventRetrieveResponse,
-    type AllowedEventListResponse as AllowedEventListResponse,
     type AllowedEventDeleteResponse as AllowedEventDeleteResponse,
     type AllowedEventCreateParams as AllowedEventCreateParams,
   };
