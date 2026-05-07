@@ -128,22 +128,26 @@ List methods in the OursPrivacyPlatform API are paginated.
 You can use the `for await … of` syntax to iterate through items across all pages:
 
 ```ts
-async function fetchAllExperimentListResponses(params) {
-  const allExperimentListResponses = [];
+async function fetchAllExperimentVariantListResponses(params) {
+  const allExperimentVariantListResponses = [];
   // Automatically fetches more pages as needed.
-  for await (const experimentListResponse of client.experiments.list()) {
-    allExperimentListResponses.push(experimentListResponse);
+  for await (const experimentVariantListResponse of client.experimentVariants.list({
+    experimentId: '08524dc8-5289-48e8-bf40-b3a7cfa6ca0a',
+  })) {
+    allExperimentVariantListResponses.push(experimentVariantListResponse);
   }
-  return allExperimentListResponses;
+  return allExperimentVariantListResponses;
 }
 ```
 
 Alternatively, you can request a single page at a time:
 
 ```ts
-let page = await client.experiments.list();
-for (const experimentListResponse of page.entities) {
-  console.log(experimentListResponse);
+let page = await client.experimentVariants.list({
+  experimentId: '08524dc8-5289-48e8-bf40-b3a7cfa6ca0a',
+});
+for (const experimentVariantListResponse of page.entities) {
+  console.log(experimentVariantListResponse);
 }
 
 // Convenience methods are provided for manually paginating:

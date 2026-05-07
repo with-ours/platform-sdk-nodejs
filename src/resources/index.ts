@@ -49,6 +49,7 @@ export {
   type ExperimentVariantListParams,
   type ExperimentVariantCreateParams,
   type ExperimentVariantUpdateParams,
+  type ExperimentVariantListResponsesCursor,
 } from './experiment-variants';
 export {
   Experiments,
@@ -96,6 +97,7 @@ export {
   type MappingListParams,
   type MappingCreateParams,
   type MappingUpdateParams,
+  type MappingListResponsesCursor,
 } from './mappings';
 export {
   ReplaySettings,

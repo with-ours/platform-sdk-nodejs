@@ -24,6 +24,8 @@ describe('resource experimentVariants', () => {
   test('list: required and optional params', async () => {
     const response = await client.experimentVariants.list({
       experimentId: '08524dc8-5289-48e8-bf40-b3a7cfa6ca0a',
+      cursor: 'cursor',
+      limit: 200,
     });
   });
 

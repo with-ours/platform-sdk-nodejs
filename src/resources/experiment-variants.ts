@@ -2,28 +2,35 @@
 
 import { APIResource } from '../core/resource';
 import { APIPromise } from '../core/api-promise';
+import { Cursor, type CursorParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
 export class ExperimentVariants extends APIResource {
   /**
    * List variants for a specific parent experiment. Requires the `experimentId`
-   * query parameter — variants are always scoped to a single experiment. Requires
-   * scope: experiment:find
+   * query parameter — variants are always scoped to a single experiment. Supports
+   * cursor pagination via `limit` and `cursor`; SDK runtimes that need the full set
+   * in one request can pass `?limit=100`. Requires scope: experiment:find
    *
    * @example
    * ```ts
-   * const experimentVariants =
-   *   await client.experimentVariants.list({
-   *     experimentId: '08524dc8-5289-48e8-bf40-b3a7cfa6ca0a',
-   *   });
+   * // Automatically fetches more pages as needed.
+   * for await (const experimentVariantListResponse of client.experimentVariants.list(
+   *   { experimentId: '08524dc8-5289-48e8-bf40-b3a7cfa6ca0a' },
+   * )) {
+   *   // ...
+   * }
    * ```
    */
   list(
     query: ExperimentVariantListParams,
     options?: RequestOptions,
-  ): APIPromise<ExperimentVariantListResponse> {
-    return this._client.get('/rest/v1/experiment-variants', { query, ...options });
+  ): PagePromise<ExperimentVariantListResponsesCursor, ExperimentVariantListResponse> {
+    return this._client.getAPIList('/rest/v1/experiment-variants', Cursor<ExperimentVariantListResponse>, {
+      query,
+      ...options,
+    });
   }
 
   /**
@@ -91,122 +98,112 @@ export class ExperimentVariants extends APIResource {
   }
 }
 
+export type ExperimentVariantListResponsesCursor = Cursor<ExperimentVariantListResponse>;
+
 export interface ExperimentVariantListResponse {
   /**
-   * All variants on the parent experiment, including the auto-generated control.
-   * Returns an empty list when the experiment does not exist or is not visible to
-   * the caller. Variants per experiment are capped at 200; this list is not
-   * paginated because the SDK runtime always needs the full set to drive bucketing.
+   * Unique identifier for this experiment variant.
    */
-  entities: Array<ExperimentVariantListResponse.Entity>;
+  id: string;
+
+  /**
+   * Parent experiment ID this variant belongs to.
+   */
+  experimentId: string;
+
+  /**
+   * Whether this is the baseline control variant.
+   */
+  isControl: boolean;
+
+  /**
+   * Human-readable variant name shown in the dashboard and results.
+   */
+  name: string;
+
+  /**
+   * Relative traffic weight used when assigning visitors among variants in an active
+   * experiment.
+   */
+  weight: number;
+
+  /**
+   * Ordered list of declarative DOM mutations applied when this variant is assigned.
+   */
+  domModifications?: Array<ExperimentVariantListResponse.DomModification> | null;
+
+  /**
+   * Target URL for redirect variants. Use either a site-relative path such as
+   * `/pricing-v2` or an absolute `https://` URL. Cross-origin `http://` URLs are
+   * rejected. Omit for DOM modification variants.
+   */
+  redirectUrl?: string | null;
+
+  /**
+   * How this variant changes the user experience. `dom_modifications` for on-page
+   * changes or `redirect` for redirect tests.
+   */
+  variantType?: string | null;
 }
 
 export namespace ExperimentVariantListResponse {
-  export interface Entity {
+  export interface DomModification {
     /**
-     * Unique identifier for this experiment variant.
+     * Mutation to apply when the selector matches. Use `redirectUrl` instead of DOM
+     * modifications for redirect variants.
      */
-    id: string;
+    action:
+      | 'customCss'
+      | 'customJs'
+      | 'insertAfter'
+      | 'insertBefore'
+      | 'remove'
+      | 'setAttribute'
+      | 'setHtml'
+      | 'setImage'
+      | 'setStyle'
+      | 'setText';
 
     /**
-     * Parent experiment ID this variant belongs to.
+     * CSS selector used to find the element to modify on the page at runtime.
      */
-    experimentId: string;
+    selector: string;
 
     /**
-     * Whether this is the baseline control variant.
+     * Canonical action payload. For `setText` / `setHtml` / `customCss` / `customJs` /
+     * `setImage` / `insertBefore` / `insertAfter` this is the literal
+     * text/HTML/CSS/JS/URL. For `setStyle` and `setAttribute` it is a JSON-stringified
+     * `{key: value}` object — prefer the structured `styles` / `attribute` fields
+     * below to avoid manual JSON encoding.
      */
-    isControl: boolean;
+    value: string;
 
     /**
-     * Human-readable variant name shown in the dashboard and results.
+     * Populated on read for `setAttribute` modifications, parsed from `value`.
+     * Customers may also send this field instead of a JSON-stringified `value` on
+     * write — see `domModificationInputSchema`.
      */
-    name: string;
+    attribute?: unknown | null;
 
     /**
-     * Relative traffic weight used when assigning visitors among variants in an active
-     * experiment.
+     * Populated on read for `setStyle` modifications, parsed from `value`. Customers
+     * may also send this field instead of a JSON-stringified `value` on write — see
+     * `domModificationInputSchema`.
      */
-    weight: number;
-
-    /**
-     * Ordered list of declarative DOM mutations applied when this variant is assigned.
-     */
-    domModifications?: Array<Entity.DomModification> | null;
-
-    /**
-     * Target URL for redirect variants. Use either a site-relative path such as
-     * `/pricing-v2` or an absolute `https://` URL. Cross-origin `http://` URLs are
-     * rejected. Omit for DOM modification variants.
-     */
-    redirectUrl?: string | null;
-
-    /**
-     * How this variant changes the user experience. `dom_modifications` for on-page
-     * changes or `redirect` for redirect tests.
-     */
-    variantType?: string | null;
+    styles?: Array<DomModification.Style> | null;
   }
 
-  export namespace Entity {
-    export interface DomModification {
+  export namespace DomModification {
+    export interface Style {
       /**
-       * Mutation to apply when the selector matches. Use `redirectUrl` instead of DOM
-       * modifications for redirect variants.
+       * CSS property name in camelCase or kebab-case.
        */
-      action:
-        | 'customCss'
-        | 'customJs'
-        | 'insertAfter'
-        | 'insertBefore'
-        | 'remove'
-        | 'setAttribute'
-        | 'setHtml'
-        | 'setImage'
-        | 'setStyle'
-        | 'setText';
+      property: string;
 
       /**
-       * CSS selector used to find the element to modify on the page at runtime.
-       */
-      selector: string;
-
-      /**
-       * Canonical action payload. For `setText` / `setHtml` / `customCss` / `customJs` /
-       * `setImage` / `insertBefore` / `insertAfter` this is the literal
-       * text/HTML/CSS/JS/URL. For `setStyle` and `setAttribute` it is a JSON-stringified
-       * `{key: value}` object — prefer the structured `styles` / `attribute` fields
-       * below to avoid manual JSON encoding.
+       * CSS value to assign to the property.
        */
       value: string;
-
-      /**
-       * Populated on read for `setAttribute` modifications, parsed from `value`.
-       * Customers may also send this field instead of a JSON-stringified `value` on
-       * write — see `domModificationInputSchema`.
-       */
-      attribute?: unknown | null;
-
-      /**
-       * Populated on read for `setStyle` modifications, parsed from `value`. Customers
-       * may also send this field instead of a JSON-stringified `value` on write — see
-       * `domModificationInputSchema`.
-       */
-      styles?: Array<DomModification.Style> | null;
-    }
-
-    export namespace DomModification {
-      export interface Style {
-        /**
-         * CSS property name in camelCase or kebab-case.
-         */
-        property: string;
-
-        /**
-         * CSS value to assign to the property.
-         */
-        value: string;
-      }
     }
   }
 }
@@ -643,7 +640,7 @@ export namespace ExperimentVariantDeleteResponse {
   }
 }
 
-export interface ExperimentVariantListParams {
+export interface ExperimentVariantListParams extends CursorParams {
   /**
    * Required. List variants belonging to this parent experiment.
    */
@@ -863,6 +860,7 @@ export declare namespace ExperimentVariants {
     type ExperimentVariantRetrieveResponse as ExperimentVariantRetrieveResponse,
     type ExperimentVariantUpdateResponse as ExperimentVariantUpdateResponse,
     type ExperimentVariantDeleteResponse as ExperimentVariantDeleteResponse,
+    type ExperimentVariantListResponsesCursor as ExperimentVariantListResponsesCursor,
     type ExperimentVariantListParams as ExperimentVariantListParams,
     type ExperimentVariantCreateParams as ExperimentVariantCreateParams,
     type ExperimentVariantUpdateParams as ExperimentVariantUpdateParams,

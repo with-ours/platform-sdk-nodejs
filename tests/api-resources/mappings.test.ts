@@ -20,7 +20,11 @@ describe('resource mappings', () => {
   });
 
   test('list: required and optional params', async () => {
-    const response = await client.mappings.list({ entityId: '00000000-0000-0000-0000-000000000000' });
+    const response = await client.mappings.list({
+      entityId: '00000000-0000-0000-0000-000000000000',
+      cursor: 'cursor',
+      limit: 1000,
+    });
   });
 
   test('create: only required params', async () => {
