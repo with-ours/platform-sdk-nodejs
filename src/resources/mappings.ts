@@ -2,15 +2,22 @@
 
 import { APIResource } from '../core/resource';
 import { APIPromise } from '../core/api-promise';
+import { Cursor, type CursorParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
 export class Mappings extends APIResource {
   /**
-   * List all mappings for an entity. Requires scope: mapping:list
+   * List mappings for an entity (a source or destination). Requires the `entityId`
+   * query parameter. Supports cursor pagination via `limit` and `cursor`. Sorted by
+   * `priority` ascending, then by `id` for deterministic pagination. Requires scope:
+   * mapping:list
    */
-  list(query: MappingListParams, options?: RequestOptions): APIPromise<MappingListResponse> {
-    return this._client.get('/rest/v1/mappings', { query, ...options });
+  list(
+    query: MappingListParams,
+    options?: RequestOptions,
+  ): PagePromise<MappingListResponsesCursor, MappingListResponse> {
+    return this._client.getAPIList('/rest/v1/mappings', Cursor<MappingListResponse>, { query, ...options });
   }
 
   /**
@@ -43,41 +50,39 @@ export class Mappings extends APIResource {
   }
 }
 
-export type MappingListResponse = Array<MappingListResponse.MappingListResponseItem>;
+export type MappingListResponsesCursor = Cursor<MappingListResponse>;
+
+export interface MappingListResponse {
+  id: string;
+
+  isEnabled: boolean;
+
+  mappings: Array<MappingListResponse.Mapping>;
+
+  destinationId?: string | null;
+
+  isDefaultMapping?: boolean | null;
+
+  name?: string | null;
+
+  priority?: number | null;
+
+  sourceId?: string | null;
+
+  templateId?: string | null;
+
+  templateName?: string | null;
+
+  updatedAt?: string | null;
+}
 
 export namespace MappingListResponse {
-  export interface MappingListResponseItem {
-    id: string;
+  export interface Mapping {
+    map: string;
 
-    isEnabled: boolean;
+    property: string;
 
-    mappings: Array<MappingListResponseItem.Mapping>;
-
-    destinationId?: string | null;
-
-    isDefaultMapping?: boolean | null;
-
-    name?: string | null;
-
-    priority?: number | null;
-
-    sourceId?: string | null;
-
-    templateId?: string | null;
-
-    templateName?: string | null;
-
-    updatedAt?: string | null;
-  }
-
-  export namespace MappingListResponseItem {
-    export interface Mapping {
-      map: string;
-
-      property: string;
-
-      modification?: string | null;
-    }
+    modification?: string | null;
   }
 }
 
@@ -185,7 +190,7 @@ export namespace MappingUpdateResponse {
 
 export type MappingDeleteResponse = boolean;
 
-export interface MappingListParams {
+export interface MappingListParams extends CursorParams {
   /**
    * Filter mappings by their parent entity id (for example an allowed event id).
    */
@@ -223,6 +228,7 @@ export declare namespace Mappings {
     type MappingRetrieveResponse as MappingRetrieveResponse,
     type MappingUpdateResponse as MappingUpdateResponse,
     type MappingDeleteResponse as MappingDeleteResponse,
+    type MappingListResponsesCursor as MappingListResponsesCursor,
     type MappingListParams as MappingListParams,
     type MappingCreateParams as MappingCreateParams,
     type MappingUpdateParams as MappingUpdateParams,
