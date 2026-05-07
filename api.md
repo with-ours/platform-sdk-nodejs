@@ -212,4 +212,4 @@ Methods:
 - <code title="patch /rest/v1/versions/{id}">client.versions.<a href="./src/resources/versions.ts">update</a>(id, { ...params }) -> VersionUpdateResponse</code>
 - <code title="post /rest/v1/versions/{id}/publish">client.versions.<a href="./src/resources/versions.ts">publish</a>(id) -> VersionPublishResponse</code>
 - <code title="get /rest/v1/versions/{id}/snapshot">client.versions.<a href="./src/resources/versions.ts">snapshot</a>(id) -> VersionSnapshotResponse</code>
-- <code title="get /rest/v1/versions/{id}/diff">client.versions.<a href="./src/resources/versions.ts">diff</a>(id) -> VersionDiffResponse</code>
+- <code title="get /rest/v1/versions/{id}/diff">client.versions.<a href="./src/resources/versions.ts">diff</a>(id, { ...params }) -> VersionDiffResponse</code>

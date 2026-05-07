@@ -69,15 +69,26 @@ export class Versions extends APIResource {
   }
 
   /**
-   * Compare the current draft (all unpublished entity changes) against the latest
-   * published version. Returns added/removed/modified entities grouped by
-   * collection, plus a total `count`. Use this to preview what would be included in
-   * a `POST /rest/v1/versions` call. The path segment `draft` is a literal — there
-   * is no version with that ID; it identifies the comparison target. Requires scope:
-   * version:find
+   * Compare two versions of the account configuration. Returns
+   * added/removed/modified entities grouped by collection, plus a total `count`.
+   *
+   * - `GET /rest/v1/versions/draft/diff` — compare the current draft (all
+   *   unpublished entity changes) against the latest published version. Use this to
+   *   preview what would be included in a `POST /rest/v1/versions` call. (`draft` is
+   *   a literal path segment — there is no version with that ID; it identifies the
+   *   comparison target.)
+   * - `GET /rest/v1/versions/{id}/diff` — compare that specific version against the
+   *   latest published version.
+   * - `GET /rest/v1/versions/{id}/diff?against={otherId}` — compare two specific
+   *   versions. `otherId` may also be `draft` to diff a published snapshot against
+   *   the live draft state. Requires scope: version:find
    */
-  diff(id: 'draft', options?: RequestOptions): APIPromise<VersionDiffResponse> {
-    return this._client.get(path`/rest/v1/versions/${id}/diff`, options);
+  diff(
+    id: 'draft' | (string & {}),
+    query: VersionDiffParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<VersionDiffResponse> {
+    return this._client.get(path`/rest/v1/versions/${id}/diff`, { query, ...options });
   }
 }
 
@@ -93,6 +104,8 @@ export interface VersionListResponse {
   versionNumber: number;
 
   name?: string | null;
+
+  notes?: string | null;
 
   /**
    * When this version was most recently published. NOT cleared when a newer version
@@ -255,6 +268,11 @@ export namespace VersionDiffResponse {
     export interface AllowedEvents {
       added: Array<AllowedEvents.Added>;
 
+      /**
+       * Entities present in both snapshots but with at least one field changed. `old` is
+       * the snapshot of the entity in the baseline (latest published); `new` is the
+       * snapshot in the comparison target (the draft).
+       */
       modified: Array<AllowedEvents.Modified>;
 
       removed: Array<AllowedEvents.Removed>;
@@ -264,10 +282,27 @@ export namespace VersionDiffResponse {
       export interface Added {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
 
@@ -281,20 +316,54 @@ export namespace VersionDiffResponse {
         export interface New {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
 
         export interface Old {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
       }
@@ -302,10 +371,27 @@ export namespace VersionDiffResponse {
       export interface Removed {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
     }
@@ -313,6 +399,11 @@ export namespace VersionDiffResponse {
     export interface ConsentSettings {
       added: Array<ConsentSettings.Added>;
 
+      /**
+       * Entities present in both snapshots but with at least one field changed. `old` is
+       * the snapshot of the entity in the baseline (latest published); `new` is the
+       * snapshot in the comparison target (the draft).
+       */
       modified: Array<ConsentSettings.Modified>;
 
       removed: Array<ConsentSettings.Removed>;
@@ -322,10 +413,27 @@ export namespace VersionDiffResponse {
       export interface Added {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
 
@@ -339,20 +447,54 @@ export namespace VersionDiffResponse {
         export interface New {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
 
         export interface Old {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
       }
@@ -360,10 +502,27 @@ export namespace VersionDiffResponse {
       export interface Removed {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
     }
@@ -371,6 +530,11 @@ export namespace VersionDiffResponse {
     export interface DataGovernanceEvents {
       added: Array<DataGovernanceEvents.Added>;
 
+      /**
+       * Entities present in both snapshots but with at least one field changed. `old` is
+       * the snapshot of the entity in the baseline (latest published); `new` is the
+       * snapshot in the comparison target (the draft).
+       */
       modified: Array<DataGovernanceEvents.Modified>;
 
       removed: Array<DataGovernanceEvents.Removed>;
@@ -380,10 +544,27 @@ export namespace VersionDiffResponse {
       export interface Added {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
 
@@ -397,20 +578,54 @@ export namespace VersionDiffResponse {
         export interface New {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
 
         export interface Old {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
       }
@@ -418,10 +633,27 @@ export namespace VersionDiffResponse {
       export interface Removed {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
     }
@@ -429,6 +661,11 @@ export namespace VersionDiffResponse {
     export interface DataGovernanceRules {
       added: Array<DataGovernanceRules.Added>;
 
+      /**
+       * Entities present in both snapshots but with at least one field changed. `old` is
+       * the snapshot of the entity in the baseline (latest published); `new` is the
+       * snapshot in the comparison target (the draft).
+       */
       modified: Array<DataGovernanceRules.Modified>;
 
       removed: Array<DataGovernanceRules.Removed>;
@@ -438,10 +675,27 @@ export namespace VersionDiffResponse {
       export interface Added {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
 
@@ -455,20 +709,54 @@ export namespace VersionDiffResponse {
         export interface New {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
 
         export interface Old {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
       }
@@ -476,10 +764,27 @@ export namespace VersionDiffResponse {
       export interface Removed {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
     }
@@ -487,6 +792,11 @@ export namespace VersionDiffResponse {
     export interface Destinations {
       added: Array<Destinations.Added>;
 
+      /**
+       * Entities present in both snapshots but with at least one field changed. `old` is
+       * the snapshot of the entity in the baseline (latest published); `new` is the
+       * snapshot in the comparison target (the draft).
+       */
       modified: Array<Destinations.Modified>;
 
       removed: Array<Destinations.Removed>;
@@ -496,10 +806,27 @@ export namespace VersionDiffResponse {
       export interface Added {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
 
@@ -513,20 +840,54 @@ export namespace VersionDiffResponse {
         export interface New {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
 
         export interface Old {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
       }
@@ -534,10 +895,27 @@ export namespace VersionDiffResponse {
       export interface Removed {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
     }
@@ -545,6 +923,11 @@ export namespace VersionDiffResponse {
     export interface Experiments {
       added: Array<Experiments.Added>;
 
+      /**
+       * Entities present in both snapshots but with at least one field changed. `old` is
+       * the snapshot of the entity in the baseline (latest published); `new` is the
+       * snapshot in the comparison target (the draft).
+       */
       modified: Array<Experiments.Modified>;
 
       removed: Array<Experiments.Removed>;
@@ -554,10 +937,27 @@ export namespace VersionDiffResponse {
       export interface Added {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
 
@@ -571,20 +971,54 @@ export namespace VersionDiffResponse {
         export interface New {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
 
         export interface Old {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
       }
@@ -592,10 +1026,27 @@ export namespace VersionDiffResponse {
       export interface Removed {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
     }
@@ -603,6 +1054,11 @@ export namespace VersionDiffResponse {
     export interface ExperimentSettings {
       added: Array<ExperimentSettings.Added>;
 
+      /**
+       * Entities present in both snapshots but with at least one field changed. `old` is
+       * the snapshot of the entity in the baseline (latest published); `new` is the
+       * snapshot in the comparison target (the draft).
+       */
       modified: Array<ExperimentSettings.Modified>;
 
       removed: Array<ExperimentSettings.Removed>;
@@ -612,10 +1068,27 @@ export namespace VersionDiffResponse {
       export interface Added {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
 
@@ -629,20 +1102,54 @@ export namespace VersionDiffResponse {
         export interface New {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
 
         export interface Old {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
       }
@@ -650,10 +1157,27 @@ export namespace VersionDiffResponse {
       export interface Removed {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
     }
@@ -661,6 +1185,11 @@ export namespace VersionDiffResponse {
     export interface ExperimentVariants {
       added: Array<ExperimentVariants.Added>;
 
+      /**
+       * Entities present in both snapshots but with at least one field changed. `old` is
+       * the snapshot of the entity in the baseline (latest published); `new` is the
+       * snapshot in the comparison target (the draft).
+       */
       modified: Array<ExperimentVariants.Modified>;
 
       removed: Array<ExperimentVariants.Removed>;
@@ -670,10 +1199,27 @@ export namespace VersionDiffResponse {
       export interface Added {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
 
@@ -687,20 +1233,54 @@ export namespace VersionDiffResponse {
         export interface New {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
 
         export interface Old {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
       }
@@ -708,10 +1288,27 @@ export namespace VersionDiffResponse {
       export interface Removed {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
     }
@@ -719,6 +1316,11 @@ export namespace VersionDiffResponse {
     export interface ExternalAllowedEventData {
       added: Array<ExternalAllowedEventData.Added>;
 
+      /**
+       * Entities present in both snapshots but with at least one field changed. `old` is
+       * the snapshot of the entity in the baseline (latest published); `new` is the
+       * snapshot in the comparison target (the draft).
+       */
       modified: Array<ExternalAllowedEventData.Modified>;
 
       removed: Array<ExternalAllowedEventData.Removed>;
@@ -728,10 +1330,27 @@ export namespace VersionDiffResponse {
       export interface Added {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
 
@@ -745,20 +1364,54 @@ export namespace VersionDiffResponse {
         export interface New {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
 
         export interface Old {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
       }
@@ -766,10 +1419,27 @@ export namespace VersionDiffResponse {
       export interface Removed {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
     }
@@ -777,6 +1447,11 @@ export namespace VersionDiffResponse {
     export interface GlobalDispatchCenters {
       added: Array<GlobalDispatchCenters.Added>;
 
+      /**
+       * Entities present in both snapshots but with at least one field changed. `old` is
+       * the snapshot of the entity in the baseline (latest published); `new` is the
+       * snapshot in the comparison target (the draft).
+       */
       modified: Array<GlobalDispatchCenters.Modified>;
 
       removed: Array<GlobalDispatchCenters.Removed>;
@@ -786,10 +1461,27 @@ export namespace VersionDiffResponse {
       export interface Added {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
 
@@ -803,20 +1495,54 @@ export namespace VersionDiffResponse {
         export interface New {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
 
         export interface Old {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
       }
@@ -824,10 +1550,27 @@ export namespace VersionDiffResponse {
       export interface Removed {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
     }
@@ -835,6 +1578,11 @@ export namespace VersionDiffResponse {
     export interface Mappings {
       added: Array<Mappings.Added>;
 
+      /**
+       * Entities present in both snapshots but with at least one field changed. `old` is
+       * the snapshot of the entity in the baseline (latest published); `new` is the
+       * snapshot in the comparison target (the draft).
+       */
       modified: Array<Mappings.Modified>;
 
       removed: Array<Mappings.Removed>;
@@ -844,10 +1592,27 @@ export namespace VersionDiffResponse {
       export interface Added {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
 
@@ -861,20 +1626,54 @@ export namespace VersionDiffResponse {
         export interface New {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
 
         export interface Old {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
       }
@@ -882,10 +1681,27 @@ export namespace VersionDiffResponse {
       export interface Removed {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
     }
@@ -893,6 +1709,11 @@ export namespace VersionDiffResponse {
     export interface ReplaySettings {
       added: Array<ReplaySettings.Added>;
 
+      /**
+       * Entities present in both snapshots but with at least one field changed. `old` is
+       * the snapshot of the entity in the baseline (latest published); `new` is the
+       * snapshot in the comparison target (the draft).
+       */
       modified: Array<ReplaySettings.Modified>;
 
       removed: Array<ReplaySettings.Removed>;
@@ -902,10 +1723,27 @@ export namespace VersionDiffResponse {
       export interface Added {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
 
@@ -919,20 +1757,54 @@ export namespace VersionDiffResponse {
         export interface New {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
 
         export interface Old {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
       }
@@ -940,10 +1812,27 @@ export namespace VersionDiffResponse {
       export interface Removed {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
     }
@@ -951,6 +1840,11 @@ export namespace VersionDiffResponse {
     export interface Sources {
       added: Array<Sources.Added>;
 
+      /**
+       * Entities present in both snapshots but with at least one field changed. `old` is
+       * the snapshot of the entity in the baseline (latest published); `new` is the
+       * snapshot in the comparison target (the draft).
+       */
       modified: Array<Sources.Modified>;
 
       removed: Array<Sources.Removed>;
@@ -960,10 +1854,27 @@ export namespace VersionDiffResponse {
       export interface Added {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
 
@@ -977,20 +1888,54 @@ export namespace VersionDiffResponse {
         export interface New {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
 
         export interface Old {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
       }
@@ -998,10 +1943,27 @@ export namespace VersionDiffResponse {
       export interface Removed {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
     }
@@ -1009,6 +1971,11 @@ export namespace VersionDiffResponse {
     export interface TagManagerTags {
       added: Array<TagManagerTags.Added>;
 
+      /**
+       * Entities present in both snapshots but with at least one field changed. `old` is
+       * the snapshot of the entity in the baseline (latest published); `new` is the
+       * snapshot in the comparison target (the draft).
+       */
       modified: Array<TagManagerTags.Modified>;
 
       removed: Array<TagManagerTags.Removed>;
@@ -1018,10 +1985,27 @@ export namespace VersionDiffResponse {
       export interface Added {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
 
@@ -1035,20 +2019,54 @@ export namespace VersionDiffResponse {
         export interface New {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
 
         export interface Old {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
       }
@@ -1056,10 +2074,27 @@ export namespace VersionDiffResponse {
       export interface Removed {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
     }
@@ -1067,6 +2102,11 @@ export namespace VersionDiffResponse {
     export interface TagManagerTriggers {
       added: Array<TagManagerTriggers.Added>;
 
+      /**
+       * Entities present in both snapshots but with at least one field changed. `old` is
+       * the snapshot of the entity in the baseline (latest published); `new` is the
+       * snapshot in the comparison target (the draft).
+       */
       modified: Array<TagManagerTriggers.Modified>;
 
       removed: Array<TagManagerTriggers.Removed>;
@@ -1076,10 +2116,27 @@ export namespace VersionDiffResponse {
       export interface Added {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
 
@@ -1093,20 +2150,54 @@ export namespace VersionDiffResponse {
         export interface New {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
 
         export interface Old {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
       }
@@ -1114,10 +2205,27 @@ export namespace VersionDiffResponse {
       export interface Removed {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
     }
@@ -1125,6 +2233,11 @@ export namespace VersionDiffResponse {
     export interface TagManagerVariables {
       added: Array<TagManagerVariables.Added>;
 
+      /**
+       * Entities present in both snapshots but with at least one field changed. `old` is
+       * the snapshot of the entity in the baseline (latest published); `new` is the
+       * snapshot in the comparison target (the draft).
+       */
       modified: Array<TagManagerVariables.Modified>;
 
       removed: Array<TagManagerVariables.Removed>;
@@ -1134,10 +2247,27 @@ export namespace VersionDiffResponse {
       export interface Added {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
 
@@ -1151,20 +2281,54 @@ export namespace VersionDiffResponse {
         export interface New {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
 
         export interface Old {
           id: string;
 
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
           name?: string | null;
 
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
           summary?: string | null;
 
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
           tagManagerId?: string | null;
         }
       }
@@ -1172,10 +2336,27 @@ export namespace VersionDiffResponse {
       export interface Removed {
         id: string;
 
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
         name?: string | null;
 
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
         summary?: string | null;
 
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
         tagManagerId?: string | null;
       }
     }
@@ -1200,26 +2381,100 @@ export interface VersionListParams extends CursorParams {
 }
 
 export interface VersionCreateParams {
+  /**
+   * Cherry-pick: allowed event ids (slug-like strings) to include from the draft.
+   * Omit or send `[]` to include all draft changes in this collection.
+   */
   includeAllowedEvents?: Array<string> | null;
 
+  /**
+   * Cherry-pick: consent settings ids to include from the draft. Omit or send `[]`
+   * to include all draft changes in this collection.
+   */
   includeConsentSettings?: Array<string> | null;
 
+  /**
+   * Cherry-pick: data governance event UUIDs to include from the draft. Omit or send
+   * `[]` to include all draft changes in this collection.
+   */
+  includeDataGovernanceEvents?: Array<string> | null;
+
+  /**
+   * Cherry-pick: data governance rule UUIDs to include from the draft. Omit or send
+   * `[]` to include all draft changes in this collection.
+   */
+  includeDataGovernanceRules?: Array<string> | null;
+
+  /**
+   * Cherry-pick: destination UUIDs to include from the draft. Omit or send `[]` to
+   * include all draft changes in this collection.
+   */
   includeDestinations?: Array<string> | null;
 
+  /**
+   * Cherry-pick: experiment UUIDs to include from the draft. Omit or send `[]` to
+   * include all draft changes in this collection.
+   */
+  includeExperiments?: Array<string> | null;
+
+  /**
+   * Cherry-pick: experiment settings UUIDs to include from the draft. Omit or send
+   * `[]` to include all draft changes in this collection.
+   */
+  includeExperimentSettings?: Array<string> | null;
+
+  /**
+   * Cherry-pick: experiment variant UUIDs to include from the draft. Omit or send
+   * `[]` to include all draft changes in this collection.
+   */
+  includeExperimentVariants?: Array<string> | null;
+
+  /**
+   * Cherry-pick: external allowed event data ids to include from the draft. Omit or
+   * send `[]` to include all draft changes in this collection.
+   */
   includeExternalAllowedEventData?: Array<string> | null;
 
+  /**
+   * Cherry-pick: global dispatch center ids to include from the draft. Omit or send
+   * `[]` to include all draft changes in this collection.
+   */
   includeGlobalDispatchCenters?: Array<string> | null;
 
+  /**
+   * Cherry-pick: mapping ids to include from the draft. Omit or send `[]` to include
+   * all draft changes in this collection.
+   */
   includeMappings?: Array<string> | null;
 
+  /**
+   * Cherry-pick: replay settings ids to include from the draft. Omit or send `[]` to
+   * include all draft changes in this collection.
+   */
   includeReplaySettings?: Array<string> | null;
 
+  /**
+   * Cherry-pick: source UUIDs to include from the draft. Omit or send `[]` to
+   * include all draft changes in this collection.
+   */
   includeSources?: Array<string> | null;
 
+  /**
+   * Cherry-pick: tag manager tag UUIDs to include from the draft. Omit or send `[]`
+   * to include all draft changes in this collection.
+   */
   includeTagManagerTags?: Array<string> | null;
 
+  /**
+   * Cherry-pick: tag manager trigger UUIDs to include from the draft. Omit or send
+   * `[]` to include all draft changes in this collection.
+   */
   includeTagManagerTriggers?: Array<string> | null;
 
+  /**
+   * Cherry-pick: tag manager variable UUIDs to include from the draft. Omit or send
+   * `[]` to include all draft changes in this collection.
+   */
   includeTagManagerVariables?: Array<string> | null;
 
   name?: string | null;
@@ -1231,6 +2486,14 @@ export interface VersionUpdateParams {
   name?: string | null;
 
   notes?: string | null;
+}
+
+export interface VersionDiffParams {
+  /**
+   * Baseline version id to compare the path version against. Omit for the latest
+   * published version. Pass a version UUID to compute a version-vs-version diff.
+   */
+  against?: string;
 }
 
 export declare namespace Versions {
@@ -1246,5 +2509,6 @@ export declare namespace Versions {
     type VersionListParams as VersionListParams,
     type VersionCreateParams as VersionCreateParams,
     type VersionUpdateParams as VersionUpdateParams,
+    type VersionDiffParams as VersionDiffParams,
   };
 }
