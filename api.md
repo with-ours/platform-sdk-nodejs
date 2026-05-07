@@ -82,7 +82,7 @@ Types:
 
 Methods:
 
-- <code title="get /rest/v1/experiment-variants">client.experimentVariants.<a href="./src/resources/experiment-variants.ts">list</a>({ ...params }) -> ExperimentVariantListResponse</code>
+- <code title="get /rest/v1/experiment-variants">client.experimentVariants.<a href="./src/resources/experiment-variants.ts">list</a>({ ...params }) -> ExperimentVariantListResponsesCursor</code>
 - <code title="post /rest/v1/experiment-variants">client.experimentVariants.<a href="./src/resources/experiment-variants.ts">create</a>({ ...params }) -> ExperimentVariantCreateResponse</code>
 - <code title="get /rest/v1/experiment-variants/{id}">client.experimentVariants.<a href="./src/resources/experiment-variants.ts">retrieve</a>(id) -> ExperimentVariantRetrieveResponse</code>
 - <code title="patch /rest/v1/experiment-variants/{id}">client.experimentVariants.<a href="./src/resources/experiment-variants.ts">update</a>(id, { ...params }) -> ExperimentVariantUpdateResponse</code>
@@ -148,7 +148,7 @@ Types:
 
 Methods:
 
-- <code title="get /rest/v1/mappings">client.mappings.<a href="./src/resources/mappings.ts">list</a>({ ...params }) -> MappingListResponse</code>
+- <code title="get /rest/v1/mappings">client.mappings.<a href="./src/resources/mappings.ts">list</a>({ ...params }) -> MappingListResponsesCursor</code>
 - <code title="post /rest/v1/mappings">client.mappings.<a href="./src/resources/mappings.ts">create</a>({ ...params }) -> MappingCreateResponse</code>
 - <code title="get /rest/v1/mappings/{id}">client.mappings.<a href="./src/resources/mappings.ts">retrieve</a>(id) -> MappingRetrieveResponse</code>
 - <code title="patch /rest/v1/mappings/{id}">client.mappings.<a href="./src/resources/mappings.ts">update</a>(id, { ...params }) -> MappingUpdateResponse</code>
