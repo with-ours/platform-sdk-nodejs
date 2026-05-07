@@ -134,5 +134,6 @@ export {
   type VersionListParams,
   type VersionCreateParams,
   type VersionUpdateParams,
+  type VersionDiffParams,
   type VersionListResponsesCursor,
 } from './versions';
