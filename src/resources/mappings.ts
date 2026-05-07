@@ -82,7 +82,37 @@ export namespace MappingListResponse {
 
     property: string;
 
-    modification?: string | null;
+    modification?:
+      | 'CamelCase'
+      | 'DmaIP'
+      | 'DomainOnly'
+      | 'DomainPathOnly'
+      | 'DomainPathUTMs'
+      | 'DomainUTMs'
+      | 'FakeDomain'
+      | 'FakeDomainRealPath'
+      | 'FakeIP'
+      | 'FullUrl'
+      | 'Hash'
+      | 'HashMD5'
+      | 'HashedCountry'
+      | 'HashedDateOfBirth'
+      | 'HashedGender'
+      | 'HashedNormalized'
+      | 'HashedNormalizedNoSpecialChars'
+      | 'HashedPhone'
+      | 'HashedState'
+      | 'HashedZip'
+      | 'KebabCase'
+      | 'LowerCase'
+      | 'None'
+      | 'Null'
+      | 'Redacted'
+      | 'RegionalIP'
+      | 'SnakeCase'
+      | 'StartCase'
+      | 'UpperCase'
+      | null;
   }
 }
 
@@ -116,7 +146,37 @@ export namespace MappingCreateResponse {
 
     property: string;
 
-    modification?: string | null;
+    modification?:
+      | 'CamelCase'
+      | 'DmaIP'
+      | 'DomainOnly'
+      | 'DomainPathOnly'
+      | 'DomainPathUTMs'
+      | 'DomainUTMs'
+      | 'FakeDomain'
+      | 'FakeDomainRealPath'
+      | 'FakeIP'
+      | 'FullUrl'
+      | 'Hash'
+      | 'HashMD5'
+      | 'HashedCountry'
+      | 'HashedDateOfBirth'
+      | 'HashedGender'
+      | 'HashedNormalized'
+      | 'HashedNormalizedNoSpecialChars'
+      | 'HashedPhone'
+      | 'HashedState'
+      | 'HashedZip'
+      | 'KebabCase'
+      | 'LowerCase'
+      | 'None'
+      | 'Null'
+      | 'Redacted'
+      | 'RegionalIP'
+      | 'SnakeCase'
+      | 'StartCase'
+      | 'UpperCase'
+      | null;
   }
 }
 
@@ -150,7 +210,37 @@ export namespace MappingRetrieveResponse {
 
     property: string;
 
-    modification?: string | null;
+    modification?:
+      | 'CamelCase'
+      | 'DmaIP'
+      | 'DomainOnly'
+      | 'DomainPathOnly'
+      | 'DomainPathUTMs'
+      | 'DomainUTMs'
+      | 'FakeDomain'
+      | 'FakeDomainRealPath'
+      | 'FakeIP'
+      | 'FullUrl'
+      | 'Hash'
+      | 'HashMD5'
+      | 'HashedCountry'
+      | 'HashedDateOfBirth'
+      | 'HashedGender'
+      | 'HashedNormalized'
+      | 'HashedNormalizedNoSpecialChars'
+      | 'HashedPhone'
+      | 'HashedState'
+      | 'HashedZip'
+      | 'KebabCase'
+      | 'LowerCase'
+      | 'None'
+      | 'Null'
+      | 'Redacted'
+      | 'RegionalIP'
+      | 'SnakeCase'
+      | 'StartCase'
+      | 'UpperCase'
+      | null;
   }
 }
 
@@ -184,7 +274,37 @@ export namespace MappingUpdateResponse {
 
     property: string;
 
-    modification?: string | null;
+    modification?:
+      | 'CamelCase'
+      | 'DmaIP'
+      | 'DomainOnly'
+      | 'DomainPathOnly'
+      | 'DomainPathUTMs'
+      | 'DomainUTMs'
+      | 'FakeDomain'
+      | 'FakeDomainRealPath'
+      | 'FakeIP'
+      | 'FullUrl'
+      | 'Hash'
+      | 'HashMD5'
+      | 'HashedCountry'
+      | 'HashedDateOfBirth'
+      | 'HashedGender'
+      | 'HashedNormalized'
+      | 'HashedNormalizedNoSpecialChars'
+      | 'HashedPhone'
+      | 'HashedState'
+      | 'HashedZip'
+      | 'KebabCase'
+      | 'LowerCase'
+      | 'None'
+      | 'Null'
+      | 'Redacted'
+      | 'RegionalIP'
+      | 'SnakeCase'
+      | 'StartCase'
+      | 'UpperCase'
+      | null;
   }
 }
 
@@ -192,7 +312,8 @@ export type MappingDeleteResponse = boolean;
 
 export interface MappingListParams extends CursorParams {
   /**
-   * Filter mappings by their parent entity id (for example an allowed event id).
+   * Filter mappings by their parent entity id. Must be a destination id or source
+   * id.
    */
   entityId: string;
 }
@@ -204,7 +325,14 @@ export interface MappingCreateParams {
 }
 
 export interface MappingUpdateParams {
-  logic?: unknown;
+  /**
+   * Condition tree gating when this mapping fires. A node is either a leaf
+   * `condition` or a combinator (`AND`, `OR`, `NOT`). Combinator children are
+   * themselves `MappingLogic` nodes, so trees nest arbitrarily. Example leaf:
+   * `{ "condition": { "property": "$event.event", "operator": "Is", "value": "page_view" } }`.
+   * Example combinator: `{ "AND": [{ "condition": ... }, { "OR": [...] }] }`.
+   */
+  logic?: MappingUpdateParams.Logic;
 
   mappings?: Array<MappingUpdateParams.Mapping>;
 
@@ -212,12 +340,109 @@ export interface MappingUpdateParams {
 }
 
 export namespace MappingUpdateParams {
+  /**
+   * Condition tree gating when this mapping fires. A node is either a leaf
+   * `condition` or a combinator (`AND`, `OR`, `NOT`). Combinator children are
+   * themselves `MappingLogic` nodes, so trees nest arbitrarily. Example leaf:
+   * `{ "condition": { "property": "$event.event", "operator": "Is", "value": "page_view" } }`.
+   * Example combinator: `{ "AND": [{ "condition": ... }, { "OR": [...] }] }`.
+   */
+  export interface Logic {
+    /**
+     * All child nodes must match. Each child is a `MappingLogic` node.
+     */
+    AND?: Array<unknown> | null;
+
+    condition?: Logic.Condition;
+
+    /**
+     * Negates a single child `MappingLogic` node.
+     */
+    NOT?: unknown;
+
+    /**
+     * Any child node must match. Each child is a `MappingLogic` node.
+     */
+    OR?: Array<unknown> | null;
+  }
+
+  export namespace Logic {
+    export interface Condition {
+      operator:
+        | 'Is'
+        | 'IsNot'
+        | 'Contains'
+        | 'DoesNotContain'
+        | 'StartsWith'
+        | 'EndsWith'
+        | 'IsFalsy'
+        | 'IsTruthy'
+        | 'IsNull'
+        | 'IsNotNull'
+        | 'IsUndefined'
+        | 'IsNotUndefined'
+        | 'IsGreaterThan'
+        | 'IsGreaterThanOrEqual'
+        | 'IsLessThan'
+        | 'IsLessThanOrEqual'
+        | 'IsIn'
+        | 'IsNotIn'
+        | 'IsFoundIn'
+        | 'IsNotFoundIn'
+        | 'IsTrue'
+        | 'IsFalse'
+        | 'IsBefore'
+        | 'IsAfter'
+        | 'IsBetween'
+        | 'IsOnOrBefore'
+        | 'IsOnOrAfter'
+        | 'MatchesRegex'
+        | 'MatchesRegexIgnoreCase'
+        | 'DoesNotMatchRegex'
+        | 'DoesNotMatchRegexIgnoreCase';
+
+      property: string;
+
+      value: string;
+    }
+  }
+
   export interface Mapping {
     map: string;
 
     property: string;
 
-    modification?: string | null;
+    modification?:
+      | 'CamelCase'
+      | 'DmaIP'
+      | 'DomainOnly'
+      | 'DomainPathOnly'
+      | 'DomainPathUTMs'
+      | 'DomainUTMs'
+      | 'FakeDomain'
+      | 'FakeDomainRealPath'
+      | 'FakeIP'
+      | 'FullUrl'
+      | 'Hash'
+      | 'HashMD5'
+      | 'HashedCountry'
+      | 'HashedDateOfBirth'
+      | 'HashedGender'
+      | 'HashedNormalized'
+      | 'HashedNormalizedNoSpecialChars'
+      | 'HashedPhone'
+      | 'HashedState'
+      | 'HashedZip'
+      | 'KebabCase'
+      | 'LowerCase'
+      | 'None'
+      | 'Null'
+      | 'Redacted'
+      | 'RegionalIP'
+      | 'SnakeCase'
+      | 'StartCase'
+      | 'UpperCase'
+      | null;
   }
 }
 
