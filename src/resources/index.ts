@@ -64,6 +64,7 @@ export {
   type ExperimentResumeResponse,
   type ExperimentResultsResponse,
   type ExperimentResultsTimeSeriesResponse,
+  type ExperimentSessionReplaysResponse,
   type ExperimentListParams,
   type ExperimentCreateParams,
   type ExperimentUpdateParams,
@@ -73,6 +74,7 @@ export {
   type ExperimentResumeParams,
   type ExperimentResultsParams,
   type ExperimentResultsTimeSeriesParams,
+  type ExperimentSessionReplaysParams,
   type ExperimentListResponsesCursor,
 } from './experiments';
 export {

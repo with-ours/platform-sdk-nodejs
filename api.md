@@ -103,6 +103,7 @@ Types:
 - <code><a href="./src/resources/experiments.ts">ExperimentResumeResponse</a></code>
 - <code><a href="./src/resources/experiments.ts">ExperimentResultsResponse</a></code>
 - <code><a href="./src/resources/experiments.ts">ExperimentResultsTimeSeriesResponse</a></code>
+- <code><a href="./src/resources/experiments.ts">ExperimentSessionReplaysResponse</a></code>
 
 Methods:
 
@@ -117,6 +118,7 @@ Methods:
 - <code title="post /rest/v1/experiments/{id}/resume">client.experiments.<a href="./src/resources/experiments.ts">resume</a>(id, { ...params }) -> ExperimentResumeResponse</code>
 - <code title="get /rest/v1/experiments/{id}/results">client.experiments.<a href="./src/resources/experiments.ts">results</a>(id, { ...params }) -> ExperimentResultsResponse</code>
 - <code title="get /rest/v1/experiments/{id}/results-time-series">client.experiments.<a href="./src/resources/experiments.ts">resultsTimeSeries</a>(id, { ...params }) -> ExperimentResultsTimeSeriesResponse</code>
+- <code title="get /rest/v1/experiments/{id}/session-replays">client.experiments.<a href="./src/resources/experiments.ts">sessionReplays</a>(id, { ...params }) -> ExperimentSessionReplaysResponse</code>
 
 # GlobalDispatchCenters
 

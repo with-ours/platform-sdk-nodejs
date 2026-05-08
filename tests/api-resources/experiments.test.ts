@@ -230,4 +230,30 @@ describe('resource experiments', () => {
       ),
     ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
   });
+
+  test('sessionReplays', async () => {
+    const responsePromise = client.experiments.sessionReplays('id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('sessionReplays: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.experiments.sessionReplays(
+        'id',
+        {
+          cursor: 'cursor',
+          limit: 25,
+          variant_id: 'var_01HZX8YJH3Z3W1R2Q4M5N6P7Q8',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
+  });
 });

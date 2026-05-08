@@ -132,9 +132,11 @@ export namespace ExperimentSettingListResponse {
     updatedByUserId?: string | null;
 
     /**
-     * Optional domain allowlist for experiment SDK delivery. When set, experiments
-     * using this settings record are only served on these domains. This is separate
-     * from source `whitelistDomains`, which gates source event ingestion.
+     * Limits which domains can load your experiments. When set, experiments using this
+     * settings record are only served on these domains; the SDK refuses to load
+     * anywhere else and your experiments never run on those hosts. Separate from
+     * source `whitelistDomains`, which limits which domains can send events to the
+     * CDP.
      */
     whitelistDomains?: Array<string> | null;
   }
@@ -176,9 +178,11 @@ export interface ExperimentSettingCreateResponse {
   updatedByUserId?: string | null;
 
   /**
-   * Optional domain allowlist for experiment SDK delivery. When set, experiments
-   * using this settings record are only served on these domains. This is separate
-   * from source `whitelistDomains`, which gates source event ingestion.
+   * Limits which domains can load your experiments. When set, experiments using this
+   * settings record are only served on these domains; the SDK refuses to load
+   * anywhere else and your experiments never run on those hosts. Separate from
+   * source `whitelistDomains`, which limits which domains can send events to the
+   * CDP.
    */
   whitelistDomains?: Array<string> | null;
 }
@@ -219,9 +223,11 @@ export interface ExperimentSettingRetrieveResponse {
   updatedByUserId?: string | null;
 
   /**
-   * Optional domain allowlist for experiment SDK delivery. When set, experiments
-   * using this settings record are only served on these domains. This is separate
-   * from source `whitelistDomains`, which gates source event ingestion.
+   * Limits which domains can load your experiments. When set, experiments using this
+   * settings record are only served on these domains; the SDK refuses to load
+   * anywhere else and your experiments never run on those hosts. Separate from
+   * source `whitelistDomains`, which limits which domains can send events to the
+   * CDP.
    */
   whitelistDomains?: Array<string> | null;
 }
@@ -262,9 +268,11 @@ export interface ExperimentSettingUpdateResponse {
   updatedByUserId?: string | null;
 
   /**
-   * Optional domain allowlist for experiment SDK delivery. When set, experiments
-   * using this settings record are only served on these domains. This is separate
-   * from source `whitelistDomains`, which gates source event ingestion.
+   * Limits which domains can load your experiments. When set, experiments using this
+   * settings record are only served on these domains; the SDK refuses to load
+   * anywhere else and your experiments never run on those hosts. Separate from
+   * source `whitelistDomains`, which limits which domains can send events to the
+   * CDP.
    */
   whitelistDomains?: Array<string> | null;
 }
@@ -305,9 +313,11 @@ export interface ExperimentSettingDeleteResponse {
   updatedByUserId?: string | null;
 
   /**
-   * Optional domain allowlist for experiment SDK delivery. When set, experiments
-   * using this settings record are only served on these domains. This is separate
-   * from source `whitelistDomains`, which gates source event ingestion.
+   * Limits which domains can load your experiments. When set, experiments using this
+   * settings record are only served on these domains; the SDK refuses to load
+   * anywhere else and your experiments never run on those hosts. Separate from
+   * source `whitelistDomains`, which limits which domains can send events to the
+   * CDP.
    */
   whitelistDomains?: Array<string> | null;
 }
@@ -326,9 +336,11 @@ export interface ExperimentSettingCreateParams {
   name?: string | null;
 
   /**
-   * Optional domain allowlist for experiment SDK delivery. When set, experiments
-   * using this settings record are only served on these domains. This is separate
-   * from source `whitelistDomains`, which gates CDP event ingestion.
+   * Limits which domains can load your experiments. When set, experiments using this
+   * settings record are only served on these domains; the SDK refuses to load
+   * anywhere else and your experiments never run on those hosts. Separate from
+   * source `whitelistDomains`, which limits which domains can send events to the
+   * CDP.
    */
   whitelistDomains?: Array<string> | null;
 }
@@ -347,9 +359,11 @@ export interface ExperimentSettingUpdateParams {
   name?: string | null;
 
   /**
-   * Optional domain allowlist for experiment SDK delivery. When set, experiments
-   * using this settings record are only served on these domains. This is separate
-   * from source `whitelistDomains`, which gates CDP event ingestion.
+   * Limits which domains can load your experiments. When set, experiments using this
+   * settings record are only served on these domains; the SDK refuses to load
+   * anywhere else and your experiments never run on those hosts. Separate from
+   * source `whitelistDomains`, which limits which domains can send events to the
+   * CDP.
    */
   whitelistDomains?: Array<string> | null;
 }
