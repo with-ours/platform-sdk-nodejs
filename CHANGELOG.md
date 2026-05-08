@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.15.1 (2026-05-08)
+
+Full Changelog: [v1.15.0...v1.15.1](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.15.0...v1.15.1)
+
+### Chores
+
+* redact api-key headers in debug logs ([2dbb4d6](https://github.com/with-ours/platform-sdk-nodejs/commit/2dbb4d606f1ebf99f12d15045663cacef1f2ca07))
+
 ## 1.15.0 (2026-05-07)
 
 Full Changelog: [v1.14.0...v1.15.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.14.0...v1.15.0)
