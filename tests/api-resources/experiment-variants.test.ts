@@ -52,7 +52,7 @@ describe('resource experimentVariants', () => {
       domModifications: [
         {
           action: 'customCss',
-          selector: 'h1.hero-title',
+          selector: '#hero-headline',
           attribute: {},
           styles: [{ property: 'background-color', value: '#10B981' }],
           value: 'Start your free trial',

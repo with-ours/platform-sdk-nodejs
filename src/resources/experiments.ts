@@ -93,8 +93,13 @@ export class Experiments extends APIResource {
   }
 
   /**
-   * Start an experiment. The request body is optional — send `{}` to use defaults.
-   * Requires scope: experiment:start
+   * Start an experiment. By default also publishes the experiment and its variants
+   * atomically as a new version, making them live for end users — this is the
+   * canonical publish path for experiment changes. They do NOT flow through
+   * `POST /rest/v1/versions`. Pass `{ "publishAfterStart": false }` only if a
+   * separate publish is desired (e.g. bundling with non-experiment edits via a
+   * manual `POST /rest/v1/versions` afterwards). The request body is optional — send
+   * `{}` to use defaults. Requires scope: experiment:start
    *
    * @example
    * ```ts
@@ -202,6 +207,29 @@ export class Experiments extends APIResource {
     options?: RequestOptions,
   ): APIPromise<ExperimentResultsTimeSeriesResponse> {
     return this._client.get(path`/rest/v1/experiments/${id}/results-time-series`, { query, ...options });
+  }
+
+  /**
+   * List session replays for sessions in which the `$experiment_impression` event
+   * fired for this experiment. Each row is one session with the variant the visitor
+   * was assigned for that impression. Sessions are ordered newest first by session
+   * start. Filter to one variant with `variant_id`. Cursor pagination via `limit`
+   * (1–100, default 25) and `cursor`; malformed cursors return 400. Requires scope:
+   * experiment:find
+   *
+   * @example
+   * ```ts
+   * const response = await client.experiments.sessionReplays(
+   *   'id',
+   * );
+   * ```
+   */
+  sessionReplays(
+    id: string,
+    query: ExperimentSessionReplaysParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ExperimentSessionReplaysResponse> {
+    return this._client.get(path`/rest/v1/experiments/${id}/session-replays`, { query, ...options });
   }
 }
 
@@ -336,7 +364,12 @@ export namespace ExperimentListResponse {
     /**
      * Glob-style URL patterns that must match for the experiment to be eligible. Up to
      * 200 patterns; each pattern up to 2000 characters. An empty array (or omitting
-     * the field) matches all URLs — equivalent to `["**"]`.
+     * the field) matches all URLs — equivalent to `['**']`. The host(s) targeted here
+     * must also appear in the parent experiment settings' `whitelistDomains` — that
+     * allowlist is what limits which domains can load your experiments (see
+     * `GET /experiment-settings`). If the host is missing, the SDK refuses to load
+     * there and the experiment never runs, even after `POST /experiments/{id}/start`
+     * succeeds.
      */
     urlPatterns: Array<string>;
 
@@ -629,7 +662,12 @@ export namespace ExperimentCreateResponse {
     /**
      * Glob-style URL patterns that must match for the experiment to be eligible. Up to
      * 200 patterns; each pattern up to 2000 characters. An empty array (or omitting
-     * the field) matches all URLs — equivalent to `["**"]`.
+     * the field) matches all URLs — equivalent to `['**']`. The host(s) targeted here
+     * must also appear in the parent experiment settings' `whitelistDomains` — that
+     * allowlist is what limits which domains can load your experiments (see
+     * `GET /experiment-settings`). If the host is missing, the SDK refuses to load
+     * there and the experiment never runs, even after `POST /experiments/{id}/start`
+     * succeeds.
      */
     urlPatterns: Array<string>;
 
@@ -922,7 +960,12 @@ export namespace ExperimentRetrieveResponse {
     /**
      * Glob-style URL patterns that must match for the experiment to be eligible. Up to
      * 200 patterns; each pattern up to 2000 characters. An empty array (or omitting
-     * the field) matches all URLs — equivalent to `["**"]`.
+     * the field) matches all URLs — equivalent to `['**']`. The host(s) targeted here
+     * must also appear in the parent experiment settings' `whitelistDomains` — that
+     * allowlist is what limits which domains can load your experiments (see
+     * `GET /experiment-settings`). If the host is missing, the SDK refuses to load
+     * there and the experiment never runs, even after `POST /experiments/{id}/start`
+     * succeeds.
      */
     urlPatterns: Array<string>;
 
@@ -1100,7 +1143,12 @@ export namespace ExperimentUpdateResponse {
     /**
      * Glob-style URL patterns that must match for the experiment to be eligible. Up to
      * 200 patterns; each pattern up to 2000 characters. An empty array (or omitting
-     * the field) matches all URLs — equivalent to `["**"]`.
+     * the field) matches all URLs — equivalent to `['**']`. The host(s) targeted here
+     * must also appear in the parent experiment settings' `whitelistDomains` — that
+     * allowlist is what limits which domains can load your experiments (see
+     * `GET /experiment-settings`). If the host is missing, the SDK refuses to load
+     * there and the experiment never runs, even after `POST /experiments/{id}/start`
+     * succeeds.
      */
     urlPatterns: Array<string>;
 
@@ -1301,7 +1349,12 @@ export namespace ExperimentStartResponse {
       /**
        * Glob-style URL patterns that must match for the experiment to be eligible. Up to
        * 200 patterns; each pattern up to 2000 characters. An empty array (or omitting
-       * the field) matches all URLs — equivalent to `["**"]`.
+       * the field) matches all URLs — equivalent to `['**']`. The host(s) targeted here
+       * must also appear in the parent experiment settings' `whitelistDomains` — that
+       * allowlist is what limits which domains can load your experiments (see
+       * `GET /experiment-settings`). If the host is missing, the SDK refuses to load
+       * there and the experiment never runs, even after `POST /experiments/{id}/start`
+       * succeeds.
        */
       urlPatterns: Array<string>;
 
@@ -1498,7 +1551,12 @@ export namespace ExperimentStopResponse {
       /**
        * Glob-style URL patterns that must match for the experiment to be eligible. Up to
        * 200 patterns; each pattern up to 2000 characters. An empty array (or omitting
-       * the field) matches all URLs — equivalent to `["**"]`.
+       * the field) matches all URLs — equivalent to `['**']`. The host(s) targeted here
+       * must also appear in the parent experiment settings' `whitelistDomains` — that
+       * allowlist is what limits which domains can load your experiments (see
+       * `GET /experiment-settings`). If the host is missing, the SDK refuses to load
+       * there and the experiment never runs, even after `POST /experiments/{id}/start`
+       * succeeds.
        */
       urlPatterns: Array<string>;
 
@@ -1695,7 +1753,12 @@ export namespace ExperimentPauseResponse {
       /**
        * Glob-style URL patterns that must match for the experiment to be eligible. Up to
        * 200 patterns; each pattern up to 2000 characters. An empty array (or omitting
-       * the field) matches all URLs — equivalent to `["**"]`.
+       * the field) matches all URLs — equivalent to `['**']`. The host(s) targeted here
+       * must also appear in the parent experiment settings' `whitelistDomains` — that
+       * allowlist is what limits which domains can load your experiments (see
+       * `GET /experiment-settings`). If the host is missing, the SDK refuses to load
+       * there and the experiment never runs, even after `POST /experiments/{id}/start`
+       * succeeds.
        */
       urlPatterns: Array<string>;
 
@@ -1892,7 +1955,12 @@ export namespace ExperimentResumeResponse {
       /**
        * Glob-style URL patterns that must match for the experiment to be eligible. Up to
        * 200 patterns; each pattern up to 2000 characters. An empty array (or omitting
-       * the field) matches all URLs — equivalent to `["**"]`.
+       * the field) matches all URLs — equivalent to `['**']`. The host(s) targeted here
+       * must also appear in the parent experiment settings' `whitelistDomains` — that
+       * allowlist is what limits which domains can load your experiments (see
+       * `GET /experiment-settings`). If the host is missing, the SDK refuses to load
+       * there and the experiment never runs, even after `POST /experiments/{id}/start`
+       * succeeds.
        */
       urlPatterns: Array<string>;
 
@@ -2021,6 +2089,69 @@ export namespace ExperimentResultsTimeSeriesResponse {
 
       impressions: number;
     }
+  }
+}
+
+export interface ExperimentSessionReplaysResponse {
+  /**
+   * Sessions in which a `$experiment_impression` event for this experiment was
+   * recorded, ordered newest first by session start time.
+   */
+  entities: Array<ExperimentSessionReplaysResponse.Entity>;
+
+  pagination: ExperimentSessionReplaysResponse.Pagination;
+}
+
+export namespace ExperimentSessionReplaysResponse {
+  export interface Entity {
+    /**
+     * Time between the first and last events recorded for this session, in whole
+     * seconds.
+     */
+    durationSeconds: number;
+
+    /**
+     * Number of distinct page paths visited during this session.
+     */
+    pageCount: number;
+
+    /**
+     * Deep link to the in-app replay viewer for this session. Requires an
+     * authenticated session in the Ours Privacy app for an account that owns this
+     * experiment — not embeddable in customer-facing emails.
+     */
+    replayUrl: string;
+
+    /**
+     * Session identifier (`dp_sid`). Combine with `visitorId` and the `YYYY-MM-DD`
+     * date of `startTime` to deep-link to a replay outside of the response
+     * `replayUrl`.
+     */
+    sessionId: string;
+
+    /**
+     * ISO-8601 timestamp of the first event recorded in this session. Sessions are
+     * ordered newest first by this field.
+     */
+    startTime: string;
+
+    /**
+     * Human-readable name of the variant the visitor was assigned for the recorded
+     * impression. May be empty if the variant has been deleted since the impression
+     * fired.
+     */
+    variantName: string;
+
+    /**
+     * Visitor identifier whose session is recorded here.
+     */
+    visitorId: string;
+  }
+
+  export interface Pagination {
+    hasMore: boolean;
+
+    nextCursor?: string | null;
   }
 }
 
@@ -2155,7 +2286,12 @@ export namespace ExperimentCreateParams {
     /**
      * Glob-style URL patterns that must match for the experiment to be eligible. Up to
      * 200 patterns; each pattern up to 2000 characters. An empty array (or omitting
-     * the field) matches all URLs — equivalent to `["**"]`.
+     * the field) matches all URLs — equivalent to `['**']`. The host(s) targeted here
+     * must also appear in the parent experiment settings' `whitelistDomains` — that
+     * allowlist is what limits which domains can load your experiments (see
+     * `GET /experiment-settings`). If the host is missing, the SDK refuses to load
+     * there and the experiment never runs, even after `POST /experiments/{id}/start`
+     * succeeds.
      */
     urlPatterns: Array<string>;
 
@@ -2302,7 +2438,12 @@ export namespace ExperimentUpdateParams {
     /**
      * Glob-style URL patterns that must match for the experiment to be eligible. Up to
      * 200 patterns; each pattern up to 2000 characters. An empty array (or omitting
-     * the field) matches all URLs — equivalent to `["**"]`.
+     * the field) matches all URLs — equivalent to `['**']`. The host(s) targeted here
+     * must also appear in the parent experiment settings' `whitelistDomains` — that
+     * allowlist is what limits which domains can load your experiments (see
+     * `GET /experiment-settings`). If the host is missing, the SDK refuses to load
+     * there and the experiment never runs, even after `POST /experiments/{id}/start`
+     * succeeds.
      */
     urlPatterns: Array<string>;
 
@@ -2353,10 +2494,13 @@ export namespace ExperimentUpdateParams {
 
 export interface ExperimentStartParams {
   /**
-   * When true (default on the REST surface), publish the current draft version
-   * immediately after starting the experiment. Any other unpublished changes in the
-   * same account version are included in that publish. Pass `false` explicitly to
-   * stage the change without publishing; the response will report `pending_publish`.
+   * When true (the default), atomically publish the experiment and its variants as a
+   * new version after starting — this is the canonical publish path for experiment
+   * changes. Any other unpublished non-experiment changes (destinations, mappings,
+   * settings, etc.) currently in draft are included in the same publish. Pass
+   * `false` explicitly to stage the change without publishing; the response will
+   * report `pending_publish` and a separate `POST /rest/v1/versions` call is then
+   * required.
    */
   publishAfterStart?: boolean;
 }
@@ -2419,6 +2563,26 @@ export interface ExperimentResultsTimeSeriesParams {
   startDate?: string;
 }
 
+export interface ExperimentSessionReplaysParams {
+  /**
+   * Opaque pagination cursor from pagination.nextCursor in the previous response. Do
+   * not decode or modify it. Malformed cursors return 400 Bad Request.
+   */
+  cursor?: string;
+
+  /**
+   * Maximum number of items to return. Defaults to 25; values below 1 are clamped to
+   * 1 and values above 100 are clamped to 100.
+   */
+  limit?: number | null;
+
+  /**
+   * Optional filter to a single variant ID. Returns sessions for all variants when
+   * omitted.
+   */
+  variant_id?: string;
+}
+
 export declare namespace Experiments {
   export {
     type ExperimentListResponse as ExperimentListResponse,
@@ -2432,6 +2596,7 @@ export declare namespace Experiments {
     type ExperimentResumeResponse as ExperimentResumeResponse,
     type ExperimentResultsResponse as ExperimentResultsResponse,
     type ExperimentResultsTimeSeriesResponse as ExperimentResultsTimeSeriesResponse,
+    type ExperimentSessionReplaysResponse as ExperimentSessionReplaysResponse,
     type ExperimentListResponsesCursor as ExperimentListResponsesCursor,
     type ExperimentListParams as ExperimentListParams,
     type ExperimentCreateParams as ExperimentCreateParams,
@@ -2442,5 +2607,6 @@ export declare namespace Experiments {
     type ExperimentResumeParams as ExperimentResumeParams,
     type ExperimentResultsParams as ExperimentResultsParams,
     type ExperimentResultsTimeSeriesParams as ExperimentResultsTimeSeriesParams,
+    type ExperimentSessionReplaysParams as ExperimentSessionReplaysParams,
   };
 }

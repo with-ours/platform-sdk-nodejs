@@ -112,10 +112,9 @@ export namespace SourceListResponse {
     selectedAccountId?: string | null;
 
     /**
-     * Optional domain allowlist for source event ingestion. When set, only requests
-     * from these domains are accepted for this source. This is separate from
-     * experimentation settings `whitelistDomains`, which gates experiment SDK
-     * delivery.
+     * Limits which domains can send events to the CDP. When set, only requests from
+     * these domains are accepted for this source. Separate from experiment settings
+     * `whitelistDomains`, which limits which domains can load your experiments.
      */
     whitelistDomains?: Array<string> | null;
 
@@ -223,10 +222,9 @@ export interface SourceRetrieveResponse {
   selectedAccountId?: string | null;
 
   /**
-   * Optional domain allowlist for source event ingestion. When set, only requests
-   * from these domains are accepted for this source. This is separate from
-   * experimentation settings `whitelistDomains`, which gates experiment SDK
-   * delivery.
+   * Limits which domains can send events to the CDP. When set, only requests from
+   * these domains are accepted for this source. Separate from experiment settings
+   * `whitelistDomains`, which limits which domains can load your experiments.
    */
   whitelistDomains?: Array<string> | null;
 
