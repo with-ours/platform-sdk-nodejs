@@ -86,6 +86,8 @@ import {
   ExperimentResumeParams,
   ExperimentResumeResponse,
   ExperimentRetrieveResponse,
+  ExperimentSessionReplaysParams,
+  ExperimentSessionReplaysResponse,
   ExperimentStartParams,
   ExperimentStartResponse,
   ExperimentStopParams,
@@ -992,6 +994,7 @@ export declare namespace OursPrivacyPlatform {
     type ExperimentResumeResponse as ExperimentResumeResponse,
     type ExperimentResultsResponse as ExperimentResultsResponse,
     type ExperimentResultsTimeSeriesResponse as ExperimentResultsTimeSeriesResponse,
+    type ExperimentSessionReplaysResponse as ExperimentSessionReplaysResponse,
     type ExperimentListResponsesCursor as ExperimentListResponsesCursor,
     type ExperimentListParams as ExperimentListParams,
     type ExperimentCreateParams as ExperimentCreateParams,
@@ -1002,6 +1005,7 @@ export declare namespace OursPrivacyPlatform {
     type ExperimentResumeParams as ExperimentResumeParams,
     type ExperimentResultsParams as ExperimentResultsParams,
     type ExperimentResultsTimeSeriesParams as ExperimentResultsTimeSeriesParams,
+    type ExperimentSessionReplaysParams as ExperimentSessionReplaysParams,
   };
 
   export {
