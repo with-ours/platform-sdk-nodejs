@@ -138,6 +138,8 @@ Methods:
 - <code title="patch /rest/v1/global-dispatch-centers/{id}">client.globalDispatchCenters.<a href="./src/resources/global-dispatch-centers.ts">update</a>(id, { ...params }) -> GlobalDispatchCenterUpdateResponse</code>
 - <code title="delete /rest/v1/global-dispatch-centers/{id}">client.globalDispatchCenters.<a href="./src/resources/global-dispatch-centers.ts">delete</a>(id) -> GlobalDispatchCenterDeleteResponse</code>
 
+# HeatmapPages
+
 # Mappings
 
 Types:
