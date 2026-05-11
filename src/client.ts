@@ -108,7 +108,14 @@ import {
   GlobalDispatchCenterUpdateResponse,
   GlobalDispatchCenters,
 } from './resources/global-dispatch-centers';
-import { HeatmapPages } from './resources/heatmap-pages';
+import {
+  HeatmapPageListParams,
+  HeatmapPageListResponse,
+  HeatmapPageListResponsesCursor,
+  HeatmapPageSummaryParams,
+  HeatmapPageSummaryResponse,
+  HeatmapPages,
+} from './resources/heatmap-pages';
 import {
   MappingCreateParams,
   MappingCreateResponse,
@@ -1024,7 +1031,14 @@ export declare namespace OursPrivacyPlatform {
     type GlobalDispatchCenterUpdateParams as GlobalDispatchCenterUpdateParams,
   };
 
-  export { HeatmapPages as HeatmapPages };
+  export {
+    HeatmapPages as HeatmapPages,
+    type HeatmapPageListResponse as HeatmapPageListResponse,
+    type HeatmapPageSummaryResponse as HeatmapPageSummaryResponse,
+    type HeatmapPageListResponsesCursor as HeatmapPageListResponsesCursor,
+    type HeatmapPageListParams as HeatmapPageListParams,
+    type HeatmapPageSummaryParams as HeatmapPageSummaryParams,
+  };
 
   export {
     Mappings as Mappings,

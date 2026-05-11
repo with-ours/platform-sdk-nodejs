@@ -140,6 +140,16 @@ Methods:
 
 # HeatmapPages
 
+Types:
+
+- <code><a href="./src/resources/heatmap-pages.ts">HeatmapPageListResponse</a></code>
+- <code><a href="./src/resources/heatmap-pages.ts">HeatmapPageSummaryResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/heatmap-pages">client.heatmapPages.<a href="./src/resources/heatmap-pages.ts">list</a>({ ...params }) -> HeatmapPageListResponsesCursor</code>
+- <code title="get /rest/v1/heatmap-pages/summary">client.heatmapPages.<a href="./src/resources/heatmap-pages.ts">summary</a>({ ...params }) -> HeatmapPageSummaryResponse</code>
+
 # Mappings
 
 Types:
