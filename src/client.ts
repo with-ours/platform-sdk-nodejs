@@ -109,6 +109,14 @@ import {
   GlobalDispatchCenters,
 } from './resources/global-dispatch-centers';
 import {
+  HeatmapPageListParams,
+  HeatmapPageListResponse,
+  HeatmapPageListResponsesCursor,
+  HeatmapPageSummaryParams,
+  HeatmapPageSummaryResponse,
+  HeatmapPages,
+} from './resources/heatmap-pages';
+import {
   MappingCreateParams,
   MappingCreateResponse,
   MappingDeleteResponse,
@@ -901,6 +909,7 @@ export class OursPrivacyPlatform {
   experimentVariants: API.ExperimentVariants = new API.ExperimentVariants(this);
   experiments: API.Experiments = new API.Experiments(this);
   globalDispatchCenters: API.GlobalDispatchCenters = new API.GlobalDispatchCenters(this);
+  heatmapPages: API.HeatmapPages = new API.HeatmapPages(this);
   mappings: API.Mappings = new API.Mappings(this);
   replaySettings: API.ReplaySettings = new API.ReplaySettings(this);
   sources: API.Sources = new API.Sources(this);
@@ -914,6 +923,7 @@ OursPrivacyPlatform.ExperimentSettings = ExperimentSettings;
 OursPrivacyPlatform.ExperimentVariants = ExperimentVariants;
 OursPrivacyPlatform.Experiments = Experiments;
 OursPrivacyPlatform.GlobalDispatchCenters = GlobalDispatchCenters;
+OursPrivacyPlatform.HeatmapPages = HeatmapPages;
 OursPrivacyPlatform.Mappings = Mappings;
 OursPrivacyPlatform.ReplaySettings = ReplaySettings;
 OursPrivacyPlatform.Sources = Sources;
@@ -1019,6 +1029,15 @@ export declare namespace OursPrivacyPlatform {
     type GlobalDispatchCenterListParams as GlobalDispatchCenterListParams,
     type GlobalDispatchCenterCreateParams as GlobalDispatchCenterCreateParams,
     type GlobalDispatchCenterUpdateParams as GlobalDispatchCenterUpdateParams,
+  };
+
+  export {
+    HeatmapPages as HeatmapPages,
+    type HeatmapPageListResponse as HeatmapPageListResponse,
+    type HeatmapPageSummaryResponse as HeatmapPageSummaryResponse,
+    type HeatmapPageListResponsesCursor as HeatmapPageListResponsesCursor,
+    type HeatmapPageListParams as HeatmapPageListParams,
+    type HeatmapPageSummaryParams as HeatmapPageSummaryParams,
   };
 
   export {

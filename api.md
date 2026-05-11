@@ -138,6 +138,18 @@ Methods:
 - <code title="patch /rest/v1/global-dispatch-centers/{id}">client.globalDispatchCenters.<a href="./src/resources/global-dispatch-centers.ts">update</a>(id, { ...params }) -> GlobalDispatchCenterUpdateResponse</code>
 - <code title="delete /rest/v1/global-dispatch-centers/{id}">client.globalDispatchCenters.<a href="./src/resources/global-dispatch-centers.ts">delete</a>(id) -> GlobalDispatchCenterDeleteResponse</code>
 
+# HeatmapPages
+
+Types:
+
+- <code><a href="./src/resources/heatmap-pages.ts">HeatmapPageListResponse</a></code>
+- <code><a href="./src/resources/heatmap-pages.ts">HeatmapPageSummaryResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/heatmap-pages">client.heatmapPages.<a href="./src/resources/heatmap-pages.ts">list</a>({ ...params }) -> HeatmapPageListResponsesCursor</code>
+- <code title="get /rest/v1/heatmap-pages/summary">client.heatmapPages.<a href="./src/resources/heatmap-pages.ts">summary</a>({ ...params }) -> HeatmapPageSummaryResponse</code>
+
 # Mappings
 
 Types:

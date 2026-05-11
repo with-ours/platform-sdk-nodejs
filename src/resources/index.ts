@@ -90,6 +90,14 @@ export {
   type GlobalDispatchCenterListResponsesCursor,
 } from './global-dispatch-centers';
 export {
+  HeatmapPages,
+  type HeatmapPageListResponse,
+  type HeatmapPageSummaryResponse,
+  type HeatmapPageListParams,
+  type HeatmapPageSummaryParams,
+  type HeatmapPageListResponsesCursor,
+} from './heatmap-pages';
+export {
   Mappings,
   type MappingListResponse,
   type MappingCreateResponse,
