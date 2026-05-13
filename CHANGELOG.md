@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.18.0 (2026-05-13)
+
+Full Changelog: [v1.17.0...v1.18.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.17.0...v1.18.0)
+
+### Features
+
+* **api:** OIDC npm ([f589ac6](https://github.com/with-ours/platform-sdk-nodejs/commit/f589ac6ea48cba1c083baa77b1f3a0439665f121))
+
 ## 1.17.0 (2026-05-11)
 
 Full Changelog: [v1.16.0...v1.17.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.16.0...v1.17.0)
