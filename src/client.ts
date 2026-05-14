@@ -925,12 +925,12 @@ export class OursPrivacyPlatform {
   experiments: API.Experiments = new API.Experiments(this);
   globalDispatchCenters: API.GlobalDispatchCenters = new API.GlobalDispatchCenters(this);
   heatmapPages: API.HeatmapPages = new API.HeatmapPages(this);
+  locations: API.Locations = new API.Locations(this);
   mappings: API.Mappings = new API.Mappings(this);
   replaySettings: API.ReplaySettings = new API.ReplaySettings(this);
   sources: API.Sources = new API.Sources(this);
   versions: API.Versions = new API.Versions(this);
   destinationTypes: API.DestinationTypes = new API.DestinationTypes(this);
-  locations: API.Locations = new API.Locations(this);
 }
 
 OursPrivacyPlatform.AllowedEvents = AllowedEvents;
@@ -941,12 +941,12 @@ OursPrivacyPlatform.ExperimentVariants = ExperimentVariants;
 OursPrivacyPlatform.Experiments = Experiments;
 OursPrivacyPlatform.GlobalDispatchCenters = GlobalDispatchCenters;
 OursPrivacyPlatform.HeatmapPages = HeatmapPages;
+OursPrivacyPlatform.Locations = Locations;
 OursPrivacyPlatform.Mappings = Mappings;
 OursPrivacyPlatform.ReplaySettings = ReplaySettings;
 OursPrivacyPlatform.Sources = Sources;
 OursPrivacyPlatform.Versions = Versions;
 OursPrivacyPlatform.DestinationTypes = DestinationTypes;
-OursPrivacyPlatform.Locations = Locations;
 
 export declare namespace OursPrivacyPlatform {
   export type RequestOptions = Opts.RequestOptions;
@@ -1060,6 +1060,17 @@ export declare namespace OursPrivacyPlatform {
   };
 
   export {
+    Locations as Locations,
+    type LocationListResponse as LocationListResponse,
+    type LocationCreateResponse as LocationCreateResponse,
+    type LocationUpdateResponse as LocationUpdateResponse,
+    type LocationEmbedCodeResponse as LocationEmbedCodeResponse,
+    type LocationCreateParams as LocationCreateParams,
+    type LocationUpdateParams as LocationUpdateParams,
+    type LocationEmbedCodeParams as LocationEmbedCodeParams,
+  };
+
+  export {
     Mappings as Mappings,
     type MappingListResponse as MappingListResponse,
     type MappingCreateResponse as MappingCreateResponse,
@@ -1117,16 +1128,5 @@ export declare namespace OursPrivacyPlatform {
     DestinationTypes as DestinationTypes,
     type DestinationTypeListResponse as DestinationTypeListResponse,
     type DestinationTypeRetrieveResponse as DestinationTypeRetrieveResponse,
-  };
-
-  export {
-    Locations as Locations,
-    type LocationListResponse as LocationListResponse,
-    type LocationCreateResponse as LocationCreateResponse,
-    type LocationUpdateResponse as LocationUpdateResponse,
-    type LocationEmbedCodeResponse as LocationEmbedCodeResponse,
-    type LocationCreateParams as LocationCreateParams,
-    type LocationUpdateParams as LocationUpdateParams,
-    type LocationEmbedCodeParams as LocationEmbedCodeParams,
   };
 }
