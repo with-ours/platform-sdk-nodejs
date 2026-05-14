@@ -162,3 +162,5 @@ export {
   type VersionDiffParams,
   type VersionListResponsesCursor,
 } from './versions';
+export { WebScannerRules } from './web-scanner-rules';
+export { WebScanners } from './web-scanners';

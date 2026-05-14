@@ -181,6 +181,8 @@ import {
   VersionUpdateResponse,
   Versions,
 } from './resources/versions';
+import { WebScannerRules } from './resources/web-scanner-rules';
+import { WebScanners } from './resources/web-scanners';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -930,6 +932,8 @@ export class OursPrivacyPlatform {
   replaySettings: API.ReplaySettings = new API.ReplaySettings(this);
   sources: API.Sources = new API.Sources(this);
   versions: API.Versions = new API.Versions(this);
+  webScannerRules: API.WebScannerRules = new API.WebScannerRules(this);
+  webScanners: API.WebScanners = new API.WebScanners(this);
   destinationTypes: API.DestinationTypes = new API.DestinationTypes(this);
 }
 
@@ -946,6 +950,8 @@ OursPrivacyPlatform.Mappings = Mappings;
 OursPrivacyPlatform.ReplaySettings = ReplaySettings;
 OursPrivacyPlatform.Sources = Sources;
 OursPrivacyPlatform.Versions = Versions;
+OursPrivacyPlatform.WebScannerRules = WebScannerRules;
+OursPrivacyPlatform.WebScanners = WebScanners;
 OursPrivacyPlatform.DestinationTypes = DestinationTypes;
 
 export declare namespace OursPrivacyPlatform {
@@ -1123,6 +1129,10 @@ export declare namespace OursPrivacyPlatform {
     type VersionUpdateParams as VersionUpdateParams,
     type VersionDiffParams as VersionDiffParams,
   };
+
+  export { WebScannerRules as WebScannerRules };
+
+  export { WebScanners as WebScanners };
 
   export {
     DestinationTypes as DestinationTypes,
