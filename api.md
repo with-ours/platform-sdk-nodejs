@@ -227,3 +227,15 @@ Methods:
 - <code title="post /rest/v1/versions/{id}/publish">client.versions.<a href="./src/resources/versions.ts">publish</a>(id) -> VersionPublishResponse</code>
 - <code title="get /rest/v1/versions/{id}/snapshot">client.versions.<a href="./src/resources/versions.ts">snapshot</a>(id) -> VersionSnapshotResponse</code>
 - <code title="get /rest/v1/versions/{id}/diff">client.versions.<a href="./src/resources/versions.ts">diff</a>(id, { ...params }) -> VersionDiffResponse</code>
+
+# DestinationTypes
+
+Types:
+
+- <code><a href="./src/resources/destination-types.ts">DestinationTypeListResponse</a></code>
+- <code><a href="./src/resources/destination-types.ts">DestinationTypeRetrieveResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/destination-types">client.destinationTypes.<a href="./src/resources/destination-types.ts">list</a>() -> DestinationTypeListResponse</code>
+- <code title="get /rest/v1/destination-types/{id}">client.destinationTypes.<a href="./src/resources/destination-types.ts">retrieve</a>(id) -> DestinationTypeRetrieveResponse</code>

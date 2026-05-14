@@ -39,6 +39,11 @@ import {
   ConsentSettings,
 } from './resources/consent-settings';
 import {
+  DestinationTypeListResponse,
+  DestinationTypeRetrieveResponse,
+  DestinationTypes,
+} from './resources/destination-types';
+import {
   DestinationCreateParams,
   DestinationCreateResponse,
   DestinationDeleteResponse,
@@ -914,6 +919,7 @@ export class OursPrivacyPlatform {
   replaySettings: API.ReplaySettings = new API.ReplaySettings(this);
   sources: API.Sources = new API.Sources(this);
   versions: API.Versions = new API.Versions(this);
+  destinationTypes: API.DestinationTypes = new API.DestinationTypes(this);
 }
 
 OursPrivacyPlatform.AllowedEvents = AllowedEvents;
@@ -928,6 +934,7 @@ OursPrivacyPlatform.Mappings = Mappings;
 OursPrivacyPlatform.ReplaySettings = ReplaySettings;
 OursPrivacyPlatform.Sources = Sources;
 OursPrivacyPlatform.Versions = Versions;
+OursPrivacyPlatform.DestinationTypes = DestinationTypes;
 
 export declare namespace OursPrivacyPlatform {
   export type RequestOptions = Opts.RequestOptions;
@@ -1092,5 +1099,11 @@ export declare namespace OursPrivacyPlatform {
     type VersionCreateParams as VersionCreateParams,
     type VersionUpdateParams as VersionUpdateParams,
     type VersionDiffParams as VersionDiffParams,
+  };
+
+  export {
+    DestinationTypes as DestinationTypes,
+    type DestinationTypeListResponse as DestinationTypeListResponse,
+    type DestinationTypeRetrieveResponse as DestinationTypeRetrieveResponse,
   };
 }
