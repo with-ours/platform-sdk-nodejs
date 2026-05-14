@@ -150,6 +150,22 @@ Methods:
 - <code title="get /rest/v1/heatmap-pages">client.heatmapPages.<a href="./src/resources/heatmap-pages.ts">list</a>({ ...params }) -> HeatmapPageListResponsesCursor</code>
 - <code title="get /rest/v1/heatmap-pages/summary">client.heatmapPages.<a href="./src/resources/heatmap-pages.ts">summary</a>({ ...params }) -> HeatmapPageSummaryResponse</code>
 
+# Locations
+
+Types:
+
+- <code><a href="./src/resources/locations.ts">LocationListResponse</a></code>
+- <code><a href="./src/resources/locations.ts">LocationCreateResponse</a></code>
+- <code><a href="./src/resources/locations.ts">LocationUpdateResponse</a></code>
+- <code><a href="./src/resources/locations.ts">LocationEmbedCodeResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/locations">client.locations.<a href="./src/resources/locations.ts">list</a>() -> LocationListResponse</code>
+- <code title="post /rest/v1/locations">client.locations.<a href="./src/resources/locations.ts">create</a>({ ...params }) -> LocationCreateResponse</code>
+- <code title="patch /rest/v1/locations/{id}">client.locations.<a href="./src/resources/locations.ts">update</a>(id, { ...params }) -> LocationUpdateResponse</code>
+- <code title="get /rest/v1/locations/{id}/embed-code">client.locations.<a href="./src/resources/locations.ts">embedCode</a>(id, { ...params }) -> LocationEmbedCodeResponse</code>
+
 # Mappings
 
 Types:
@@ -239,19 +255,3 @@ Methods:
 
 - <code title="get /rest/v1/destination-types">client.destinationTypes.<a href="./src/resources/destination-types.ts">list</a>() -> DestinationTypeListResponse</code>
 - <code title="get /rest/v1/destination-types/{id}">client.destinationTypes.<a href="./src/resources/destination-types.ts">retrieve</a>(id) -> DestinationTypeRetrieveResponse</code>
-
-# Locations
-
-Types:
-
-- <code><a href="./src/resources/locations.ts">LocationListResponse</a></code>
-- <code><a href="./src/resources/locations.ts">LocationCreateResponse</a></code>
-- <code><a href="./src/resources/locations.ts">LocationUpdateResponse</a></code>
-- <code><a href="./src/resources/locations.ts">LocationEmbedCodeResponse</a></code>
-
-Methods:
-
-- <code title="get /rest/v1/locations">client.locations.<a href="./src/resources/locations.ts">list</a>() -> LocationListResponse</code>
-- <code title="post /rest/v1/locations">client.locations.<a href="./src/resources/locations.ts">create</a>({ ...params }) -> LocationCreateResponse</code>
-- <code title="patch /rest/v1/locations/{id}">client.locations.<a href="./src/resources/locations.ts">update</a>(id, { ...params }) -> LocationUpdateResponse</code>
-- <code title="get /rest/v1/locations/{id}/embed-code">client.locations.<a href="./src/resources/locations.ts">embedCode</a>(id, { ...params }) -> LocationEmbedCodeResponse</code>
