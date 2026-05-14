@@ -20,6 +20,11 @@ export {
   type ConsentSettingUpdateParams,
 } from './consent-settings';
 export {
+  DestinationTypes,
+  type DestinationTypeListResponse,
+  type DestinationTypeRetrieveResponse,
+} from './destination-types';
+export {
   Destinations,
   type DestinationListResponse,
   type DestinationCreateResponse,

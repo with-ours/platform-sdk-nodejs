@@ -28,15 +28,23 @@ export class Destinations extends APIResource {
   }
 
   /**
-   * Partially update a destination. Only the fields you send are changed. Requires
-   * scope: destination:update
+   * Partially update a destination. Only the fields you send are changed; omitted
+   * fields are unchanged. The `settings` object is deep-merged into the existing
+   * settings by default — keys you omit keep their current value. Pass
+   * `?settings_strategy=replace` to wipe and replace the settings blob entirely.
+   * Requires scope: destination:update
    */
   update(
     id: string,
-    body: DestinationUpdateParams,
+    params: DestinationUpdateParams,
     options?: RequestOptions,
   ): APIPromise<DestinationUpdateResponse> {
-    return this._client.patch(path`/rest/v1/destinations/${id}`, { body, ...options });
+    const { settings_strategy, ...body } = params;
+    return this._client.patch(path`/rest/v1/destinations/${id}`, {
+      query: { settings_strategy },
+      body,
+      ...options,
+    });
   }
 
   /**
@@ -75,6 +83,7 @@ export namespace DestinationListResponse {
       | 'Audiohook'
       | 'AzureBlob'
       | 'BasisPostback'
+      | 'BeeswaxPostback'
       | 'BingAds'
       | 'BingAdsWeb'
       | 'Braze'
@@ -189,6 +198,7 @@ export interface DestinationCreateResponse {
     | 'Audiohook'
     | 'AzureBlob'
     | 'BasisPostback'
+    | 'BeeswaxPostback'
     | 'BingAds'
     | 'BingAdsWeb'
     | 'Braze'
@@ -276,6 +286,7 @@ export interface DestinationRetrieveResponse {
     | 'Audiohook'
     | 'AzureBlob'
     | 'BasisPostback'
+    | 'BeeswaxPostback'
     | 'BingAds'
     | 'BingAdsWeb'
     | 'Braze'
@@ -389,6 +400,7 @@ export interface DestinationUpdateResponse {
     | 'Audiohook'
     | 'AzureBlob'
     | 'BasisPostback'
+    | 'BeeswaxPostback'
     | 'BingAds'
     | 'BingAdsWeb'
     | 'Braze'
@@ -472,6 +484,7 @@ export interface DestinationCreateParams {
     | 'Audiohook'
     | 'AzureBlob'
     | 'BasisPostback'
+    | 'BeeswaxPostback'
     | 'BingAds'
     | 'BingAdsWeb'
     | 'Braze'
@@ -535,35 +548,85 @@ export interface DestinationCreateParams {
 }
 
 export interface DestinationUpdateParams {
-  status: 'Disabled' | 'Enabled';
+  /**
+   * Query param
+   */
+  settings_strategy?: 'merge' | 'replace';
 
+  /**
+   * Body param
+   */
   facebookConversionAPIKey?: string | null;
 
+  /**
+   * Body param
+   */
   facebookPixelId?: string | null;
 
+  /**
+   * Body param
+   */
   g4AnalyticsApiKey?: string | null;
 
+  /**
+   * Body param
+   */
   g4AnalyticsMeasurementId?: string | null;
 
+  /**
+   * Body param
+   */
   g4AnalyticsTrackOnPage?: boolean | null;
 
+  /**
+   * Body param
+   */
   hashingSalt?: string | null;
 
+  /**
+   * Body param
+   */
   httpDestinationUrl?: string | null;
 
+  /**
+   * Body param
+   */
   limitedToSourceIds?: Array<string> | null;
 
+  /**
+   * Body param
+   */
   managerGoogleCustomerId?: string | null;
 
+  /**
+   * Body param
+   */
   name?: string | null;
 
+  /**
+   * Body param
+   */
   projectAPIKey?: string | null;
 
+  /**
+   * Body param
+   */
   projectToken?: string | null;
 
+  /**
+   * Body param
+   */
   selectedAccountId?: string | null;
 
+  /**
+   * Body param
+   */
   settings?: unknown | null;
+
+  /**
+   * Body param
+   */
+  status?: 'Disabled' | 'Enabled' | null;
 }
 
 export declare namespace Destinations {

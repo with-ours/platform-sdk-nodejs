@@ -45,8 +45,8 @@ describe('resource destinations', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('update: only required params', async () => {
-    const responsePromise = client.destinations.update('id', { status: 'Disabled' });
+  test('update', async () => {
+    const responsePromise = client.destinations.update('id', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -54,26 +54,6 @@ describe('resource destinations', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('update: required and optional params', async () => {
-    const response = await client.destinations.update('id', {
-      status: 'Disabled',
-      facebookConversionAPIKey: 'facebookConversionAPIKey',
-      facebookPixelId: 'facebookPixelId',
-      g4AnalyticsApiKey: 'g4AnalyticsApiKey',
-      g4AnalyticsMeasurementId: 'g4AnalyticsMeasurementId',
-      g4AnalyticsTrackOnPage: true,
-      hashingSalt: 'hashingSalt',
-      httpDestinationUrl: 'httpDestinationUrl',
-      limitedToSourceIds: ['string'],
-      managerGoogleCustomerId: 'managerGoogleCustomerId',
-      name: 'name',
-      projectAPIKey: 'projectAPIKey',
-      projectToken: 'projectToken',
-      selectedAccountId: 'selectedAccountId',
-      settings: {},
-    });
   });
 
   test('delete', async () => {
