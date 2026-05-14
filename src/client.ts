@@ -122,6 +122,16 @@ import {
   HeatmapPages,
 } from './resources/heatmap-pages';
 import {
+  LocationCreateParams,
+  LocationCreateResponse,
+  LocationEmbedCodeParams,
+  LocationEmbedCodeResponse,
+  LocationListResponse,
+  LocationUpdateParams,
+  LocationUpdateResponse,
+  Locations,
+} from './resources/locations';
+import {
   MappingCreateParams,
   MappingCreateResponse,
   MappingDeleteResponse,
@@ -920,6 +930,7 @@ export class OursPrivacyPlatform {
   sources: API.Sources = new API.Sources(this);
   versions: API.Versions = new API.Versions(this);
   destinationTypes: API.DestinationTypes = new API.DestinationTypes(this);
+  locations: API.Locations = new API.Locations(this);
 }
 
 OursPrivacyPlatform.AllowedEvents = AllowedEvents;
@@ -935,6 +946,7 @@ OursPrivacyPlatform.ReplaySettings = ReplaySettings;
 OursPrivacyPlatform.Sources = Sources;
 OursPrivacyPlatform.Versions = Versions;
 OursPrivacyPlatform.DestinationTypes = DestinationTypes;
+OursPrivacyPlatform.Locations = Locations;
 
 export declare namespace OursPrivacyPlatform {
   export type RequestOptions = Opts.RequestOptions;
@@ -1105,5 +1117,16 @@ export declare namespace OursPrivacyPlatform {
     DestinationTypes as DestinationTypes,
     type DestinationTypeListResponse as DestinationTypeListResponse,
     type DestinationTypeRetrieveResponse as DestinationTypeRetrieveResponse,
+  };
+
+  export {
+    Locations as Locations,
+    type LocationListResponse as LocationListResponse,
+    type LocationCreateResponse as LocationCreateResponse,
+    type LocationUpdateResponse as LocationUpdateResponse,
+    type LocationEmbedCodeResponse as LocationEmbedCodeResponse,
+    type LocationCreateParams as LocationCreateParams,
+    type LocationUpdateParams as LocationUpdateParams,
+    type LocationEmbedCodeParams as LocationEmbedCodeParams,
   };
 }

@@ -103,6 +103,16 @@ export {
   type HeatmapPageListResponsesCursor,
 } from './heatmap-pages';
 export {
+  Locations,
+  type LocationListResponse,
+  type LocationCreateResponse,
+  type LocationUpdateResponse,
+  type LocationEmbedCodeResponse,
+  type LocationCreateParams,
+  type LocationUpdateParams,
+  type LocationEmbedCodeParams,
+} from './locations';
+export {
   Mappings,
   type MappingListResponse,
   type MappingCreateResponse,
