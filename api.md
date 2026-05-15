@@ -34,6 +34,18 @@ Methods:
 - <code title="patch /rest/v1/consent-settings/{id}">client.consentSettings.<a href="./src/resources/consent-settings.ts">update</a>(id, { ...params }) -> ConsentSettingUpdateResponse</code>
 - <code title="delete /rest/v1/consent-settings/{id}">client.consentSettings.<a href="./src/resources/consent-settings.ts">delete</a>(id) -> ConsentSettingDeleteResponse</code>
 
+# DestinationTypes
+
+Types:
+
+- <code><a href="./src/resources/destination-types.ts">DestinationTypeListResponse</a></code>
+- <code><a href="./src/resources/destination-types.ts">DestinationTypeRetrieveResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/destination-types">client.destinationTypes.<a href="./src/resources/destination-types.ts">list</a>() -> DestinationTypeListResponse</code>
+- <code title="get /rest/v1/destination-types/{id}">client.destinationTypes.<a href="./src/resources/destination-types.ts">retrieve</a>(id) -> DestinationTypeRetrieveResponse</code>
+
 # Destinations
 
 Types:
@@ -247,15 +259,3 @@ Methods:
 # WebScannerRules
 
 # WebScanners
-
-# DestinationTypes
-
-Types:
-
-- <code><a href="./src/resources/destination-types.ts">DestinationTypeListResponse</a></code>
-- <code><a href="./src/resources/destination-types.ts">DestinationTypeRetrieveResponse</a></code>
-
-Methods:
-
-- <code title="get /rest/v1/destination-types">client.destinationTypes.<a href="./src/resources/destination-types.ts">list</a>() -> DestinationTypeListResponse</code>
-- <code title="get /rest/v1/destination-types/{id}">client.destinationTypes.<a href="./src/resources/destination-types.ts">retrieve</a>(id) -> DestinationTypeRetrieveResponse</code>

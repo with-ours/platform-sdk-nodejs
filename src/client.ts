@@ -921,6 +921,7 @@ export class OursPrivacyPlatform {
 
   allowedEvents: API.AllowedEvents = new API.AllowedEvents(this);
   consentSettings: API.ConsentSettings = new API.ConsentSettings(this);
+  destinationTypes: API.DestinationTypes = new API.DestinationTypes(this);
   destinations: API.Destinations = new API.Destinations(this);
   experimentSettings: API.ExperimentSettings = new API.ExperimentSettings(this);
   experimentVariants: API.ExperimentVariants = new API.ExperimentVariants(this);
@@ -934,11 +935,11 @@ export class OursPrivacyPlatform {
   versions: API.Versions = new API.Versions(this);
   webScannerRules: API.WebScannerRules = new API.WebScannerRules(this);
   webScanners: API.WebScanners = new API.WebScanners(this);
-  destinationTypes: API.DestinationTypes = new API.DestinationTypes(this);
 }
 
 OursPrivacyPlatform.AllowedEvents = AllowedEvents;
 OursPrivacyPlatform.ConsentSettings = ConsentSettings;
+OursPrivacyPlatform.DestinationTypes = DestinationTypes;
 OursPrivacyPlatform.Destinations = Destinations;
 OursPrivacyPlatform.ExperimentSettings = ExperimentSettings;
 OursPrivacyPlatform.ExperimentVariants = ExperimentVariants;
@@ -952,7 +953,6 @@ OursPrivacyPlatform.Sources = Sources;
 OursPrivacyPlatform.Versions = Versions;
 OursPrivacyPlatform.WebScannerRules = WebScannerRules;
 OursPrivacyPlatform.WebScanners = WebScanners;
-OursPrivacyPlatform.DestinationTypes = DestinationTypes;
 
 export declare namespace OursPrivacyPlatform {
   export type RequestOptions = Opts.RequestOptions;
@@ -979,6 +979,12 @@ export declare namespace OursPrivacyPlatform {
     type ConsentSettingDeleteResponse as ConsentSettingDeleteResponse,
     type ConsentSettingReplaceParams as ConsentSettingReplaceParams,
     type ConsentSettingUpdateParams as ConsentSettingUpdateParams,
+  };
+
+  export {
+    DestinationTypes as DestinationTypes,
+    type DestinationTypeListResponse as DestinationTypeListResponse,
+    type DestinationTypeRetrieveResponse as DestinationTypeRetrieveResponse,
   };
 
   export {
@@ -1133,10 +1139,4 @@ export declare namespace OursPrivacyPlatform {
   export { WebScannerRules as WebScannerRules };
 
   export { WebScanners as WebScanners };
-
-  export {
-    DestinationTypes as DestinationTypes,
-    type DestinationTypeListResponse as DestinationTypeListResponse,
-    type DestinationTypeRetrieveResponse as DestinationTypeRetrieveResponse,
-  };
 }
