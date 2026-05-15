@@ -181,8 +181,28 @@ import {
   VersionUpdateResponse,
   Versions,
 } from './resources/versions';
-import { WebScannerRules } from './resources/web-scanner-rules';
-import { WebScanners } from './resources/web-scanners';
+import {
+  WebScannerRuleCreateParams,
+  WebScannerRuleCreateResponse,
+  WebScannerRuleDeleteResponse,
+  WebScannerRuleListParams,
+  WebScannerRuleListResponse,
+  WebScannerRuleRetrieveResponse,
+  WebScannerRuleUpdateParams,
+  WebScannerRuleUpdateResponse,
+  WebScannerRules,
+} from './resources/web-scanner-rules';
+import {
+  WebScannerCreateParams,
+  WebScannerCreateResponse,
+  WebScannerDeleteResponse,
+  WebScannerListResponse,
+  WebScannerRetrieveResponse,
+  WebScannerTriggerResponse,
+  WebScannerUpdateParams,
+  WebScannerUpdateResponse,
+  WebScanners,
+} from './resources/web-scanners';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -1136,7 +1156,27 @@ export declare namespace OursPrivacyPlatform {
     type VersionDiffParams as VersionDiffParams,
   };
 
-  export { WebScannerRules as WebScannerRules };
+  export {
+    WebScannerRules as WebScannerRules,
+    type WebScannerRuleListResponse as WebScannerRuleListResponse,
+    type WebScannerRuleCreateResponse as WebScannerRuleCreateResponse,
+    type WebScannerRuleRetrieveResponse as WebScannerRuleRetrieveResponse,
+    type WebScannerRuleUpdateResponse as WebScannerRuleUpdateResponse,
+    type WebScannerRuleDeleteResponse as WebScannerRuleDeleteResponse,
+    type WebScannerRuleListParams as WebScannerRuleListParams,
+    type WebScannerRuleCreateParams as WebScannerRuleCreateParams,
+    type WebScannerRuleUpdateParams as WebScannerRuleUpdateParams,
+  };
 
-  export { WebScanners as WebScanners };
+  export {
+    WebScanners as WebScanners,
+    type WebScannerListResponse as WebScannerListResponse,
+    type WebScannerCreateResponse as WebScannerCreateResponse,
+    type WebScannerRetrieveResponse as WebScannerRetrieveResponse,
+    type WebScannerUpdateResponse as WebScannerUpdateResponse,
+    type WebScannerDeleteResponse as WebScannerDeleteResponse,
+    type WebScannerTriggerResponse as WebScannerTriggerResponse,
+    type WebScannerCreateParams as WebScannerCreateParams,
+    type WebScannerUpdateParams as WebScannerUpdateParams,
+  };
 }
