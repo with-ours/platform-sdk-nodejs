@@ -162,5 +162,25 @@ export {
   type VersionDiffParams,
   type VersionListResponsesCursor,
 } from './versions';
-export { WebScannerRules } from './web-scanner-rules';
-export { WebScanners } from './web-scanners';
+export {
+  WebScannerRules,
+  type WebScannerRuleListResponse,
+  type WebScannerRuleCreateResponse,
+  type WebScannerRuleRetrieveResponse,
+  type WebScannerRuleUpdateResponse,
+  type WebScannerRuleDeleteResponse,
+  type WebScannerRuleListParams,
+  type WebScannerRuleCreateParams,
+  type WebScannerRuleUpdateParams,
+} from './web-scanner-rules';
+export {
+  WebScanners,
+  type WebScannerListResponse,
+  type WebScannerCreateResponse,
+  type WebScannerRetrieveResponse,
+  type WebScannerUpdateResponse,
+  type WebScannerDeleteResponse,
+  type WebScannerTriggerResponse,
+  type WebScannerCreateParams,
+  type WebScannerUpdateParams,
+} from './web-scanners';
