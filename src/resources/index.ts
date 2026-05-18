@@ -31,8 +31,10 @@ export {
   type DestinationRetrieveResponse,
   type DestinationUpdateResponse,
   type DestinationDeleteResponse,
+  type DestinationListParams,
   type DestinationCreateParams,
   type DestinationUpdateParams,
+  type DestinationListResponsesCursor,
 } from './destinations';
 export {
   ExperimentSettings,

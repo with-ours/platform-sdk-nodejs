@@ -20,7 +20,7 @@ describe('resource destinationTypes', () => {
   });
 
   test('retrieve', async () => {
-    const responsePromise = client.destinationTypes.retrieve('AWSEventBridge');
+    const responsePromise = client.destinationTypes.retrieve('x');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

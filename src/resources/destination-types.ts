@@ -22,85 +22,7 @@ export class DestinationTypes extends APIResource {
    * `Klaviyo`, `Facebook`, `GoogleDataManagerEventIngest`). Returns 404 if the
    * identifier is unknown. Requires scope: destination:list
    */
-  retrieve(
-    id:
-      | 'AWSEventBridge'
-      | 'AWSKinesis'
-      | 'AWSLambda'
-      | 'AWSS3'
-      | 'AWSSNS'
-      | 'ActiveCampaignApi'
-      | 'Admitad'
-      | 'AdobeAnalytics'
-      | 'AmazonDSP'
-      | 'Amplitude'
-      | 'AppLovin'
-      | 'ArtsAI'
-      | 'Attentive'
-      | 'Audiohook'
-      | 'AzureBlob'
-      | 'BasisPostback'
-      | 'BeeswaxPostback'
-      | 'BingAds'
-      | 'BingAdsWeb'
-      | 'Braze'
-      | 'ConvertABTestingEvent'
-      | 'Customerio'
-      | 'DomoWarehouse'
-      | 'Everflow'
-      | 'Facebook'
-      | 'FloodlightSGTM'
-      | 'FullContact'
-      | 'G4Analytics'
-      | 'GA4MeasurementProtocol'
-      | 'GA4ServerProxy'
-      | 'Google'
-      | 'GoogleAds360'
-      | 'GoogleAdsServerContainer'
-      | 'GoogleBigQuery'
-      | 'GoogleBigQueryWarehouse'
-      | 'GoogleDataManagerEventIngest'
-      | 'GooglePubSub'
-      | 'GoogleStorage'
-      | 'HTTPCustomRequest'
-      | 'HTTPDestination'
-      | 'Hubspot'
-      | 'IHeartMediaMagellan'
-      | 'Impact'
-      | 'Iterable'
-      | 'Klaviyo'
-      | 'LinkedInAdsCAPI'
-      | 'LiveIntent'
-      | 'LiveRampWarehouse'
-      | 'Mailchimp'
-      | 'Mixpanel'
-      | 'NextdoorAds'
-      | 'OursSyntheticData'
-      | 'Partnerize'
-      | 'Pinterest'
-      | 'Plausible'
-      | 'Podscribe'
-      | 'PostHog'
-      | 'QuantcastCAPI'
-      | 'QuoraAds'
-      | 'Reddit'
-      | 'RokuCAPI'
-      | 'SnapchatAdsCapi'
-      | 'Spotify'
-      | 'StackAdaptAPI'
-      | 'Taboola'
-      | 'Tatari'
-      | 'TheTradeDesk'
-      | 'TikTok'
-      | 'VWO'
-      | 'Viant'
-      | 'Vibe'
-      | 'Woopra'
-      | 'XAds'
-      | 'Zendesk'
-      | 'ZoomInfo',
-    options?: RequestOptions,
-  ): APIPromise<DestinationTypeRetrieveResponse> {
+  retrieve(id: string, options?: RequestOptions): APIPromise<DestinationTypeRetrieveResponse> {
     return this._client.get(path`/rest/v1/destination-types/${id}`, options);
   }
 }
@@ -112,81 +34,72 @@ export interface DestinationTypeListResponse {
 export namespace DestinationTypeListResponse {
   export interface Entity {
     id:
-      | 'AWSEventBridge'
-      | 'AWSKinesis'
-      | 'AWSLambda'
-      | 'AWSS3'
-      | 'AWSSNS'
-      | 'ActiveCampaignApi'
-      | 'Admitad'
-      | 'AdobeAnalytics'
-      | 'AmazonDSP'
-      | 'Amplitude'
-      | 'AppLovin'
-      | 'ArtsAI'
-      | 'Attentive'
       | 'Audiohook'
-      | 'AzureBlob'
       | 'BasisPostback'
-      | 'BeeswaxPostback'
-      | 'BingAds'
-      | 'BingAdsWeb'
+      | 'OursSyntheticData'
+      | 'FullContact'
+      | 'ZoomInfo'
+      | 'TheTradeDesk'
       | 'Braze'
+      | 'LiveIntent'
       | 'ConvertABTestingEvent'
       | 'Customerio'
-      | 'DomoWarehouse'
-      | 'Everflow'
-      | 'Facebook'
-      | 'FloodlightSGTM'
-      | 'FullContact'
-      | 'G4Analytics'
-      | 'GA4MeasurementProtocol'
-      | 'GA4ServerProxy'
-      | 'Google'
-      | 'GoogleAds360'
-      | 'GoogleAdsServerContainer'
-      | 'GoogleBigQuery'
-      | 'GoogleBigQueryWarehouse'
-      | 'GoogleDataManagerEventIngest'
-      | 'GooglePubSub'
-      | 'GoogleStorage'
-      | 'HTTPCustomRequest'
+      | 'BingAds'
+      | 'BingAdsWeb'
       | 'HTTPDestination'
-      | 'Hubspot'
-      | 'IHeartMediaMagellan'
-      | 'Impact'
-      | 'Iterable'
-      | 'Klaviyo'
-      | 'LinkedInAdsCAPI'
-      | 'LiveIntent'
-      | 'LiveRampWarehouse'
-      | 'Mailchimp'
-      | 'Mixpanel'
-      | 'NextdoorAds'
-      | 'OursSyntheticData'
-      | 'Partnerize'
-      | 'Pinterest'
-      | 'Plausible'
-      | 'Podscribe'
-      | 'PostHog'
-      | 'QuantcastCAPI'
-      | 'QuoraAds'
-      | 'Reddit'
-      | 'RokuCAPI'
-      | 'SnapchatAdsCapi'
-      | 'Spotify'
-      | 'StackAdaptAPI'
-      | 'Taboola'
-      | 'Tatari'
-      | 'TheTradeDesk'
-      | 'TikTok'
-      | 'VWO'
-      | 'Viant'
-      | 'Vibe'
       | 'Woopra'
+      | 'HTTPCustomRequest'
+      | 'Google'
+      | 'GoogleAdsServerContainer'
+      | 'G4Analytics'
+      | 'GA4ServerProxy'
+      | 'GA4MeasurementProtocol'
+      | 'GoogleAds360'
+      | 'Facebook'
+      | 'Mixpanel'
+      | 'Amplitude'
+      | 'TikTok'
+      | 'Reddit'
+      | 'Podscribe'
+      | 'Pinterest'
+      | 'Mailchimp'
+      | 'AWSKinesis'
+      | 'AWSLambda'
+      | 'GooglePubSub'
+      | 'LinkedInAdsCAPI'
+      | 'ActiveCampaignApi'
+      | 'StackAdaptAPI'
+      | 'Hubspot'
+      | 'Klaviyo'
       | 'XAds'
+      | 'QuoraAds'
+      | 'SnapchatAdsCapi'
+      | 'Partnerize'
+      | 'NextdoorAds'
+      | 'Tatari'
+      | 'Viant'
+      | 'Impact'
+      | 'Spotify'
+      | 'Taboola'
+      | 'AmazonDSP'
+      | 'AppLovin'
+      | 'IHeartMediaMagellan'
+      | 'Vibe'
+      | 'GoogleDataManagerEventIngest'
       | 'Zendesk'
-      | 'ZoomInfo';
+      | 'Iterable'
+      | 'ArtsAI'
+      | 'QuantcastCAPI'
+      | 'FloodlightSGTM'
+      | 'VWO'
+      | 'Attentive'
+      | 'Admitad'
+      | 'Plausible'
+      | 'PostHog'
+      | 'RokuCAPI'
+      | 'Everflow'
+      | 'BeeswaxPostback'
+      | 'AdobeAnalytics';
 
     capabilities: Entity.Capabilities;
 
@@ -215,9 +128,13 @@ export namespace DestinationTypeListResponse {
     export interface UnionMember0 {
       key: string;
 
+      /**
+       * Informational display message only. Do not send this key in POST or PATCH
+       * settings.
+       */
       label: string;
 
-      type: 'Alert' | 'GenericOauth' | 'Secret' | 'Select' | 'Switch' | 'Text';
+      type: 'Alert';
     }
 
     export interface UnionMember1 {
@@ -227,7 +144,7 @@ export namespace DestinationTypeListResponse {
 
       options: Array<UnionMember1.Option>;
 
-      type: 'Alert' | 'GenericOauth' | 'Secret' | 'Select' | 'Switch' | 'Text';
+      type: 'Select';
 
       required?: boolean | null;
 
@@ -247,7 +164,7 @@ export namespace DestinationTypeListResponse {
 
       label: string;
 
-      type: 'Alert' | 'GenericOauth' | 'Secret' | 'Select' | 'Switch' | 'Text';
+      type: 'Switch';
 
       defaultValue?: boolean | null;
 
@@ -261,7 +178,7 @@ export namespace DestinationTypeListResponse {
 
       label: string;
 
-      type: 'Alert' | 'GenericOauth' | 'Secret' | 'Select' | 'Switch' | 'Text';
+      type: 'GenericOauth';
 
       sublabel?: string | null;
     }
@@ -273,7 +190,7 @@ export namespace DestinationTypeListResponse {
 
       placeholder: string;
 
-      type: 'Alert' | 'GenericOauth' | 'Secret' | 'Select' | 'Switch' | 'Text';
+      type: 'Text' | 'Secret';
 
       required?: boolean | null;
 
@@ -284,81 +201,72 @@ export namespace DestinationTypeListResponse {
 
 export interface DestinationTypeRetrieveResponse {
   id:
-    | 'AWSEventBridge'
-    | 'AWSKinesis'
-    | 'AWSLambda'
-    | 'AWSS3'
-    | 'AWSSNS'
-    | 'ActiveCampaignApi'
-    | 'Admitad'
-    | 'AdobeAnalytics'
-    | 'AmazonDSP'
-    | 'Amplitude'
-    | 'AppLovin'
-    | 'ArtsAI'
-    | 'Attentive'
     | 'Audiohook'
-    | 'AzureBlob'
     | 'BasisPostback'
-    | 'BeeswaxPostback'
-    | 'BingAds'
-    | 'BingAdsWeb'
+    | 'OursSyntheticData'
+    | 'FullContact'
+    | 'ZoomInfo'
+    | 'TheTradeDesk'
     | 'Braze'
+    | 'LiveIntent'
     | 'ConvertABTestingEvent'
     | 'Customerio'
-    | 'DomoWarehouse'
-    | 'Everflow'
-    | 'Facebook'
-    | 'FloodlightSGTM'
-    | 'FullContact'
-    | 'G4Analytics'
-    | 'GA4MeasurementProtocol'
-    | 'GA4ServerProxy'
-    | 'Google'
-    | 'GoogleAds360'
-    | 'GoogleAdsServerContainer'
-    | 'GoogleBigQuery'
-    | 'GoogleBigQueryWarehouse'
-    | 'GoogleDataManagerEventIngest'
-    | 'GooglePubSub'
-    | 'GoogleStorage'
-    | 'HTTPCustomRequest'
+    | 'BingAds'
+    | 'BingAdsWeb'
     | 'HTTPDestination'
-    | 'Hubspot'
-    | 'IHeartMediaMagellan'
-    | 'Impact'
-    | 'Iterable'
-    | 'Klaviyo'
-    | 'LinkedInAdsCAPI'
-    | 'LiveIntent'
-    | 'LiveRampWarehouse'
-    | 'Mailchimp'
-    | 'Mixpanel'
-    | 'NextdoorAds'
-    | 'OursSyntheticData'
-    | 'Partnerize'
-    | 'Pinterest'
-    | 'Plausible'
-    | 'Podscribe'
-    | 'PostHog'
-    | 'QuantcastCAPI'
-    | 'QuoraAds'
-    | 'Reddit'
-    | 'RokuCAPI'
-    | 'SnapchatAdsCapi'
-    | 'Spotify'
-    | 'StackAdaptAPI'
-    | 'Taboola'
-    | 'Tatari'
-    | 'TheTradeDesk'
-    | 'TikTok'
-    | 'VWO'
-    | 'Viant'
-    | 'Vibe'
     | 'Woopra'
+    | 'HTTPCustomRequest'
+    | 'Google'
+    | 'GoogleAdsServerContainer'
+    | 'G4Analytics'
+    | 'GA4ServerProxy'
+    | 'GA4MeasurementProtocol'
+    | 'GoogleAds360'
+    | 'Facebook'
+    | 'Mixpanel'
+    | 'Amplitude'
+    | 'TikTok'
+    | 'Reddit'
+    | 'Podscribe'
+    | 'Pinterest'
+    | 'Mailchimp'
+    | 'AWSKinesis'
+    | 'AWSLambda'
+    | 'GooglePubSub'
+    | 'LinkedInAdsCAPI'
+    | 'ActiveCampaignApi'
+    | 'StackAdaptAPI'
+    | 'Hubspot'
+    | 'Klaviyo'
     | 'XAds'
+    | 'QuoraAds'
+    | 'SnapchatAdsCapi'
+    | 'Partnerize'
+    | 'NextdoorAds'
+    | 'Tatari'
+    | 'Viant'
+    | 'Impact'
+    | 'Spotify'
+    | 'Taboola'
+    | 'AmazonDSP'
+    | 'AppLovin'
+    | 'IHeartMediaMagellan'
+    | 'Vibe'
+    | 'GoogleDataManagerEventIngest'
     | 'Zendesk'
-    | 'ZoomInfo';
+    | 'Iterable'
+    | 'ArtsAI'
+    | 'QuantcastCAPI'
+    | 'FloodlightSGTM'
+    | 'VWO'
+    | 'Attentive'
+    | 'Admitad'
+    | 'Plausible'
+    | 'PostHog'
+    | 'RokuCAPI'
+    | 'Everflow'
+    | 'BeeswaxPostback'
+    | 'AdobeAnalytics';
 
   capabilities: DestinationTypeRetrieveResponse.Capabilities;
 
@@ -387,9 +295,13 @@ export namespace DestinationTypeRetrieveResponse {
   export interface UnionMember0 {
     key: string;
 
+    /**
+     * Informational display message only. Do not send this key in POST or PATCH
+     * settings.
+     */
     label: string;
 
-    type: 'Alert' | 'GenericOauth' | 'Secret' | 'Select' | 'Switch' | 'Text';
+    type: 'Alert';
   }
 
   export interface UnionMember1 {
@@ -399,7 +311,7 @@ export namespace DestinationTypeRetrieveResponse {
 
     options: Array<UnionMember1.Option>;
 
-    type: 'Alert' | 'GenericOauth' | 'Secret' | 'Select' | 'Switch' | 'Text';
+    type: 'Select';
 
     required?: boolean | null;
 
@@ -419,7 +331,7 @@ export namespace DestinationTypeRetrieveResponse {
 
     label: string;
 
-    type: 'Alert' | 'GenericOauth' | 'Secret' | 'Select' | 'Switch' | 'Text';
+    type: 'Switch';
 
     defaultValue?: boolean | null;
 
@@ -433,7 +345,7 @@ export namespace DestinationTypeRetrieveResponse {
 
     label: string;
 
-    type: 'Alert' | 'GenericOauth' | 'Secret' | 'Select' | 'Switch' | 'Text';
+    type: 'GenericOauth';
 
     sublabel?: string | null;
   }
@@ -445,7 +357,7 @@ export namespace DestinationTypeRetrieveResponse {
 
     placeholder: string;
 
-    type: 'Alert' | 'GenericOauth' | 'Secret' | 'Select' | 'Switch' | 'Text';
+    type: 'Text' | 'Secret';
 
     required?: boolean | null;
 

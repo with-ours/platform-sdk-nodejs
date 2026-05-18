@@ -47,7 +47,9 @@ import {
   DestinationCreateParams,
   DestinationCreateResponse,
   DestinationDeleteResponse,
+  DestinationListParams,
   DestinationListResponse,
+  DestinationListResponsesCursor,
   DestinationRetrieveResponse,
   DestinationUpdateParams,
   DestinationUpdateResponse,
@@ -1014,6 +1016,8 @@ export declare namespace OursPrivacyPlatform {
     type DestinationRetrieveResponse as DestinationRetrieveResponse,
     type DestinationUpdateResponse as DestinationUpdateResponse,
     type DestinationDeleteResponse as DestinationDeleteResponse,
+    type DestinationListResponsesCursor as DestinationListResponsesCursor,
+    type DestinationListParams as DestinationListParams,
     type DestinationCreateParams as DestinationCreateParams,
     type DestinationUpdateParams as DestinationUpdateParams,
   };
