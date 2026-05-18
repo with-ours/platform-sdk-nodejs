@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.20.0 (2026-05-18)
+
+Full Changelog: [v1.19.0...v1.20.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.19.0...v1.20.0)
+
+### Features
+
+* **api:** api update ([d1900fb](https://github.com/with-ours/platform-sdk-nodejs/commit/d1900fbad5ccca1d94a0a12fbe8c67de736bd2a4))
+* **api:** api update ([37dc4c2](https://github.com/with-ours/platform-sdk-nodejs/commit/37dc4c2086d15ff268876847c408b3d5c485c5e4))
+* **api:** api update ([98c2f19](https://github.com/with-ours/platform-sdk-nodejs/commit/98c2f1986fd636e612fdb3edf3c6a078e808b22a))
+* **api:** locations resource declaration ([2cf19c8](https://github.com/with-ours/platform-sdk-nodejs/commit/2cf19c89ad8f13b9683494355c64f29c26607461))
+* **api:** manual updates ([763d8f1](https://github.com/with-ours/platform-sdk-nodejs/commit/763d8f1cfa2f15b7e3bec3921cc6b065f5502edb))
+* **api:** web scanners rest ([d509168](https://github.com/with-ours/platform-sdk-nodejs/commit/d509168b36a1f0a0abc22cfd6cbc6f075c5012cd))
+
 ## 1.19.0 (2026-05-14)
 
 Full Changelog: [v1.18.0...v1.19.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.18.0...v1.19.0)
