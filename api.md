@@ -58,7 +58,7 @@ Types:
 
 Methods:
 
-- <code title="get /rest/v1/destinations">client.destinations.<a href="./src/resources/destinations.ts">list</a>() -> DestinationListResponse</code>
+- <code title="get /rest/v1/destinations">client.destinations.<a href="./src/resources/destinations.ts">list</a>({ ...params }) -> DestinationListResponsesCursor</code>
 - <code title="post /rest/v1/destinations">client.destinations.<a href="./src/resources/destinations.ts">create</a>({ ...params }) -> DestinationCreateResponse</code>
 - <code title="get /rest/v1/destinations/{id}">client.destinations.<a href="./src/resources/destinations.ts">retrieve</a>(id) -> DestinationRetrieveResponse</code>
 - <code title="patch /rest/v1/destinations/{id}">client.destinations.<a href="./src/resources/destinations.ts">update</a>(id, { ...params }) -> DestinationUpdateResponse</code>
