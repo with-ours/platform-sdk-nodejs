@@ -2,6 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import { APIPromise } from '../core/api-promise';
+import { Cursor, type CursorParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
@@ -9,8 +10,14 @@ export class Destinations extends APIResource {
   /**
    * List all destinations. Requires scope: destination:list
    */
-  list(options?: RequestOptions): APIPromise<DestinationListResponse> {
-    return this._client.get('/rest/v1/destinations', options);
+  list(
+    query: DestinationListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<DestinationListResponsesCursor, DestinationListResponse> {
+    return this._client.getAPIList('/rest/v1/destinations', Cursor<DestinationListResponse>, {
+      query,
+      ...options,
+    });
   }
 
   /**
@@ -29,22 +36,16 @@ export class Destinations extends APIResource {
 
   /**
    * Partially update a destination. Only the fields you send are changed; omitted
-   * fields are unchanged. The `settings` object is deep-merged into the existing
-   * settings by default — keys you omit keep their current value. Pass
-   * `?settings_strategy=replace` to wipe and replace the settings blob entirely.
-   * Requires scope: destination:update
+   * fields are unchanged. The `settings` object is patch-only: omitted keys keep
+   * their current value, and send `null` to clear a specific setting. Requires
+   * scope: destination:update
    */
   update(
     id: string,
-    params: DestinationUpdateParams,
+    body: DestinationUpdateParams,
     options?: RequestOptions,
   ): APIPromise<DestinationUpdateResponse> {
-    const { settings_strategy, ...body } = params;
-    return this._client.patch(path`/rest/v1/destinations/${id}`, {
-      query: { settings_strategy },
-      body,
-      ...options,
-    });
+    return this._client.patch(path`/rest/v1/destinations/${id}`, { body, ...options });
   }
 
   /**
@@ -55,133 +56,19 @@ export class Destinations extends APIResource {
   }
 }
 
+export type DestinationListResponsesCursor = Cursor<DestinationListResponse>;
+
 export interface DestinationListResponse {
-  entities: Array<DestinationListResponse.Entity>;
-}
-
-export namespace DestinationListResponse {
-  export interface Entity {
-    id: string;
-
-    createdAt: string;
-
-    status: 'Disabled' | 'Enabled';
-
-    type:
-      | 'AWSEventBridge'
-      | 'AWSKinesis'
-      | 'AWSLambda'
-      | 'AWSS3'
-      | 'AWSSNS'
-      | 'ActiveCampaignApi'
-      | 'Admitad'
-      | 'AmazonDSP'
-      | 'Amplitude'
-      | 'AppLovin'
-      | 'ArtsAI'
-      | 'Attentive'
-      | 'Audiohook'
-      | 'AzureBlob'
-      | 'BasisPostback'
-      | 'BeeswaxPostback'
-      | 'BingAds'
-      | 'BingAdsWeb'
-      | 'Braze'
-      | 'ConvertABTestingEvent'
-      | 'Customerio'
-      | 'DomoWarehouse'
-      | 'Everflow'
-      | 'Facebook'
-      | 'FloodlightSGTM'
-      | 'FullContact'
-      | 'G4Analytics'
-      | 'GA4MeasurementProtocol'
-      | 'GA4ServerProxy'
-      | 'Google'
-      | 'GoogleAds360'
-      | 'GoogleAdsServerContainer'
-      | 'GoogleBigQuery'
-      | 'GoogleBigQueryWarehouse'
-      | 'GoogleDataManagerEventIngest'
-      | 'GooglePubSub'
-      | 'GoogleStorage'
-      | 'HTTPCustomRequest'
-      | 'HTTPDestination'
-      | 'Hubspot'
-      | 'IHeartMediaMagellan'
-      | 'Impact'
-      | 'Iterable'
-      | 'Klaviyo'
-      | 'LinkedInAdsCAPI'
-      | 'LiveIntent'
-      | 'LiveRampWarehouse'
-      | 'Mailchimp'
-      | 'Mixpanel'
-      | 'NextdoorAds'
-      | 'OursSyntheticData'
-      | 'Partnerize'
-      | 'Pinterest'
-      | 'Plausible'
-      | 'Podscribe'
-      | 'PostHog'
-      | 'QuantcastCAPI'
-      | 'QuoraAds'
-      | 'Reddit'
-      | 'RokuCAPI'
-      | 'SnapchatAdsCapi'
-      | 'Spotify'
-      | 'StackAdaptAPI'
-      | 'Taboola'
-      | 'Tatari'
-      | 'TheTradeDesk'
-      | 'TikTok'
-      | 'VWO'
-      | 'Viant'
-      | 'Vibe'
-      | 'Woopra'
-      | 'XAds'
-      | 'Zendesk'
-      | 'ZoomInfo';
-
-    facebookConversionAPIKey?: string | null;
-
-    facebookPixelId?: string | null;
-
-    g4AnalyticsApiKey?: string | null;
-
-    g4AnalyticsMeasurementId?: string | null;
-
-    g4AnalyticsTrackOnPage?: boolean | null;
-
-    hashingSalt?: string | null;
-
-    httpDestinationUrl?: string | null;
-
-    limitedToSourceIds?: Array<string> | null;
-
-    managerGoogleCustomerId?: string | null;
-
-    name?: string | null;
-
-    projectAPIKey?: string | null;
-
-    projectToken?: string | null;
-
-    selectedAccountId?: string | null;
-
-    settings?: unknown | null;
-
-    updatedAt?: string | null;
-  }
-}
-
-export interface DestinationCreateResponse {
   id: string;
 
   createdAt: string;
 
   status: 'Disabled' | 'Enabled';
 
+  /**
+   * Destination type. Read responses may include warehouse or cloud-storage types
+   * that are not creatable through POST /rest/v1/destinations.
+   */
   type:
     | 'AWSEventBridge'
     | 'AWSKinesis'
@@ -190,6 +77,7 @@ export interface DestinationCreateResponse {
     | 'AWSSNS'
     | 'ActiveCampaignApi'
     | 'Admitad'
+    | 'AdobeAnalytics'
     | 'AmazonDSP'
     | 'Amplitude'
     | 'AppLovin'
@@ -258,7 +146,112 @@ export interface DestinationCreateResponse {
     | 'Zendesk'
     | 'ZoomInfo';
 
+  hashingSalt?: string | null;
+
+  limitedToSourceIds?: Array<string> | null;
+
   name?: string | null;
+
+  settings?: unknown | null;
+
+  updatedAt?: string | null;
+}
+
+export interface DestinationCreateResponse {
+  id: string;
+
+  createdAt: string;
+
+  status: 'Disabled' | 'Enabled';
+
+  /**
+   * Destination type. Read responses may include warehouse or cloud-storage types
+   * that are not creatable through POST /rest/v1/destinations.
+   */
+  type:
+    | 'AWSEventBridge'
+    | 'AWSKinesis'
+    | 'AWSLambda'
+    | 'AWSS3'
+    | 'AWSSNS'
+    | 'ActiveCampaignApi'
+    | 'Admitad'
+    | 'AdobeAnalytics'
+    | 'AmazonDSP'
+    | 'Amplitude'
+    | 'AppLovin'
+    | 'ArtsAI'
+    | 'Attentive'
+    | 'Audiohook'
+    | 'AzureBlob'
+    | 'BasisPostback'
+    | 'BeeswaxPostback'
+    | 'BingAds'
+    | 'BingAdsWeb'
+    | 'Braze'
+    | 'ConvertABTestingEvent'
+    | 'Customerio'
+    | 'DomoWarehouse'
+    | 'Everflow'
+    | 'Facebook'
+    | 'FloodlightSGTM'
+    | 'FullContact'
+    | 'G4Analytics'
+    | 'GA4MeasurementProtocol'
+    | 'GA4ServerProxy'
+    | 'Google'
+    | 'GoogleAds360'
+    | 'GoogleAdsServerContainer'
+    | 'GoogleBigQuery'
+    | 'GoogleBigQueryWarehouse'
+    | 'GoogleDataManagerEventIngest'
+    | 'GooglePubSub'
+    | 'GoogleStorage'
+    | 'HTTPCustomRequest'
+    | 'HTTPDestination'
+    | 'Hubspot'
+    | 'IHeartMediaMagellan'
+    | 'Impact'
+    | 'Iterable'
+    | 'Klaviyo'
+    | 'LinkedInAdsCAPI'
+    | 'LiveIntent'
+    | 'LiveRampWarehouse'
+    | 'Mailchimp'
+    | 'Mixpanel'
+    | 'NextdoorAds'
+    | 'OursSyntheticData'
+    | 'Partnerize'
+    | 'Pinterest'
+    | 'Plausible'
+    | 'Podscribe'
+    | 'PostHog'
+    | 'QuantcastCAPI'
+    | 'QuoraAds'
+    | 'Reddit'
+    | 'RokuCAPI'
+    | 'SnapchatAdsCapi'
+    | 'Spotify'
+    | 'StackAdaptAPI'
+    | 'Taboola'
+    | 'Tatari'
+    | 'TheTradeDesk'
+    | 'TikTok'
+    | 'VWO'
+    | 'Viant'
+    | 'Vibe'
+    | 'Woopra'
+    | 'XAds'
+    | 'Zendesk'
+    | 'ZoomInfo';
+
+  hashingSalt?: string | null;
+
+  limitedToSourceIds?: Array<string> | null;
+
+  name?: string | null;
+
+  settings?: unknown | null;
 
   updatedAt?: string | null;
 }
@@ -270,6 +263,10 @@ export interface DestinationRetrieveResponse {
 
   status: 'Disabled' | 'Enabled';
 
+  /**
+   * Destination type. Read responses may include warehouse or cloud-storage types
+   * that are not creatable through POST /rest/v1/destinations.
+   */
   type:
     | 'AWSEventBridge'
     | 'AWSKinesis'
@@ -278,6 +275,7 @@ export interface DestinationRetrieveResponse {
     | 'AWSSNS'
     | 'ActiveCampaignApi'
     | 'Admitad'
+    | 'AdobeAnalytics'
     | 'AmazonDSP'
     | 'Amplitude'
     | 'AppLovin'
@@ -346,31 +344,11 @@ export interface DestinationRetrieveResponse {
     | 'Zendesk'
     | 'ZoomInfo';
 
-  facebookConversionAPIKey?: string | null;
-
-  facebookPixelId?: string | null;
-
-  g4AnalyticsApiKey?: string | null;
-
-  g4AnalyticsMeasurementId?: string | null;
-
-  g4AnalyticsTrackOnPage?: boolean | null;
-
   hashingSalt?: string | null;
-
-  httpDestinationUrl?: string | null;
 
   limitedToSourceIds?: Array<string> | null;
 
-  managerGoogleCustomerId?: string | null;
-
   name?: string | null;
-
-  projectAPIKey?: string | null;
-
-  projectToken?: string | null;
-
-  selectedAccountId?: string | null;
 
   settings?: unknown | null;
 
@@ -384,6 +362,10 @@ export interface DestinationUpdateResponse {
 
   status: 'Disabled' | 'Enabled';
 
+  /**
+   * Destination type. Read responses may include warehouse or cloud-storage types
+   * that are not creatable through POST /rest/v1/destinations.
+   */
   type:
     | 'AWSEventBridge'
     | 'AWSKinesis'
@@ -392,6 +374,7 @@ export interface DestinationUpdateResponse {
     | 'AWSSNS'
     | 'ActiveCampaignApi'
     | 'Admitad'
+    | 'AdobeAnalytics'
     | 'AmazonDSP'
     | 'Amplitude'
     | 'AppLovin'
@@ -460,15 +443,29 @@ export interface DestinationUpdateResponse {
     | 'Zendesk'
     | 'ZoomInfo';
 
+  hashingSalt?: string | null;
+
+  limitedToSourceIds?: Array<string> | null;
+
   name?: string | null;
+
+  settings?: unknown | null;
 
   updatedAt?: string | null;
 }
 
 export type DestinationDeleteResponse = boolean;
 
-export interface DestinationCreateParams {
-  type:
+export interface DestinationListParams extends CursorParams {
+  /**
+   * Filter destinations by status.
+   */
+  status?: 'Disabled' | 'Enabled';
+
+  /**
+   * Filter destinations by destination type.
+   */
+  type?:
     | 'AWSEventBridge'
     | 'AWSKinesis'
     | 'AWSLambda'
@@ -476,6 +473,7 @@ export interface DestinationCreateParams {
     | 'AWSSNS'
     | 'ActiveCampaignApi'
     | 'Admitad'
+    | 'AdobeAnalytics'
     | 'AmazonDSP'
     | 'Amplitude'
     | 'AppLovin'
@@ -543,89 +541,104 @@ export interface DestinationCreateParams {
     | 'XAds'
     | 'Zendesk'
     | 'ZoomInfo';
+}
+
+export interface DestinationCreateParams {
+  /**
+   * Event-dispatch destination type to create. Warehouse and cloud-storage
+   * destination types may appear on read responses but are not creatable through
+   * POST.
+   */
+  type:
+    | 'Audiohook'
+    | 'BasisPostback'
+    | 'OursSyntheticData'
+    | 'FullContact'
+    | 'ZoomInfo'
+    | 'TheTradeDesk'
+    | 'Braze'
+    | 'LiveIntent'
+    | 'ConvertABTestingEvent'
+    | 'Customerio'
+    | 'BingAds'
+    | 'BingAdsWeb'
+    | 'HTTPDestination'
+    | 'Woopra'
+    | 'HTTPCustomRequest'
+    | 'Google'
+    | 'GoogleAdsServerContainer'
+    | 'G4Analytics'
+    | 'GA4ServerProxy'
+    | 'GA4MeasurementProtocol'
+    | 'GoogleAds360'
+    | 'Facebook'
+    | 'Mixpanel'
+    | 'Amplitude'
+    | 'TikTok'
+    | 'Reddit'
+    | 'Podscribe'
+    | 'Pinterest'
+    | 'Mailchimp'
+    | 'AWSKinesis'
+    | 'AWSLambda'
+    | 'GooglePubSub'
+    | 'LinkedInAdsCAPI'
+    | 'ActiveCampaignApi'
+    | 'StackAdaptAPI'
+    | 'Hubspot'
+    | 'Klaviyo'
+    | 'XAds'
+    | 'QuoraAds'
+    | 'SnapchatAdsCapi'
+    | 'Partnerize'
+    | 'NextdoorAds'
+    | 'Tatari'
+    | 'Viant'
+    | 'Impact'
+    | 'Spotify'
+    | 'Taboola'
+    | 'AmazonDSP'
+    | 'AppLovin'
+    | 'IHeartMediaMagellan'
+    | 'Vibe'
+    | 'GoogleDataManagerEventIngest'
+    | 'Zendesk'
+    | 'Iterable'
+    | 'ArtsAI'
+    | 'QuantcastCAPI'
+    | 'FloodlightSGTM'
+    | 'VWO'
+    | 'Attentive'
+    | 'Admitad'
+    | 'Plausible'
+    | 'PostHog'
+    | 'RokuCAPI'
+    | 'Everflow'
+    | 'BeeswaxPostback'
+    | 'AdobeAnalytics';
 
   name?: string | null;
+
+  /**
+   * Per-type configuration keys and values. Call GET /rest/v1/destination-types/{id}
+   * to get the valid keys for your destination type.
+   */
+  settings?: unknown | null;
 }
 
 export interface DestinationUpdateParams {
-  /**
-   * Query param
-   */
-  settings_strategy?: 'merge' | 'replace';
-
-  /**
-   * Body param
-   */
-  facebookConversionAPIKey?: string | null;
-
-  /**
-   * Body param
-   */
-  facebookPixelId?: string | null;
-
-  /**
-   * Body param
-   */
-  g4AnalyticsApiKey?: string | null;
-
-  /**
-   * Body param
-   */
-  g4AnalyticsMeasurementId?: string | null;
-
-  /**
-   * Body param
-   */
-  g4AnalyticsTrackOnPage?: boolean | null;
-
-  /**
-   * Body param
-   */
   hashingSalt?: string | null;
 
-  /**
-   * Body param
-   */
-  httpDestinationUrl?: string | null;
-
-  /**
-   * Body param
-   */
   limitedToSourceIds?: Array<string> | null;
 
-  /**
-   * Body param
-   */
-  managerGoogleCustomerId?: string | null;
-
-  /**
-   * Body param
-   */
   name?: string | null;
 
   /**
-   * Body param
-   */
-  projectAPIKey?: string | null;
-
-  /**
-   * Body param
-   */
-  projectToken?: string | null;
-
-  /**
-   * Body param
-   */
-  selectedAccountId?: string | null;
-
-  /**
-   * Body param
+   * Per-type configuration keys and values. Call GET /rest/v1/destination-types/{id}
+   * to get the valid keys for your destination type.
    */
   settings?: unknown | null;
 
-  /**
-   * Body param
-   */
   status?: 'Disabled' | 'Enabled' | null;
 }
 
@@ -636,6 +649,8 @@ export declare namespace Destinations {
     type DestinationRetrieveResponse as DestinationRetrieveResponse,
     type DestinationUpdateResponse as DestinationUpdateResponse,
     type DestinationDeleteResponse as DestinationDeleteResponse,
+    type DestinationListResponsesCursor as DestinationListResponsesCursor,
+    type DestinationListParams as DestinationListParams,
     type DestinationCreateParams as DestinationCreateParams,
     type DestinationUpdateParams as DestinationUpdateParams,
   };

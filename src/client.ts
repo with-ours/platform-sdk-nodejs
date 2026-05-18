@@ -47,7 +47,9 @@ import {
   DestinationCreateParams,
   DestinationCreateResponse,
   DestinationDeleteResponse,
+  DestinationListParams,
   DestinationListResponse,
+  DestinationListResponsesCursor,
   DestinationRetrieveResponse,
   DestinationUpdateParams,
   DestinationUpdateResponse,
@@ -122,6 +124,16 @@ import {
   HeatmapPages,
 } from './resources/heatmap-pages';
 import {
+  LocationCreateParams,
+  LocationCreateResponse,
+  LocationEmbedCodeParams,
+  LocationEmbedCodeResponse,
+  LocationListResponse,
+  LocationUpdateParams,
+  LocationUpdateResponse,
+  Locations,
+} from './resources/locations';
+import {
   MappingCreateParams,
   MappingCreateResponse,
   MappingDeleteResponse,
@@ -171,6 +183,28 @@ import {
   VersionUpdateResponse,
   Versions,
 } from './resources/versions';
+import {
+  WebScannerRuleCreateParams,
+  WebScannerRuleCreateResponse,
+  WebScannerRuleDeleteResponse,
+  WebScannerRuleListParams,
+  WebScannerRuleListResponse,
+  WebScannerRuleRetrieveResponse,
+  WebScannerRuleUpdateParams,
+  WebScannerRuleUpdateResponse,
+  WebScannerRules,
+} from './resources/web-scanner-rules';
+import {
+  WebScannerCreateParams,
+  WebScannerCreateResponse,
+  WebScannerDeleteResponse,
+  WebScannerListResponse,
+  WebScannerRetrieveResponse,
+  WebScannerTriggerResponse,
+  WebScannerUpdateParams,
+  WebScannerUpdateResponse,
+  WebScanners,
+} from './resources/web-scanners';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -909,32 +943,38 @@ export class OursPrivacyPlatform {
 
   allowedEvents: API.AllowedEvents = new API.AllowedEvents(this);
   consentSettings: API.ConsentSettings = new API.ConsentSettings(this);
+  destinationTypes: API.DestinationTypes = new API.DestinationTypes(this);
   destinations: API.Destinations = new API.Destinations(this);
   experimentSettings: API.ExperimentSettings = new API.ExperimentSettings(this);
   experimentVariants: API.ExperimentVariants = new API.ExperimentVariants(this);
   experiments: API.Experiments = new API.Experiments(this);
   globalDispatchCenters: API.GlobalDispatchCenters = new API.GlobalDispatchCenters(this);
   heatmapPages: API.HeatmapPages = new API.HeatmapPages(this);
+  locations: API.Locations = new API.Locations(this);
   mappings: API.Mappings = new API.Mappings(this);
   replaySettings: API.ReplaySettings = new API.ReplaySettings(this);
   sources: API.Sources = new API.Sources(this);
   versions: API.Versions = new API.Versions(this);
-  destinationTypes: API.DestinationTypes = new API.DestinationTypes(this);
+  webScannerRules: API.WebScannerRules = new API.WebScannerRules(this);
+  webScanners: API.WebScanners = new API.WebScanners(this);
 }
 
 OursPrivacyPlatform.AllowedEvents = AllowedEvents;
 OursPrivacyPlatform.ConsentSettings = ConsentSettings;
+OursPrivacyPlatform.DestinationTypes = DestinationTypes;
 OursPrivacyPlatform.Destinations = Destinations;
 OursPrivacyPlatform.ExperimentSettings = ExperimentSettings;
 OursPrivacyPlatform.ExperimentVariants = ExperimentVariants;
 OursPrivacyPlatform.Experiments = Experiments;
 OursPrivacyPlatform.GlobalDispatchCenters = GlobalDispatchCenters;
 OursPrivacyPlatform.HeatmapPages = HeatmapPages;
+OursPrivacyPlatform.Locations = Locations;
 OursPrivacyPlatform.Mappings = Mappings;
 OursPrivacyPlatform.ReplaySettings = ReplaySettings;
 OursPrivacyPlatform.Sources = Sources;
 OursPrivacyPlatform.Versions = Versions;
-OursPrivacyPlatform.DestinationTypes = DestinationTypes;
+OursPrivacyPlatform.WebScannerRules = WebScannerRules;
+OursPrivacyPlatform.WebScanners = WebScanners;
 
 export declare namespace OursPrivacyPlatform {
   export type RequestOptions = Opts.RequestOptions;
@@ -964,12 +1004,20 @@ export declare namespace OursPrivacyPlatform {
   };
 
   export {
+    DestinationTypes as DestinationTypes,
+    type DestinationTypeListResponse as DestinationTypeListResponse,
+    type DestinationTypeRetrieveResponse as DestinationTypeRetrieveResponse,
+  };
+
+  export {
     Destinations as Destinations,
     type DestinationListResponse as DestinationListResponse,
     type DestinationCreateResponse as DestinationCreateResponse,
     type DestinationRetrieveResponse as DestinationRetrieveResponse,
     type DestinationUpdateResponse as DestinationUpdateResponse,
     type DestinationDeleteResponse as DestinationDeleteResponse,
+    type DestinationListResponsesCursor as DestinationListResponsesCursor,
+    type DestinationListParams as DestinationListParams,
     type DestinationCreateParams as DestinationCreateParams,
     type DestinationUpdateParams as DestinationUpdateParams,
   };
@@ -1048,6 +1096,17 @@ export declare namespace OursPrivacyPlatform {
   };
 
   export {
+    Locations as Locations,
+    type LocationListResponse as LocationListResponse,
+    type LocationCreateResponse as LocationCreateResponse,
+    type LocationUpdateResponse as LocationUpdateResponse,
+    type LocationEmbedCodeResponse as LocationEmbedCodeResponse,
+    type LocationCreateParams as LocationCreateParams,
+    type LocationUpdateParams as LocationUpdateParams,
+    type LocationEmbedCodeParams as LocationEmbedCodeParams,
+  };
+
+  export {
     Mappings as Mappings,
     type MappingListResponse as MappingListResponse,
     type MappingCreateResponse as MappingCreateResponse,
@@ -1102,8 +1161,26 @@ export declare namespace OursPrivacyPlatform {
   };
 
   export {
-    DestinationTypes as DestinationTypes,
-    type DestinationTypeListResponse as DestinationTypeListResponse,
-    type DestinationTypeRetrieveResponse as DestinationTypeRetrieveResponse,
+    WebScannerRules as WebScannerRules,
+    type WebScannerRuleListResponse as WebScannerRuleListResponse,
+    type WebScannerRuleCreateResponse as WebScannerRuleCreateResponse,
+    type WebScannerRuleRetrieveResponse as WebScannerRuleRetrieveResponse,
+    type WebScannerRuleUpdateResponse as WebScannerRuleUpdateResponse,
+    type WebScannerRuleDeleteResponse as WebScannerRuleDeleteResponse,
+    type WebScannerRuleListParams as WebScannerRuleListParams,
+    type WebScannerRuleCreateParams as WebScannerRuleCreateParams,
+    type WebScannerRuleUpdateParams as WebScannerRuleUpdateParams,
+  };
+
+  export {
+    WebScanners as WebScanners,
+    type WebScannerListResponse as WebScannerListResponse,
+    type WebScannerCreateResponse as WebScannerCreateResponse,
+    type WebScannerRetrieveResponse as WebScannerRetrieveResponse,
+    type WebScannerUpdateResponse as WebScannerUpdateResponse,
+    type WebScannerDeleteResponse as WebScannerDeleteResponse,
+    type WebScannerTriggerResponse as WebScannerTriggerResponse,
+    type WebScannerCreateParams as WebScannerCreateParams,
+    type WebScannerUpdateParams as WebScannerUpdateParams,
   };
 }

@@ -7,9 +7,9 @@ const client = new OursPrivacyPlatform({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource destinations', () => {
+describe('resource webScanners', () => {
   test('list', async () => {
-    const responsePromise = client.destinations.list();
+    const responsePromise = client.webScanners.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -19,23 +19,8 @@ describe('resource destinations', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.destinations.list(
-        {
-          cursor: 'cursor',
-          limit: 25,
-          status: 'Disabled',
-          type: 'AWSEventBridge',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
-  });
-
   test('create: only required params', async () => {
-    const responsePromise = client.destinations.create({ type: 'Audiohook' });
+    const responsePromise = client.webScanners.create({ rootDomain: 'x' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -46,15 +31,18 @@ describe('resource destinations', () => {
   });
 
   test('create: required and optional params', async () => {
-    const response = await client.destinations.create({
-      type: 'Audiohook',
+    const response = await client.webScanners.create({
+      rootDomain: 'x',
+      excludedPatterns: ['string'],
+      includedUrls: ['string'],
       name: 'name',
-      settings: {},
+      status: 'Disabled',
+      urlLimit: 0,
     });
   });
 
   test('retrieve', async () => {
-    const responsePromise = client.destinations.retrieve('id');
+    const responsePromise = client.webScanners.retrieve('id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -65,7 +53,7 @@ describe('resource destinations', () => {
   });
 
   test('update', async () => {
-    const responsePromise = client.destinations.update('id', {});
+    const responsePromise = client.webScanners.update('id', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -76,7 +64,18 @@ describe('resource destinations', () => {
   });
 
   test('delete', async () => {
-    const responsePromise = client.destinations.delete('id');
+    const responsePromise = client.webScanners.delete('id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('trigger', async () => {
+    const responsePromise = client.webScanners.trigger('id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

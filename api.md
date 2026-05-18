@@ -34,6 +34,18 @@ Methods:
 - <code title="patch /rest/v1/consent-settings/{id}">client.consentSettings.<a href="./src/resources/consent-settings.ts">update</a>(id, { ...params }) -> ConsentSettingUpdateResponse</code>
 - <code title="delete /rest/v1/consent-settings/{id}">client.consentSettings.<a href="./src/resources/consent-settings.ts">delete</a>(id) -> ConsentSettingDeleteResponse</code>
 
+# DestinationTypes
+
+Types:
+
+- <code><a href="./src/resources/destination-types.ts">DestinationTypeListResponse</a></code>
+- <code><a href="./src/resources/destination-types.ts">DestinationTypeRetrieveResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/destination-types">client.destinationTypes.<a href="./src/resources/destination-types.ts">list</a>() -> DestinationTypeListResponse</code>
+- <code title="get /rest/v1/destination-types/{id}">client.destinationTypes.<a href="./src/resources/destination-types.ts">retrieve</a>(id) -> DestinationTypeRetrieveResponse</code>
+
 # Destinations
 
 Types:
@@ -46,7 +58,7 @@ Types:
 
 Methods:
 
-- <code title="get /rest/v1/destinations">client.destinations.<a href="./src/resources/destinations.ts">list</a>() -> DestinationListResponse</code>
+- <code title="get /rest/v1/destinations">client.destinations.<a href="./src/resources/destinations.ts">list</a>({ ...params }) -> DestinationListResponsesCursor</code>
 - <code title="post /rest/v1/destinations">client.destinations.<a href="./src/resources/destinations.ts">create</a>({ ...params }) -> DestinationCreateResponse</code>
 - <code title="get /rest/v1/destinations/{id}">client.destinations.<a href="./src/resources/destinations.ts">retrieve</a>(id) -> DestinationRetrieveResponse</code>
 - <code title="patch /rest/v1/destinations/{id}">client.destinations.<a href="./src/resources/destinations.ts">update</a>(id, { ...params }) -> DestinationUpdateResponse</code>
@@ -150,6 +162,22 @@ Methods:
 - <code title="get /rest/v1/heatmap-pages">client.heatmapPages.<a href="./src/resources/heatmap-pages.ts">list</a>({ ...params }) -> HeatmapPageListResponsesCursor</code>
 - <code title="get /rest/v1/heatmap-pages/summary">client.heatmapPages.<a href="./src/resources/heatmap-pages.ts">summary</a>({ ...params }) -> HeatmapPageSummaryResponse</code>
 
+# Locations
+
+Types:
+
+- <code><a href="./src/resources/locations.ts">LocationListResponse</a></code>
+- <code><a href="./src/resources/locations.ts">LocationCreateResponse</a></code>
+- <code><a href="./src/resources/locations.ts">LocationUpdateResponse</a></code>
+- <code><a href="./src/resources/locations.ts">LocationEmbedCodeResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/locations">client.locations.<a href="./src/resources/locations.ts">list</a>() -> LocationListResponse</code>
+- <code title="post /rest/v1/locations">client.locations.<a href="./src/resources/locations.ts">create</a>({ ...params }) -> LocationCreateResponse</code>
+- <code title="patch /rest/v1/locations/{id}">client.locations.<a href="./src/resources/locations.ts">update</a>(id, { ...params }) -> LocationUpdateResponse</code>
+- <code title="get /rest/v1/locations/{id}/embed-code">client.locations.<a href="./src/resources/locations.ts">embedCode</a>(id, { ...params }) -> LocationEmbedCodeResponse</code>
+
 # Mappings
 
 Types:
@@ -228,14 +256,40 @@ Methods:
 - <code title="get /rest/v1/versions/{id}/snapshot">client.versions.<a href="./src/resources/versions.ts">snapshot</a>(id) -> VersionSnapshotResponse</code>
 - <code title="get /rest/v1/versions/{id}/diff">client.versions.<a href="./src/resources/versions.ts">diff</a>(id, { ...params }) -> VersionDiffResponse</code>
 
-# DestinationTypes
+# WebScannerRules
 
 Types:
 
-- <code><a href="./src/resources/destination-types.ts">DestinationTypeListResponse</a></code>
-- <code><a href="./src/resources/destination-types.ts">DestinationTypeRetrieveResponse</a></code>
+- <code><a href="./src/resources/web-scanner-rules.ts">WebScannerRuleListResponse</a></code>
+- <code><a href="./src/resources/web-scanner-rules.ts">WebScannerRuleCreateResponse</a></code>
+- <code><a href="./src/resources/web-scanner-rules.ts">WebScannerRuleRetrieveResponse</a></code>
+- <code><a href="./src/resources/web-scanner-rules.ts">WebScannerRuleUpdateResponse</a></code>
+- <code><a href="./src/resources/web-scanner-rules.ts">WebScannerRuleDeleteResponse</a></code>
 
 Methods:
 
-- <code title="get /rest/v1/destination-types">client.destinationTypes.<a href="./src/resources/destination-types.ts">list</a>() -> DestinationTypeListResponse</code>
-- <code title="get /rest/v1/destination-types/{id}">client.destinationTypes.<a href="./src/resources/destination-types.ts">retrieve</a>(id) -> DestinationTypeRetrieveResponse</code>
+- <code title="get /rest/v1/web-scanner-rules">client.webScannerRules.<a href="./src/resources/web-scanner-rules.ts">list</a>({ ...params }) -> WebScannerRuleListResponse</code>
+- <code title="post /rest/v1/web-scanner-rules">client.webScannerRules.<a href="./src/resources/web-scanner-rules.ts">create</a>({ ...params }) -> WebScannerRuleCreateResponse</code>
+- <code title="get /rest/v1/web-scanner-rules/{id}">client.webScannerRules.<a href="./src/resources/web-scanner-rules.ts">retrieve</a>(id) -> WebScannerRuleRetrieveResponse</code>
+- <code title="patch /rest/v1/web-scanner-rules/{id}">client.webScannerRules.<a href="./src/resources/web-scanner-rules.ts">update</a>(id, { ...params }) -> WebScannerRuleUpdateResponse</code>
+- <code title="delete /rest/v1/web-scanner-rules/{id}">client.webScannerRules.<a href="./src/resources/web-scanner-rules.ts">delete</a>(id) -> WebScannerRuleDeleteResponse</code>
+
+# WebScanners
+
+Types:
+
+- <code><a href="./src/resources/web-scanners.ts">WebScannerListResponse</a></code>
+- <code><a href="./src/resources/web-scanners.ts">WebScannerCreateResponse</a></code>
+- <code><a href="./src/resources/web-scanners.ts">WebScannerRetrieveResponse</a></code>
+- <code><a href="./src/resources/web-scanners.ts">WebScannerUpdateResponse</a></code>
+- <code><a href="./src/resources/web-scanners.ts">WebScannerDeleteResponse</a></code>
+- <code><a href="./src/resources/web-scanners.ts">WebScannerTriggerResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/web-scanners">client.webScanners.<a href="./src/resources/web-scanners.ts">list</a>() -> WebScannerListResponse</code>
+- <code title="post /rest/v1/web-scanners">client.webScanners.<a href="./src/resources/web-scanners.ts">create</a>({ ...params }) -> WebScannerCreateResponse</code>
+- <code title="get /rest/v1/web-scanners/{id}">client.webScanners.<a href="./src/resources/web-scanners.ts">retrieve</a>(id) -> WebScannerRetrieveResponse</code>
+- <code title="patch /rest/v1/web-scanners/{id}">client.webScanners.<a href="./src/resources/web-scanners.ts">update</a>(id, { ...params }) -> WebScannerUpdateResponse</code>
+- <code title="delete /rest/v1/web-scanners/{id}">client.webScanners.<a href="./src/resources/web-scanners.ts">delete</a>(id) -> WebScannerDeleteResponse</code>
+- <code title="post /rest/v1/web-scanners/{id}/trigger">client.webScanners.<a href="./src/resources/web-scanners.ts">trigger</a>(id) -> WebScannerTriggerResponse</code>

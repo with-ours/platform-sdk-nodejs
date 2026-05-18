@@ -7,9 +7,9 @@ const client = new OursPrivacyPlatform({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource destinations', () => {
+describe('resource locations', () => {
   test('list', async () => {
-    const responsePromise = client.destinations.list();
+    const responsePromise = client.locations.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -19,42 +19,8 @@ describe('resource destinations', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.destinations.list(
-        {
-          cursor: 'cursor',
-          limit: 25,
-          status: 'Disabled',
-          type: 'AWSEventBridge',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
-  });
-
-  test('create: only required params', async () => {
-    const responsePromise = client.destinations.create({ type: 'Audiohook' });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('create: required and optional params', async () => {
-    const response = await client.destinations.create({
-      type: 'Audiohook',
-      name: 'name',
-      settings: {},
-    });
-  });
-
-  test('retrieve', async () => {
-    const responsePromise = client.destinations.retrieve('id');
+  test('create', async () => {
+    const responsePromise = client.locations.create({});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -65,7 +31,7 @@ describe('resource destinations', () => {
   });
 
   test('update', async () => {
-    const responsePromise = client.destinations.update('id', {});
+    const responsePromise = client.locations.update('id', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -75,8 +41,8 @@ describe('resource destinations', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('delete', async () => {
-    const responsePromise = client.destinations.delete('id');
+  test('embedCode', async () => {
+    const responsePromise = client.locations.embedCode('id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -84,5 +50,25 @@ describe('resource destinations', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('embedCode: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.locations.embedCode(
+        'id',
+        {
+          color: '#B33E3E',
+          colorScheme: 'light',
+          includeAddressBox: true,
+          includeControls: 'yes',
+          includeSEOSchema: true,
+          mapStyle: 'Standard',
+          theme: 'default',
+          zoom: 1,
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
   });
 });

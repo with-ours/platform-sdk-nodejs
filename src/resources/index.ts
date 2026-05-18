@@ -31,8 +31,10 @@ export {
   type DestinationRetrieveResponse,
   type DestinationUpdateResponse,
   type DestinationDeleteResponse,
+  type DestinationListParams,
   type DestinationCreateParams,
   type DestinationUpdateParams,
+  type DestinationListResponsesCursor,
 } from './destinations';
 export {
   ExperimentSettings,
@@ -103,6 +105,16 @@ export {
   type HeatmapPageListResponsesCursor,
 } from './heatmap-pages';
 export {
+  Locations,
+  type LocationListResponse,
+  type LocationCreateResponse,
+  type LocationUpdateResponse,
+  type LocationEmbedCodeResponse,
+  type LocationCreateParams,
+  type LocationUpdateParams,
+  type LocationEmbedCodeParams,
+} from './locations';
+export {
   Mappings,
   type MappingListResponse,
   type MappingCreateResponse,
@@ -152,3 +164,25 @@ export {
   type VersionDiffParams,
   type VersionListResponsesCursor,
 } from './versions';
+export {
+  WebScannerRules,
+  type WebScannerRuleListResponse,
+  type WebScannerRuleCreateResponse,
+  type WebScannerRuleRetrieveResponse,
+  type WebScannerRuleUpdateResponse,
+  type WebScannerRuleDeleteResponse,
+  type WebScannerRuleListParams,
+  type WebScannerRuleCreateParams,
+  type WebScannerRuleUpdateParams,
+} from './web-scanner-rules';
+export {
+  WebScanners,
+  type WebScannerListResponse,
+  type WebScannerCreateResponse,
+  type WebScannerRetrieveResponse,
+  type WebScannerUpdateResponse,
+  type WebScannerDeleteResponse,
+  type WebScannerTriggerResponse,
+  type WebScannerCreateParams,
+  type WebScannerUpdateParams,
+} from './web-scanners';
