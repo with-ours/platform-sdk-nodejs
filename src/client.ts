@@ -957,6 +957,7 @@ export class OursPrivacyPlatform {
 
   allowedEvents: API.AllowedEvents = new API.AllowedEvents(this);
   consentSettings: API.ConsentSettings = new API.ConsentSettings(this);
+  defaultMappings: API.DefaultMappings = new API.DefaultMappings(this);
   destinationTypes: API.DestinationTypes = new API.DestinationTypes(this);
   destinations: API.Destinations = new API.Destinations(this);
   experimentSettings: API.ExperimentSettings = new API.ExperimentSettings(this);
@@ -965,18 +966,18 @@ export class OursPrivacyPlatform {
   globalDispatchCenters: API.GlobalDispatchCenters = new API.GlobalDispatchCenters(this);
   heatmapPages: API.HeatmapPages = new API.HeatmapPages(this);
   locations: API.Locations = new API.Locations(this);
+  mappingTemplates: API.MappingTemplates = new API.MappingTemplates(this);
   mappings: API.Mappings = new API.Mappings(this);
   replaySettings: API.ReplaySettings = new API.ReplaySettings(this);
   sources: API.Sources = new API.Sources(this);
   versions: API.Versions = new API.Versions(this);
   webScannerRules: API.WebScannerRules = new API.WebScannerRules(this);
   webScanners: API.WebScanners = new API.WebScanners(this);
-  mappingTemplates: API.MappingTemplates = new API.MappingTemplates(this);
-  defaultMappings: API.DefaultMappings = new API.DefaultMappings(this);
 }
 
 OursPrivacyPlatform.AllowedEvents = AllowedEvents;
 OursPrivacyPlatform.ConsentSettings = ConsentSettings;
+OursPrivacyPlatform.DefaultMappings = DefaultMappings;
 OursPrivacyPlatform.DestinationTypes = DestinationTypes;
 OursPrivacyPlatform.Destinations = Destinations;
 OursPrivacyPlatform.ExperimentSettings = ExperimentSettings;
@@ -985,14 +986,13 @@ OursPrivacyPlatform.Experiments = Experiments;
 OursPrivacyPlatform.GlobalDispatchCenters = GlobalDispatchCenters;
 OursPrivacyPlatform.HeatmapPages = HeatmapPages;
 OursPrivacyPlatform.Locations = Locations;
+OursPrivacyPlatform.MappingTemplates = MappingTemplates;
 OursPrivacyPlatform.Mappings = Mappings;
 OursPrivacyPlatform.ReplaySettings = ReplaySettings;
 OursPrivacyPlatform.Sources = Sources;
 OursPrivacyPlatform.Versions = Versions;
 OursPrivacyPlatform.WebScannerRules = WebScannerRules;
 OursPrivacyPlatform.WebScanners = WebScanners;
-OursPrivacyPlatform.MappingTemplates = MappingTemplates;
-OursPrivacyPlatform.DefaultMappings = DefaultMappings;
 
 export declare namespace OursPrivacyPlatform {
   export type RequestOptions = Opts.RequestOptions;
@@ -1019,6 +1019,14 @@ export declare namespace OursPrivacyPlatform {
     type ConsentSettingDeleteResponse as ConsentSettingDeleteResponse,
     type ConsentSettingReplaceParams as ConsentSettingReplaceParams,
     type ConsentSettingUpdateParams as ConsentSettingUpdateParams,
+  };
+
+  export {
+    DefaultMappings as DefaultMappings,
+    type DefaultMappingListResponse as DefaultMappingListResponse,
+    type DefaultMappingRetrieveResponse as DefaultMappingRetrieveResponse,
+    type DefaultMappingReplaceResponse as DefaultMappingReplaceResponse,
+    type DefaultMappingReplaceParams as DefaultMappingReplaceParams,
   };
 
   export {
@@ -1125,6 +1133,12 @@ export declare namespace OursPrivacyPlatform {
   };
 
   export {
+    MappingTemplates as MappingTemplates,
+    type MappingTemplateListResponse as MappingTemplateListResponse,
+    type MappingTemplateListParams as MappingTemplateListParams,
+  };
+
+  export {
     Mappings as Mappings,
     type MappingListResponse as MappingListResponse,
     type MappingCreateResponse as MappingCreateResponse,
@@ -1202,19 +1216,5 @@ export declare namespace OursPrivacyPlatform {
     type WebScannerTriggerResponse as WebScannerTriggerResponse,
     type WebScannerCreateParams as WebScannerCreateParams,
     type WebScannerUpdateParams as WebScannerUpdateParams,
-  };
-
-  export {
-    MappingTemplates as MappingTemplates,
-    type MappingTemplateListResponse as MappingTemplateListResponse,
-    type MappingTemplateListParams as MappingTemplateListParams,
-  };
-
-  export {
-    DefaultMappings as DefaultMappings,
-    type DefaultMappingListResponse as DefaultMappingListResponse,
-    type DefaultMappingRetrieveResponse as DefaultMappingRetrieveResponse,
-    type DefaultMappingReplaceResponse as DefaultMappingReplaceResponse,
-    type DefaultMappingReplaceParams as DefaultMappingReplaceParams,
   };
 }
