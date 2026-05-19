@@ -20,6 +20,13 @@ export {
   type ConsentSettingUpdateParams,
 } from './consent-settings';
 export {
+  DefaultMappings,
+  type DefaultMappingListResponse,
+  type DefaultMappingRetrieveResponse,
+  type DefaultMappingReplaceResponse,
+  type DefaultMappingReplaceParams,
+} from './default-mappings';
+export {
   DestinationTypes,
   type DestinationTypeListResponse,
   type DestinationTypeRetrieveResponse,
@@ -115,15 +122,22 @@ export {
   type LocationEmbedCodeParams,
 } from './locations';
 export {
+  MappingTemplates,
+  type MappingTemplateListResponse,
+  type MappingTemplateListParams,
+} from './mapping-templates';
+export {
   Mappings,
   type MappingListResponse,
   type MappingCreateResponse,
   type MappingRetrieveResponse,
   type MappingUpdateResponse,
   type MappingDeleteResponse,
+  type MappingReorderResponse,
   type MappingListParams,
   type MappingCreateParams,
   type MappingUpdateParams,
+  type MappingReorderParams,
   type MappingListResponsesCursor,
 } from './mappings';
 export {

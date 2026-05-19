@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.21.0 (2026-05-19)
+
+Full Changelog: [v1.20.0...v1.21.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.20.0...v1.21.0)
+
+### Features
+
+* **api:** api update ([5204e24](https://github.com/with-ours/platform-sdk-nodejs/commit/5204e24b4291f503a19963dd27524dd0f8791a47))
+
+
+### Bug Fixes
+
+* **typescript:** upgrade tsc-multi so that it works with Node 26 ([bb7bea1](https://github.com/with-ours/platform-sdk-nodejs/commit/bb7bea14890c54b902ed537d4d23a60337b4879b))
+
+
+### Chores
+
+* **tests:** remove redundant File import ([bda0a1f](https://github.com/with-ours/platform-sdk-nodejs/commit/bda0a1f34fd38cd79be45e069e4d1fe14311da2c))
+
 ## 1.20.0 (2026-05-18)
 
 Full Changelog: [v1.19.0...v1.20.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.19.0...v1.20.0)
