@@ -39,6 +39,13 @@ import {
   ConsentSettings,
 } from './resources/consent-settings';
 import {
+  DefaultMappingListResponse,
+  DefaultMappingReplaceParams,
+  DefaultMappingReplaceResponse,
+  DefaultMappingRetrieveResponse,
+  DefaultMappings,
+} from './resources/default-mappings';
+import {
   DestinationTypeListResponse,
   DestinationTypeRetrieveResponse,
   DestinationTypes,
@@ -134,12 +141,19 @@ import {
   Locations,
 } from './resources/locations';
 import {
+  MappingTemplateListParams,
+  MappingTemplateListResponse,
+  MappingTemplates,
+} from './resources/mapping-templates';
+import {
   MappingCreateParams,
   MappingCreateResponse,
   MappingDeleteResponse,
   MappingListParams,
   MappingListResponse,
   MappingListResponsesCursor,
+  MappingReorderParams,
+  MappingReorderResponse,
   MappingRetrieveResponse,
   MappingUpdateParams,
   MappingUpdateResponse,
@@ -957,6 +971,8 @@ export class OursPrivacyPlatform {
   versions: API.Versions = new API.Versions(this);
   webScannerRules: API.WebScannerRules = new API.WebScannerRules(this);
   webScanners: API.WebScanners = new API.WebScanners(this);
+  mappingTemplates: API.MappingTemplates = new API.MappingTemplates(this);
+  defaultMappings: API.DefaultMappings = new API.DefaultMappings(this);
 }
 
 OursPrivacyPlatform.AllowedEvents = AllowedEvents;
@@ -975,6 +991,8 @@ OursPrivacyPlatform.Sources = Sources;
 OursPrivacyPlatform.Versions = Versions;
 OursPrivacyPlatform.WebScannerRules = WebScannerRules;
 OursPrivacyPlatform.WebScanners = WebScanners;
+OursPrivacyPlatform.MappingTemplates = MappingTemplates;
+OursPrivacyPlatform.DefaultMappings = DefaultMappings;
 
 export declare namespace OursPrivacyPlatform {
   export type RequestOptions = Opts.RequestOptions;
@@ -1113,10 +1131,12 @@ export declare namespace OursPrivacyPlatform {
     type MappingRetrieveResponse as MappingRetrieveResponse,
     type MappingUpdateResponse as MappingUpdateResponse,
     type MappingDeleteResponse as MappingDeleteResponse,
+    type MappingReorderResponse as MappingReorderResponse,
     type MappingListResponsesCursor as MappingListResponsesCursor,
     type MappingListParams as MappingListParams,
     type MappingCreateParams as MappingCreateParams,
     type MappingUpdateParams as MappingUpdateParams,
+    type MappingReorderParams as MappingReorderParams,
   };
 
   export {
@@ -1182,5 +1202,19 @@ export declare namespace OursPrivacyPlatform {
     type WebScannerTriggerResponse as WebScannerTriggerResponse,
     type WebScannerCreateParams as WebScannerCreateParams,
     type WebScannerUpdateParams as WebScannerUpdateParams,
+  };
+
+  export {
+    MappingTemplates as MappingTemplates,
+    type MappingTemplateListResponse as MappingTemplateListResponse,
+    type MappingTemplateListParams as MappingTemplateListParams,
+  };
+
+  export {
+    DefaultMappings as DefaultMappings,
+    type DefaultMappingListResponse as DefaultMappingListResponse,
+    type DefaultMappingRetrieveResponse as DefaultMappingRetrieveResponse,
+    type DefaultMappingReplaceResponse as DefaultMappingReplaceResponse,
+    type DefaultMappingReplaceParams as DefaultMappingReplaceParams,
   };
 }
