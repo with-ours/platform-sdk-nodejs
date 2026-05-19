@@ -27,17 +27,13 @@ export {
   type DefaultMappingReplaceParams,
 } from './default-mappings';
 export {
-  DestinationTypes,
-  type DestinationTypeListResponse,
-  type DestinationTypeRetrieveResponse,
-} from './destination-types';
-export {
   Destinations,
   type DestinationListResponse,
   type DestinationCreateResponse,
   type DestinationRetrieveResponse,
   type DestinationUpdateResponse,
   type DestinationDeleteResponse,
+  type DestinationTypesResponse,
   type DestinationListParams,
   type DestinationCreateParams,
   type DestinationUpdateParams,
@@ -122,11 +118,6 @@ export {
   type LocationEmbedCodeParams,
 } from './locations';
 export {
-  MappingTemplates,
-  type MappingTemplateListResponse,
-  type MappingTemplateListParams,
-} from './mapping-templates';
-export {
   Mappings,
   type MappingListResponse,
   type MappingCreateResponse,
@@ -134,10 +125,15 @@ export {
   type MappingUpdateResponse,
   type MappingDeleteResponse,
   type MappingReorderResponse,
+  type MappingTemplatesResponse,
+  type MappingDefaultVariablesResponse,
+  type MappingCustomVariablesResponse,
+  type MappingModificationsResponse,
   type MappingListParams,
   type MappingCreateParams,
   type MappingUpdateParams,
   type MappingReorderParams,
+  type MappingTemplatesParams,
   type MappingListResponsesCursor,
 } from './mappings';
 export {
