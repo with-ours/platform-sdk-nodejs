@@ -46,11 +46,6 @@ import {
   DefaultMappings,
 } from './resources/default-mappings';
 import {
-  DestinationTypeListResponse,
-  DestinationTypeRetrieveResponse,
-  DestinationTypes,
-} from './resources/destination-types';
-import {
   DestinationCreateParams,
   DestinationCreateResponse,
   DestinationDeleteResponse,
@@ -58,6 +53,7 @@ import {
   DestinationListResponse,
   DestinationListResponsesCursor,
   DestinationRetrieveResponse,
+  DestinationTypesResponse,
   DestinationUpdateParams,
   DestinationUpdateResponse,
   Destinations,
@@ -141,20 +137,20 @@ import {
   Locations,
 } from './resources/locations';
 import {
-  MappingTemplateListParams,
-  MappingTemplateListResponse,
-  MappingTemplates,
-} from './resources/mapping-templates';
-import {
   MappingCreateParams,
   MappingCreateResponse,
+  MappingCustomVariablesResponse,
+  MappingDefaultVariablesResponse,
   MappingDeleteResponse,
   MappingListParams,
   MappingListResponse,
   MappingListResponsesCursor,
+  MappingModificationsResponse,
   MappingReorderParams,
   MappingReorderResponse,
   MappingRetrieveResponse,
+  MappingTemplatesParams,
+  MappingTemplatesResponse,
   MappingUpdateParams,
   MappingUpdateResponse,
   Mappings,
@@ -957,7 +953,7 @@ export class OursPrivacyPlatform {
 
   allowedEvents: API.AllowedEvents = new API.AllowedEvents(this);
   consentSettings: API.ConsentSettings = new API.ConsentSettings(this);
-  destinationTypes: API.DestinationTypes = new API.DestinationTypes(this);
+  defaultMappings: API.DefaultMappings = new API.DefaultMappings(this);
   destinations: API.Destinations = new API.Destinations(this);
   experimentSettings: API.ExperimentSettings = new API.ExperimentSettings(this);
   experimentVariants: API.ExperimentVariants = new API.ExperimentVariants(this);
@@ -971,13 +967,11 @@ export class OursPrivacyPlatform {
   versions: API.Versions = new API.Versions(this);
   webScannerRules: API.WebScannerRules = new API.WebScannerRules(this);
   webScanners: API.WebScanners = new API.WebScanners(this);
-  mappingTemplates: API.MappingTemplates = new API.MappingTemplates(this);
-  defaultMappings: API.DefaultMappings = new API.DefaultMappings(this);
 }
 
 OursPrivacyPlatform.AllowedEvents = AllowedEvents;
 OursPrivacyPlatform.ConsentSettings = ConsentSettings;
-OursPrivacyPlatform.DestinationTypes = DestinationTypes;
+OursPrivacyPlatform.DefaultMappings = DefaultMappings;
 OursPrivacyPlatform.Destinations = Destinations;
 OursPrivacyPlatform.ExperimentSettings = ExperimentSettings;
 OursPrivacyPlatform.ExperimentVariants = ExperimentVariants;
@@ -991,8 +985,6 @@ OursPrivacyPlatform.Sources = Sources;
 OursPrivacyPlatform.Versions = Versions;
 OursPrivacyPlatform.WebScannerRules = WebScannerRules;
 OursPrivacyPlatform.WebScanners = WebScanners;
-OursPrivacyPlatform.MappingTemplates = MappingTemplates;
-OursPrivacyPlatform.DefaultMappings = DefaultMappings;
 
 export declare namespace OursPrivacyPlatform {
   export type RequestOptions = Opts.RequestOptions;
@@ -1022,9 +1014,11 @@ export declare namespace OursPrivacyPlatform {
   };
 
   export {
-    DestinationTypes as DestinationTypes,
-    type DestinationTypeListResponse as DestinationTypeListResponse,
-    type DestinationTypeRetrieveResponse as DestinationTypeRetrieveResponse,
+    DefaultMappings as DefaultMappings,
+    type DefaultMappingListResponse as DefaultMappingListResponse,
+    type DefaultMappingRetrieveResponse as DefaultMappingRetrieveResponse,
+    type DefaultMappingReplaceResponse as DefaultMappingReplaceResponse,
+    type DefaultMappingReplaceParams as DefaultMappingReplaceParams,
   };
 
   export {
@@ -1034,6 +1028,7 @@ export declare namespace OursPrivacyPlatform {
     type DestinationRetrieveResponse as DestinationRetrieveResponse,
     type DestinationUpdateResponse as DestinationUpdateResponse,
     type DestinationDeleteResponse as DestinationDeleteResponse,
+    type DestinationTypesResponse as DestinationTypesResponse,
     type DestinationListResponsesCursor as DestinationListResponsesCursor,
     type DestinationListParams as DestinationListParams,
     type DestinationCreateParams as DestinationCreateParams,
@@ -1132,11 +1127,16 @@ export declare namespace OursPrivacyPlatform {
     type MappingUpdateResponse as MappingUpdateResponse,
     type MappingDeleteResponse as MappingDeleteResponse,
     type MappingReorderResponse as MappingReorderResponse,
+    type MappingTemplatesResponse as MappingTemplatesResponse,
+    type MappingDefaultVariablesResponse as MappingDefaultVariablesResponse,
+    type MappingCustomVariablesResponse as MappingCustomVariablesResponse,
+    type MappingModificationsResponse as MappingModificationsResponse,
     type MappingListResponsesCursor as MappingListResponsesCursor,
     type MappingListParams as MappingListParams,
     type MappingCreateParams as MappingCreateParams,
     type MappingUpdateParams as MappingUpdateParams,
     type MappingReorderParams as MappingReorderParams,
+    type MappingTemplatesParams as MappingTemplatesParams,
   };
 
   export {
@@ -1202,19 +1202,5 @@ export declare namespace OursPrivacyPlatform {
     type WebScannerTriggerResponse as WebScannerTriggerResponse,
     type WebScannerCreateParams as WebScannerCreateParams,
     type WebScannerUpdateParams as WebScannerUpdateParams,
-  };
-
-  export {
-    MappingTemplates as MappingTemplates,
-    type MappingTemplateListResponse as MappingTemplateListResponse,
-    type MappingTemplateListParams as MappingTemplateListParams,
-  };
-
-  export {
-    DefaultMappings as DefaultMappings,
-    type DefaultMappingListResponse as DefaultMappingListResponse,
-    type DefaultMappingRetrieveResponse as DefaultMappingRetrieveResponse,
-    type DefaultMappingReplaceResponse as DefaultMappingReplaceResponse,
-    type DefaultMappingReplaceParams as DefaultMappingReplaceParams,
   };
 }
