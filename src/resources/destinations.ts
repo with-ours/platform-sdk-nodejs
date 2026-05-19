@@ -54,6 +54,18 @@ export class Destinations extends APIResource {
   delete(id: string, options?: RequestOptions): APIPromise<DestinationDeleteResponse> {
     return this._client.delete(path`/rest/v1/destinations/${id}`, options);
   }
+
+  /**
+   * Lists every destination type the platform supports, with its human-readable
+   * label, capability flags (oauth, listsAccounts, supportsRenamedEvents), and the
+   * settings descriptor used to configure a destination of that type.
+   * Account-agnostic — the response is the same for every API key. Filter
+   * client-side to find a specific type (e.g. `Klaviyo`, `Facebook`). Requires
+   * scope: destination:list
+   */
+  types(options?: RequestOptions): APIPromise<DestinationTypesResponse> {
+    return this._client.get('/rest/v1/destinations/types', options);
+  }
 }
 
 export type DestinationListResponsesCursor = Cursor<DestinationListResponse>;
@@ -456,6 +468,178 @@ export interface DestinationUpdateResponse {
 
 export type DestinationDeleteResponse = boolean;
 
+export interface DestinationTypesResponse {
+  entities: Array<DestinationTypesResponse.Entity>;
+}
+
+export namespace DestinationTypesResponse {
+  export interface Entity {
+    id:
+      | 'Audiohook'
+      | 'BasisPostback'
+      | 'OursSyntheticData'
+      | 'FullContact'
+      | 'ZoomInfo'
+      | 'TheTradeDesk'
+      | 'Braze'
+      | 'LiveIntent'
+      | 'ConvertABTestingEvent'
+      | 'Customerio'
+      | 'BingAds'
+      | 'BingAdsWeb'
+      | 'HTTPDestination'
+      | 'Woopra'
+      | 'HTTPCustomRequest'
+      | 'Google'
+      | 'GoogleAdsServerContainer'
+      | 'G4Analytics'
+      | 'GA4ServerProxy'
+      | 'GA4MeasurementProtocol'
+      | 'GoogleAds360'
+      | 'Facebook'
+      | 'Mixpanel'
+      | 'Amplitude'
+      | 'TikTok'
+      | 'Reddit'
+      | 'Podscribe'
+      | 'Pinterest'
+      | 'Mailchimp'
+      | 'AWSKinesis'
+      | 'AWSLambda'
+      | 'GooglePubSub'
+      | 'LinkedInAdsCAPI'
+      | 'ActiveCampaignApi'
+      | 'StackAdaptAPI'
+      | 'Hubspot'
+      | 'Klaviyo'
+      | 'XAds'
+      | 'QuoraAds'
+      | 'SnapchatAdsCapi'
+      | 'Partnerize'
+      | 'NextdoorAds'
+      | 'Tatari'
+      | 'Viant'
+      | 'Impact'
+      | 'Spotify'
+      | 'Taboola'
+      | 'AmazonDSP'
+      | 'AppLovin'
+      | 'IHeartMediaMagellan'
+      | 'Vibe'
+      | 'GoogleDataManagerEventIngest'
+      | 'Zendesk'
+      | 'Iterable'
+      | 'ArtsAI'
+      | 'QuantcastCAPI'
+      | 'FloodlightSGTM'
+      | 'VWO'
+      | 'Attentive'
+      | 'Admitad'
+      | 'Plausible'
+      | 'PostHog'
+      | 'RokuCAPI'
+      | 'Everflow'
+      | 'BeeswaxPostback'
+      | 'AdobeAnalytics';
+
+    capabilities: Entity.Capabilities;
+
+    label: string;
+
+    settings: Array<
+      | Entity.UnionMember0
+      | Entity.UnionMember1
+      | Entity.UnionMember2
+      | Entity.UnionMember3
+      | Entity.UnionMember4
+    >;
+
+    status: 'deprecated' | 'ga';
+  }
+
+  export namespace Entity {
+    export interface Capabilities {
+      listsAccounts: boolean;
+
+      oauth: boolean;
+
+      supportsRenamedEvents: boolean;
+    }
+
+    export interface UnionMember0 {
+      key: string;
+
+      /**
+       * Informational display message only. Do not send this key in POST or PATCH
+       * settings.
+       */
+      label: string;
+
+      type: 'Alert';
+    }
+
+    export interface UnionMember1 {
+      key: string;
+
+      label: string;
+
+      options: Array<UnionMember1.Option>;
+
+      type: 'Select';
+
+      required?: boolean | null;
+
+      sublabel?: string | null;
+    }
+
+    export namespace UnionMember1 {
+      export interface Option {
+        label: string;
+
+        value: string;
+      }
+    }
+
+    export interface UnionMember2 {
+      key: string;
+
+      label: string;
+
+      type: 'Switch';
+
+      defaultValue?: boolean | null;
+
+      required?: boolean | null;
+
+      sublabel?: string | null;
+    }
+
+    export interface UnionMember3 {
+      key: string;
+
+      label: string;
+
+      type: 'GenericOauth';
+
+      sublabel?: string | null;
+    }
+
+    export interface UnionMember4 {
+      key: string;
+
+      label: string;
+
+      placeholder: string;
+
+      type: 'Text' | 'Secret';
+
+      required?: boolean | null;
+
+      sublabel?: string | null;
+    }
+  }
+}
+
 export interface DestinationListParams extends CursorParams {
   /**
    * Filter destinations by status.
@@ -620,8 +804,8 @@ export interface DestinationCreateParams {
   name?: string | null;
 
   /**
-   * Per-type configuration keys and values. Call GET /rest/v1/destination-types/{id}
-   * to get the valid keys for your destination type.
+   * Per-type configuration keys and values. Call GET /rest/v1/destinations/types to
+   * get the valid keys for your destination type.
    */
   settings?: unknown | null;
 }
@@ -634,8 +818,8 @@ export interface DestinationUpdateParams {
   name?: string | null;
 
   /**
-   * Per-type configuration keys and values. Call GET /rest/v1/destination-types/{id}
-   * to get the valid keys for your destination type.
+   * Per-type configuration keys and values. Call GET /rest/v1/destinations/types to
+   * get the valid keys for your destination type.
    */
   settings?: unknown | null;
 
@@ -649,6 +833,7 @@ export declare namespace Destinations {
     type DestinationRetrieveResponse as DestinationRetrieveResponse,
     type DestinationUpdateResponse as DestinationUpdateResponse,
     type DestinationDeleteResponse as DestinationDeleteResponse,
+    type DestinationTypesResponse as DestinationTypesResponse,
     type DestinationListResponsesCursor as DestinationListResponsesCursor,
     type DestinationListParams as DestinationListParams,
     type DestinationCreateParams as DestinationCreateParams,

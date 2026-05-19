@@ -46,11 +46,6 @@ import {
   DefaultMappings,
 } from './resources/default-mappings';
 import {
-  DestinationTypeListResponse,
-  DestinationTypeRetrieveResponse,
-  DestinationTypes,
-} from './resources/destination-types';
-import {
   DestinationCreateParams,
   DestinationCreateResponse,
   DestinationDeleteResponse,
@@ -58,6 +53,7 @@ import {
   DestinationListResponse,
   DestinationListResponsesCursor,
   DestinationRetrieveResponse,
+  DestinationTypesResponse,
   DestinationUpdateParams,
   DestinationUpdateResponse,
   Destinations,
@@ -141,20 +137,20 @@ import {
   Locations,
 } from './resources/locations';
 import {
-  MappingTemplateListParams,
-  MappingTemplateListResponse,
-  MappingTemplates,
-} from './resources/mapping-templates';
-import {
   MappingCreateParams,
   MappingCreateResponse,
+  MappingCustomVariablesResponse,
+  MappingDefaultVariablesResponse,
   MappingDeleteResponse,
   MappingListParams,
   MappingListResponse,
   MappingListResponsesCursor,
+  MappingModificationsResponse,
   MappingReorderParams,
   MappingReorderResponse,
   MappingRetrieveResponse,
+  MappingTemplatesParams,
+  MappingTemplatesResponse,
   MappingUpdateParams,
   MappingUpdateResponse,
   Mappings,
@@ -971,8 +967,6 @@ export class OursPrivacyPlatform {
   versions: API.Versions = new API.Versions(this);
   webScannerRules: API.WebScannerRules = new API.WebScannerRules(this);
   webScanners: API.WebScanners = new API.WebScanners(this);
-  destinationTypes: API.DestinationTypes = new API.DestinationTypes(this);
-  mappingTemplates: API.MappingTemplates = new API.MappingTemplates(this);
 }
 
 OursPrivacyPlatform.AllowedEvents = AllowedEvents;
@@ -991,8 +985,6 @@ OursPrivacyPlatform.Sources = Sources;
 OursPrivacyPlatform.Versions = Versions;
 OursPrivacyPlatform.WebScannerRules = WebScannerRules;
 OursPrivacyPlatform.WebScanners = WebScanners;
-OursPrivacyPlatform.DestinationTypes = DestinationTypes;
-OursPrivacyPlatform.MappingTemplates = MappingTemplates;
 
 export declare namespace OursPrivacyPlatform {
   export type RequestOptions = Opts.RequestOptions;
@@ -1036,6 +1028,7 @@ export declare namespace OursPrivacyPlatform {
     type DestinationRetrieveResponse as DestinationRetrieveResponse,
     type DestinationUpdateResponse as DestinationUpdateResponse,
     type DestinationDeleteResponse as DestinationDeleteResponse,
+    type DestinationTypesResponse as DestinationTypesResponse,
     type DestinationListResponsesCursor as DestinationListResponsesCursor,
     type DestinationListParams as DestinationListParams,
     type DestinationCreateParams as DestinationCreateParams,
@@ -1134,11 +1127,16 @@ export declare namespace OursPrivacyPlatform {
     type MappingUpdateResponse as MappingUpdateResponse,
     type MappingDeleteResponse as MappingDeleteResponse,
     type MappingReorderResponse as MappingReorderResponse,
+    type MappingTemplatesResponse as MappingTemplatesResponse,
+    type MappingDefaultVariablesResponse as MappingDefaultVariablesResponse,
+    type MappingCustomVariablesResponse as MappingCustomVariablesResponse,
+    type MappingModificationsResponse as MappingModificationsResponse,
     type MappingListResponsesCursor as MappingListResponsesCursor,
     type MappingListParams as MappingListParams,
     type MappingCreateParams as MappingCreateParams,
     type MappingUpdateParams as MappingUpdateParams,
     type MappingReorderParams as MappingReorderParams,
+    type MappingTemplatesParams as MappingTemplatesParams,
   };
 
   export {
@@ -1204,17 +1202,5 @@ export declare namespace OursPrivacyPlatform {
     type WebScannerTriggerResponse as WebScannerTriggerResponse,
     type WebScannerCreateParams as WebScannerCreateParams,
     type WebScannerUpdateParams as WebScannerUpdateParams,
-  };
-
-  export {
-    DestinationTypes as DestinationTypes,
-    type DestinationTypeListResponse as DestinationTypeListResponse,
-    type DestinationTypeRetrieveResponse as DestinationTypeRetrieveResponse,
-  };
-
-  export {
-    MappingTemplates as MappingTemplates,
-    type MappingTemplateListResponse as MappingTemplateListResponse,
-    type MappingTemplateListParams as MappingTemplateListParams,
   };
 }

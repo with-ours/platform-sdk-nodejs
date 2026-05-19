@@ -72,6 +72,51 @@ export class Mappings extends APIResource {
   reorder(body: MappingReorderParams, options?: RequestOptions): APIPromise<MappingReorderResponse> {
     return this._client.post('/rest/v1/mappings/reorder', { body, ...options });
   }
+
+  /**
+   * Discover every mapping template available for a destination or source, with full
+   * property descriptors inlined. Use the returned `id` as `templateId` when calling
+   * `POST /rest/v1/mappings` (template fat-create variant), and use each entry under
+   * `mappings[]` to learn the valid `property`, `kind`, `modificationOptions`, and
+   * any enforced `options`. The `isDefault: true` entry is the destination's
+   * built-in default template (the one stored at `MAPPER#{destinationId}` when
+   * configured via `PUT /rest/v1/default-mappings/{destinationId}`). Requires scope:
+   * mapping:find
+   */
+  templates(query: MappingTemplatesParams, options?: RequestOptions): APIPromise<MappingTemplatesResponse> {
+    return this._client.get('/rest/v1/mappings/templates', { query, ...options });
+  }
+
+  /**
+   * Lists the platform-provided variables that any mapping `value` can reference
+   * (e.g. `event.email`, `event.request_context.ip`, `visitor.id`). Account-agnostic
+   * discovery — use these paths as the right-hand side of a mapping field. Requires
+   * scope: variables:find-default
+   */
+  defaultVariables(options?: RequestOptions): APIPromise<MappingDefaultVariablesResponse> {
+    return this._client.get('/rest/v1/mappings/default-variables', options);
+  }
+
+  /**
+   * Lists the custom variables observed in this account’s recent event stream (last
+   * 14 days). These are dot-paths under `event.event_properties.*` that callers can
+   * target in mapping `value` fields. The result is cached for 10 minutes; an empty
+   * list means no custom properties have been seen yet for this account. Requires
+   * scope: variables:find-custom
+   */
+  customVariables(options?: RequestOptions): APIPromise<MappingCustomVariablesResponse> {
+    return this._client.get('/rest/v1/mappings/custom-variables', options);
+  }
+
+  /**
+   * Lists every value accepted on a mapping field’s `modification` property, with a
+   * human-readable label and one-sentence description. Account-agnostic. Use this
+   * alongside `GET /rest/v1/mapping-templates` to render a labelled modification
+   * picker without hardcoding the enum. Requires scope: variables:find-default
+   */
+  modifications(options?: RequestOptions): APIPromise<MappingModificationsResponse> {
+    return this._client.get('/rest/v1/mappings/modifications', options);
+  }
 }
 
 export type MappingListResponsesCursor = Cursor<MappingListResponse>;
@@ -449,6 +494,292 @@ export namespace MappingReorderResponse {
   }
 }
 
+export interface MappingTemplatesResponse {
+  entities: Array<MappingTemplatesResponse.Entity>;
+}
+
+export namespace MappingTemplatesResponse {
+  export interface Entity {
+    /**
+     * Template identifier — pass to `POST /rest/v1/mappings` as `templateId`.
+     */
+    id: string;
+
+    /**
+     * True for the destination's built-in default template (the one stored at
+     * `MAPPER#{destinationId}` when configured). Sources only have one template; it is
+     * always default.
+     */
+    isDefault: boolean;
+
+    mappings: Array<Entity.Mapping>;
+
+    name: string;
+
+    description?: string | null;
+  }
+
+  export namespace Entity {
+    export interface Mapping {
+      /**
+       * Long-form description / tooltip for this property.
+       */
+      description: string | null;
+
+      isPII: boolean;
+
+      /**
+       * Type information for SDK validation (Text, Integer, Email, Url, IP, Object,
+       * KnownObject, Date, DateTime, Array, Boolean, JSON).
+       */
+      kind:
+        | 'Array'
+        | 'Boolean'
+        | 'Date'
+        | 'DateTime'
+        | 'Email'
+        | 'IP'
+        | 'Integer'
+        | 'JSON'
+        | 'KnownObject'
+        | 'Object'
+        | 'Text'
+        | 'Url';
+
+      /**
+       * Human-readable label (e.g. "Email", "Event Name").
+       */
+      label: string;
+
+      /**
+       * The template default source expression, e.g. `{{visitor.email}}`.
+       */
+      map: string;
+
+      /**
+       * The value to send as `mappings[].property` when creating or patching a mapping.
+       */
+      property: string;
+
+      required: boolean;
+
+      /**
+       * The template default modification (hashing / case / URL truncation).
+       */
+      modification?:
+        | 'CamelCase'
+        | 'DmaIP'
+        | 'DomainOnly'
+        | 'DomainPathOnly'
+        | 'DomainPathUTMs'
+        | 'DomainUTMs'
+        | 'FakeDomain'
+        | 'FakeDomainRealPath'
+        | 'FakeIP'
+        | 'FullUrl'
+        | 'Hash'
+        | 'HashMD5'
+        | 'HashedCountry'
+        | 'HashedDateOfBirth'
+        | 'HashedGender'
+        | 'HashedNormalized'
+        | 'HashedNormalizedNoSpecialChars'
+        | 'HashedPhone'
+        | 'HashedState'
+        | 'HashedZip'
+        | 'KebabCase'
+        | 'LowerCase'
+        | 'None'
+        | 'Null'
+        | 'Redacted'
+        | 'RegionalIP'
+        | 'SnakeCase'
+        | 'StartCase'
+        | 'UpperCase'
+        | null;
+
+      /**
+       * Suggested modification options for this property. Not a whitelist.
+       */
+      modificationOptions?: Array<
+        | 'CamelCase'
+        | 'DmaIP'
+        | 'DomainOnly'
+        | 'DomainPathOnly'
+        | 'DomainPathUTMs'
+        | 'DomainUTMs'
+        | 'FakeDomain'
+        | 'FakeDomainRealPath'
+        | 'FakeIP'
+        | 'FullUrl'
+        | 'Hash'
+        | 'HashMD5'
+        | 'HashedCountry'
+        | 'HashedDateOfBirth'
+        | 'HashedGender'
+        | 'HashedNormalized'
+        | 'HashedNormalizedNoSpecialChars'
+        | 'HashedPhone'
+        | 'HashedState'
+        | 'HashedZip'
+        | 'KebabCase'
+        | 'LowerCase'
+        | 'None'
+        | 'Null'
+        | 'Redacted'
+        | 'RegionalIP'
+        | 'SnakeCase'
+        | 'StartCase'
+        | 'UpperCase'
+      > | null;
+
+      /**
+       * When set, the ONLY valid `map` values for this property. Typically used for
+       * enum-shaped destinations.
+       */
+      options?: Array<Mapping.Option> | null;
+
+      /**
+       * Non-binding suggestions for the `map` value (e.g. common event names a customer
+       * might want to use).
+       */
+      suggestedOptions?: Array<Mapping.SuggestedOption> | null;
+    }
+
+    export namespace Mapping {
+      export interface Option {
+        label: string;
+
+        value: string;
+      }
+
+      export interface SuggestedOption {
+        label: string;
+
+        value: string;
+      }
+    }
+  }
+}
+
+export interface MappingDefaultVariablesResponse {
+  entities: Array<MappingDefaultVariablesResponse.Entity>;
+}
+
+export namespace MappingDefaultVariablesResponse {
+  export interface Entity {
+    /**
+     * Sample values observed for this path (empty for unsampled defaults).
+     */
+    examples: Array<string>;
+
+    /**
+     * Human-readable display name.
+     */
+    name: string;
+
+    /**
+     * Dot-path used in mapping `value` fields (e.g. `event.email`).
+     */
+    path: string;
+
+    /**
+     * Relative popularity rank. Higher means more frequently set across events.
+     */
+    popularity: number;
+
+    /**
+     * Optional long-form context shown in the variable dictionary drawer.
+     */
+    advancedInfo?: string | null;
+  }
+}
+
+export interface MappingCustomVariablesResponse {
+  entities: Array<MappingCustomVariablesResponse.Entity>;
+}
+
+export namespace MappingCustomVariablesResponse {
+  export interface Entity {
+    /**
+     * Sample values observed for this path (empty for unsampled defaults).
+     */
+    examples: Array<string>;
+
+    /**
+     * Human-readable display name.
+     */
+    name: string;
+
+    /**
+     * Dot-path used in mapping `value` fields (e.g. `event.email`).
+     */
+    path: string;
+
+    /**
+     * Relative popularity rank. Higher means more frequently set across events.
+     */
+    popularity: number;
+
+    /**
+     * Optional long-form context shown in the variable dictionary drawer.
+     */
+    advancedInfo?: string | null;
+  }
+}
+
+export interface MappingModificationsResponse {
+  entities: Array<MappingModificationsResponse.Entity>;
+}
+
+export namespace MappingModificationsResponse {
+  export interface Entity {
+    /**
+     * One-sentence explanation of what the modification does to the mapped value.
+     */
+    description: string;
+
+    /**
+     * Short human-readable name (suitable for picker labels).
+     */
+    label: string;
+
+    /**
+     * Enum value to send on `modification` fields when authoring a mapping.
+     */
+    value:
+      | 'CamelCase'
+      | 'DmaIP'
+      | 'DomainOnly'
+      | 'DomainPathOnly'
+      | 'DomainPathUTMs'
+      | 'DomainUTMs'
+      | 'FakeDomain'
+      | 'FakeDomainRealPath'
+      | 'FakeIP'
+      | 'FullUrl'
+      | 'Hash'
+      | 'HashMD5'
+      | 'HashedCountry'
+      | 'HashedDateOfBirth'
+      | 'HashedGender'
+      | 'HashedNormalized'
+      | 'HashedNormalizedNoSpecialChars'
+      | 'HashedPhone'
+      | 'HashedState'
+      | 'HashedZip'
+      | 'KebabCase'
+      | 'LowerCase'
+      | 'None'
+      | 'Null'
+      | 'Redacted'
+      | 'RegionalIP'
+      | 'SnakeCase'
+      | 'StartCase'
+      | 'UpperCase';
+  }
+}
+
 export interface MappingListParams extends CursorParams {
   /**
    * Filter mappings by their parent entity id. Must be a destination id or source
@@ -759,6 +1090,13 @@ export interface MappingReorderParams {
   uuids: Array<string>;
 }
 
+export interface MappingTemplatesParams {
+  /**
+   * Destination or source id. Required.
+   */
+  entityId: string;
+}
+
 export declare namespace Mappings {
   export {
     type MappingListResponse as MappingListResponse,
@@ -767,10 +1105,15 @@ export declare namespace Mappings {
     type MappingUpdateResponse as MappingUpdateResponse,
     type MappingDeleteResponse as MappingDeleteResponse,
     type MappingReorderResponse as MappingReorderResponse,
+    type MappingTemplatesResponse as MappingTemplatesResponse,
+    type MappingDefaultVariablesResponse as MappingDefaultVariablesResponse,
+    type MappingCustomVariablesResponse as MappingCustomVariablesResponse,
+    type MappingModificationsResponse as MappingModificationsResponse,
     type MappingListResponsesCursor as MappingListResponsesCursor,
     type MappingListParams as MappingListParams,
     type MappingCreateParams as MappingCreateParams,
     type MappingUpdateParams as MappingUpdateParams,
     type MappingReorderParams as MappingReorderParams,
+    type MappingTemplatesParams as MappingTemplatesParams,
   };
 }

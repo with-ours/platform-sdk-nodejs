@@ -57,6 +57,7 @@ Types:
 - <code><a href="./src/resources/destinations.ts">DestinationRetrieveResponse</a></code>
 - <code><a href="./src/resources/destinations.ts">DestinationUpdateResponse</a></code>
 - <code><a href="./src/resources/destinations.ts">DestinationDeleteResponse</a></code>
+- <code><a href="./src/resources/destinations.ts">DestinationTypesResponse</a></code>
 
 Methods:
 
@@ -65,6 +66,7 @@ Methods:
 - <code title="get /rest/v1/destinations/{id}">client.destinations.<a href="./src/resources/destinations.ts">retrieve</a>(id) -> DestinationRetrieveResponse</code>
 - <code title="patch /rest/v1/destinations/{id}">client.destinations.<a href="./src/resources/destinations.ts">update</a>(id, { ...params }) -> DestinationUpdateResponse</code>
 - <code title="delete /rest/v1/destinations/{id}">client.destinations.<a href="./src/resources/destinations.ts">delete</a>(id) -> DestinationDeleteResponse</code>
+- <code title="get /rest/v1/destinations/types">client.destinations.<a href="./src/resources/destinations.ts">types</a>() -> DestinationTypesResponse</code>
 
 # ExperimentSettings
 
@@ -190,6 +192,10 @@ Types:
 - <code><a href="./src/resources/mappings.ts">MappingUpdateResponse</a></code>
 - <code><a href="./src/resources/mappings.ts">MappingDeleteResponse</a></code>
 - <code><a href="./src/resources/mappings.ts">MappingReorderResponse</a></code>
+- <code><a href="./src/resources/mappings.ts">MappingTemplatesResponse</a></code>
+- <code><a href="./src/resources/mappings.ts">MappingDefaultVariablesResponse</a></code>
+- <code><a href="./src/resources/mappings.ts">MappingCustomVariablesResponse</a></code>
+- <code><a href="./src/resources/mappings.ts">MappingModificationsResponse</a></code>
 
 Methods:
 
@@ -199,6 +205,10 @@ Methods:
 - <code title="patch /rest/v1/mappings/{id}">client.mappings.<a href="./src/resources/mappings.ts">update</a>(id, { ...params }) -> MappingUpdateResponse</code>
 - <code title="delete /rest/v1/mappings/{id}">client.mappings.<a href="./src/resources/mappings.ts">delete</a>(id) -> MappingDeleteResponse</code>
 - <code title="post /rest/v1/mappings/reorder">client.mappings.<a href="./src/resources/mappings.ts">reorder</a>({ ...params }) -> MappingReorderResponse</code>
+- <code title="get /rest/v1/mappings/templates">client.mappings.<a href="./src/resources/mappings.ts">templates</a>({ ...params }) -> MappingTemplatesResponse</code>
+- <code title="get /rest/v1/mappings/default-variables">client.mappings.<a href="./src/resources/mappings.ts">defaultVariables</a>() -> MappingDefaultVariablesResponse</code>
+- <code title="get /rest/v1/mappings/custom-variables">client.mappings.<a href="./src/resources/mappings.ts">customVariables</a>() -> MappingCustomVariablesResponse</code>
+- <code title="get /rest/v1/mappings/modifications">client.mappings.<a href="./src/resources/mappings.ts">modifications</a>() -> MappingModificationsResponse</code>
 
 # ReplaySettings
 
@@ -297,25 +307,3 @@ Methods:
 - <code title="patch /rest/v1/web-scanners/{id}">client.webScanners.<a href="./src/resources/web-scanners.ts">update</a>(id, { ...params }) -> WebScannerUpdateResponse</code>
 - <code title="delete /rest/v1/web-scanners/{id}">client.webScanners.<a href="./src/resources/web-scanners.ts">delete</a>(id) -> WebScannerDeleteResponse</code>
 - <code title="post /rest/v1/web-scanners/{id}/trigger">client.webScanners.<a href="./src/resources/web-scanners.ts">trigger</a>(id) -> WebScannerTriggerResponse</code>
-
-# DestinationTypes
-
-Types:
-
-- <code><a href="./src/resources/destination-types.ts">DestinationTypeListResponse</a></code>
-- <code><a href="./src/resources/destination-types.ts">DestinationTypeRetrieveResponse</a></code>
-
-Methods:
-
-- <code title="get /rest/v1/destination-types">client.destinationTypes.<a href="./src/resources/destination-types.ts">list</a>() -> DestinationTypeListResponse</code>
-- <code title="get /rest/v1/destination-types/{id}">client.destinationTypes.<a href="./src/resources/destination-types.ts">retrieve</a>(id) -> DestinationTypeRetrieveResponse</code>
-
-# MappingTemplates
-
-Types:
-
-- <code><a href="./src/resources/mapping-templates.ts">MappingTemplateListResponse</a></code>
-
-Methods:
-
-- <code title="get /rest/v1/mapping-templates">client.mappingTemplates.<a href="./src/resources/mapping-templates.ts">list</a>({ ...params }) -> MappingTemplateListResponse</code>
