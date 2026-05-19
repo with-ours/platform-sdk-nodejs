@@ -34,6 +34,20 @@ Methods:
 - <code title="patch /rest/v1/consent-settings/{id}">client.consentSettings.<a href="./src/resources/consent-settings.ts">update</a>(id, { ...params }) -> ConsentSettingUpdateResponse</code>
 - <code title="delete /rest/v1/consent-settings/{id}">client.consentSettings.<a href="./src/resources/consent-settings.ts">delete</a>(id) -> ConsentSettingDeleteResponse</code>
 
+# DefaultMappings
+
+Types:
+
+- <code><a href="./src/resources/default-mappings.ts">DefaultMappingListResponse</a></code>
+- <code><a href="./src/resources/default-mappings.ts">DefaultMappingRetrieveResponse</a></code>
+- <code><a href="./src/resources/default-mappings.ts">DefaultMappingReplaceResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/default-mappings">client.defaultMappings.<a href="./src/resources/default-mappings.ts">list</a>() -> DefaultMappingListResponse</code>
+- <code title="get /rest/v1/default-mappings/{id}">client.defaultMappings.<a href="./src/resources/default-mappings.ts">retrieve</a>(id) -> DefaultMappingRetrieveResponse</code>
+- <code title="put /rest/v1/default-mappings/{id}">client.defaultMappings.<a href="./src/resources/default-mappings.ts">replace</a>(id, { ...params }) -> DefaultMappingReplaceResponse</code>
+
 # DestinationTypes
 
 Types:
@@ -178,6 +192,16 @@ Methods:
 - <code title="patch /rest/v1/locations/{id}">client.locations.<a href="./src/resources/locations.ts">update</a>(id, { ...params }) -> LocationUpdateResponse</code>
 - <code title="get /rest/v1/locations/{id}/embed-code">client.locations.<a href="./src/resources/locations.ts">embedCode</a>(id, { ...params }) -> LocationEmbedCodeResponse</code>
 
+# MappingTemplates
+
+Types:
+
+- <code><a href="./src/resources/mapping-templates.ts">MappingTemplateListResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/mapping-templates">client.mappingTemplates.<a href="./src/resources/mapping-templates.ts">list</a>({ ...params }) -> MappingTemplateListResponse</code>
+
 # Mappings
 
 Types:
@@ -295,27 +319,3 @@ Methods:
 - <code title="patch /rest/v1/web-scanners/{id}">client.webScanners.<a href="./src/resources/web-scanners.ts">update</a>(id, { ...params }) -> WebScannerUpdateResponse</code>
 - <code title="delete /rest/v1/web-scanners/{id}">client.webScanners.<a href="./src/resources/web-scanners.ts">delete</a>(id) -> WebScannerDeleteResponse</code>
 - <code title="post /rest/v1/web-scanners/{id}/trigger">client.webScanners.<a href="./src/resources/web-scanners.ts">trigger</a>(id) -> WebScannerTriggerResponse</code>
-
-# MappingTemplates
-
-Types:
-
-- <code><a href="./src/resources/mapping-templates.ts">MappingTemplateListResponse</a></code>
-
-Methods:
-
-- <code title="get /rest/v1/mapping-templates">client.mappingTemplates.<a href="./src/resources/mapping-templates.ts">list</a>({ ...params }) -> MappingTemplateListResponse</code>
-
-# DefaultMappings
-
-Types:
-
-- <code><a href="./src/resources/default-mappings.ts">DefaultMappingListResponse</a></code>
-- <code><a href="./src/resources/default-mappings.ts">DefaultMappingRetrieveResponse</a></code>
-- <code><a href="./src/resources/default-mappings.ts">DefaultMappingReplaceResponse</a></code>
-
-Methods:
-
-- <code title="get /rest/v1/default-mappings">client.defaultMappings.<a href="./src/resources/default-mappings.ts">list</a>() -> DefaultMappingListResponse</code>
-- <code title="get /rest/v1/default-mappings/{id}">client.defaultMappings.<a href="./src/resources/default-mappings.ts">retrieve</a>(id) -> DefaultMappingRetrieveResponse</code>
-- <code title="put /rest/v1/default-mappings/{id}">client.defaultMappings.<a href="./src/resources/default-mappings.ts">replace</a>(id, { ...params }) -> DefaultMappingReplaceResponse</code>
