@@ -5,6 +5,7 @@ Types:
 - <code><a href="./src/resources/allowed-events.ts">AllowedEventListResponse</a></code>
 - <code><a href="./src/resources/allowed-events.ts">AllowedEventCreateResponse</a></code>
 - <code><a href="./src/resources/allowed-events.ts">AllowedEventRetrieveResponse</a></code>
+- <code><a href="./src/resources/allowed-events.ts">AllowedEventUpdateResponse</a></code>
 - <code><a href="./src/resources/allowed-events.ts">AllowedEventDeleteResponse</a></code>
 
 Methods:
@@ -12,6 +13,7 @@ Methods:
 - <code title="get /rest/v1/allowed-events">client.allowedEvents.<a href="./src/resources/allowed-events.ts">list</a>() -> AllowedEventListResponse</code>
 - <code title="post /rest/v1/allowed-events">client.allowedEvents.<a href="./src/resources/allowed-events.ts">create</a>({ ...params }) -> AllowedEventCreateResponse</code>
 - <code title="get /rest/v1/allowed-events/{id}">client.allowedEvents.<a href="./src/resources/allowed-events.ts">retrieve</a>(id) -> AllowedEventRetrieveResponse</code>
+- <code title="patch /rest/v1/allowed-events/{id}">client.allowedEvents.<a href="./src/resources/allowed-events.ts">update</a>(id, { ...params }) -> AllowedEventUpdateResponse</code>
 - <code title="delete /rest/v1/allowed-events/{id}">client.allowedEvents.<a href="./src/resources/allowed-events.ts">delete</a>(id) -> AllowedEventDeleteResponse</code>
 
 # ConsentSettings
@@ -24,6 +26,9 @@ Types:
 - <code><a href="./src/resources/consent-settings.ts">ConsentSettingReplaceResponse</a></code>
 - <code><a href="./src/resources/consent-settings.ts">ConsentSettingUpdateResponse</a></code>
 - <code><a href="./src/resources/consent-settings.ts">ConsentSettingDeleteResponse</a></code>
+- <code><a href="./src/resources/consent-settings.ts">ConsentSettingAnalyticsResponse</a></code>
+- <code><a href="./src/resources/consent-settings.ts">ConsentSettingPageAnalysisResponse</a></code>
+- <code><a href="./src/resources/consent-settings.ts">ConsentSettingAnalyticsByRegionResponse</a></code>
 
 Methods:
 
@@ -33,6 +38,9 @@ Methods:
 - <code title="put /rest/v1/consent-settings/{id}">client.consentSettings.<a href="./src/resources/consent-settings.ts">replace</a>(id, { ...params }) -> ConsentSettingReplaceResponse</code>
 - <code title="patch /rest/v1/consent-settings/{id}">client.consentSettings.<a href="./src/resources/consent-settings.ts">update</a>(id, { ...params }) -> ConsentSettingUpdateResponse</code>
 - <code title="delete /rest/v1/consent-settings/{id}">client.consentSettings.<a href="./src/resources/consent-settings.ts">delete</a>(id) -> ConsentSettingDeleteResponse</code>
+- <code title="get /rest/v1/consent-settings/{id}/analytics">client.consentSettings.<a href="./src/resources/consent-settings.ts">analytics</a>(id, { ...params }) -> ConsentSettingAnalyticsResponse</code>
+- <code title="get /rest/v1/consent-settings/{id}/page-analysis">client.consentSettings.<a href="./src/resources/consent-settings.ts">pageAnalysis</a>(id, { ...params }) -> ConsentSettingPageAnalysisResponse</code>
+- <code title="get /rest/v1/consent-settings/{id}/analytics-by-region">client.consentSettings.<a href="./src/resources/consent-settings.ts">analyticsByRegion</a>(id, { ...params }) -> ConsentSettingAnalyticsByRegionResponse</code>
 
 # DefaultMappings
 
@@ -137,22 +145,6 @@ Methods:
 - <code title="get /rest/v1/experiments/{id}/session-replays">client.experiments.<a href="./src/resources/experiments.ts">sessionReplays</a>(id, { ...params }) -> ExperimentSessionReplaysResponse</code>
 
 # GlobalDispatchCenters
-
-Types:
-
-- <code><a href="./src/resources/global-dispatch-centers.ts">GlobalDispatchCenterListResponse</a></code>
-- <code><a href="./src/resources/global-dispatch-centers.ts">GlobalDispatchCenterCreateResponse</a></code>
-- <code><a href="./src/resources/global-dispatch-centers.ts">GlobalDispatchCenterRetrieveResponse</a></code>
-- <code><a href="./src/resources/global-dispatch-centers.ts">GlobalDispatchCenterUpdateResponse</a></code>
-- <code><a href="./src/resources/global-dispatch-centers.ts">GlobalDispatchCenterDeleteResponse</a></code>
-
-Methods:
-
-- <code title="get /rest/v1/global-dispatch-centers">client.globalDispatchCenters.<a href="./src/resources/global-dispatch-centers.ts">list</a>({ ...params }) -> GlobalDispatchCenterListResponsesCursor</code>
-- <code title="post /rest/v1/global-dispatch-centers">client.globalDispatchCenters.<a href="./src/resources/global-dispatch-centers.ts">create</a>({ ...params }) -> GlobalDispatchCenterCreateResponse</code>
-- <code title="get /rest/v1/global-dispatch-centers/{id}">client.globalDispatchCenters.<a href="./src/resources/global-dispatch-centers.ts">retrieve</a>(id) -> GlobalDispatchCenterRetrieveResponse | null</code>
-- <code title="patch /rest/v1/global-dispatch-centers/{id}">client.globalDispatchCenters.<a href="./src/resources/global-dispatch-centers.ts">update</a>(id, { ...params }) -> GlobalDispatchCenterUpdateResponse</code>
-- <code title="delete /rest/v1/global-dispatch-centers/{id}">client.globalDispatchCenters.<a href="./src/resources/global-dispatch-centers.ts">delete</a>(id) -> GlobalDispatchCenterDeleteResponse</code>
 
 # HeatmapPages
 
@@ -307,3 +299,31 @@ Methods:
 - <code title="patch /rest/v1/web-scanners/{id}">client.webScanners.<a href="./src/resources/web-scanners.ts">update</a>(id, { ...params }) -> WebScannerUpdateResponse</code>
 - <code title="delete /rest/v1/web-scanners/{id}">client.webScanners.<a href="./src/resources/web-scanners.ts">delete</a>(id) -> WebScannerDeleteResponse</code>
 - <code title="post /rest/v1/web-scanners/{id}/trigger">client.webScanners.<a href="./src/resources/web-scanners.ts">trigger</a>(id) -> WebScannerTriggerResponse</code>
+
+# ConsentAnalytics
+
+Types:
+
+- <code><a href="./src/resources/consent-analytics.ts">ConsentAnalyticsListResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/consent-analytics">client.consentAnalytics.<a href="./src/resources/consent-analytics.ts">list</a>({ ...params }) -> ConsentAnalyticsListResponse</code>
+
+# DataGovernance
+
+Types:
+
+- <code><a href="./src/resources/data-governance.ts">DataGovernanceListResponse</a></code>
+- <code><a href="./src/resources/data-governance.ts">DataGovernanceCreateResponse</a></code>
+- <code><a href="./src/resources/data-governance.ts">DataGovernanceRetrieveResponse</a></code>
+- <code><a href="./src/resources/data-governance.ts">DataGovernanceUpdateResponse</a></code>
+- <code><a href="./src/resources/data-governance.ts">DataGovernanceDeleteResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/data-governance">client.dataGovernance.<a href="./src/resources/data-governance.ts">list</a>({ ...params }) -> DataGovernanceListResponsesCursor</code>
+- <code title="post /rest/v1/data-governance">client.dataGovernance.<a href="./src/resources/data-governance.ts">create</a>({ ...params }) -> DataGovernanceCreateResponse</code>
+- <code title="get /rest/v1/data-governance/{id}">client.dataGovernance.<a href="./src/resources/data-governance.ts">retrieve</a>(id) -> DataGovernanceRetrieveResponse | null</code>
+- <code title="patch /rest/v1/data-governance/{id}">client.dataGovernance.<a href="./src/resources/data-governance.ts">update</a>(id, { ...params }) -> DataGovernanceUpdateResponse</code>
+- <code title="delete /rest/v1/data-governance/{id}">client.dataGovernance.<a href="./src/resources/data-governance.ts">delete</a>(id) -> DataGovernanceDeleteResponse</code>
