@@ -66,6 +66,61 @@ export class ConsentSettings extends APIResource {
   delete(id: string, options?: RequestOptions): APIPromise<ConsentSettingDeleteResponse> {
     return this._client.delete(path`/rest/v1/consent-settings/${id}`, options);
   }
+
+  /**
+   * Time-series consent analytics for a single consent settings record: banner
+   * views, opt-ins, opt-outs, close-icon clicks, and derived opt-in/out rates per
+   * UTC day (or per UTC hour with `granularity=HOURLY`). The window is zero-filled
+   * so callers get a contiguous series, and rates are person-level
+   * (`COUNT(DISTINCT visitor_id)`). Use the optional `pagePath` and `region` filters
+   * to scope to one page or one visitor region; use `compareWithPreviousPeriod=true`
+   * to also receive the matching prior window. `DAILY` allows a 90-day window;
+   * `HOURLY` is capped at 14 days. Reuses the API-key scope `consentSettings:find`
+   * because the endpoint is identified by a consent settings `id`. Requires scope:
+   * consentSettings:find
+   */
+  analytics(
+    id: string,
+    query: ConsentSettingAnalyticsParams,
+    options?: RequestOptions,
+  ): APIPromise<ConsentSettingAnalyticsResponse> {
+    return this._client.get(path`/rest/v1/consent-settings/${id}/analytics`, { query, ...options });
+  }
+
+  /**
+   * Per-page consent breakdown for one consent settings record, ranked by opt-outs
+   * (descending). Each row bundles banner views, opt-outs, close-icon clicks, and
+   * the derived opt-out rate. Documented exception to the cursor-pagination
+   * standard: this is a derived read whose underlying GraphQL contract is
+   * offset/limit-based; cursors are not used. `search` is a substring match against
+   * `pathname`; `region` filters to one visitor region. Reuses the API-key scope
+   * `consentSettings:find`. Requires scope: consentSettings:find
+   */
+  pageAnalysis(
+    id: string,
+    query: ConsentSettingPageAnalysisParams,
+    options?: RequestOptions,
+  ): APIPromise<ConsentSettingPageAnalysisResponse> {
+    return this._client.get(path`/rest/v1/consent-settings/${id}/page-analysis`, { query, ...options });
+  }
+
+  /**
+   * Region-grouped consent totals for the window: banner views, opt-ins, opt-outs,
+   * close-icon clicks, and derived rates per visitor `country_region_name`, ranked
+   * by banner views (descending). Visitors whose region cannot be resolved (e.g. bot
+   * traffic, IP geo failure) are bucketed under the literal `Unknown` so per-region
+   * counts always sum to the global totals. Use this to discover the region names
+   * you can later pass to the `region` filter on
+   * `GET /rest/v1/consent-settings/{id}/analytics`. Reuses the API-key scope
+   * `consentSettings:find`. Requires scope: consentSettings:find
+   */
+  analyticsByRegion(
+    id: string,
+    query: ConsentSettingAnalyticsByRegionParams,
+    options?: RequestOptions,
+  ): APIPromise<ConsentSettingAnalyticsByRegionResponse> {
+    return this._client.get(path`/rest/v1/consent-settings/${id}/analytics-by-region`, { query, ...options });
+  }
 }
 
 export interface ConsentSettingListResponse {
@@ -2624,6 +2679,115 @@ export namespace ConsentSettingDeleteResponse {
   }
 }
 
+export interface ConsentSettingAnalyticsResponse {
+  /**
+   * One entry per time bucket (day or hour, depending on `granularity`) covering the
+   * full window — empty windows are zero-filled so callers can render contiguous
+   * time series without gap-handling logic.
+   */
+  items: Array<ConsentSettingAnalyticsResponse.Item>;
+}
+
+export namespace ConsentSettingAnalyticsResponse {
+  export interface Item {
+    bannerViews: number;
+
+    closeIconClicks: number;
+
+    dateTime: string;
+
+    explicitOptIns: number;
+
+    explicitOptOuts: number;
+
+    optInRate: number;
+
+    optOutRate: number;
+
+    percentageChangeBannerViews?: number | null;
+
+    percentageChangeCloseIconClicks?: number | null;
+
+    percentageChangeExplicitOptIns?: number | null;
+
+    percentageChangeExplicitOptOuts?: number | null;
+
+    previousBannerViews?: number | null;
+
+    previousCloseIconClicks?: number | null;
+
+    previousExplicitOptIns?: number | null;
+
+    previousExplicitOptOuts?: number | null;
+
+    previousOptInRate?: number | null;
+
+    previousOptOutRate?: number | null;
+  }
+}
+
+export interface ConsentSettingPageAnalysisResponse {
+  /**
+   * True when at least one more page is available beyond the current window.
+   */
+  hasMore: boolean;
+
+  /**
+   * Pages with consent activity in the window, ranked by opt-outs (descending). Each
+   * page bundles banner views, opt-outs, close-icon clicks, and the derived opt-out
+   * rate.
+   */
+  items: Array<ConsentSettingPageAnalysisResponse.Item>;
+
+  /**
+   * Running count of pages loaded so far (`offset + items.length`). Approximate for
+   * load-more flows; query without `offset` to get the exact size of the first page.
+   */
+  total: number;
+}
+
+export namespace ConsentSettingPageAnalysisResponse {
+  export interface Item {
+    bannerViews: number;
+
+    closeIconClicks: number;
+
+    optOutRate: number;
+
+    optOuts: number;
+
+    page: string;
+  }
+}
+
+export interface ConsentSettingAnalyticsByRegionResponse {
+  /**
+   * Per-region totals for the window, ranked by banner views (descending). Visitors
+   * whose region cannot be resolved (e.g. bot traffic, IP geo failure) are bucketed
+   * under the literal `Unknown`, so the per-region counts always sum to the global
+   * totals.
+   */
+  regions: Array<ConsentSettingAnalyticsByRegionResponse.Region>;
+}
+
+export namespace ConsentSettingAnalyticsByRegionResponse {
+  export interface Region {
+    bannerViews: number;
+
+    closeIconClicks: number;
+
+    explicitOptIns: number;
+
+    explicitOptOuts: number;
+
+    optInRate: number;
+
+    optOutRate: number;
+
+    regionName: string;
+  }
+}
+
 export interface ConsentSettingReplaceParams {
   /**
    * Top-level consent categories. Server re-stamps `priority` to 0..N.
@@ -3422,6 +3586,108 @@ export namespace ConsentSettingUpdateParams {
   }
 }
 
+export interface ConsentSettingAnalyticsParams {
+  /**
+   * Inclusive lower bound of the analytics window, as a UTC calendar day in
+   * `YYYY-MM-DD` format. The window between `from` and `to` must be 90 days or fewer
+   * (14 for `HOURLY` granularity).
+   */
+  from: string;
+
+  /**
+   * Inclusive upper bound of the analytics window, as a UTC calendar day in
+   * `YYYY-MM-DD` format. The window between `from` and `to` must be 90 days or fewer
+   * (14 for `HOURLY` granularity).
+   */
+  to: string;
+
+  /**
+   * When `true`, each bucket also returns the matching bucket from the immediately
+   * preceding window of equal length (in `previous*` and `percentageChange*`
+   * fields). Defaults to `false`.
+   */
+  compareWithPreviousPeriod?: boolean;
+
+  /**
+   * Bucket size for the time-series rollup. `DAILY` (default) buckets per UTC day;
+   * `HOURLY` buckets per UTC hour and limits the window to 14 days.
+   */
+  granularity?: 'DAILY' | 'HOURLY';
+
+  /**
+   * Filter to events whose `default_properties.pathname` equals this value (exact
+   * match, case-sensitive). Use this to drill into a single page.
+   */
+  pagePath?: string;
+
+  /**
+   * Filter results to events whose `request_context.country_region_name` is in this
+   * set. Pass a single region (e.g. `California`) or a comma-separated list
+   * (`California,Texas`). Case-sensitive. Use
+   * `GET /rest/v1/consent-settings/{id}/analytics-by-region` to discover the region
+   * names available for an account.
+   */
+  regions?: string;
+}
+
+export interface ConsentSettingPageAnalysisParams {
+  /**
+   * Inclusive lower bound of the analytics window, as a UTC calendar day in
+   * `YYYY-MM-DD` format. The window between `from` and `to` must be 90 days or fewer
+   * (14 for `HOURLY` granularity).
+   */
+  from: string;
+
+  /**
+   * Inclusive upper bound of the analytics window, as a UTC calendar day in
+   * `YYYY-MM-DD` format. The window between `from` and `to` must be 90 days or fewer
+   * (14 for `HOURLY` granularity).
+   */
+  to: string;
+
+  /**
+   * Maximum number of pages to return. Defaults to 50.
+   */
+  limit?: number;
+
+  /**
+   * Skip this many top-ranked pages before returning. Use together with `limit` for
+   * load-more pagination.
+   */
+  offset?: number | null;
+
+  /**
+   * Filter results to events whose `request_context.country_region_name` is in this
+   * set. Pass a single region (e.g. `California`) or a comma-separated list
+   * (`California,Texas`). Case-sensitive. Use
+   * `GET /rest/v1/consent-settings/{id}/analytics-by-region` to discover the region
+   * names available for an account.
+   */
+  regions?: string;
+
+  /**
+   * Case-sensitive substring match against `default_properties.pathname`. Wrapped in
+   * `%...%` server-side.
+   */
+  search?: string;
+}
+
+export interface ConsentSettingAnalyticsByRegionParams {
+  /**
+   * Inclusive lower bound of the analytics window, as a UTC calendar day in
+   * `YYYY-MM-DD` format. The window between `from` and `to` must be 90 days or fewer
+   * (14 for `HOURLY` granularity).
+   */
+  from: string;
+
+  /**
+   * Inclusive upper bound of the analytics window, as a UTC calendar day in
+   * `YYYY-MM-DD` format. The window between `from` and `to` must be 90 days or fewer
+   * (14 for `HOURLY` granularity).
+   */
+  to: string;
+}
+
 export declare namespace ConsentSettings {
   export {
     type ConsentSettingListResponse as ConsentSettingListResponse,
@@ -3430,7 +3696,13 @@ export declare namespace ConsentSettings {
     type ConsentSettingReplaceResponse as ConsentSettingReplaceResponse,
     type ConsentSettingUpdateResponse as ConsentSettingUpdateResponse,
     type ConsentSettingDeleteResponse as ConsentSettingDeleteResponse,
+    type ConsentSettingAnalyticsResponse as ConsentSettingAnalyticsResponse,
+    type ConsentSettingPageAnalysisResponse as ConsentSettingPageAnalysisResponse,
+    type ConsentSettingAnalyticsByRegionResponse as ConsentSettingAnalyticsByRegionResponse,
     type ConsentSettingReplaceParams as ConsentSettingReplaceParams,
     type ConsentSettingUpdateParams as ConsentSettingUpdateParams,
+    type ConsentSettingAnalyticsParams as ConsentSettingAnalyticsParams,
+    type ConsentSettingPageAnalysisParams as ConsentSettingPageAnalysisParams,
+    type ConsentSettingAnalyticsByRegionParams as ConsentSettingAnalyticsByRegionParams,
   };
 }

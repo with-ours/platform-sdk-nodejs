@@ -61,8 +61,11 @@ export namespace DefaultMappingListResponse {
     /**
      * Condition tree gating when this mapping fires. A node is either a leaf
      * `condition` or a combinator (`AND`, `OR`, `NOT`). Combinator children are
-     * themselves `MappingLogic` nodes, so trees nest arbitrarily. Example leaf:
+     * themselves logic nodes, so trees nest arbitrarily.
+     *
+     * Example leaf:
      * `{ "condition": { "property": "$event.event", "operator": "Is", "value": "page_view" } }`.
+     *
      * Example combinator: `{ "AND": [{ "condition": ... }, { "OR": [...] }] }`.
      */
     logic?: unknown;
@@ -82,8 +85,20 @@ export namespace DefaultMappingListResponse {
 
   export namespace Entity {
     export interface Mapping {
+      /**
+       * Source expression sent to the destination for this `property`. Use `{{...}}`
+       * template syntax to substitute values from the event/visitor record:
+       * `{{event.event}}`, `{{event.event_properties.value}}`, `{{visitor.email}}`. Bare
+       * strings (no `{{}}`) are sent verbatim. Note: `{{...}}` template syntax belongs
+       * HERE, NOT in `logic.condition.property` — logic conditions use bare dotted paths
+       * like `$event.event_properties.value`.
+       */
       map: string;
 
+      /**
+       * Destination-side field name. Comes from the destination template — discover the
+       * valid set via `GET /rest/v1/mapping-templates?entityId=...`.
+       */
       property: string;
 
       modification?:
@@ -135,8 +150,11 @@ export interface DefaultMappingRetrieveResponse {
   /**
    * Condition tree gating when this mapping fires. A node is either a leaf
    * `condition` or a combinator (`AND`, `OR`, `NOT`). Combinator children are
-   * themselves `MappingLogic` nodes, so trees nest arbitrarily. Example leaf:
+   * themselves logic nodes, so trees nest arbitrarily.
+   *
+   * Example leaf:
    * `{ "condition": { "property": "$event.event", "operator": "Is", "value": "page_view" } }`.
+   *
    * Example combinator: `{ "AND": [{ "condition": ... }, { "OR": [...] }] }`.
    */
   logic?: unknown;
@@ -156,8 +174,20 @@ export interface DefaultMappingRetrieveResponse {
 
 export namespace DefaultMappingRetrieveResponse {
   export interface Mapping {
+    /**
+     * Source expression sent to the destination for this `property`. Use `{{...}}`
+     * template syntax to substitute values from the event/visitor record:
+     * `{{event.event}}`, `{{event.event_properties.value}}`, `{{visitor.email}}`. Bare
+     * strings (no `{{}}`) are sent verbatim. Note: `{{...}}` template syntax belongs
+     * HERE, NOT in `logic.condition.property` — logic conditions use bare dotted paths
+     * like `$event.event_properties.value`.
+     */
     map: string;
 
+    /**
+     * Destination-side field name. Comes from the destination template — discover the
+     * valid set via `GET /rest/v1/mapping-templates?entityId=...`.
+     */
     property: string;
 
     modification?:
@@ -208,8 +238,11 @@ export interface DefaultMappingReplaceResponse {
   /**
    * Condition tree gating when this mapping fires. A node is either a leaf
    * `condition` or a combinator (`AND`, `OR`, `NOT`). Combinator children are
-   * themselves `MappingLogic` nodes, so trees nest arbitrarily. Example leaf:
+   * themselves logic nodes, so trees nest arbitrarily.
+   *
+   * Example leaf:
    * `{ "condition": { "property": "$event.event", "operator": "Is", "value": "page_view" } }`.
+   *
    * Example combinator: `{ "AND": [{ "condition": ... }, { "OR": [...] }] }`.
    */
   logic?: unknown;
@@ -229,8 +262,20 @@ export interface DefaultMappingReplaceResponse {
 
 export namespace DefaultMappingReplaceResponse {
   export interface Mapping {
+    /**
+     * Source expression sent to the destination for this `property`. Use `{{...}}`
+     * template syntax to substitute values from the event/visitor record:
+     * `{{event.event}}`, `{{event.event_properties.value}}`, `{{visitor.email}}`. Bare
+     * strings (no `{{}}`) are sent verbatim. Note: `{{...}}` template syntax belongs
+     * HERE, NOT in `logic.condition.property` — logic conditions use bare dotted paths
+     * like `$event.event_properties.value`.
+     */
     map: string;
 
+    /**
+     * Destination-side field name. Comes from the destination template — discover the
+     * valid set via `GET /rest/v1/mapping-templates?entityId=...`.
+     */
     property: string;
 
     modification?:
@@ -284,8 +329,20 @@ export interface DefaultMappingReplaceParams {
 
 export namespace DefaultMappingReplaceParams {
   export interface Mapping {
+    /**
+     * Source expression sent to the destination for this `property`. Use `{{...}}`
+     * template syntax to substitute values from the event/visitor record:
+     * `{{event.event}}`, `{{event.event_properties.value}}`, `{{visitor.email}}`. Bare
+     * strings (no `{{}}`) are sent verbatim. Note: `{{...}}` template syntax belongs
+     * HERE, NOT in `logic.condition.property` — logic conditions use bare dotted paths
+     * like `$event.event_properties.value`.
+     */
     map: string;
 
+    /**
+     * Destination-side field name. Comes from the destination template — discover the
+     * valid set via `GET /rest/v1/mapping-templates?entityId=...`.
+     */
     property: string;
 
     modification?:

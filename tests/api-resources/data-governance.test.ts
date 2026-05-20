@@ -7,9 +7,9 @@ const client = new OursPrivacyPlatform({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource globalDispatchCenters', () => {
+describe('resource dataGovernance', () => {
   test('list', async () => {
-    const responsePromise = client.globalDispatchCenters.list();
+    const responsePromise = client.dataGovernance.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -22,15 +22,12 @@ describe('resource globalDispatchCenters', () => {
   test('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.globalDispatchCenters.list(
-        { cursor: 'cursor', limit: 25 },
-        { path: '/_stainless_unknown_path' },
-      ),
+      client.dataGovernance.list({ cursor: 'cursor', limit: 25 }, { path: '/_stainless_unknown_path' }),
     ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
   });
 
   test('create', async () => {
-    const responsePromise = client.globalDispatchCenters.create({});
+    const responsePromise = client.dataGovernance.create({});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -41,7 +38,7 @@ describe('resource globalDispatchCenters', () => {
   });
 
   test('retrieve', async () => {
-    const responsePromise = client.globalDispatchCenters.retrieve('id');
+    const responsePromise = client.dataGovernance.retrieve('id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -52,7 +49,7 @@ describe('resource globalDispatchCenters', () => {
   });
 
   test('update', async () => {
-    const responsePromise = client.globalDispatchCenters.update('id', {});
+    const responsePromise = client.dataGovernance.update('id', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -63,7 +60,7 @@ describe('resource globalDispatchCenters', () => {
   });
 
   test('delete', async () => {
-    const responsePromise = client.globalDispatchCenters.delete('id');
+    const responsePromise = client.dataGovernance.delete('id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

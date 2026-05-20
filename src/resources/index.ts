@@ -5,9 +5,16 @@ export {
   type AllowedEventListResponse,
   type AllowedEventCreateResponse,
   type AllowedEventRetrieveResponse,
+  type AllowedEventUpdateResponse,
   type AllowedEventDeleteResponse,
   type AllowedEventCreateParams,
+  type AllowedEventUpdateParams,
 } from './allowed-events';
+export {
+  ConsentAnalytics,
+  type ConsentAnalyticsListResponse,
+  type ConsentAnalyticsListParams,
+} from './consent-analytics';
 export {
   ConsentSettings,
   type ConsentSettingListResponse,
@@ -16,9 +23,27 @@ export {
   type ConsentSettingReplaceResponse,
   type ConsentSettingUpdateResponse,
   type ConsentSettingDeleteResponse,
+  type ConsentSettingAnalyticsResponse,
+  type ConsentSettingPageAnalysisResponse,
+  type ConsentSettingAnalyticsByRegionResponse,
   type ConsentSettingReplaceParams,
   type ConsentSettingUpdateParams,
+  type ConsentSettingAnalyticsParams,
+  type ConsentSettingPageAnalysisParams,
+  type ConsentSettingAnalyticsByRegionParams,
 } from './consent-settings';
+export {
+  DataGovernance,
+  type DataGovernanceListResponse,
+  type DataGovernanceCreateResponse,
+  type DataGovernanceRetrieveResponse,
+  type DataGovernanceUpdateResponse,
+  type DataGovernanceDeleteResponse,
+  type DataGovernanceListParams,
+  type DataGovernanceCreateParams,
+  type DataGovernanceUpdateParams,
+  type DataGovernanceListResponsesCursor,
+} from './data-governance';
 export {
   DefaultMappings,
   type DefaultMappingListResponse,
@@ -87,18 +112,6 @@ export {
   type ExperimentSessionReplaysParams,
   type ExperimentListResponsesCursor,
 } from './experiments';
-export {
-  GlobalDispatchCenters,
-  type GlobalDispatchCenterListResponse,
-  type GlobalDispatchCenterCreateResponse,
-  type GlobalDispatchCenterRetrieveResponse,
-  type GlobalDispatchCenterUpdateResponse,
-  type GlobalDispatchCenterDeleteResponse,
-  type GlobalDispatchCenterListParams,
-  type GlobalDispatchCenterCreateParams,
-  type GlobalDispatchCenterUpdateParams,
-  type GlobalDispatchCenterListResponsesCursor,
-} from './global-dispatch-centers';
 export {
   HeatmapPages,
   type HeatmapPageListResponse,
