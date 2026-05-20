@@ -16,6 +16,16 @@ Methods:
 - <code title="patch /rest/v1/allowed-events/{id}">client.allowedEvents.<a href="./src/resources/allowed-events.ts">update</a>(id, { ...params }) -> AllowedEventUpdateResponse</code>
 - <code title="delete /rest/v1/allowed-events/{id}">client.allowedEvents.<a href="./src/resources/allowed-events.ts">delete</a>(id) -> AllowedEventDeleteResponse</code>
 
+# ConsentAnalytics
+
+Types:
+
+- <code><a href="./src/resources/consent-analytics.ts">ConsentAnalyticsListResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/consent-analytics">client.consentAnalytics.<a href="./src/resources/consent-analytics.ts">list</a>({ ...params }) -> ConsentAnalyticsListResponse</code>
+
 # ConsentSettings
 
 Types:
@@ -41,6 +51,24 @@ Methods:
 - <code title="get /rest/v1/consent-settings/{id}/analytics">client.consentSettings.<a href="./src/resources/consent-settings.ts">analytics</a>(id, { ...params }) -> ConsentSettingAnalyticsResponse</code>
 - <code title="get /rest/v1/consent-settings/{id}/page-analysis">client.consentSettings.<a href="./src/resources/consent-settings.ts">pageAnalysis</a>(id, { ...params }) -> ConsentSettingPageAnalysisResponse</code>
 - <code title="get /rest/v1/consent-settings/{id}/analytics-by-region">client.consentSettings.<a href="./src/resources/consent-settings.ts">analyticsByRegion</a>(id, { ...params }) -> ConsentSettingAnalyticsByRegionResponse</code>
+
+# DataGovernance
+
+Types:
+
+- <code><a href="./src/resources/data-governance.ts">DataGovernanceListResponse</a></code>
+- <code><a href="./src/resources/data-governance.ts">DataGovernanceCreateResponse</a></code>
+- <code><a href="./src/resources/data-governance.ts">DataGovernanceRetrieveResponse</a></code>
+- <code><a href="./src/resources/data-governance.ts">DataGovernanceUpdateResponse</a></code>
+- <code><a href="./src/resources/data-governance.ts">DataGovernanceDeleteResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/data-governance">client.dataGovernance.<a href="./src/resources/data-governance.ts">list</a>({ ...params }) -> DataGovernanceListResponsesCursor</code>
+- <code title="post /rest/v1/data-governance">client.dataGovernance.<a href="./src/resources/data-governance.ts">create</a>({ ...params }) -> DataGovernanceCreateResponse</code>
+- <code title="get /rest/v1/data-governance/{id}">client.dataGovernance.<a href="./src/resources/data-governance.ts">retrieve</a>(id) -> DataGovernanceRetrieveResponse | null</code>
+- <code title="patch /rest/v1/data-governance/{id}">client.dataGovernance.<a href="./src/resources/data-governance.ts">update</a>(id, { ...params }) -> DataGovernanceUpdateResponse</code>
+- <code title="delete /rest/v1/data-governance/{id}">client.dataGovernance.<a href="./src/resources/data-governance.ts">delete</a>(id) -> DataGovernanceDeleteResponse</code>
 
 # DefaultMappings
 
@@ -143,8 +171,6 @@ Methods:
 - <code title="get /rest/v1/experiments/{id}/results">client.experiments.<a href="./src/resources/experiments.ts">results</a>(id, { ...params }) -> ExperimentResultsResponse</code>
 - <code title="get /rest/v1/experiments/{id}/results-time-series">client.experiments.<a href="./src/resources/experiments.ts">resultsTimeSeries</a>(id, { ...params }) -> ExperimentResultsTimeSeriesResponse</code>
 - <code title="get /rest/v1/experiments/{id}/session-replays">client.experiments.<a href="./src/resources/experiments.ts">sessionReplays</a>(id, { ...params }) -> ExperimentSessionReplaysResponse</code>
-
-# GlobalDispatchCenters
 
 # HeatmapPages
 
@@ -299,31 +325,3 @@ Methods:
 - <code title="patch /rest/v1/web-scanners/{id}">client.webScanners.<a href="./src/resources/web-scanners.ts">update</a>(id, { ...params }) -> WebScannerUpdateResponse</code>
 - <code title="delete /rest/v1/web-scanners/{id}">client.webScanners.<a href="./src/resources/web-scanners.ts">delete</a>(id) -> WebScannerDeleteResponse</code>
 - <code title="post /rest/v1/web-scanners/{id}/trigger">client.webScanners.<a href="./src/resources/web-scanners.ts">trigger</a>(id) -> WebScannerTriggerResponse</code>
-
-# ConsentAnalytics
-
-Types:
-
-- <code><a href="./src/resources/consent-analytics.ts">ConsentAnalyticsListResponse</a></code>
-
-Methods:
-
-- <code title="get /rest/v1/consent-analytics">client.consentAnalytics.<a href="./src/resources/consent-analytics.ts">list</a>({ ...params }) -> ConsentAnalyticsListResponse</code>
-
-# DataGovernance
-
-Types:
-
-- <code><a href="./src/resources/data-governance.ts">DataGovernanceListResponse</a></code>
-- <code><a href="./src/resources/data-governance.ts">DataGovernanceCreateResponse</a></code>
-- <code><a href="./src/resources/data-governance.ts">DataGovernanceRetrieveResponse</a></code>
-- <code><a href="./src/resources/data-governance.ts">DataGovernanceUpdateResponse</a></code>
-- <code><a href="./src/resources/data-governance.ts">DataGovernanceDeleteResponse</a></code>
-
-Methods:
-
-- <code title="get /rest/v1/data-governance">client.dataGovernance.<a href="./src/resources/data-governance.ts">list</a>({ ...params }) -> DataGovernanceListResponsesCursor</code>
-- <code title="post /rest/v1/data-governance">client.dataGovernance.<a href="./src/resources/data-governance.ts">create</a>({ ...params }) -> DataGovernanceCreateResponse</code>
-- <code title="get /rest/v1/data-governance/{id}">client.dataGovernance.<a href="./src/resources/data-governance.ts">retrieve</a>(id) -> DataGovernanceRetrieveResponse | null</code>
-- <code title="patch /rest/v1/data-governance/{id}">client.dataGovernance.<a href="./src/resources/data-governance.ts">update</a>(id, { ...params }) -> DataGovernanceUpdateResponse</code>
-- <code title="delete /rest/v1/data-governance/{id}">client.dataGovernance.<a href="./src/resources/data-governance.ts">delete</a>(id) -> DataGovernanceDeleteResponse</code>

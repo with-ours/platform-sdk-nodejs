@@ -112,7 +112,6 @@ export {
   type ExperimentSessionReplaysParams,
   type ExperimentListResponsesCursor,
 } from './experiments';
-export { GlobalDispatchCenters } from './global-dispatch-centers';
 export {
   HeatmapPages,
   type HeatmapPageListResponse,
