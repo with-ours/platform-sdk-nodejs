@@ -25,12 +25,25 @@ import {
   AllowedEventDeleteResponse,
   AllowedEventListResponse,
   AllowedEventRetrieveResponse,
+  AllowedEventUpdateParams,
+  AllowedEventUpdateResponse,
   AllowedEvents,
 } from './resources/allowed-events';
 import {
+  ConsentAnalytics,
+  ConsentAnalyticsListParams,
+  ConsentAnalyticsListResponse,
+} from './resources/consent-analytics';
+import {
+  ConsentSettingAnalyticsByRegionParams,
+  ConsentSettingAnalyticsByRegionResponse,
+  ConsentSettingAnalyticsParams,
+  ConsentSettingAnalyticsResponse,
   ConsentSettingCreateResponse,
   ConsentSettingDeleteResponse,
   ConsentSettingListResponse,
+  ConsentSettingPageAnalysisParams,
+  ConsentSettingPageAnalysisResponse,
   ConsentSettingReplaceParams,
   ConsentSettingReplaceResponse,
   ConsentSettingRetrieveResponse,
@@ -38,6 +51,18 @@ import {
   ConsentSettingUpdateResponse,
   ConsentSettings,
 } from './resources/consent-settings';
+import {
+  DataGovernance,
+  DataGovernanceCreateParams,
+  DataGovernanceCreateResponse,
+  DataGovernanceDeleteResponse,
+  DataGovernanceListParams,
+  DataGovernanceListResponse,
+  DataGovernanceListResponsesCursor,
+  DataGovernanceRetrieveResponse,
+  DataGovernanceUpdateParams,
+  DataGovernanceUpdateResponse,
+} from './resources/data-governance';
 import {
   DefaultMappingListResponse,
   DefaultMappingReplaceParams,
@@ -106,18 +131,7 @@ import {
   ExperimentUpdateResponse,
   Experiments,
 } from './resources/experiments';
-import {
-  GlobalDispatchCenterCreateParams,
-  GlobalDispatchCenterCreateResponse,
-  GlobalDispatchCenterDeleteResponse,
-  GlobalDispatchCenterListParams,
-  GlobalDispatchCenterListResponse,
-  GlobalDispatchCenterListResponsesCursor,
-  GlobalDispatchCenterRetrieveResponse,
-  GlobalDispatchCenterUpdateParams,
-  GlobalDispatchCenterUpdateResponse,
-  GlobalDispatchCenters,
-} from './resources/global-dispatch-centers';
+import { GlobalDispatchCenters } from './resources/global-dispatch-centers';
 import {
   HeatmapPageListParams,
   HeatmapPageListResponse,
@@ -967,6 +981,8 @@ export class OursPrivacyPlatform {
   versions: API.Versions = new API.Versions(this);
   webScannerRules: API.WebScannerRules = new API.WebScannerRules(this);
   webScanners: API.WebScanners = new API.WebScanners(this);
+  consentAnalytics: API.ConsentAnalytics = new API.ConsentAnalytics(this);
+  dataGovernance: API.DataGovernance = new API.DataGovernance(this);
 }
 
 OursPrivacyPlatform.AllowedEvents = AllowedEvents;
@@ -985,6 +1001,8 @@ OursPrivacyPlatform.Sources = Sources;
 OursPrivacyPlatform.Versions = Versions;
 OursPrivacyPlatform.WebScannerRules = WebScannerRules;
 OursPrivacyPlatform.WebScanners = WebScanners;
+OursPrivacyPlatform.ConsentAnalytics = ConsentAnalytics;
+OursPrivacyPlatform.DataGovernance = DataGovernance;
 
 export declare namespace OursPrivacyPlatform {
   export type RequestOptions = Opts.RequestOptions;
@@ -997,8 +1015,10 @@ export declare namespace OursPrivacyPlatform {
     type AllowedEventListResponse as AllowedEventListResponse,
     type AllowedEventCreateResponse as AllowedEventCreateResponse,
     type AllowedEventRetrieveResponse as AllowedEventRetrieveResponse,
+    type AllowedEventUpdateResponse as AllowedEventUpdateResponse,
     type AllowedEventDeleteResponse as AllowedEventDeleteResponse,
     type AllowedEventCreateParams as AllowedEventCreateParams,
+    type AllowedEventUpdateParams as AllowedEventUpdateParams,
   };
 
   export {
@@ -1009,8 +1029,14 @@ export declare namespace OursPrivacyPlatform {
     type ConsentSettingReplaceResponse as ConsentSettingReplaceResponse,
     type ConsentSettingUpdateResponse as ConsentSettingUpdateResponse,
     type ConsentSettingDeleteResponse as ConsentSettingDeleteResponse,
+    type ConsentSettingAnalyticsResponse as ConsentSettingAnalyticsResponse,
+    type ConsentSettingPageAnalysisResponse as ConsentSettingPageAnalysisResponse,
+    type ConsentSettingAnalyticsByRegionResponse as ConsentSettingAnalyticsByRegionResponse,
     type ConsentSettingReplaceParams as ConsentSettingReplaceParams,
     type ConsentSettingUpdateParams as ConsentSettingUpdateParams,
+    type ConsentSettingAnalyticsParams as ConsentSettingAnalyticsParams,
+    type ConsentSettingPageAnalysisParams as ConsentSettingPageAnalysisParams,
+    type ConsentSettingAnalyticsByRegionParams as ConsentSettingAnalyticsByRegionParams,
   };
 
   export {
@@ -1086,18 +1112,7 @@ export declare namespace OursPrivacyPlatform {
     type ExperimentSessionReplaysParams as ExperimentSessionReplaysParams,
   };
 
-  export {
-    GlobalDispatchCenters as GlobalDispatchCenters,
-    type GlobalDispatchCenterListResponse as GlobalDispatchCenterListResponse,
-    type GlobalDispatchCenterCreateResponse as GlobalDispatchCenterCreateResponse,
-    type GlobalDispatchCenterRetrieveResponse as GlobalDispatchCenterRetrieveResponse,
-    type GlobalDispatchCenterUpdateResponse as GlobalDispatchCenterUpdateResponse,
-    type GlobalDispatchCenterDeleteResponse as GlobalDispatchCenterDeleteResponse,
-    type GlobalDispatchCenterListResponsesCursor as GlobalDispatchCenterListResponsesCursor,
-    type GlobalDispatchCenterListParams as GlobalDispatchCenterListParams,
-    type GlobalDispatchCenterCreateParams as GlobalDispatchCenterCreateParams,
-    type GlobalDispatchCenterUpdateParams as GlobalDispatchCenterUpdateParams,
-  };
+  export { GlobalDispatchCenters as GlobalDispatchCenters };
 
   export {
     HeatmapPages as HeatmapPages,
@@ -1202,5 +1217,24 @@ export declare namespace OursPrivacyPlatform {
     type WebScannerTriggerResponse as WebScannerTriggerResponse,
     type WebScannerCreateParams as WebScannerCreateParams,
     type WebScannerUpdateParams as WebScannerUpdateParams,
+  };
+
+  export {
+    ConsentAnalytics as ConsentAnalytics,
+    type ConsentAnalyticsListResponse as ConsentAnalyticsListResponse,
+    type ConsentAnalyticsListParams as ConsentAnalyticsListParams,
+  };
+
+  export {
+    DataGovernance as DataGovernance,
+    type DataGovernanceListResponse as DataGovernanceListResponse,
+    type DataGovernanceCreateResponse as DataGovernanceCreateResponse,
+    type DataGovernanceRetrieveResponse as DataGovernanceRetrieveResponse,
+    type DataGovernanceUpdateResponse as DataGovernanceUpdateResponse,
+    type DataGovernanceDeleteResponse as DataGovernanceDeleteResponse,
+    type DataGovernanceListResponsesCursor as DataGovernanceListResponsesCursor,
+    type DataGovernanceListParams as DataGovernanceListParams,
+    type DataGovernanceCreateParams as DataGovernanceCreateParams,
+    type DataGovernanceUpdateParams as DataGovernanceUpdateParams,
   };
 }

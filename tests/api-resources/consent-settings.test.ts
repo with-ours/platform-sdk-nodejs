@@ -220,4 +220,72 @@ describe('resource consentSettings', () => {
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
   });
+
+  test('analytics: only required params', async () => {
+    const responsePromise = client.consentSettings.analytics('id', { from: '2026-04-01', to: '2026-04-30' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('analytics: required and optional params', async () => {
+    const response = await client.consentSettings.analytics('id', {
+      from: '2026-04-01',
+      to: '2026-04-30',
+      compareWithPreviousPeriod: true,
+      granularity: 'DAILY',
+      pagePath: '/pricing',
+      regions: 'California',
+    });
+  });
+
+  test('pageAnalysis: only required params', async () => {
+    const responsePromise = client.consentSettings.pageAnalysis('id', {
+      from: '2026-04-01',
+      to: '2026-04-30',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('pageAnalysis: required and optional params', async () => {
+    const response = await client.consentSettings.pageAnalysis('id', {
+      from: '2026-04-01',
+      to: '2026-04-30',
+      limit: 1,
+      offset: 0,
+      regions: 'California',
+      search: '/checkout',
+    });
+  });
+
+  test('analyticsByRegion: only required params', async () => {
+    const responsePromise = client.consentSettings.analyticsByRegion('id', {
+      from: '2026-04-01',
+      to: '2026-04-30',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('analyticsByRegion: required and optional params', async () => {
+    const response = await client.consentSettings.analyticsByRegion('id', {
+      from: '2026-04-01',
+      to: '2026-04-30',
+    });
+  });
 });
