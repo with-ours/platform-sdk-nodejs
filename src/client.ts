@@ -131,7 +131,6 @@ import {
   ExperimentUpdateResponse,
   Experiments,
 } from './resources/experiments';
-import { GlobalDispatchCenters } from './resources/global-dispatch-centers';
 import {
   HeatmapPageListParams,
   HeatmapPageListResponse,
@@ -966,13 +965,14 @@ export class OursPrivacyPlatform {
   static toFile = Uploads.toFile;
 
   allowedEvents: API.AllowedEvents = new API.AllowedEvents(this);
+  consentAnalytics: API.ConsentAnalytics = new API.ConsentAnalytics(this);
   consentSettings: API.ConsentSettings = new API.ConsentSettings(this);
+  dataGovernance: API.DataGovernance = new API.DataGovernance(this);
   defaultMappings: API.DefaultMappings = new API.DefaultMappings(this);
   destinations: API.Destinations = new API.Destinations(this);
   experimentSettings: API.ExperimentSettings = new API.ExperimentSettings(this);
   experimentVariants: API.ExperimentVariants = new API.ExperimentVariants(this);
   experiments: API.Experiments = new API.Experiments(this);
-  globalDispatchCenters: API.GlobalDispatchCenters = new API.GlobalDispatchCenters(this);
   heatmapPages: API.HeatmapPages = new API.HeatmapPages(this);
   locations: API.Locations = new API.Locations(this);
   mappings: API.Mappings = new API.Mappings(this);
@@ -981,18 +981,17 @@ export class OursPrivacyPlatform {
   versions: API.Versions = new API.Versions(this);
   webScannerRules: API.WebScannerRules = new API.WebScannerRules(this);
   webScanners: API.WebScanners = new API.WebScanners(this);
-  consentAnalytics: API.ConsentAnalytics = new API.ConsentAnalytics(this);
-  dataGovernance: API.DataGovernance = new API.DataGovernance(this);
 }
 
 OursPrivacyPlatform.AllowedEvents = AllowedEvents;
+OursPrivacyPlatform.ConsentAnalytics = ConsentAnalytics;
 OursPrivacyPlatform.ConsentSettings = ConsentSettings;
+OursPrivacyPlatform.DataGovernance = DataGovernance;
 OursPrivacyPlatform.DefaultMappings = DefaultMappings;
 OursPrivacyPlatform.Destinations = Destinations;
 OursPrivacyPlatform.ExperimentSettings = ExperimentSettings;
 OursPrivacyPlatform.ExperimentVariants = ExperimentVariants;
 OursPrivacyPlatform.Experiments = Experiments;
-OursPrivacyPlatform.GlobalDispatchCenters = GlobalDispatchCenters;
 OursPrivacyPlatform.HeatmapPages = HeatmapPages;
 OursPrivacyPlatform.Locations = Locations;
 OursPrivacyPlatform.Mappings = Mappings;
@@ -1001,8 +1000,6 @@ OursPrivacyPlatform.Sources = Sources;
 OursPrivacyPlatform.Versions = Versions;
 OursPrivacyPlatform.WebScannerRules = WebScannerRules;
 OursPrivacyPlatform.WebScanners = WebScanners;
-OursPrivacyPlatform.ConsentAnalytics = ConsentAnalytics;
-OursPrivacyPlatform.DataGovernance = DataGovernance;
 
 export declare namespace OursPrivacyPlatform {
   export type RequestOptions = Opts.RequestOptions;
@@ -1022,6 +1019,12 @@ export declare namespace OursPrivacyPlatform {
   };
 
   export {
+    ConsentAnalytics as ConsentAnalytics,
+    type ConsentAnalyticsListResponse as ConsentAnalyticsListResponse,
+    type ConsentAnalyticsListParams as ConsentAnalyticsListParams,
+  };
+
+  export {
     ConsentSettings as ConsentSettings,
     type ConsentSettingListResponse as ConsentSettingListResponse,
     type ConsentSettingCreateResponse as ConsentSettingCreateResponse,
@@ -1037,6 +1040,19 @@ export declare namespace OursPrivacyPlatform {
     type ConsentSettingAnalyticsParams as ConsentSettingAnalyticsParams,
     type ConsentSettingPageAnalysisParams as ConsentSettingPageAnalysisParams,
     type ConsentSettingAnalyticsByRegionParams as ConsentSettingAnalyticsByRegionParams,
+  };
+
+  export {
+    DataGovernance as DataGovernance,
+    type DataGovernanceListResponse as DataGovernanceListResponse,
+    type DataGovernanceCreateResponse as DataGovernanceCreateResponse,
+    type DataGovernanceRetrieveResponse as DataGovernanceRetrieveResponse,
+    type DataGovernanceUpdateResponse as DataGovernanceUpdateResponse,
+    type DataGovernanceDeleteResponse as DataGovernanceDeleteResponse,
+    type DataGovernanceListResponsesCursor as DataGovernanceListResponsesCursor,
+    type DataGovernanceListParams as DataGovernanceListParams,
+    type DataGovernanceCreateParams as DataGovernanceCreateParams,
+    type DataGovernanceUpdateParams as DataGovernanceUpdateParams,
   };
 
   export {
@@ -1111,8 +1127,6 @@ export declare namespace OursPrivacyPlatform {
     type ExperimentResultsTimeSeriesParams as ExperimentResultsTimeSeriesParams,
     type ExperimentSessionReplaysParams as ExperimentSessionReplaysParams,
   };
-
-  export { GlobalDispatchCenters as GlobalDispatchCenters };
 
   export {
     HeatmapPages as HeatmapPages,
@@ -1217,24 +1231,5 @@ export declare namespace OursPrivacyPlatform {
     type WebScannerTriggerResponse as WebScannerTriggerResponse,
     type WebScannerCreateParams as WebScannerCreateParams,
     type WebScannerUpdateParams as WebScannerUpdateParams,
-  };
-
-  export {
-    ConsentAnalytics as ConsentAnalytics,
-    type ConsentAnalyticsListResponse as ConsentAnalyticsListResponse,
-    type ConsentAnalyticsListParams as ConsentAnalyticsListParams,
-  };
-
-  export {
-    DataGovernance as DataGovernance,
-    type DataGovernanceListResponse as DataGovernanceListResponse,
-    type DataGovernanceCreateResponse as DataGovernanceCreateResponse,
-    type DataGovernanceRetrieveResponse as DataGovernanceRetrieveResponse,
-    type DataGovernanceUpdateResponse as DataGovernanceUpdateResponse,
-    type DataGovernanceDeleteResponse as DataGovernanceDeleteResponse,
-    type DataGovernanceListResponsesCursor as DataGovernanceListResponsesCursor,
-    type DataGovernanceListParams as DataGovernanceListParams,
-    type DataGovernanceCreateParams as DataGovernanceCreateParams,
-    type DataGovernanceUpdateParams as DataGovernanceUpdateParams,
   };
 }
