@@ -19,6 +19,22 @@ describe('resource sources', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
+  test('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.sources.list(
+        {
+          cursor: 'cursor',
+          limit: 25,
+          nameContains: 'nameContains',
+          status: 'Disabled',
+          type: 'AlchemerWebhook',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
+  });
+
   test('create: only required params', async () => {
     const responsePromise = client.sources.create({ type: 'AlchemerWebhook' });
     const rawResponse = await responsePromise.asResponse();
@@ -45,8 +61,8 @@ describe('resource sources', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('update: only required params', async () => {
-    const responsePromise = client.sources.update('id', { status: 'Disabled' });
+  test('update', async () => {
+    const responsePromise = client.sources.update('id', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -54,22 +70,6 @@ describe('resource sources', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('update: required and optional params', async () => {
-    const response = await client.sources.update('id', {
-      status: 'Disabled',
-      botControlMode: 'botControlMode',
-      botScoreThreshold: 0,
-      excludeRequestContext: true,
-      name: 'name',
-      probabilisticIdentity: {},
-      projectAPIKey: 'projectAPIKey',
-      redirectUrl: 'redirectUrl',
-      selectedAccountId: 'selectedAccountId',
-      whitelistDomains: ['string'],
-      whitelistIps: ['string'],
-    });
   });
 
   test('delete', async () => {

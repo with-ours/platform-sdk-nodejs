@@ -2,19 +2,27 @@
 
 import { APIResource } from '../core/resource';
 import { APIPromise } from '../core/api-promise';
+import { Cursor, type CursorParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
 export class Sources extends APIResource {
   /**
-   * List all sources. Requires scope: source:list
+   * List all sources for this account. Supports cursor pagination and optional
+   * filters for `type`, `status`, and `nameContains`. Results are sorted by creation
+   * date descending. Requires scope: source:list
    */
-  list(options?: RequestOptions): APIPromise<SourceListResponse> {
-    return this._client.get('/rest/v1/sources', options);
+  list(
+    query: SourceListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<SourceListResponsesCursor, SourceListResponse> {
+    return this._client.getAPIList('/rest/v1/sources', Cursor<SourceListResponse>, { query, ...options });
   }
 
   /**
-   * Create a new source. Requires scope: source:create
+   * Create a new source. Returns the full source entity (same shape as GET
+   * /sources/{id}) so callers can read all server-assigned fields without a
+   * follow-up GET. Requires scope: source:create
    */
   create(body: SourceCreateParams, options?: RequestOptions): APIPromise<SourceCreateResponse> {
     return this._client.post('/rest/v1/sources', { body, ...options });
@@ -28,8 +36,9 @@ export class Sources extends APIResource {
   }
 
   /**
-   * Partially update a source. Only the fields you send are changed. Requires scope:
-   * source:update
+   * Partially update a source. Only the fields you send are changed; omitted fields
+   * are unchanged. Send explicit `null` to clear a nullable field. Returns the full
+   * source entity after the update. Requires scope: source:update
    */
   update(id: string, body: SourceUpdateParams, options?: RequestOptions): APIPromise<SourceUpdateResponse> {
     return this._client.patch(path`/rest/v1/sources/${id}`, { body, ...options });
@@ -43,130 +52,27 @@ export class Sources extends APIResource {
   }
 
   /**
-   * Fetch install tokens and snippets for a source. Requires scope: source:view
+   * Returns the install or ingest tokens for a source. Pixel sources (WebSource,
+   * PixelImage, HTTPApiSource) return
+   * `{ sourceType: "pixel", token, testToken, installScript, testInstallScript }`.
+   * Webhook sources (Webhook, CallRail, Formstack, Healthie, etc.) return
+   * `{ sourceType: "webhook", token, testToken, ingestUrl, testIngestUrl, sampleCurl }`.
+   * Requires scope: source:view
    */
   tokens(id: string, options?: RequestOptions): APIPromise<SourceTokensResponse> {
     return this._client.get(path`/rest/v1/sources/${id}/tokens`, options);
   }
 }
 
+export type SourceListResponsesCursor = Cursor<SourceListResponse>;
+
 export interface SourceListResponse {
-  entities: Array<SourceListResponse.Entity>;
-}
-
-export namespace SourceListResponse {
-  export interface Entity {
-    id: string;
-
-    createdAt: string;
-
-    status: 'Disabled' | 'Enabled';
-
-    type:
-      | 'AlchemerWebhook'
-      | 'AndroidNativeApi'
-      | 'CSharpApi'
-      | 'CalComWebhooks'
-      | 'CalendlyWebhook'
-      | 'CallRail'
-      | 'CallTrackingMetrics'
-      | 'DotNetApi'
-      | 'FacebookLeadAds'
-      | 'FormsortWebhooks'
-      | 'Formstack'
-      | 'GoLangApi'
-      | 'HTTPApiSource'
-      | 'Healthie'
-      | 'HubspotAppActions'
-      | 'HubspotFormWebhook'
-      | 'JotFormWebhooks'
-      | 'KotlinApi'
-      | 'NodejsApi'
-      | 'PHPApi'
-      | 'PixelImage'
-      | 'PythonApi'
-      | 'ReactNativeApi'
-      | 'RedirectSource'
-      | 'RubyApi'
-      | 'SegmentWebPlugin'
-      | 'TypeformWebhooks'
-      | 'WebSource'
-      | 'Webhook'
-      | 'WhatConverts'
-      | 'iOSNativeApi';
-
-    botControlMode?: string | null;
-
-    botScoreThreshold?: number | null;
-
-    excludeRequestContext?: boolean | null;
-
-    name?: string | null;
-
-    probabilisticIdentity?: unknown | null;
-
-    projectAPIKey?: string | null;
-
-    redirectUrl?: string | null;
-
-    selectedAccountId?: string | null;
-
-    /**
-     * Limits which domains can send events to the CDP. When set, only requests from
-     * these domains are accepted for this source. Separate from experiment settings
-     * `whitelistDomains`, which limits which domains can load your experiments.
-     */
-    whitelistDomains?: Array<string> | null;
-
-    whitelistIps?: Array<string> | null;
-  }
-}
-
-export interface SourceCreateResponse {
   id: string;
 
-  createdAt: string;
-
-  status: 'Disabled' | 'Enabled';
-
-  type:
-    | 'AlchemerWebhook'
-    | 'AndroidNativeApi'
-    | 'CSharpApi'
-    | 'CalComWebhooks'
-    | 'CalendlyWebhook'
-    | 'CallRail'
-    | 'CallTrackingMetrics'
-    | 'DotNetApi'
-    | 'FacebookLeadAds'
-    | 'FormsortWebhooks'
-    | 'Formstack'
-    | 'GoLangApi'
-    | 'HTTPApiSource'
-    | 'Healthie'
-    | 'HubspotAppActions'
-    | 'HubspotFormWebhook'
-    | 'JotFormWebhooks'
-    | 'KotlinApi'
-    | 'NodejsApi'
-    | 'PHPApi'
-    | 'PixelImage'
-    | 'PythonApi'
-    | 'ReactNativeApi'
-    | 'RedirectSource'
-    | 'RubyApi'
-    | 'SegmentWebPlugin'
-    | 'TypeformWebhooks'
-    | 'WebSource'
-    | 'Webhook'
-    | 'WhatConverts'
-    | 'iOSNativeApi';
-
-  name?: string | null;
-}
-
-export interface SourceRetrieveResponse {
-  id: string;
+  /**
+   * Organization id that owns this source.
+   */
+  accountId: string;
 
   createdAt: string;
 
@@ -211,6 +117,24 @@ export interface SourceRetrieveResponse {
 
   excludeRequestContext?: boolean | null;
 
+  /**
+   * Whether this source exists in the currently published version. A source that is
+   * not published will not accept events.
+   */
+  isPublished?: boolean | null;
+
+  /**
+   * ISO-8601 timestamp of the most recent event from this source successfully
+   * dispatched to a destination.
+   */
+  lastDispatchedAt?: string | null;
+
+  /**
+   * ISO-8601 timestamp of the most recent inbound request received by this source.
+   * Useful for debugging "is my webhook even reaching us?"
+   */
+  lastTriggeredAt?: string | null;
+
   name?: string | null;
 
   probabilisticIdentity?: unknown | null;
@@ -231,8 +155,13 @@ export interface SourceRetrieveResponse {
   whitelistIps?: Array<string> | null;
 }
 
-export interface SourceUpdateResponse {
+export interface SourceCreateResponse {
   id: string;
+
+  /**
+   * Organization id that owns this source.
+   */
+  accountId: string;
 
   createdAt: string;
 
@@ -271,33 +200,351 @@ export interface SourceUpdateResponse {
     | 'WhatConverts'
     | 'iOSNativeApi';
 
+  botControlMode?: string | null;
+
+  botScoreThreshold?: number | null;
+
+  excludeRequestContext?: boolean | null;
+
+  /**
+   * Whether this source exists in the currently published version. A source that is
+   * not published will not accept events.
+   */
+  isPublished?: boolean | null;
+
+  /**
+   * ISO-8601 timestamp of the most recent event from this source successfully
+   * dispatched to a destination.
+   */
+  lastDispatchedAt?: string | null;
+
+  /**
+   * ISO-8601 timestamp of the most recent inbound request received by this source.
+   * Useful for debugging "is my webhook even reaching us?"
+   */
+  lastTriggeredAt?: string | null;
+
   name?: string | null;
+
+  probabilisticIdentity?: unknown | null;
+
+  projectAPIKey?: string | null;
+
+  redirectUrl?: string | null;
+
+  selectedAccountId?: string | null;
+
+  /**
+   * Limits which domains can send events to the CDP. When set, only requests from
+   * these domains are accepted for this source. Separate from experiment settings
+   * `whitelistDomains`, which limits which domains can load your experiments.
+   */
+  whitelistDomains?: Array<string> | null;
+
+  whitelistIps?: Array<string> | null;
 }
 
-export type SourceDeleteResponse = boolean;
-
-export interface SourceTokensResponse {
-  /**
-   * Install token for the source.
-   */
-  token: string;
+export interface SourceRetrieveResponse {
+  id: string;
 
   /**
-   * Ready-to-paste install snippet for the production token, including linked
-   * runtime tokens for supported modules.
+   * Organization id that owns this source.
    */
-  installScript: string;
+  accountId: string;
+
+  createdAt: string;
+
+  status: 'Disabled' | 'Enabled';
+
+  type:
+    | 'AlchemerWebhook'
+    | 'AndroidNativeApi'
+    | 'CSharpApi'
+    | 'CalComWebhooks'
+    | 'CalendlyWebhook'
+    | 'CallRail'
+    | 'CallTrackingMetrics'
+    | 'DotNetApi'
+    | 'FacebookLeadAds'
+    | 'FormsortWebhooks'
+    | 'Formstack'
+    | 'GoLangApi'
+    | 'HTTPApiSource'
+    | 'Healthie'
+    | 'HubspotAppActions'
+    | 'HubspotFormWebhook'
+    | 'JotFormWebhooks'
+    | 'KotlinApi'
+    | 'NodejsApi'
+    | 'PHPApi'
+    | 'PixelImage'
+    | 'PythonApi'
+    | 'ReactNativeApi'
+    | 'RedirectSource'
+    | 'RubyApi'
+    | 'SegmentWebPlugin'
+    | 'TypeformWebhooks'
+    | 'WebSource'
+    | 'Webhook'
+    | 'WhatConverts'
+    | 'iOSNativeApi';
+
+  botControlMode?: string | null;
+
+  botScoreThreshold?: number | null;
+
+  excludeRequestContext?: boolean | null;
 
   /**
-   * Ready-to-paste install snippet for the test token, suitable for validation
-   * before a live install.
+   * Whether this source exists in the currently published version. A source that is
+   * not published will not accept events.
    */
-  testInstallScript: string;
+  isPublished?: boolean | null;
 
   /**
-   * Test-mode token derived from `token`.
+   * ISO-8601 timestamp of the most recent event from this source successfully
+   * dispatched to a destination.
    */
-  testToken: string;
+  lastDispatchedAt?: string | null;
+
+  /**
+   * ISO-8601 timestamp of the most recent inbound request received by this source.
+   * Useful for debugging "is my webhook even reaching us?"
+   */
+  lastTriggeredAt?: string | null;
+
+  name?: string | null;
+
+  probabilisticIdentity?: unknown | null;
+
+  projectAPIKey?: string | null;
+
+  redirectUrl?: string | null;
+
+  selectedAccountId?: string | null;
+
+  /**
+   * Limits which domains can send events to the CDP. When set, only requests from
+   * these domains are accepted for this source. Separate from experiment settings
+   * `whitelistDomains`, which limits which domains can load your experiments.
+   */
+  whitelistDomains?: Array<string> | null;
+
+  whitelistIps?: Array<string> | null;
+}
+
+export interface SourceUpdateResponse {
+  id: string;
+
+  /**
+   * Organization id that owns this source.
+   */
+  accountId: string;
+
+  createdAt: string;
+
+  status: 'Disabled' | 'Enabled';
+
+  type:
+    | 'AlchemerWebhook'
+    | 'AndroidNativeApi'
+    | 'CSharpApi'
+    | 'CalComWebhooks'
+    | 'CalendlyWebhook'
+    | 'CallRail'
+    | 'CallTrackingMetrics'
+    | 'DotNetApi'
+    | 'FacebookLeadAds'
+    | 'FormsortWebhooks'
+    | 'Formstack'
+    | 'GoLangApi'
+    | 'HTTPApiSource'
+    | 'Healthie'
+    | 'HubspotAppActions'
+    | 'HubspotFormWebhook'
+    | 'JotFormWebhooks'
+    | 'KotlinApi'
+    | 'NodejsApi'
+    | 'PHPApi'
+    | 'PixelImage'
+    | 'PythonApi'
+    | 'ReactNativeApi'
+    | 'RedirectSource'
+    | 'RubyApi'
+    | 'SegmentWebPlugin'
+    | 'TypeformWebhooks'
+    | 'WebSource'
+    | 'Webhook'
+    | 'WhatConverts'
+    | 'iOSNativeApi';
+
+  botControlMode?: string | null;
+
+  botScoreThreshold?: number | null;
+
+  excludeRequestContext?: boolean | null;
+
+  /**
+   * Whether this source exists in the currently published version. A source that is
+   * not published will not accept events.
+   */
+  isPublished?: boolean | null;
+
+  /**
+   * ISO-8601 timestamp of the most recent event from this source successfully
+   * dispatched to a destination.
+   */
+  lastDispatchedAt?: string | null;
+
+  /**
+   * ISO-8601 timestamp of the most recent inbound request received by this source.
+   * Useful for debugging "is my webhook even reaching us?"
+   */
+  lastTriggeredAt?: string | null;
+
+  name?: string | null;
+
+  probabilisticIdentity?: unknown | null;
+
+  projectAPIKey?: string | null;
+
+  redirectUrl?: string | null;
+
+  selectedAccountId?: string | null;
+
+  /**
+   * Limits which domains can send events to the CDP. When set, only requests from
+   * these domains are accepted for this source. Separate from experiment settings
+   * `whitelistDomains`, which limits which domains can load your experiments.
+   */
+  whitelistDomains?: Array<string> | null;
+
+  whitelistIps?: Array<string> | null;
+}
+
+export interface SourceDeleteResponse {
+  deleted: true;
+}
+
+/**
+ * Token data for the source. The `sourceType` field discriminates between pixel
+ * sources (web / PixelImage) which return an `installScript`, and webhook sources
+ * which return an `ingestUrl` and `sampleCurl` instead. Pixel sources use
+ * `installScript` / `testInstallScript` to add the tracking pixel to a website.
+ * Webhook sources POST JSON to `ingestUrl` directly.
+ */
+export type SourceTokensResponse = SourceTokensResponse.UnionMember0 | SourceTokensResponse.UnionMember1;
+
+export namespace SourceTokensResponse {
+  export interface UnionMember0 {
+    /**
+     * Install token for the source.
+     */
+    token: string;
+
+    /**
+     * Ready-to-paste install snippet for the production token, including linked
+     * runtime tokens for supported modules.
+     */
+    installScript: string;
+
+    /**
+     * Discriminator: this is a pixel/web source.
+     */
+    sourceType: 'pixel';
+
+    /**
+     * Ready-to-paste install snippet for the test token, suitable for validation
+     * before a live install.
+     */
+    testInstallScript: string;
+
+    /**
+     * Test-mode token derived from `token`.
+     */
+    testToken: string;
+  }
+
+  export interface UnionMember1 {
+    /**
+     * Source token (the source id).
+     */
+    token: string;
+
+    /**
+     * Production ingest URL for the webhook source.
+     */
+    ingestUrl: string;
+
+    /**
+     * Example curl command showing how to POST a sample event to the ingest URL. Copy
+     * and run to verify connectivity.
+     */
+    sampleCurl: string;
+
+    /**
+     * Discriminator: this is a webhook source.
+     */
+    sourceType: 'webhook';
+
+    /**
+     * Test-mode ingest URL.
+     */
+    testIngestUrl: string;
+
+    /**
+     * Test-mode token derived from `token`.
+     */
+    testToken: string;
+  }
+}
+
+export interface SourceListParams extends CursorParams {
+  /**
+   * Case-insensitive substring filter on the source name.
+   */
+  nameContains?: string;
+
+  /**
+   * Filter by source status.
+   */
+  status?: 'Disabled' | 'Enabled';
+
+  /**
+   * Filter by source type.
+   */
+  type?:
+    | 'AlchemerWebhook'
+    | 'AndroidNativeApi'
+    | 'CSharpApi'
+    | 'CalComWebhooks'
+    | 'CalendlyWebhook'
+    | 'CallRail'
+    | 'CallTrackingMetrics'
+    | 'DotNetApi'
+    | 'FacebookLeadAds'
+    | 'FormsortWebhooks'
+    | 'Formstack'
+    | 'GoLangApi'
+    | 'HTTPApiSource'
+    | 'Healthie'
+    | 'HubspotAppActions'
+    | 'HubspotFormWebhook'
+    | 'JotFormWebhooks'
+    | 'KotlinApi'
+    | 'NodejsApi'
+    | 'PHPApi'
+    | 'PixelImage'
+    | 'PythonApi'
+    | 'ReactNativeApi'
+    | 'RedirectSource'
+    | 'RubyApi'
+    | 'SegmentWebPlugin'
+    | 'TypeformWebhooks'
+    | 'WebSource'
+    | 'Webhook'
+    | 'WhatConverts'
+    | 'iOSNativeApi';
 }
 
 export interface SourceCreateParams {
@@ -338,8 +585,6 @@ export interface SourceCreateParams {
 }
 
 export interface SourceUpdateParams {
-  status: 'Disabled' | 'Enabled';
-
   botControlMode?: string | null;
 
   botScoreThreshold?: number | null;
@@ -356,6 +601,8 @@ export interface SourceUpdateParams {
 
   selectedAccountId?: string | null;
 
+  status?: string | null;
+
   whitelistDomains?: Array<string> | null;
 
   whitelistIps?: Array<string> | null;
@@ -369,6 +616,8 @@ export declare namespace Sources {
     type SourceUpdateResponse as SourceUpdateResponse,
     type SourceDeleteResponse as SourceDeleteResponse,
     type SourceTokensResponse as SourceTokensResponse,
+    type SourceListResponsesCursor as SourceListResponsesCursor,
+    type SourceListParams as SourceListParams,
     type SourceCreateParams as SourceCreateParams,
     type SourceUpdateParams as SourceUpdateParams,
   };

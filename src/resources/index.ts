@@ -169,8 +169,10 @@ export {
   type SourceUpdateResponse,
   type SourceDeleteResponse,
   type SourceTokensResponse,
+  type SourceListParams,
   type SourceCreateParams,
   type SourceUpdateParams,
+  type SourceListResponsesCursor,
 } from './sources';
 export {
   Versions,

@@ -26,9 +26,10 @@ const client = new OursPrivacyPlatform({
   apiKey: process.env['OURS_PRIVACY_API_KEY'], // This is the default and can be omitted
 });
 
-const sources = await client.sources.list();
+const page = await client.sources.list();
+const sourceListResponse = page.entities[0];
 
-console.log(sources.entities);
+console.log(sourceListResponse.id);
 ```
 
 ### Request & Response types
@@ -43,7 +44,7 @@ const client = new OursPrivacyPlatform({
   apiKey: process.env['OURS_PRIVACY_API_KEY'], // This is the default and can be omitted
 });
 
-const sources: OursPrivacyPlatform.SourceListResponse = await client.sources.list();
+const [sourceListResponse]: [OursPrivacyPlatform.SourceListResponse] = await client.sources.list();
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -56,7 +57,7 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const sources = await client.sources.list().catch(async (err) => {
+const page = await client.sources.list().catch(async (err) => {
   if (err instanceof OursPrivacyPlatform.APIError) {
     console.log(err.status); // 400
     console.log(err.name); // BadRequestError
@@ -128,22 +129,22 @@ List methods in the OursPrivacyPlatform API are paginated.
 You can use the `for await … of` syntax to iterate through items across all pages:
 
 ```ts
-async function fetchAllDataGovernanceListResponses(params) {
-  const allDataGovernanceListResponses = [];
+async function fetchAllSourceListResponses(params) {
+  const allSourceListResponses = [];
   // Automatically fetches more pages as needed.
-  for await (const dataGovernanceListResponse of client.dataGovernance.list()) {
-    allDataGovernanceListResponses.push(dataGovernanceListResponse);
+  for await (const sourceListResponse of client.sources.list()) {
+    allSourceListResponses.push(sourceListResponse);
   }
-  return allDataGovernanceListResponses;
+  return allSourceListResponses;
 }
 ```
 
 Alternatively, you can request a single page at a time:
 
 ```ts
-let page = await client.dataGovernance.list();
-for (const dataGovernanceListResponse of page.entities) {
-  console.log(dataGovernanceListResponse);
+let page = await client.sources.list();
+for (const sourceListResponse of page.entities) {
+  console.log(sourceListResponse);
 }
 
 // Convenience methods are provided for manually paginating:
@@ -171,9 +172,11 @@ const response = await client.sources.list().asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: sources, response: raw } = await client.sources.list().withResponse();
+const { data: page, response: raw } = await client.sources.list().withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(sources.entities);
+for await (const sourceListResponse of page) {
+  console.log(sourceListResponse.id);
+}
 ```
 
 ### Logging
