@@ -259,7 +259,7 @@ Types:
 
 Methods:
 
-- <code title="get /rest/v1/sources">client.sources.<a href="./src/resources/sources.ts">list</a>() -> SourceListResponse</code>
+- <code title="get /rest/v1/sources">client.sources.<a href="./src/resources/sources.ts">list</a>({ ...params }) -> SourceListResponsesCursor</code>
 - <code title="post /rest/v1/sources">client.sources.<a href="./src/resources/sources.ts">create</a>({ ...params }) -> SourceCreateResponse</code>
 - <code title="get /rest/v1/sources/{id}">client.sources.<a href="./src/resources/sources.ts">retrieve</a>(id) -> SourceRetrieveResponse</code>
 - <code title="patch /rest/v1/sources/{id}">client.sources.<a href="./src/resources/sources.ts">update</a>(id, { ...params }) -> SourceUpdateResponse</code>

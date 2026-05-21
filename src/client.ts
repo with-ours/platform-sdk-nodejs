@@ -184,7 +184,9 @@ import {
   SourceCreateParams,
   SourceCreateResponse,
   SourceDeleteResponse,
+  SourceListParams,
   SourceListResponse,
+  SourceListResponsesCursor,
   SourceRetrieveResponse,
   SourceTokensResponse,
   SourceUpdateParams,
@@ -1189,6 +1191,8 @@ export declare namespace OursPrivacyPlatform {
     type SourceUpdateResponse as SourceUpdateResponse,
     type SourceDeleteResponse as SourceDeleteResponse,
     type SourceTokensResponse as SourceTokensResponse,
+    type SourceListResponsesCursor as SourceListResponsesCursor,
+    type SourceListParams as SourceListParams,
     type SourceCreateParams as SourceCreateParams,
     type SourceUpdateParams as SourceUpdateParams,
   };
