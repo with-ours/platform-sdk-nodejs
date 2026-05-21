@@ -150,6 +150,7 @@ export interface DestinationListResponse {
     | 'Tatari'
     | 'TheTradeDesk'
     | 'TikTok'
+    | 'UniversalAds'
     | 'VWO'
     | 'Viant'
     | 'Vibe'
@@ -249,6 +250,7 @@ export interface DestinationCreateResponse {
     | 'Tatari'
     | 'TheTradeDesk'
     | 'TikTok'
+    | 'UniversalAds'
     | 'VWO'
     | 'Viant'
     | 'Vibe'
@@ -348,6 +350,7 @@ export interface DestinationRetrieveResponse {
     | 'Tatari'
     | 'TheTradeDesk'
     | 'TikTok'
+    | 'UniversalAds'
     | 'VWO'
     | 'Viant'
     | 'Vibe'
@@ -447,6 +450,7 @@ export interface DestinationUpdateResponse {
     | 'Tatari'
     | 'TheTradeDesk'
     | 'TikTok'
+    | 'UniversalAds'
     | 'VWO'
     | 'Viant'
     | 'Vibe'
@@ -540,7 +544,8 @@ export namespace DestinationTypesResponse {
       | 'RokuCAPI'
       | 'Everflow'
       | 'BeeswaxPostback'
-      | 'AdobeAnalytics';
+      | 'AdobeAnalytics'
+      | 'UniversalAds';
 
     capabilities: Entity.Capabilities;
 
@@ -718,6 +723,7 @@ export interface DestinationListParams extends CursorParams {
     | 'Tatari'
     | 'TheTradeDesk'
     | 'TikTok'
+    | 'UniversalAds'
     | 'VWO'
     | 'Viant'
     | 'Vibe'
@@ -799,7 +805,8 @@ export interface DestinationCreateParams {
     | 'RokuCAPI'
     | 'Everflow'
     | 'BeeswaxPostback'
-    | 'AdobeAnalytics';
+    | 'AdobeAnalytics'
+    | 'UniversalAds';
 
   name?: string | null;
 
