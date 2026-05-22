@@ -467,7 +467,7 @@ export namespace SourceTokensResponse {
 
   export interface UnionMember1 {
     /**
-     * Source token (the source id).
+     * Ingest token embedded in the webhook URL path.
      */
     token: string;
 
@@ -493,7 +493,7 @@ export namespace SourceTokensResponse {
     testIngestUrl: string;
 
     /**
-     * Test-mode token derived from `token`.
+     * Test-mode ingest token derived from `token`.
      */
     testToken: string;
   }
