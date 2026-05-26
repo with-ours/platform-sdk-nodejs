@@ -52,12 +52,13 @@ export class Sources extends APIResource {
   }
 
   /**
-   * Returns the install or ingest tokens for a source. Pixel sources (WebSource,
-   * PixelImage, HTTPApiSource) return
-   * `{ sourceType: "pixel", token, testToken, installScript, testInstallScript }`.
-   * Webhook sources (Webhook, CallRail, Formstack, Healthie, etc.) return
+   * Returns the install or ingest tokens for a source. The response is a
+   * discriminated union on `sourceType`: pixel sources return
+   * `{ sourceType: "pixel", token, testToken, installScript, testInstallScript }`,
+   * and webhook sources return
    * `{ sourceType: "webhook", token, testToken, ingestUrl, testIngestUrl, sampleCurl }`.
-   * Requires scope: source:view
+   * Inspect the source's `type` field (`GET /rest/v1/sources/{id}`) to know which
+   * variant to expect. Requires scope: source:view
    */
   tokens(id: string, options?: RequestOptions): APIPromise<SourceTokensResponse> {
     return this._client.get(path`/rest/v1/sources/${id}/tokens`, options);
