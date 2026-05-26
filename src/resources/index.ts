@@ -175,6 +175,67 @@ export {
   type SourceListResponsesCursor,
 } from './sources';
 export {
+  TagManagerFolders,
+  type TagManagerFolderListResponse,
+  type TagManagerFolderCreateResponse,
+  type TagManagerFolderRetrieveResponse,
+  type TagManagerFolderUpdateResponse,
+  type TagManagerFolderDeleteResponse,
+  type TagManagerFolderListParams,
+  type TagManagerFolderCreateParams,
+  type TagManagerFolderUpdateParams,
+  type TagManagerFolderListResponsesCursor,
+} from './tag-manager-folders';
+export {
+  TagManagerTags,
+  type TagManagerTagListResponse,
+  type TagManagerTagCreateResponse,
+  type TagManagerTagRetrieveResponse,
+  type TagManagerTagUpdateResponse,
+  type TagManagerTagDeleteResponse,
+  type TagManagerTagTypesResponse,
+  type TagManagerTagListParams,
+  type TagManagerTagCreateParams,
+  type TagManagerTagUpdateParams,
+  type TagManagerTagListResponsesCursor,
+} from './tag-manager-tags';
+export {
+  TagManagerTriggers,
+  type TagManagerTriggerListResponse,
+  type TagManagerTriggerCreateResponse,
+  type TagManagerTriggerRetrieveResponse,
+  type TagManagerTriggerUpdateResponse,
+  type TagManagerTriggerDeleteResponse,
+  type TagManagerTriggerTypesResponse,
+  type TagManagerTriggerListParams,
+  type TagManagerTriggerCreateParams,
+  type TagManagerTriggerUpdateParams,
+  type TagManagerTriggerListResponsesCursor,
+} from './tag-manager-triggers';
+export {
+  TagManagerVariables,
+  type TagManagerVariableListResponse,
+  type TagManagerVariableCreateResponse,
+  type TagManagerVariableRetrieveResponse,
+  type TagManagerVariableUpdateResponse,
+  type TagManagerVariableDeleteResponse,
+  type TagManagerVariableTypesResponse,
+  type TagManagerVariableListParams,
+  type TagManagerVariableCreateParams,
+  type TagManagerVariableUpdateParams,
+  type TagManagerVariableListResponsesCursor,
+} from './tag-manager-variables';
+export {
+  TagManagers,
+  type TagManagerListResponse,
+  type TagManagerCreateResponse,
+  type TagManagerRetrieveResponse,
+  type TagManagerUpdateResponse,
+  type TagManagerDeleteResponse,
+  type TagManagerCreateParams,
+  type TagManagerUpdateParams,
+} from './tag-managers';
+export {
   Versions,
   type VersionListResponse,
   type VersionCreateResponse,
