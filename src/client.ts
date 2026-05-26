@@ -194,6 +194,67 @@ import {
   Sources,
 } from './resources/sources';
 import {
+  TagManagerFolderCreateParams,
+  TagManagerFolderCreateResponse,
+  TagManagerFolderDeleteResponse,
+  TagManagerFolderListParams,
+  TagManagerFolderListResponse,
+  TagManagerFolderListResponsesCursor,
+  TagManagerFolderRetrieveResponse,
+  TagManagerFolderUpdateParams,
+  TagManagerFolderUpdateResponse,
+  TagManagerFolders,
+} from './resources/tag-manager-folders';
+import {
+  TagManagerTagCreateParams,
+  TagManagerTagCreateResponse,
+  TagManagerTagDeleteResponse,
+  TagManagerTagListParams,
+  TagManagerTagListResponse,
+  TagManagerTagListResponsesCursor,
+  TagManagerTagRetrieveResponse,
+  TagManagerTagTypesResponse,
+  TagManagerTagUpdateParams,
+  TagManagerTagUpdateResponse,
+  TagManagerTags,
+} from './resources/tag-manager-tags';
+import {
+  TagManagerTriggerCreateParams,
+  TagManagerTriggerCreateResponse,
+  TagManagerTriggerDeleteResponse,
+  TagManagerTriggerListParams,
+  TagManagerTriggerListResponse,
+  TagManagerTriggerListResponsesCursor,
+  TagManagerTriggerRetrieveResponse,
+  TagManagerTriggerTypesResponse,
+  TagManagerTriggerUpdateParams,
+  TagManagerTriggerUpdateResponse,
+  TagManagerTriggers,
+} from './resources/tag-manager-triggers';
+import {
+  TagManagerVariableCreateParams,
+  TagManagerVariableCreateResponse,
+  TagManagerVariableDeleteResponse,
+  TagManagerVariableListParams,
+  TagManagerVariableListResponse,
+  TagManagerVariableListResponsesCursor,
+  TagManagerVariableRetrieveResponse,
+  TagManagerVariableTypesResponse,
+  TagManagerVariableUpdateParams,
+  TagManagerVariableUpdateResponse,
+  TagManagerVariables,
+} from './resources/tag-manager-variables';
+import {
+  TagManagerCreateParams,
+  TagManagerCreateResponse,
+  TagManagerDeleteResponse,
+  TagManagerListResponse,
+  TagManagerRetrieveResponse,
+  TagManagerUpdateParams,
+  TagManagerUpdateResponse,
+  TagManagers,
+} from './resources/tag-managers';
+import {
   VersionCreateParams,
   VersionCreateResponse,
   VersionDiffParams,
@@ -983,6 +1044,11 @@ export class OursPrivacyPlatform {
   versions: API.Versions = new API.Versions(this);
   webScannerRules: API.WebScannerRules = new API.WebScannerRules(this);
   webScanners: API.WebScanners = new API.WebScanners(this);
+  tagManagers: API.TagManagers = new API.TagManagers(this);
+  tagManagerTags: API.TagManagerTags = new API.TagManagerTags(this);
+  tagManagerTriggers: API.TagManagerTriggers = new API.TagManagerTriggers(this);
+  tagManagerVariables: API.TagManagerVariables = new API.TagManagerVariables(this);
+  tagManagerFolders: API.TagManagerFolders = new API.TagManagerFolders(this);
 }
 
 OursPrivacyPlatform.AllowedEvents = AllowedEvents;
@@ -1002,6 +1068,11 @@ OursPrivacyPlatform.Sources = Sources;
 OursPrivacyPlatform.Versions = Versions;
 OursPrivacyPlatform.WebScannerRules = WebScannerRules;
 OursPrivacyPlatform.WebScanners = WebScanners;
+OursPrivacyPlatform.TagManagers = TagManagers;
+OursPrivacyPlatform.TagManagerTags = TagManagerTags;
+OursPrivacyPlatform.TagManagerTriggers = TagManagerTriggers;
+OursPrivacyPlatform.TagManagerVariables = TagManagerVariables;
+OursPrivacyPlatform.TagManagerFolders = TagManagerFolders;
 
 export declare namespace OursPrivacyPlatform {
   export type RequestOptions = Opts.RequestOptions;
@@ -1235,5 +1306,71 @@ export declare namespace OursPrivacyPlatform {
     type WebScannerTriggerResponse as WebScannerTriggerResponse,
     type WebScannerCreateParams as WebScannerCreateParams,
     type WebScannerUpdateParams as WebScannerUpdateParams,
+  };
+
+  export {
+    TagManagers as TagManagers,
+    type TagManagerListResponse as TagManagerListResponse,
+    type TagManagerCreateResponse as TagManagerCreateResponse,
+    type TagManagerRetrieveResponse as TagManagerRetrieveResponse,
+    type TagManagerUpdateResponse as TagManagerUpdateResponse,
+    type TagManagerDeleteResponse as TagManagerDeleteResponse,
+    type TagManagerCreateParams as TagManagerCreateParams,
+    type TagManagerUpdateParams as TagManagerUpdateParams,
+  };
+
+  export {
+    TagManagerTags as TagManagerTags,
+    type TagManagerTagListResponse as TagManagerTagListResponse,
+    type TagManagerTagCreateResponse as TagManagerTagCreateResponse,
+    type TagManagerTagRetrieveResponse as TagManagerTagRetrieveResponse,
+    type TagManagerTagUpdateResponse as TagManagerTagUpdateResponse,
+    type TagManagerTagDeleteResponse as TagManagerTagDeleteResponse,
+    type TagManagerTagTypesResponse as TagManagerTagTypesResponse,
+    type TagManagerTagListResponsesCursor as TagManagerTagListResponsesCursor,
+    type TagManagerTagListParams as TagManagerTagListParams,
+    type TagManagerTagCreateParams as TagManagerTagCreateParams,
+    type TagManagerTagUpdateParams as TagManagerTagUpdateParams,
+  };
+
+  export {
+    TagManagerTriggers as TagManagerTriggers,
+    type TagManagerTriggerListResponse as TagManagerTriggerListResponse,
+    type TagManagerTriggerCreateResponse as TagManagerTriggerCreateResponse,
+    type TagManagerTriggerRetrieveResponse as TagManagerTriggerRetrieveResponse,
+    type TagManagerTriggerUpdateResponse as TagManagerTriggerUpdateResponse,
+    type TagManagerTriggerDeleteResponse as TagManagerTriggerDeleteResponse,
+    type TagManagerTriggerTypesResponse as TagManagerTriggerTypesResponse,
+    type TagManagerTriggerListResponsesCursor as TagManagerTriggerListResponsesCursor,
+    type TagManagerTriggerListParams as TagManagerTriggerListParams,
+    type TagManagerTriggerCreateParams as TagManagerTriggerCreateParams,
+    type TagManagerTriggerUpdateParams as TagManagerTriggerUpdateParams,
+  };
+
+  export {
+    TagManagerVariables as TagManagerVariables,
+    type TagManagerVariableListResponse as TagManagerVariableListResponse,
+    type TagManagerVariableCreateResponse as TagManagerVariableCreateResponse,
+    type TagManagerVariableRetrieveResponse as TagManagerVariableRetrieveResponse,
+    type TagManagerVariableUpdateResponse as TagManagerVariableUpdateResponse,
+    type TagManagerVariableDeleteResponse as TagManagerVariableDeleteResponse,
+    type TagManagerVariableTypesResponse as TagManagerVariableTypesResponse,
+    type TagManagerVariableListResponsesCursor as TagManagerVariableListResponsesCursor,
+    type TagManagerVariableListParams as TagManagerVariableListParams,
+    type TagManagerVariableCreateParams as TagManagerVariableCreateParams,
+    type TagManagerVariableUpdateParams as TagManagerVariableUpdateParams,
+  };
+
+  export {
+    TagManagerFolders as TagManagerFolders,
+    type TagManagerFolderListResponse as TagManagerFolderListResponse,
+    type TagManagerFolderCreateResponse as TagManagerFolderCreateResponse,
+    type TagManagerFolderRetrieveResponse as TagManagerFolderRetrieveResponse,
+    type TagManagerFolderUpdateResponse as TagManagerFolderUpdateResponse,
+    type TagManagerFolderDeleteResponse as TagManagerFolderDeleteResponse,
+    type TagManagerFolderListResponsesCursor as TagManagerFolderListResponsesCursor,
+    type TagManagerFolderListParams as TagManagerFolderListParams,
+    type TagManagerFolderCreateParams as TagManagerFolderCreateParams,
+    type TagManagerFolderUpdateParams as TagManagerFolderUpdateParams,
   };
 }

@@ -325,3 +325,99 @@ Methods:
 - <code title="patch /rest/v1/web-scanners/{id}">client.webScanners.<a href="./src/resources/web-scanners.ts">update</a>(id, { ...params }) -> WebScannerUpdateResponse</code>
 - <code title="delete /rest/v1/web-scanners/{id}">client.webScanners.<a href="./src/resources/web-scanners.ts">delete</a>(id) -> WebScannerDeleteResponse</code>
 - <code title="post /rest/v1/web-scanners/{id}/trigger">client.webScanners.<a href="./src/resources/web-scanners.ts">trigger</a>(id) -> WebScannerTriggerResponse</code>
+
+# TagManagers
+
+Types:
+
+- <code><a href="./src/resources/tag-managers.ts">TagManagerListResponse</a></code>
+- <code><a href="./src/resources/tag-managers.ts">TagManagerCreateResponse</a></code>
+- <code><a href="./src/resources/tag-managers.ts">TagManagerRetrieveResponse</a></code>
+- <code><a href="./src/resources/tag-managers.ts">TagManagerUpdateResponse</a></code>
+- <code><a href="./src/resources/tag-managers.ts">TagManagerDeleteResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/tag-managers">client.tagManagers.<a href="./src/resources/tag-managers.ts">list</a>() -> TagManagerListResponse</code>
+- <code title="post /rest/v1/tag-managers">client.tagManagers.<a href="./src/resources/tag-managers.ts">create</a>({ ...params }) -> TagManagerCreateResponse</code>
+- <code title="get /rest/v1/tag-managers/{id}">client.tagManagers.<a href="./src/resources/tag-managers.ts">retrieve</a>(id) -> TagManagerRetrieveResponse</code>
+- <code title="patch /rest/v1/tag-managers/{id}">client.tagManagers.<a href="./src/resources/tag-managers.ts">update</a>(id, { ...params }) -> TagManagerUpdateResponse</code>
+- <code title="delete /rest/v1/tag-managers/{id}">client.tagManagers.<a href="./src/resources/tag-managers.ts">delete</a>(id) -> TagManagerDeleteResponse</code>
+
+# TagManagerTags
+
+Types:
+
+- <code><a href="./src/resources/tag-manager-tags.ts">TagManagerTagListResponse</a></code>
+- <code><a href="./src/resources/tag-manager-tags.ts">TagManagerTagCreateResponse</a></code>
+- <code><a href="./src/resources/tag-manager-tags.ts">TagManagerTagRetrieveResponse</a></code>
+- <code><a href="./src/resources/tag-manager-tags.ts">TagManagerTagUpdateResponse</a></code>
+- <code><a href="./src/resources/tag-manager-tags.ts">TagManagerTagDeleteResponse</a></code>
+- <code><a href="./src/resources/tag-manager-tags.ts">TagManagerTagTypesResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/tag-manager-tags">client.tagManagerTags.<a href="./src/resources/tag-manager-tags.ts">list</a>({ ...params }) -> TagManagerTagListResponsesCursor</code>
+- <code title="post /rest/v1/tag-manager-tags">client.tagManagerTags.<a href="./src/resources/tag-manager-tags.ts">create</a>({ ...params }) -> TagManagerTagCreateResponse</code>
+- <code title="get /rest/v1/tag-manager-tags/{id}">client.tagManagerTags.<a href="./src/resources/tag-manager-tags.ts">retrieve</a>(id) -> TagManagerTagRetrieveResponse</code>
+- <code title="patch /rest/v1/tag-manager-tags/{id}">client.tagManagerTags.<a href="./src/resources/tag-manager-tags.ts">update</a>(id, { ...params }) -> TagManagerTagUpdateResponse</code>
+- <code title="delete /rest/v1/tag-manager-tags/{id}">client.tagManagerTags.<a href="./src/resources/tag-manager-tags.ts">delete</a>(id) -> TagManagerTagDeleteResponse</code>
+- <code title="get /rest/v1/tag-manager-tags/types">client.tagManagerTags.<a href="./src/resources/tag-manager-tags.ts">types</a>() -> TagManagerTagTypesResponse</code>
+
+# TagManagerTriggers
+
+Types:
+
+- <code><a href="./src/resources/tag-manager-triggers.ts">TagManagerTriggerListResponse</a></code>
+- <code><a href="./src/resources/tag-manager-triggers.ts">TagManagerTriggerCreateResponse</a></code>
+- <code><a href="./src/resources/tag-manager-triggers.ts">TagManagerTriggerRetrieveResponse</a></code>
+- <code><a href="./src/resources/tag-manager-triggers.ts">TagManagerTriggerUpdateResponse</a></code>
+- <code><a href="./src/resources/tag-manager-triggers.ts">TagManagerTriggerDeleteResponse</a></code>
+- <code><a href="./src/resources/tag-manager-triggers.ts">TagManagerTriggerTypesResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/tag-manager-triggers">client.tagManagerTriggers.<a href="./src/resources/tag-manager-triggers.ts">list</a>({ ...params }) -> TagManagerTriggerListResponsesCursor</code>
+- <code title="post /rest/v1/tag-manager-triggers">client.tagManagerTriggers.<a href="./src/resources/tag-manager-triggers.ts">create</a>({ ...params }) -> TagManagerTriggerCreateResponse</code>
+- <code title="get /rest/v1/tag-manager-triggers/{id}">client.tagManagerTriggers.<a href="./src/resources/tag-manager-triggers.ts">retrieve</a>(id) -> TagManagerTriggerRetrieveResponse</code>
+- <code title="patch /rest/v1/tag-manager-triggers/{id}">client.tagManagerTriggers.<a href="./src/resources/tag-manager-triggers.ts">update</a>(id, { ...params }) -> TagManagerTriggerUpdateResponse</code>
+- <code title="delete /rest/v1/tag-manager-triggers/{id}">client.tagManagerTriggers.<a href="./src/resources/tag-manager-triggers.ts">delete</a>(id) -> TagManagerTriggerDeleteResponse</code>
+- <code title="get /rest/v1/tag-manager-triggers/types">client.tagManagerTriggers.<a href="./src/resources/tag-manager-triggers.ts">types</a>() -> TagManagerTriggerTypesResponse</code>
+
+# TagManagerVariables
+
+Types:
+
+- <code><a href="./src/resources/tag-manager-variables.ts">TagManagerVariableListResponse</a></code>
+- <code><a href="./src/resources/tag-manager-variables.ts">TagManagerVariableCreateResponse</a></code>
+- <code><a href="./src/resources/tag-manager-variables.ts">TagManagerVariableRetrieveResponse</a></code>
+- <code><a href="./src/resources/tag-manager-variables.ts">TagManagerVariableUpdateResponse</a></code>
+- <code><a href="./src/resources/tag-manager-variables.ts">TagManagerVariableDeleteResponse</a></code>
+- <code><a href="./src/resources/tag-manager-variables.ts">TagManagerVariableTypesResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/tag-manager-variables">client.tagManagerVariables.<a href="./src/resources/tag-manager-variables.ts">list</a>({ ...params }) -> TagManagerVariableListResponsesCursor</code>
+- <code title="post /rest/v1/tag-manager-variables">client.tagManagerVariables.<a href="./src/resources/tag-manager-variables.ts">create</a>({ ...params }) -> TagManagerVariableCreateResponse</code>
+- <code title="get /rest/v1/tag-manager-variables/{id}">client.tagManagerVariables.<a href="./src/resources/tag-manager-variables.ts">retrieve</a>(id) -> TagManagerVariableRetrieveResponse</code>
+- <code title="patch /rest/v1/tag-manager-variables/{id}">client.tagManagerVariables.<a href="./src/resources/tag-manager-variables.ts">update</a>(id, { ...params }) -> TagManagerVariableUpdateResponse</code>
+- <code title="delete /rest/v1/tag-manager-variables/{id}">client.tagManagerVariables.<a href="./src/resources/tag-manager-variables.ts">delete</a>(id) -> TagManagerVariableDeleteResponse</code>
+- <code title="get /rest/v1/tag-manager-variables/types">client.tagManagerVariables.<a href="./src/resources/tag-manager-variables.ts">types</a>() -> TagManagerVariableTypesResponse</code>
+
+# TagManagerFolders
+
+Types:
+
+- <code><a href="./src/resources/tag-manager-folders.ts">TagManagerFolderListResponse</a></code>
+- <code><a href="./src/resources/tag-manager-folders.ts">TagManagerFolderCreateResponse</a></code>
+- <code><a href="./src/resources/tag-manager-folders.ts">TagManagerFolderRetrieveResponse</a></code>
+- <code><a href="./src/resources/tag-manager-folders.ts">TagManagerFolderUpdateResponse</a></code>
+- <code><a href="./src/resources/tag-manager-folders.ts">TagManagerFolderDeleteResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/tag-manager-folders">client.tagManagerFolders.<a href="./src/resources/tag-manager-folders.ts">list</a>({ ...params }) -> TagManagerFolderListResponsesCursor</code>
+- <code title="post /rest/v1/tag-manager-folders">client.tagManagerFolders.<a href="./src/resources/tag-manager-folders.ts">create</a>({ ...params }) -> TagManagerFolderCreateResponse</code>
+- <code title="get /rest/v1/tag-manager-folders/{id}">client.tagManagerFolders.<a href="./src/resources/tag-manager-folders.ts">retrieve</a>(id) -> TagManagerFolderRetrieveResponse</code>
+- <code title="patch /rest/v1/tag-manager-folders/{id}">client.tagManagerFolders.<a href="./src/resources/tag-manager-folders.ts">update</a>(id, { ...params }) -> TagManagerFolderUpdateResponse</code>
+- <code title="delete /rest/v1/tag-manager-folders/{id}">client.tagManagerFolders.<a href="./src/resources/tag-manager-folders.ts">delete</a>(id) -> TagManagerFolderDeleteResponse</code>
