@@ -104,8 +104,8 @@ export interface TagManagerTagListResponse {
   parameters: { [key: string]: unknown };
 
   /**
-   * Tag implementation identifier — usually matches `type` but kept distinct for
-   * legacy tags whose implementation diverged from the type label.
+   * Must equal `type` — send the same string in both fields. The server rejects any
+   * divergent value.
    */
   Tag: string;
 
@@ -115,7 +115,10 @@ export interface TagManagerTagListResponse {
   tagManagerId: string;
 
   /**
-   * Tag type discriminator (e.g. `GA4Event`, `MetaPixel`, `OursInitTag`).
+   * Tag type discriminator. Examples that exist today: `OursTrackTag`,
+   * `OursInitTag`, `OursIdentifyTag`, `CustomHtmlTag`. Pick from
+   * `GET /tag-manager-tags/types` for the canonical set — names like `GA4Event` are
+   * not valid ids.
    */
   type: string;
 
@@ -171,8 +174,8 @@ export interface TagManagerTagCreateResponse {
   parameters: { [key: string]: unknown };
 
   /**
-   * Tag implementation identifier — usually matches `type` but kept distinct for
-   * legacy tags whose implementation diverged from the type label.
+   * Must equal `type` — send the same string in both fields. The server rejects any
+   * divergent value.
    */
   Tag: string;
 
@@ -182,7 +185,10 @@ export interface TagManagerTagCreateResponse {
   tagManagerId: string;
 
   /**
-   * Tag type discriminator (e.g. `GA4Event`, `MetaPixel`, `OursInitTag`).
+   * Tag type discriminator. Examples that exist today: `OursTrackTag`,
+   * `OursInitTag`, `OursIdentifyTag`, `CustomHtmlTag`. Pick from
+   * `GET /tag-manager-tags/types` for the canonical set — names like `GA4Event` are
+   * not valid ids.
    */
   type: string;
 
@@ -238,8 +244,8 @@ export interface TagManagerTagRetrieveResponse {
   parameters: { [key: string]: unknown };
 
   /**
-   * Tag implementation identifier — usually matches `type` but kept distinct for
-   * legacy tags whose implementation diverged from the type label.
+   * Must equal `type` — send the same string in both fields. The server rejects any
+   * divergent value.
    */
   Tag: string;
 
@@ -249,7 +255,10 @@ export interface TagManagerTagRetrieveResponse {
   tagManagerId: string;
 
   /**
-   * Tag type discriminator (e.g. `GA4Event`, `MetaPixel`, `OursInitTag`).
+   * Tag type discriminator. Examples that exist today: `OursTrackTag`,
+   * `OursInitTag`, `OursIdentifyTag`, `CustomHtmlTag`. Pick from
+   * `GET /tag-manager-tags/types` for the canonical set — names like `GA4Event` are
+   * not valid ids.
    */
   type: string;
 
@@ -305,8 +314,8 @@ export interface TagManagerTagUpdateResponse {
   parameters: { [key: string]: unknown };
 
   /**
-   * Tag implementation identifier — usually matches `type` but kept distinct for
-   * legacy tags whose implementation diverged from the type label.
+   * Must equal `type` — send the same string in both fields. The server rejects any
+   * divergent value.
    */
   Tag: string;
 
@@ -316,7 +325,10 @@ export interface TagManagerTagUpdateResponse {
   tagManagerId: string;
 
   /**
-   * Tag type discriminator (e.g. `GA4Event`, `MetaPixel`, `OursInitTag`).
+   * Tag type discriminator. Examples that exist today: `OursTrackTag`,
+   * `OursInitTag`, `OursIdentifyTag`, `CustomHtmlTag`. Pick from
+   * `GET /tag-manager-tags/types` for the canonical set — names like `GA4Event` are
+   * not valid ids.
    */
   type: string;
 
@@ -467,7 +479,8 @@ export interface TagManagerTagCreateParams {
   parameters: { [key: string]: unknown };
 
   /**
-   * Tag implementation identifier (typically equals `type`).
+   * Must equal `type` — send the same string in both fields. The server rejects any
+   * divergent value.
    */
   Tag: string;
 
@@ -477,7 +490,9 @@ export interface TagManagerTagCreateParams {
   tagManagerId: string;
 
   /**
-   * Tag type discriminator (e.g. `GA4Event`).
+   * Tag type discriminator. Pick from `GET /tag-manager-tags/types` for the
+   * canonical set (e.g. `OursTrackTag`, `OursInitTag`, `CustomHtmlTag`). Names like
+   * `GA4Event` are not valid ids.
    */
   type: string;
 
@@ -529,12 +544,14 @@ export interface TagManagerTagUpdateParams {
   priority?: number | null;
 
   /**
-   * Updated tag implementation identifier.
+   * Must equal `type`. Omit both fields, or send both with the same value — the
+   * server rejects any divergence.
    */
   Tag?: string;
 
   /**
-   * Updated tag type.
+   * Updated tag type. Pick from `GET /tag-manager-tags/types`. When changing `type`,
+   * send the new value in `Tag` as well (they must match).
    */
   type?: string;
 }

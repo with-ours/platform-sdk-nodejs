@@ -10,11 +10,10 @@ export class HeatmapPages extends APIResource {
    * List pages with heatmap coverage in a date window, ranked for triage. Each
    * entity is identified by `pageKey` (origin + pathname, query string stripped);
    * use that value to drill into `GET /rest/v1/heatmap-pages/summary`. Supports
-   * cursor pagination — the underlying store uses offset internally, so cursors are
-   * bounded to roughly 10,000 entries deep; if you need pages beyond that, narrow
-   * `from`/`to` or add filters rather than paginating further. `from`/`to` are UTC
-   * calendar days in `YYYY-MM-DD`; the window must be 60 days or fewer. Requires
-   * scope: web-analytics:view
+   * cursor pagination, with cursor depth capped at roughly 10,000 entries; if you
+   * need pages beyond that, narrow `from`/`to` or add filters rather than paginating
+   * further. `from`/`to` are UTC calendar days in `YYYY-MM-DD`; the window must be
+   * 60 days or fewer. Requires scope: web-analytics:view
    */
   list(
     query: HeatmapPageListParams,
