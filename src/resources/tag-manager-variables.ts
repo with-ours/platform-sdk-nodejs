@@ -93,12 +93,15 @@ export interface TagManagerVariableListResponse {
   tagManagerId: string;
 
   /**
-   * Variable type (e.g. `DataLayer`, `Constant`, `LookUpTable`).
+   * Variable type discriminator. Examples that exist today: `DataLayer`, `Constant`,
+   * `Cookie`, `Url`, `UrlParameter`, `Weekday`, `RandomNumber`. Pick from
+   * `GET /tag-manager-variables/types` for the canonical set.
    */
   type: string;
 
   /**
-   * Variable implementation identifier (typically equals `type`).
+   * Must equal `type` — send the same string in both fields. The server rejects any
+   * divergent value.
    */
   Variable: string;
 
@@ -141,12 +144,15 @@ export interface TagManagerVariableCreateResponse {
   tagManagerId: string;
 
   /**
-   * Variable type (e.g. `DataLayer`, `Constant`, `LookUpTable`).
+   * Variable type discriminator. Examples that exist today: `DataLayer`, `Constant`,
+   * `Cookie`, `Url`, `UrlParameter`, `Weekday`, `RandomNumber`. Pick from
+   * `GET /tag-manager-variables/types` for the canonical set.
    */
   type: string;
 
   /**
-   * Variable implementation identifier (typically equals `type`).
+   * Must equal `type` — send the same string in both fields. The server rejects any
+   * divergent value.
    */
   Variable: string;
 
@@ -189,12 +195,15 @@ export interface TagManagerVariableRetrieveResponse {
   tagManagerId: string;
 
   /**
-   * Variable type (e.g. `DataLayer`, `Constant`, `LookUpTable`).
+   * Variable type discriminator. Examples that exist today: `DataLayer`, `Constant`,
+   * `Cookie`, `Url`, `UrlParameter`, `Weekday`, `RandomNumber`. Pick from
+   * `GET /tag-manager-variables/types` for the canonical set.
    */
   type: string;
 
   /**
-   * Variable implementation identifier (typically equals `type`).
+   * Must equal `type` — send the same string in both fields. The server rejects any
+   * divergent value.
    */
   Variable: string;
 
@@ -237,12 +246,15 @@ export interface TagManagerVariableUpdateResponse {
   tagManagerId: string;
 
   /**
-   * Variable type (e.g. `DataLayer`, `Constant`, `LookUpTable`).
+   * Variable type discriminator. Examples that exist today: `DataLayer`, `Constant`,
+   * `Cookie`, `Url`, `UrlParameter`, `Weekday`, `RandomNumber`. Pick from
+   * `GET /tag-manager-variables/types` for the canonical set.
    */
   type: string;
 
   /**
-   * Variable implementation identifier (typically equals `type`).
+   * Must equal `type` — send the same string in both fields. The server rejects any
+   * divergent value.
    */
   Variable: string;
 
@@ -394,12 +406,14 @@ export interface TagManagerVariableCreateParams {
   tagManagerId: string;
 
   /**
-   * Variable type discriminator.
+   * Variable type discriminator. Pick from `GET /tag-manager-variables/types` for
+   * the canonical set (e.g. `DataLayer`, `Constant`, `Cookie`, `Url`).
    */
   type: string;
 
   /**
-   * Variable implementation identifier (typically equals `type`).
+   * Must equal `type` — send the same string in both fields. The server rejects any
+   * divergent value.
    */
   Variable: string;
 
@@ -443,12 +457,14 @@ export interface TagManagerVariableUpdateParams {
   parameters?: { [key: string]: unknown };
 
   /**
-   * Updated variable type.
+   * Updated variable type. Pick from `GET /tag-manager-variables/types`. When
+   * changing `type`, send the new value in `Variable` as well (they must match).
    */
   type?: string;
 
   /**
-   * Updated variable implementation identifier.
+   * Must equal `type`. Omit both fields, or send both with the same value — the
+   * server rejects any divergence.
    */
   Variable?: string;
 }

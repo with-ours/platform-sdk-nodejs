@@ -97,12 +97,17 @@ export interface TagManagerTriggerListResponse {
   tagManagerId: string;
 
   /**
-   * Trigger implementation identifier — typically equals `type`.
+   * Must equal `type` — send the same string in both fields. The server rejects any
+   * divergent value.
    */
   Trigger: string;
 
   /**
-   * Trigger type (e.g. `Initialization`, `PageView`, `Click`).
+   * Trigger type discriminator. Examples that exist today: `PageView`, `DomReady`,
+   * `Initialization`, `AllElementsClick`, `AllLinksClick`, `FormSubmit`,
+   * `CustomEvent`, `ScrollReach`, `Timer`. Pick from
+   * `GET /tag-manager-triggers/types` for the canonical set. Note there is no plain
+   * `Click` id; use one of the `All*Click` variants.
    */
   type: string;
 
@@ -140,12 +145,17 @@ export interface TagManagerTriggerCreateResponse {
   tagManagerId: string;
 
   /**
-   * Trigger implementation identifier — typically equals `type`.
+   * Must equal `type` — send the same string in both fields. The server rejects any
+   * divergent value.
    */
   Trigger: string;
 
   /**
-   * Trigger type (e.g. `Initialization`, `PageView`, `Click`).
+   * Trigger type discriminator. Examples that exist today: `PageView`, `DomReady`,
+   * `Initialization`, `AllElementsClick`, `AllLinksClick`, `FormSubmit`,
+   * `CustomEvent`, `ScrollReach`, `Timer`. Pick from
+   * `GET /tag-manager-triggers/types` for the canonical set. Note there is no plain
+   * `Click` id; use one of the `All*Click` variants.
    */
   type: string;
 
@@ -183,12 +193,17 @@ export interface TagManagerTriggerRetrieveResponse {
   tagManagerId: string;
 
   /**
-   * Trigger implementation identifier — typically equals `type`.
+   * Must equal `type` — send the same string in both fields. The server rejects any
+   * divergent value.
    */
   Trigger: string;
 
   /**
-   * Trigger type (e.g. `Initialization`, `PageView`, `Click`).
+   * Trigger type discriminator. Examples that exist today: `PageView`, `DomReady`,
+   * `Initialization`, `AllElementsClick`, `AllLinksClick`, `FormSubmit`,
+   * `CustomEvent`, `ScrollReach`, `Timer`. Pick from
+   * `GET /tag-manager-triggers/types` for the canonical set. Note there is no plain
+   * `Click` id; use one of the `All*Click` variants.
    */
   type: string;
 
@@ -226,12 +241,17 @@ export interface TagManagerTriggerUpdateResponse {
   tagManagerId: string;
 
   /**
-   * Trigger implementation identifier — typically equals `type`.
+   * Must equal `type` — send the same string in both fields. The server rejects any
+   * divergent value.
    */
   Trigger: string;
 
   /**
-   * Trigger type (e.g. `Initialization`, `PageView`, `Click`).
+   * Trigger type discriminator. Examples that exist today: `PageView`, `DomReady`,
+   * `Initialization`, `AllElementsClick`, `AllLinksClick`, `FormSubmit`,
+   * `CustomEvent`, `ScrollReach`, `Timer`. Pick from
+   * `GET /tag-manager-triggers/types` for the canonical set. Note there is no plain
+   * `Click` id; use one of the `All*Click` variants.
    */
   type: string;
 
@@ -371,12 +391,14 @@ export interface TagManagerTriggerCreateParams {
   tagManagerId: string;
 
   /**
-   * Trigger implementation identifier (typically equals `type`).
+   * Must equal `type` — send the same string in both fields. The server rejects any
+   * divergent value.
    */
   Trigger: string;
 
   /**
-   * Trigger type discriminator.
+   * Trigger type discriminator. Pick from `GET /tag-manager-triggers/types` for the
+   * canonical set (e.g. `PageView`, `CustomEvent`, `AllElementsClick`).
    */
   type: string;
 
@@ -405,12 +427,14 @@ export interface TagManagerTriggerUpdateParams {
   parameters?: { [key: string]: unknown };
 
   /**
-   * Updated trigger implementation identifier.
+   * Must equal `type`. Omit both fields, or send both with the same value — the
+   * server rejects any divergence.
    */
   Trigger?: string;
 
   /**
-   * Updated trigger type.
+   * Updated trigger type. Pick from `GET /tag-manager-triggers/types`. When changing
+   * `type`, send the new value in `Trigger` as well (they must match).
    */
   type?: string;
 }
