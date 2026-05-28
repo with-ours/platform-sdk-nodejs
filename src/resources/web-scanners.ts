@@ -61,13 +61,12 @@ export class WebScanners extends APIResource {
 
   /**
    * Manually kick off a new scan for this web scanner. The request body is empty (or
-   * `{}`). A successful response means the enqueue request was accepted; because the
-   * scan starts asynchronously, the returned entity may still reflect pre-trigger
-   * values for fields like `scanStatus` and `lastScanStartedAt`. The trigger is
+   * `{}`). A successful response means the request was accepted; because the scan
+   * starts asynchronously, the returned entity may still reflect pre-trigger values
+   * for fields like `scanStatus` and `lastScanStartedAt`. The trigger is
    * rate-limited: a 409 is returned if another scan is already in flight, the
-   * per-account cooldown has not elapsed, or the trigger backend rejects the
-   * request; the reason is in the response `error` field. Requires scope:
-   * webScanner:trigger
+   * per-account cooldown has not elapsed, or the request was otherwise rejected; the
+   * reason is in the response `error` field. Requires scope: webScanner:trigger
    */
   trigger(id: string, options?: RequestOptions): APIPromise<WebScannerTriggerResponse> {
     return this._client.post(path`/rest/v1/web-scanners/${id}/trigger`, options);
@@ -231,7 +230,7 @@ export interface WebScannerDeleteResponse {
   id: string;
 
   /**
-   * True when the underlying mutation succeeded; the scanner and its rules are gone.
+   * True when the scanner and its rules were deleted.
    */
   deleted: boolean;
 }

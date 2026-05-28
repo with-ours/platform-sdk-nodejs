@@ -12,8 +12,10 @@ export class ConsentAnalytics extends APIResource {
    * Not scoped to a single consent settings record — this aggregates across every
    * destination in the account. The endpoint is identified by query params rather
    * than a path id because the report is account-scoped; this is a documented
-   * derived-read exception. Reuses the API-key scope `consentSettings:list` because
-   * the report crosses every consent setting. Requires scope: consentSettings:list
+   * derived-read exception. Requires the API-key scope
+   * `report:global-consent-center-analytics` (this is the account-wide consent
+   * analytics report and is gated separately from consent-settings list). Requires
+   * scope: report:global-consent-center-analytics
    */
   list(
     query: ConsentAnalyticsListParams,

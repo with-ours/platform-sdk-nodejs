@@ -47,7 +47,8 @@ export class TagManagerVariables extends APIResource {
   /**
    * Partially update a variable. Only the fields you send are changed. Name
    * collisions with other variables in the same tag manager return 409 with the
-   * reason in the response `error` field. Requires scope: tagManagers:update
+   * reason in the response `error` field. To assign a variable to a folder, use
+   * `POST /rest/v1/tag-manager-asset-folders`. Requires scope: tagManagers:update
    */
   update(
     id: string,
@@ -93,14 +94,11 @@ export interface TagManagerVariableListResponse {
   tagManagerId: string;
 
   /**
-   * Variable type (e.g. `DataLayer`, `Constant`, `LookUpTable`).
+   * Variable type discriminator. Examples that exist today: `DataLayer`, `Constant`,
+   * `Cookie`, `Url`, `UrlParameter`, `Weekday`, `RandomNumber`. Pick from
+   * `GET /tag-manager-variables/types` for the canonical set.
    */
   type: string;
-
-  /**
-   * Variable implementation identifier (typically equals `type`).
-   */
-  Variable: string;
 
   createdAt?: string | null;
 
@@ -113,8 +111,8 @@ export interface TagManagerVariableListResponse {
   enabled?: boolean | null;
 
   /**
-   * Folder this variable belongs to. Read-only on this endpoint — use the GraphQL
-   * `assignTagManagerAssetToFolder` mutation to change.
+   * Folder this variable belongs to. Settable via PATCH — send a folder UUID to
+   * assign, or `null` to remove from its current folder.
    */
   folderId?: string | null;
 
@@ -141,14 +139,11 @@ export interface TagManagerVariableCreateResponse {
   tagManagerId: string;
 
   /**
-   * Variable type (e.g. `DataLayer`, `Constant`, `LookUpTable`).
+   * Variable type discriminator. Examples that exist today: `DataLayer`, `Constant`,
+   * `Cookie`, `Url`, `UrlParameter`, `Weekday`, `RandomNumber`. Pick from
+   * `GET /tag-manager-variables/types` for the canonical set.
    */
   type: string;
-
-  /**
-   * Variable implementation identifier (typically equals `type`).
-   */
-  Variable: string;
 
   createdAt?: string | null;
 
@@ -161,8 +156,8 @@ export interface TagManagerVariableCreateResponse {
   enabled?: boolean | null;
 
   /**
-   * Folder this variable belongs to. Read-only on this endpoint — use the GraphQL
-   * `assignTagManagerAssetToFolder` mutation to change.
+   * Folder this variable belongs to. Settable via PATCH — send a folder UUID to
+   * assign, or `null` to remove from its current folder.
    */
   folderId?: string | null;
 
@@ -189,14 +184,11 @@ export interface TagManagerVariableRetrieveResponse {
   tagManagerId: string;
 
   /**
-   * Variable type (e.g. `DataLayer`, `Constant`, `LookUpTable`).
+   * Variable type discriminator. Examples that exist today: `DataLayer`, `Constant`,
+   * `Cookie`, `Url`, `UrlParameter`, `Weekday`, `RandomNumber`. Pick from
+   * `GET /tag-manager-variables/types` for the canonical set.
    */
   type: string;
-
-  /**
-   * Variable implementation identifier (typically equals `type`).
-   */
-  Variable: string;
 
   createdAt?: string | null;
 
@@ -209,8 +201,8 @@ export interface TagManagerVariableRetrieveResponse {
   enabled?: boolean | null;
 
   /**
-   * Folder this variable belongs to. Read-only on this endpoint — use the GraphQL
-   * `assignTagManagerAssetToFolder` mutation to change.
+   * Folder this variable belongs to. Settable via PATCH — send a folder UUID to
+   * assign, or `null` to remove from its current folder.
    */
   folderId?: string | null;
 
@@ -237,14 +229,11 @@ export interface TagManagerVariableUpdateResponse {
   tagManagerId: string;
 
   /**
-   * Variable type (e.g. `DataLayer`, `Constant`, `LookUpTable`).
+   * Variable type discriminator. Examples that exist today: `DataLayer`, `Constant`,
+   * `Cookie`, `Url`, `UrlParameter`, `Weekday`, `RandomNumber`. Pick from
+   * `GET /tag-manager-variables/types` for the canonical set.
    */
   type: string;
-
-  /**
-   * Variable implementation identifier (typically equals `type`).
-   */
-  Variable: string;
 
   createdAt?: string | null;
 
@@ -257,8 +246,8 @@ export interface TagManagerVariableUpdateResponse {
   enabled?: boolean | null;
 
   /**
-   * Folder this variable belongs to. Read-only on this endpoint — use the GraphQL
-   * `assignTagManagerAssetToFolder` mutation to change.
+   * Folder this variable belongs to. Settable via PATCH — send a folder UUID to
+   * assign, or `null` to remove from its current folder.
    */
   folderId?: string | null;
 
@@ -394,14 +383,10 @@ export interface TagManagerVariableCreateParams {
   tagManagerId: string;
 
   /**
-   * Variable type discriminator.
+   * Variable type discriminator. Pick from `GET /tag-manager-variables/types` for
+   * the canonical set (e.g. `DataLayer`, `Constant`, `Cookie`, `Url`).
    */
   type: string;
-
-  /**
-   * Variable implementation identifier (typically equals `type`).
-   */
-  Variable: string;
 
   /**
    * Optional default value. JSON value of any type.
@@ -443,14 +428,9 @@ export interface TagManagerVariableUpdateParams {
   parameters?: { [key: string]: unknown };
 
   /**
-   * Updated variable type.
+   * Updated variable type. Pick from `GET /tag-manager-variables/types`.
    */
   type?: string;
-
-  /**
-   * Updated variable implementation identifier.
-   */
-  Variable?: string;
 }
 
 export declare namespace TagManagerVariables {

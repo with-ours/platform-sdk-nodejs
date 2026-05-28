@@ -19,9 +19,13 @@ export class TagManagers extends APIResource {
   /**
    * Create a new tag manager. The server seeds three default triggers
    * (`Initialization`, `PageView`, `DomReady`) and one `OursInitTag` so the
-   * container is immediately usable. Returns the bare entity. Accounts have a
-   * per-account tag manager limit — exceeding it returns 409 with the reason in the
-   * response `error` field. Requires scope: tagManagers:create
+   * container is immediately usable — call
+   * `GET /tag-manager-triggers?tagManagerId={id}` right after create to grab their
+   * server-assigned ids so you can reuse them in `fireTriggerIds` instead of
+   * redundantly creating a second `PageView`/`DomReady`/`Initialization`. Returns
+   * the bare entity. Accounts have a per-account tag manager limit — exceeding it
+   * returns 409 with the reason in the response `error` field. Requires scope:
+   * tagManagers:create
    */
   create(body: TagManagerCreateParams, options?: RequestOptions): APIPromise<TagManagerCreateResponse> {
     return this._client.post('/rest/v1/tag-managers', { body, ...options });
@@ -230,7 +234,7 @@ export interface TagManagerDeleteResponse {
   id: string;
 
   /**
-   * True when the underlying mutation succeeded.
+   * True when the tag manager was deleted.
    */
   deleted: boolean;
 }

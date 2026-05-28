@@ -421,3 +421,13 @@ Methods:
 - <code title="get /rest/v1/tag-manager-folders/{id}">client.tagManagerFolders.<a href="./src/resources/tag-manager-folders.ts">retrieve</a>(id) -> TagManagerFolderRetrieveResponse</code>
 - <code title="patch /rest/v1/tag-manager-folders/{id}">client.tagManagerFolders.<a href="./src/resources/tag-manager-folders.ts">update</a>(id, { ...params }) -> TagManagerFolderUpdateResponse</code>
 - <code title="delete /rest/v1/tag-manager-folders/{id}">client.tagManagerFolders.<a href="./src/resources/tag-manager-folders.ts">delete</a>(id) -> TagManagerFolderDeleteResponse</code>
+
+# TagManagerAssetFolders
+
+Types:
+
+- <code><a href="./src/resources/tag-manager-asset-folders.ts">TagManagerAssetFolderCreateResponse</a></code>
+
+Methods:
+
+- <code title="post /rest/v1/tag-manager-asset-folders">client.tagManagerAssetFolders.<a href="./src/resources/tag-manager-asset-folders.ts">create</a>({ ...params }) -> TagManagerAssetFolderCreateResponse</code>

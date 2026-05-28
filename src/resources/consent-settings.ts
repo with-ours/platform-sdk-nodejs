@@ -75,9 +75,10 @@ export class ConsentSettings extends APIResource {
    * (`COUNT(DISTINCT visitor_id)`). Use the optional `pagePath` and `region` filters
    * to scope to one page or one visitor region; use `compareWithPreviousPeriod=true`
    * to also receive the matching prior window. `DAILY` allows a 90-day window;
-   * `HOURLY` is capped at 14 days. Reuses the API-key scope `consentSettings:find`
-   * because the endpoint is identified by a consent settings `id`. Requires scope:
-   * consentSettings:find
+   * `HOURLY` is capped at 14 days. Requires the API-key scope
+   * `report:consent-analytics` (this endpoint returns consent analytics report data,
+   * which is PHI-bearing and gated separately from consent-settings management).
+   * Requires scope: report:consent-analytics
    */
   analytics(
     id: string,
@@ -91,10 +92,10 @@ export class ConsentSettings extends APIResource {
    * Per-page consent breakdown for one consent settings record, ranked by opt-outs
    * (descending). Each row bundles banner views, opt-outs, close-icon clicks, and
    * the derived opt-out rate. Documented exception to the cursor-pagination
-   * standard: this is a derived read whose underlying GraphQL contract is
-   * offset/limit-based; cursors are not used. `search` is a substring match against
-   * `pathname`; `region` filters to one visitor region. Reuses the API-key scope
-   * `consentSettings:find`. Requires scope: consentSettings:find
+   * standard: this endpoint paginates with `limit` and `offset` rather than
+   * `cursor`. `search` is a substring match against `pathname`; `region` filters to
+   * one visitor region. Requires the API-key scope `report:consent-page-analysis`
+   * (PHI-bearing report data). Requires scope: report:consent-page-analysis
    */
   pageAnalysis(
     id: string,
@@ -111,8 +112,9 @@ export class ConsentSettings extends APIResource {
    * traffic, IP geo failure) are bucketed under the literal `Unknown` so per-region
    * counts always sum to the global totals. Use this to discover the region names
    * you can later pass to the `region` filter on
-   * `GET /rest/v1/consent-settings/{id}/analytics`. Reuses the API-key scope
-   * `consentSettings:find`. Requires scope: consentSettings:find
+   * `GET /rest/v1/consent-settings/{id}/analytics`. Requires the API-key scope
+   * `report:consent-analytics` (PHI-bearing report data). Requires scope:
+   * report:consent-analytics
    */
   analyticsByRegion(
     id: string,

@@ -57,12 +57,12 @@ export class DataGovernance extends APIResource {
    * wholesale**. There is no partial-merge for individual categories. To change one
    * category, fetch the current record, modify the array, and PATCH it back.
    *
-   * On write, categories are sorted ascending by the `priority` field you supplied
-   * (a sort key, not a stored value), then re-stamped `1..N` so the persisted
-   * `priority` is always sequential with no gaps. Stale `destinationIds` (deleted
-   * destinations or destinations on another account) are silently filtered out — the
-   * response echoes the filtered list, so a follow-up GET is not required to see
-   * what was saved. Requires scope: globalDispatch:update
+   * Categories are sorted ascending by the `priority` you supplied and then
+   * renumbered `1..N` in the response, so the returned `priority` values are always
+   * sequential with no gaps. Stale `destinationIds` (deleted destinations or
+   * destinations on another account) are silently filtered out — the response echoes
+   * the filtered list, so a follow-up GET is not required to see what was saved.
+   * Requires scope: globalDispatch:update
    */
   update(
     id: string,
@@ -871,7 +871,7 @@ export interface DataGovernanceDeleteResponse {
   id: string;
 
   /**
-   * True when the underlying mutation succeeded; the entity is gone.
+   * True when the record was deleted.
    */
   deleted: boolean;
 }
