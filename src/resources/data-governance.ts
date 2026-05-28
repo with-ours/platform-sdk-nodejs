@@ -871,7 +871,7 @@ export interface DataGovernanceDeleteResponse {
   id: string;
 
   /**
-   * True when the underlying mutation succeeded; the entity is gone.
+   * True when the record was deleted.
    */
   deleted: boolean;
 }

@@ -194,6 +194,11 @@ import {
   Sources,
 } from './resources/sources';
 import {
+  TagManagerAssetFolderCreateParams,
+  TagManagerAssetFolderCreateResponse,
+  TagManagerAssetFolders,
+} from './resources/tag-manager-asset-folders';
+import {
   TagManagerFolderCreateParams,
   TagManagerFolderCreateResponse,
   TagManagerFolderDeleteResponse,
@@ -1049,6 +1054,7 @@ export class OursPrivacyPlatform {
   tagManagerTriggers: API.TagManagerTriggers = new API.TagManagerTriggers(this);
   tagManagerVariables: API.TagManagerVariables = new API.TagManagerVariables(this);
   tagManagerFolders: API.TagManagerFolders = new API.TagManagerFolders(this);
+  tagManagerAssetFolders: API.TagManagerAssetFolders = new API.TagManagerAssetFolders(this);
 }
 
 OursPrivacyPlatform.AllowedEvents = AllowedEvents;
@@ -1073,6 +1079,7 @@ OursPrivacyPlatform.TagManagerTags = TagManagerTags;
 OursPrivacyPlatform.TagManagerTriggers = TagManagerTriggers;
 OursPrivacyPlatform.TagManagerVariables = TagManagerVariables;
 OursPrivacyPlatform.TagManagerFolders = TagManagerFolders;
+OursPrivacyPlatform.TagManagerAssetFolders = TagManagerAssetFolders;
 
 export declare namespace OursPrivacyPlatform {
   export type RequestOptions = Opts.RequestOptions;
@@ -1372,5 +1379,11 @@ export declare namespace OursPrivacyPlatform {
     type TagManagerFolderListParams as TagManagerFolderListParams,
     type TagManagerFolderCreateParams as TagManagerFolderCreateParams,
     type TagManagerFolderUpdateParams as TagManagerFolderUpdateParams,
+  };
+
+  export {
+    TagManagerAssetFolders as TagManagerAssetFolders,
+    type TagManagerAssetFolderCreateResponse as TagManagerAssetFolderCreateResponse,
+    type TagManagerAssetFolderCreateParams as TagManagerAssetFolderCreateParams,
   };
 }

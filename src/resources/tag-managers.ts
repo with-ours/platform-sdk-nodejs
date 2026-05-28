@@ -234,7 +234,7 @@ export interface TagManagerDeleteResponse {
   id: string;
 
   /**
-   * True when the underlying mutation succeeded.
+   * True when the tag manager was deleted.
    */
   deleted: boolean;
 }

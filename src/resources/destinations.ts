@@ -133,6 +133,7 @@ export interface DestinationListResponse {
     | 'Mailchimp'
     | 'Mixpanel'
     | 'NextdoorAds'
+    | 'OpenAIAds'
     | 'OursSyntheticData'
     | 'Partnerize'
     | 'Pinterest'
@@ -234,6 +235,7 @@ export interface DestinationCreateResponse {
     | 'Mailchimp'
     | 'Mixpanel'
     | 'NextdoorAds'
+    | 'OpenAIAds'
     | 'OursSyntheticData'
     | 'Partnerize'
     | 'Pinterest'
@@ -335,6 +337,7 @@ export interface DestinationRetrieveResponse {
     | 'Mailchimp'
     | 'Mixpanel'
     | 'NextdoorAds'
+    | 'OpenAIAds'
     | 'OursSyntheticData'
     | 'Partnerize'
     | 'Pinterest'
@@ -436,6 +439,7 @@ export interface DestinationUpdateResponse {
     | 'Mailchimp'
     | 'Mixpanel'
     | 'NextdoorAds'
+    | 'OpenAIAds'
     | 'OursSyntheticData'
     | 'Partnerize'
     | 'Pinterest'
@@ -550,7 +554,8 @@ export namespace DestinationTypesResponse {
       | 'Everflow'
       | 'BeeswaxPostback'
       | 'AdobeAnalytics'
-      | 'UniversalAds';
+      | 'UniversalAds'
+      | 'OpenAIAds';
 
     capabilities: Entity.Capabilities;
 
@@ -711,6 +716,7 @@ export interface DestinationListParams extends CursorParams {
     | 'Mailchimp'
     | 'Mixpanel'
     | 'NextdoorAds'
+    | 'OpenAIAds'
     | 'OursSyntheticData'
     | 'Partnerize'
     | 'Pinterest'
@@ -813,7 +819,8 @@ export interface DestinationCreateParams {
     | 'Everflow'
     | 'BeeswaxPostback'
     | 'AdobeAnalytics'
-    | 'UniversalAds';
+    | 'UniversalAds'
+    | 'OpenAIAds';
 
   name?: string | null;
 

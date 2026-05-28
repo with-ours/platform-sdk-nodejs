@@ -32,7 +32,6 @@ describe('resource tagManagerTags', () => {
       fireTriggerIds: ['string'],
       name: 'name',
       parameters: { foo: 'bar' },
-      Tag: 'Tag',
       tagManagerId: 'x',
       type: 'type',
     });
@@ -50,7 +49,6 @@ describe('resource tagManagerTags', () => {
       fireTriggerIds: ['string'],
       name: 'name',
       parameters: { foo: 'bar' },
-      Tag: 'Tag',
       tagManagerId: 'x',
       type: 'type',
       blockTriggerIds: ['string'],

@@ -190,7 +190,7 @@ export interface WebScannerRuleDeleteResponse {
   id: string;
 
   /**
-   * True when the underlying mutation succeeded.
+   * True when the rule was deleted.
    */
   deleted: boolean;
 }

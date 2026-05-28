@@ -230,7 +230,7 @@ export interface WebScannerDeleteResponse {
   id: string;
 
   /**
-   * True when the underlying mutation succeeded; the scanner and its rules are gone.
+   * True when the scanner and its rules were deleted.
    */
   deleted: boolean;
 }

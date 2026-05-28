@@ -45,7 +45,8 @@ export class TagManagerTriggers extends APIResource {
 
   /**
    * Partially update a trigger. Only the fields you send are changed. `conditions`
-   * is replaced wholesale when sent. Requires scope: tagManagers:update
+   * is replaced wholesale when sent. To assign a trigger to a folder, use
+   * `POST /rest/v1/tag-manager-asset-folders`. Requires scope: tagManagers:update
    */
   update(
     id: string,
@@ -97,12 +98,6 @@ export interface TagManagerTriggerListResponse {
   tagManagerId: string;
 
   /**
-   * Must equal `type` — send the same string in both fields. The server rejects any
-   * divergent value.
-   */
-  Trigger: string;
-
-  /**
    * Trigger type discriminator. Examples that exist today: `PageView`, `DomReady`,
    * `Initialization`, `AllElementsClick`, `AllLinksClick`, `FormSubmit`,
    * `CustomEvent`, `ScrollReach`, `Timer`. Pick from
@@ -116,8 +111,8 @@ export interface TagManagerTriggerListResponse {
   enabled?: boolean | null;
 
   /**
-   * Folder this trigger belongs to. Read-only on this endpoint — use the GraphQL
-   * `assignTagManagerAssetToFolder` mutation to change.
+   * Folder this trigger belongs to. Settable via PATCH — send a folder UUID to
+   * assign, or `null` to remove from its current folder.
    */
   folderId?: string | null;
 
@@ -145,12 +140,6 @@ export interface TagManagerTriggerCreateResponse {
   tagManagerId: string;
 
   /**
-   * Must equal `type` — send the same string in both fields. The server rejects any
-   * divergent value.
-   */
-  Trigger: string;
-
-  /**
    * Trigger type discriminator. Examples that exist today: `PageView`, `DomReady`,
    * `Initialization`, `AllElementsClick`, `AllLinksClick`, `FormSubmit`,
    * `CustomEvent`, `ScrollReach`, `Timer`. Pick from
@@ -164,8 +153,8 @@ export interface TagManagerTriggerCreateResponse {
   enabled?: boolean | null;
 
   /**
-   * Folder this trigger belongs to. Read-only on this endpoint — use the GraphQL
-   * `assignTagManagerAssetToFolder` mutation to change.
+   * Folder this trigger belongs to. Settable via PATCH — send a folder UUID to
+   * assign, or `null` to remove from its current folder.
    */
   folderId?: string | null;
 
@@ -193,12 +182,6 @@ export interface TagManagerTriggerRetrieveResponse {
   tagManagerId: string;
 
   /**
-   * Must equal `type` — send the same string in both fields. The server rejects any
-   * divergent value.
-   */
-  Trigger: string;
-
-  /**
    * Trigger type discriminator. Examples that exist today: `PageView`, `DomReady`,
    * `Initialization`, `AllElementsClick`, `AllLinksClick`, `FormSubmit`,
    * `CustomEvent`, `ScrollReach`, `Timer`. Pick from
@@ -212,8 +195,8 @@ export interface TagManagerTriggerRetrieveResponse {
   enabled?: boolean | null;
 
   /**
-   * Folder this trigger belongs to. Read-only on this endpoint — use the GraphQL
-   * `assignTagManagerAssetToFolder` mutation to change.
+   * Folder this trigger belongs to. Settable via PATCH — send a folder UUID to
+   * assign, or `null` to remove from its current folder.
    */
   folderId?: string | null;
 
@@ -241,12 +224,6 @@ export interface TagManagerTriggerUpdateResponse {
   tagManagerId: string;
 
   /**
-   * Must equal `type` — send the same string in both fields. The server rejects any
-   * divergent value.
-   */
-  Trigger: string;
-
-  /**
    * Trigger type discriminator. Examples that exist today: `PageView`, `DomReady`,
    * `Initialization`, `AllElementsClick`, `AllLinksClick`, `FormSubmit`,
    * `CustomEvent`, `ScrollReach`, `Timer`. Pick from
@@ -260,8 +237,8 @@ export interface TagManagerTriggerUpdateResponse {
   enabled?: boolean | null;
 
   /**
-   * Folder this trigger belongs to. Read-only on this endpoint — use the GraphQL
-   * `assignTagManagerAssetToFolder` mutation to change.
+   * Folder this trigger belongs to. Settable via PATCH — send a folder UUID to
+   * assign, or `null` to remove from its current folder.
    */
   folderId?: string | null;
 
@@ -391,12 +368,6 @@ export interface TagManagerTriggerCreateParams {
   tagManagerId: string;
 
   /**
-   * Must equal `type` — send the same string in both fields. The server rejects any
-   * divergent value.
-   */
-  Trigger: string;
-
-  /**
    * Trigger type discriminator. Pick from `GET /tag-manager-triggers/types` for the
    * canonical set (e.g. `PageView`, `CustomEvent`, `AllElementsClick`).
    */
@@ -427,14 +398,7 @@ export interface TagManagerTriggerUpdateParams {
   parameters?: { [key: string]: unknown };
 
   /**
-   * Must equal `type`. Omit both fields, or send both with the same value — the
-   * server rejects any divergence.
-   */
-  Trigger?: string;
-
-  /**
-   * Updated trigger type. Pick from `GET /tag-manager-triggers/types`. When changing
-   * `type`, send the new value in `Trigger` as well (they must match).
+   * Updated trigger type. Pick from `GET /tag-manager-triggers/types`.
    */
   type?: string;
 }

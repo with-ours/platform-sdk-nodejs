@@ -33,7 +33,6 @@ describe('resource tagManagerVariables', () => {
       parameters: { foo: 'bar' },
       tagManagerId: 'x',
       type: 'type',
-      Variable: 'Variable',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -50,7 +49,6 @@ describe('resource tagManagerVariables', () => {
       parameters: { foo: 'bar' },
       tagManagerId: 'x',
       type: 'type',
-      Variable: 'Variable',
       defaultValue: { foo: 'bar' },
       enabled: true,
       lookUpTable: { foo: 'bar' },
