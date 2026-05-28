@@ -175,6 +175,11 @@ export {
   type SourceListResponsesCursor,
 } from './sources';
 export {
+  TagManagerAssetFolders,
+  type TagManagerAssetFolderCreateResponse,
+  type TagManagerAssetFolderCreateParams,
+} from './tag-manager-asset-folders';
+export {
   TagManagerFolders,
   type TagManagerFolderListResponse,
   type TagManagerFolderCreateResponse,

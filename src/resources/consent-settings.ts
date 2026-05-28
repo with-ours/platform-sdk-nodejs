@@ -92,11 +92,10 @@ export class ConsentSettings extends APIResource {
    * Per-page consent breakdown for one consent settings record, ranked by opt-outs
    * (descending). Each row bundles banner views, opt-outs, close-icon clicks, and
    * the derived opt-out rate. Documented exception to the cursor-pagination
-   * standard: this is a derived read whose underlying GraphQL contract is
-   * offset/limit-based; cursors are not used. `search` is a substring match against
-   * `pathname`; `region` filters to one visitor region. Requires the API-key scope
-   * `report:consent-page-analysis` (PHI-bearing report data). Requires scope:
-   * report:consent-page-analysis
+   * standard: this endpoint paginates with `limit` and `offset` rather than
+   * `cursor`. `search` is a substring match against `pathname`; `region` filters to
+   * one visitor region. Requires the API-key scope `report:consent-page-analysis`
+   * (PHI-bearing report data). Requires scope: report:consent-page-analysis
    */
   pageAnalysis(
     id: string,

@@ -33,7 +33,6 @@ describe('resource tagManagerTriggers', () => {
       name: 'name',
       parameters: { foo: 'bar' },
       tagManagerId: 'x',
-      Trigger: 'Trigger',
       type: 'type',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -51,7 +50,6 @@ describe('resource tagManagerTriggers', () => {
       name: 'name',
       parameters: { foo: 'bar' },
       tagManagerId: 'x',
-      Trigger: 'Trigger',
       type: 'type',
       enabled: true,
     });
