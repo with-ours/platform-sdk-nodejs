@@ -47,7 +47,8 @@ export class TagManagerVariables extends APIResource {
   /**
    * Partially update a variable. Only the fields you send are changed. Name
    * collisions with other variables in the same tag manager return 409 with the
-   * reason in the response `error` field. Requires scope: tagManagers:update
+   * reason in the response `error` field. To assign a variable to a folder, use
+   * `POST /rest/v1/tag-manager-asset-folders`. Requires scope: tagManagers:update
    */
   update(
     id: string,
@@ -99,12 +100,6 @@ export interface TagManagerVariableListResponse {
    */
   type: string;
 
-  /**
-   * Must equal `type` — send the same string in both fields. The server rejects any
-   * divergent value.
-   */
-  Variable: string;
-
   createdAt?: string | null;
 
   /**
@@ -116,8 +111,8 @@ export interface TagManagerVariableListResponse {
   enabled?: boolean | null;
 
   /**
-   * Folder this variable belongs to. Read-only on this endpoint — use the GraphQL
-   * `assignTagManagerAssetToFolder` mutation to change.
+   * Folder this variable belongs to. Settable via PATCH — send a folder UUID to
+   * assign, or `null` to remove from its current folder.
    */
   folderId?: string | null;
 
@@ -150,12 +145,6 @@ export interface TagManagerVariableCreateResponse {
    */
   type: string;
 
-  /**
-   * Must equal `type` — send the same string in both fields. The server rejects any
-   * divergent value.
-   */
-  Variable: string;
-
   createdAt?: string | null;
 
   /**
@@ -167,8 +156,8 @@ export interface TagManagerVariableCreateResponse {
   enabled?: boolean | null;
 
   /**
-   * Folder this variable belongs to. Read-only on this endpoint — use the GraphQL
-   * `assignTagManagerAssetToFolder` mutation to change.
+   * Folder this variable belongs to. Settable via PATCH — send a folder UUID to
+   * assign, or `null` to remove from its current folder.
    */
   folderId?: string | null;
 
@@ -201,12 +190,6 @@ export interface TagManagerVariableRetrieveResponse {
    */
   type: string;
 
-  /**
-   * Must equal `type` — send the same string in both fields. The server rejects any
-   * divergent value.
-   */
-  Variable: string;
-
   createdAt?: string | null;
 
   /**
@@ -218,8 +201,8 @@ export interface TagManagerVariableRetrieveResponse {
   enabled?: boolean | null;
 
   /**
-   * Folder this variable belongs to. Read-only on this endpoint — use the GraphQL
-   * `assignTagManagerAssetToFolder` mutation to change.
+   * Folder this variable belongs to. Settable via PATCH — send a folder UUID to
+   * assign, or `null` to remove from its current folder.
    */
   folderId?: string | null;
 
@@ -252,12 +235,6 @@ export interface TagManagerVariableUpdateResponse {
    */
   type: string;
 
-  /**
-   * Must equal `type` — send the same string in both fields. The server rejects any
-   * divergent value.
-   */
-  Variable: string;
-
   createdAt?: string | null;
 
   /**
@@ -269,8 +246,8 @@ export interface TagManagerVariableUpdateResponse {
   enabled?: boolean | null;
 
   /**
-   * Folder this variable belongs to. Read-only on this endpoint — use the GraphQL
-   * `assignTagManagerAssetToFolder` mutation to change.
+   * Folder this variable belongs to. Settable via PATCH — send a folder UUID to
+   * assign, or `null` to remove from its current folder.
    */
   folderId?: string | null;
 
@@ -412,12 +389,6 @@ export interface TagManagerVariableCreateParams {
   type: string;
 
   /**
-   * Must equal `type` — send the same string in both fields. The server rejects any
-   * divergent value.
-   */
-  Variable: string;
-
-  /**
    * Optional default value. JSON value of any type.
    */
   defaultValue?: { [key: string]: unknown } | null;
@@ -457,16 +428,9 @@ export interface TagManagerVariableUpdateParams {
   parameters?: { [key: string]: unknown };
 
   /**
-   * Updated variable type. Pick from `GET /tag-manager-variables/types`. When
-   * changing `type`, send the new value in `Variable` as well (they must match).
+   * Updated variable type. Pick from `GET /tag-manager-variables/types`.
    */
   type?: string;
-
-  /**
-   * Must equal `type`. Omit both fields, or send both with the same value — the
-   * server rejects any divergence.
-   */
-  Variable?: string;
 }
 
 export declare namespace TagManagerVariables {

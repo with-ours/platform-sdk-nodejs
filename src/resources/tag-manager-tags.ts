@@ -26,9 +26,8 @@ export class TagManagerTags extends APIResource {
 
   /**
    * Create a new tag inside a tag manager. `tagManagerId` is required in the body.
-   * Newly created tags are not assigned to any folder — use the GraphQL
-   * `assignTagManagerAssetToFolder` mutation to place them. Requires scope:
-   * tagManagers:update
+   * Newly created tags are not assigned to any folder — assign after creation via
+   * PATCH with `folderId`. Requires scope: tagManagers:update
    */
   create(body: TagManagerTagCreateParams, options?: RequestOptions): APIPromise<TagManagerTagCreateResponse> {
     return this._client.post('/rest/v1/tag-manager-tags', { body, ...options });
@@ -43,10 +42,9 @@ export class TagManagerTags extends APIResource {
   }
 
   /**
-   * Partially update a tag. Only the fields you send are changed. `folderId` is
-   * read-only here; change folder membership via the GraphQL
-   * `assignTagManagerAssetToFolder` mutation. Tags cannot be moved between tag
-   * managers (omit `tagManagerId` on patch). Requires scope: tagManagers:update
+   * Partially update a tag. Only the fields you send are changed. Tags cannot be
+   * moved between tag managers. To assign a tag to a folder, use
+   * `POST /rest/v1/tag-manager-asset-folders`. Requires scope: tagManagers:update
    */
   update(
     id: string,
@@ -104,12 +102,6 @@ export interface TagManagerTagListResponse {
   parameters: { [key: string]: unknown };
 
   /**
-   * Must equal `type` — send the same string in both fields. The server rejects any
-   * divergent value.
-   */
-  Tag: string;
-
-  /**
    * Parent tag manager that owns this tag.
    */
   tagManagerId: string;
@@ -135,8 +127,8 @@ export interface TagManagerTagListResponse {
   enabled?: boolean | null;
 
   /**
-   * Folder this tag belongs to in the dashboard. Read-only on this endpoint — change
-   * folder membership via the GraphQL `assignTagManagerAssetToFolder` mutation.
+   * Folder this tag belongs to in the dashboard. Settable via PATCH — send a folder
+   * UUID to assign, or `null` to remove from its current folder.
    */
   folderId?: string | null;
 
@@ -174,12 +166,6 @@ export interface TagManagerTagCreateResponse {
   parameters: { [key: string]: unknown };
 
   /**
-   * Must equal `type` — send the same string in both fields. The server rejects any
-   * divergent value.
-   */
-  Tag: string;
-
-  /**
    * Parent tag manager that owns this tag.
    */
   tagManagerId: string;
@@ -205,8 +191,8 @@ export interface TagManagerTagCreateResponse {
   enabled?: boolean | null;
 
   /**
-   * Folder this tag belongs to in the dashboard. Read-only on this endpoint — change
-   * folder membership via the GraphQL `assignTagManagerAssetToFolder` mutation.
+   * Folder this tag belongs to in the dashboard. Settable via PATCH — send a folder
+   * UUID to assign, or `null` to remove from its current folder.
    */
   folderId?: string | null;
 
@@ -244,12 +230,6 @@ export interface TagManagerTagRetrieveResponse {
   parameters: { [key: string]: unknown };
 
   /**
-   * Must equal `type` — send the same string in both fields. The server rejects any
-   * divergent value.
-   */
-  Tag: string;
-
-  /**
    * Parent tag manager that owns this tag.
    */
   tagManagerId: string;
@@ -275,8 +255,8 @@ export interface TagManagerTagRetrieveResponse {
   enabled?: boolean | null;
 
   /**
-   * Folder this tag belongs to in the dashboard. Read-only on this endpoint — change
-   * folder membership via the GraphQL `assignTagManagerAssetToFolder` mutation.
+   * Folder this tag belongs to in the dashboard. Settable via PATCH — send a folder
+   * UUID to assign, or `null` to remove from its current folder.
    */
   folderId?: string | null;
 
@@ -314,12 +294,6 @@ export interface TagManagerTagUpdateResponse {
   parameters: { [key: string]: unknown };
 
   /**
-   * Must equal `type` — send the same string in both fields. The server rejects any
-   * divergent value.
-   */
-  Tag: string;
-
-  /**
    * Parent tag manager that owns this tag.
    */
   tagManagerId: string;
@@ -345,8 +319,8 @@ export interface TagManagerTagUpdateResponse {
   enabled?: boolean | null;
 
   /**
-   * Folder this tag belongs to in the dashboard. Read-only on this endpoint — change
-   * folder membership via the GraphQL `assignTagManagerAssetToFolder` mutation.
+   * Folder this tag belongs to in the dashboard. Settable via PATCH — send a folder
+   * UUID to assign, or `null` to remove from its current folder.
    */
   folderId?: string | null;
 
@@ -479,12 +453,6 @@ export interface TagManagerTagCreateParams {
   parameters: { [key: string]: unknown };
 
   /**
-   * Must equal `type` — send the same string in both fields. The server rejects any
-   * divergent value.
-   */
-  Tag: string;
-
-  /**
    * Parent tag manager that will own the new tag.
    */
   tagManagerId: string;
@@ -544,14 +512,7 @@ export interface TagManagerTagUpdateParams {
   priority?: number | null;
 
   /**
-   * Must equal `type`. Omit both fields, or send both with the same value — the
-   * server rejects any divergence.
-   */
-  Tag?: string;
-
-  /**
-   * Updated tag type. Pick from `GET /tag-manager-tags/types`. When changing `type`,
-   * send the new value in `Tag` as well (they must match).
+   * Updated tag type. Pick from `GET /tag-manager-tags/types`.
    */
   type?: string;
 }
