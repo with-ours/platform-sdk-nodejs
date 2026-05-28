@@ -1046,15 +1046,15 @@ export class OursPrivacyPlatform {
   mappings: API.Mappings = new API.Mappings(this);
   replaySettings: API.ReplaySettings = new API.ReplaySettings(this);
   sources: API.Sources = new API.Sources(this);
-  versions: API.Versions = new API.Versions(this);
-  webScannerRules: API.WebScannerRules = new API.WebScannerRules(this);
-  webScanners: API.WebScanners = new API.WebScanners(this);
   tagManagers: API.TagManagers = new API.TagManagers(this);
   tagManagerTags: API.TagManagerTags = new API.TagManagerTags(this);
   tagManagerTriggers: API.TagManagerTriggers = new API.TagManagerTriggers(this);
   tagManagerVariables: API.TagManagerVariables = new API.TagManagerVariables(this);
   tagManagerFolders: API.TagManagerFolders = new API.TagManagerFolders(this);
   tagManagerAssetFolders: API.TagManagerAssetFolders = new API.TagManagerAssetFolders(this);
+  versions: API.Versions = new API.Versions(this);
+  webScannerRules: API.WebScannerRules = new API.WebScannerRules(this);
+  webScanners: API.WebScanners = new API.WebScanners(this);
 }
 
 OursPrivacyPlatform.AllowedEvents = AllowedEvents;
@@ -1071,15 +1071,15 @@ OursPrivacyPlatform.Locations = Locations;
 OursPrivacyPlatform.Mappings = Mappings;
 OursPrivacyPlatform.ReplaySettings = ReplaySettings;
 OursPrivacyPlatform.Sources = Sources;
-OursPrivacyPlatform.Versions = Versions;
-OursPrivacyPlatform.WebScannerRules = WebScannerRules;
-OursPrivacyPlatform.WebScanners = WebScanners;
 OursPrivacyPlatform.TagManagers = TagManagers;
 OursPrivacyPlatform.TagManagerTags = TagManagerTags;
 OursPrivacyPlatform.TagManagerTriggers = TagManagerTriggers;
 OursPrivacyPlatform.TagManagerVariables = TagManagerVariables;
 OursPrivacyPlatform.TagManagerFolders = TagManagerFolders;
 OursPrivacyPlatform.TagManagerAssetFolders = TagManagerAssetFolders;
+OursPrivacyPlatform.Versions = Versions;
+OursPrivacyPlatform.WebScannerRules = WebScannerRules;
+OursPrivacyPlatform.WebScanners = WebScanners;
 
 export declare namespace OursPrivacyPlatform {
   export type RequestOptions = Opts.RequestOptions;
@@ -1276,46 +1276,6 @@ export declare namespace OursPrivacyPlatform {
   };
 
   export {
-    Versions as Versions,
-    type VersionListResponse as VersionListResponse,
-    type VersionCreateResponse as VersionCreateResponse,
-    type VersionRetrieveResponse as VersionRetrieveResponse,
-    type VersionUpdateResponse as VersionUpdateResponse,
-    type VersionPublishResponse as VersionPublishResponse,
-    type VersionSnapshotResponse as VersionSnapshotResponse,
-    type VersionDiffResponse as VersionDiffResponse,
-    type VersionListResponsesCursor as VersionListResponsesCursor,
-    type VersionListParams as VersionListParams,
-    type VersionCreateParams as VersionCreateParams,
-    type VersionUpdateParams as VersionUpdateParams,
-    type VersionDiffParams as VersionDiffParams,
-  };
-
-  export {
-    WebScannerRules as WebScannerRules,
-    type WebScannerRuleListResponse as WebScannerRuleListResponse,
-    type WebScannerRuleCreateResponse as WebScannerRuleCreateResponse,
-    type WebScannerRuleRetrieveResponse as WebScannerRuleRetrieveResponse,
-    type WebScannerRuleUpdateResponse as WebScannerRuleUpdateResponse,
-    type WebScannerRuleDeleteResponse as WebScannerRuleDeleteResponse,
-    type WebScannerRuleListParams as WebScannerRuleListParams,
-    type WebScannerRuleCreateParams as WebScannerRuleCreateParams,
-    type WebScannerRuleUpdateParams as WebScannerRuleUpdateParams,
-  };
-
-  export {
-    WebScanners as WebScanners,
-    type WebScannerListResponse as WebScannerListResponse,
-    type WebScannerCreateResponse as WebScannerCreateResponse,
-    type WebScannerRetrieveResponse as WebScannerRetrieveResponse,
-    type WebScannerUpdateResponse as WebScannerUpdateResponse,
-    type WebScannerDeleteResponse as WebScannerDeleteResponse,
-    type WebScannerTriggerResponse as WebScannerTriggerResponse,
-    type WebScannerCreateParams as WebScannerCreateParams,
-    type WebScannerUpdateParams as WebScannerUpdateParams,
-  };
-
-  export {
     TagManagers as TagManagers,
     type TagManagerListResponse as TagManagerListResponse,
     type TagManagerCreateResponse as TagManagerCreateResponse,
@@ -1385,5 +1345,45 @@ export declare namespace OursPrivacyPlatform {
     TagManagerAssetFolders as TagManagerAssetFolders,
     type TagManagerAssetFolderCreateResponse as TagManagerAssetFolderCreateResponse,
     type TagManagerAssetFolderCreateParams as TagManagerAssetFolderCreateParams,
+  };
+
+  export {
+    Versions as Versions,
+    type VersionListResponse as VersionListResponse,
+    type VersionCreateResponse as VersionCreateResponse,
+    type VersionRetrieveResponse as VersionRetrieveResponse,
+    type VersionUpdateResponse as VersionUpdateResponse,
+    type VersionPublishResponse as VersionPublishResponse,
+    type VersionSnapshotResponse as VersionSnapshotResponse,
+    type VersionDiffResponse as VersionDiffResponse,
+    type VersionListResponsesCursor as VersionListResponsesCursor,
+    type VersionListParams as VersionListParams,
+    type VersionCreateParams as VersionCreateParams,
+    type VersionUpdateParams as VersionUpdateParams,
+    type VersionDiffParams as VersionDiffParams,
+  };
+
+  export {
+    WebScannerRules as WebScannerRules,
+    type WebScannerRuleListResponse as WebScannerRuleListResponse,
+    type WebScannerRuleCreateResponse as WebScannerRuleCreateResponse,
+    type WebScannerRuleRetrieveResponse as WebScannerRuleRetrieveResponse,
+    type WebScannerRuleUpdateResponse as WebScannerRuleUpdateResponse,
+    type WebScannerRuleDeleteResponse as WebScannerRuleDeleteResponse,
+    type WebScannerRuleListParams as WebScannerRuleListParams,
+    type WebScannerRuleCreateParams as WebScannerRuleCreateParams,
+    type WebScannerRuleUpdateParams as WebScannerRuleUpdateParams,
+  };
+
+  export {
+    WebScanners as WebScanners,
+    type WebScannerListResponse as WebScannerListResponse,
+    type WebScannerCreateResponse as WebScannerCreateResponse,
+    type WebScannerRetrieveResponse as WebScannerRetrieveResponse,
+    type WebScannerUpdateResponse as WebScannerUpdateResponse,
+    type WebScannerDeleteResponse as WebScannerDeleteResponse,
+    type WebScannerTriggerResponse as WebScannerTriggerResponse,
+    type WebScannerCreateParams as WebScannerCreateParams,
+    type WebScannerUpdateParams as WebScannerUpdateParams,
   };
 }

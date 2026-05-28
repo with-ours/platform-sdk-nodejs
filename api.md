@@ -266,66 +266,6 @@ Methods:
 - <code title="delete /rest/v1/sources/{id}">client.sources.<a href="./src/resources/sources.ts">delete</a>(id) -> SourceDeleteResponse</code>
 - <code title="get /rest/v1/sources/{id}/tokens">client.sources.<a href="./src/resources/sources.ts">tokens</a>(id) -> SourceTokensResponse</code>
 
-# Versions
-
-Types:
-
-- <code><a href="./src/resources/versions.ts">VersionListResponse</a></code>
-- <code><a href="./src/resources/versions.ts">VersionCreateResponse</a></code>
-- <code><a href="./src/resources/versions.ts">VersionRetrieveResponse</a></code>
-- <code><a href="./src/resources/versions.ts">VersionUpdateResponse</a></code>
-- <code><a href="./src/resources/versions.ts">VersionPublishResponse</a></code>
-- <code><a href="./src/resources/versions.ts">VersionSnapshotResponse</a></code>
-- <code><a href="./src/resources/versions.ts">VersionDiffResponse</a></code>
-
-Methods:
-
-- <code title="get /rest/v1/versions">client.versions.<a href="./src/resources/versions.ts">list</a>({ ...params }) -> VersionListResponsesCursor</code>
-- <code title="post /rest/v1/versions">client.versions.<a href="./src/resources/versions.ts">create</a>({ ...params }) -> VersionCreateResponse</code>
-- <code title="get /rest/v1/versions/{id}">client.versions.<a href="./src/resources/versions.ts">retrieve</a>(id) -> VersionRetrieveResponse</code>
-- <code title="patch /rest/v1/versions/{id}">client.versions.<a href="./src/resources/versions.ts">update</a>(id, { ...params }) -> VersionUpdateResponse</code>
-- <code title="post /rest/v1/versions/{id}/publish">client.versions.<a href="./src/resources/versions.ts">publish</a>(id) -> VersionPublishResponse</code>
-- <code title="get /rest/v1/versions/{id}/snapshot">client.versions.<a href="./src/resources/versions.ts">snapshot</a>(id) -> VersionSnapshotResponse</code>
-- <code title="get /rest/v1/versions/{id}/diff">client.versions.<a href="./src/resources/versions.ts">diff</a>(id, { ...params }) -> VersionDiffResponse</code>
-
-# WebScannerRules
-
-Types:
-
-- <code><a href="./src/resources/web-scanner-rules.ts">WebScannerRuleListResponse</a></code>
-- <code><a href="./src/resources/web-scanner-rules.ts">WebScannerRuleCreateResponse</a></code>
-- <code><a href="./src/resources/web-scanner-rules.ts">WebScannerRuleRetrieveResponse</a></code>
-- <code><a href="./src/resources/web-scanner-rules.ts">WebScannerRuleUpdateResponse</a></code>
-- <code><a href="./src/resources/web-scanner-rules.ts">WebScannerRuleDeleteResponse</a></code>
-
-Methods:
-
-- <code title="get /rest/v1/web-scanner-rules">client.webScannerRules.<a href="./src/resources/web-scanner-rules.ts">list</a>({ ...params }) -> WebScannerRuleListResponse</code>
-- <code title="post /rest/v1/web-scanner-rules">client.webScannerRules.<a href="./src/resources/web-scanner-rules.ts">create</a>({ ...params }) -> WebScannerRuleCreateResponse</code>
-- <code title="get /rest/v1/web-scanner-rules/{id}">client.webScannerRules.<a href="./src/resources/web-scanner-rules.ts">retrieve</a>(id) -> WebScannerRuleRetrieveResponse</code>
-- <code title="patch /rest/v1/web-scanner-rules/{id}">client.webScannerRules.<a href="./src/resources/web-scanner-rules.ts">update</a>(id, { ...params }) -> WebScannerRuleUpdateResponse</code>
-- <code title="delete /rest/v1/web-scanner-rules/{id}">client.webScannerRules.<a href="./src/resources/web-scanner-rules.ts">delete</a>(id) -> WebScannerRuleDeleteResponse</code>
-
-# WebScanners
-
-Types:
-
-- <code><a href="./src/resources/web-scanners.ts">WebScannerListResponse</a></code>
-- <code><a href="./src/resources/web-scanners.ts">WebScannerCreateResponse</a></code>
-- <code><a href="./src/resources/web-scanners.ts">WebScannerRetrieveResponse</a></code>
-- <code><a href="./src/resources/web-scanners.ts">WebScannerUpdateResponse</a></code>
-- <code><a href="./src/resources/web-scanners.ts">WebScannerDeleteResponse</a></code>
-- <code><a href="./src/resources/web-scanners.ts">WebScannerTriggerResponse</a></code>
-
-Methods:
-
-- <code title="get /rest/v1/web-scanners">client.webScanners.<a href="./src/resources/web-scanners.ts">list</a>() -> WebScannerListResponse</code>
-- <code title="post /rest/v1/web-scanners">client.webScanners.<a href="./src/resources/web-scanners.ts">create</a>({ ...params }) -> WebScannerCreateResponse</code>
-- <code title="get /rest/v1/web-scanners/{id}">client.webScanners.<a href="./src/resources/web-scanners.ts">retrieve</a>(id) -> WebScannerRetrieveResponse</code>
-- <code title="patch /rest/v1/web-scanners/{id}">client.webScanners.<a href="./src/resources/web-scanners.ts">update</a>(id, { ...params }) -> WebScannerUpdateResponse</code>
-- <code title="delete /rest/v1/web-scanners/{id}">client.webScanners.<a href="./src/resources/web-scanners.ts">delete</a>(id) -> WebScannerDeleteResponse</code>
-- <code title="post /rest/v1/web-scanners/{id}/trigger">client.webScanners.<a href="./src/resources/web-scanners.ts">trigger</a>(id) -> WebScannerTriggerResponse</code>
-
 # TagManagers
 
 Types:
@@ -431,3 +371,63 @@ Types:
 Methods:
 
 - <code title="post /rest/v1/tag-manager-asset-folders">client.tagManagerAssetFolders.<a href="./src/resources/tag-manager-asset-folders.ts">create</a>({ ...params }) -> TagManagerAssetFolderCreateResponse</code>
+
+# Versions
+
+Types:
+
+- <code><a href="./src/resources/versions.ts">VersionListResponse</a></code>
+- <code><a href="./src/resources/versions.ts">VersionCreateResponse</a></code>
+- <code><a href="./src/resources/versions.ts">VersionRetrieveResponse</a></code>
+- <code><a href="./src/resources/versions.ts">VersionUpdateResponse</a></code>
+- <code><a href="./src/resources/versions.ts">VersionPublishResponse</a></code>
+- <code><a href="./src/resources/versions.ts">VersionSnapshotResponse</a></code>
+- <code><a href="./src/resources/versions.ts">VersionDiffResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/versions">client.versions.<a href="./src/resources/versions.ts">list</a>({ ...params }) -> VersionListResponsesCursor</code>
+- <code title="post /rest/v1/versions">client.versions.<a href="./src/resources/versions.ts">create</a>({ ...params }) -> VersionCreateResponse</code>
+- <code title="get /rest/v1/versions/{id}">client.versions.<a href="./src/resources/versions.ts">retrieve</a>(id) -> VersionRetrieveResponse</code>
+- <code title="patch /rest/v1/versions/{id}">client.versions.<a href="./src/resources/versions.ts">update</a>(id, { ...params }) -> VersionUpdateResponse</code>
+- <code title="post /rest/v1/versions/{id}/publish">client.versions.<a href="./src/resources/versions.ts">publish</a>(id) -> VersionPublishResponse</code>
+- <code title="get /rest/v1/versions/{id}/snapshot">client.versions.<a href="./src/resources/versions.ts">snapshot</a>(id) -> VersionSnapshotResponse</code>
+- <code title="get /rest/v1/versions/{id}/diff">client.versions.<a href="./src/resources/versions.ts">diff</a>(id, { ...params }) -> VersionDiffResponse</code>
+
+# WebScannerRules
+
+Types:
+
+- <code><a href="./src/resources/web-scanner-rules.ts">WebScannerRuleListResponse</a></code>
+- <code><a href="./src/resources/web-scanner-rules.ts">WebScannerRuleCreateResponse</a></code>
+- <code><a href="./src/resources/web-scanner-rules.ts">WebScannerRuleRetrieveResponse</a></code>
+- <code><a href="./src/resources/web-scanner-rules.ts">WebScannerRuleUpdateResponse</a></code>
+- <code><a href="./src/resources/web-scanner-rules.ts">WebScannerRuleDeleteResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/web-scanner-rules">client.webScannerRules.<a href="./src/resources/web-scanner-rules.ts">list</a>({ ...params }) -> WebScannerRuleListResponse</code>
+- <code title="post /rest/v1/web-scanner-rules">client.webScannerRules.<a href="./src/resources/web-scanner-rules.ts">create</a>({ ...params }) -> WebScannerRuleCreateResponse</code>
+- <code title="get /rest/v1/web-scanner-rules/{id}">client.webScannerRules.<a href="./src/resources/web-scanner-rules.ts">retrieve</a>(id) -> WebScannerRuleRetrieveResponse</code>
+- <code title="patch /rest/v1/web-scanner-rules/{id}">client.webScannerRules.<a href="./src/resources/web-scanner-rules.ts">update</a>(id, { ...params }) -> WebScannerRuleUpdateResponse</code>
+- <code title="delete /rest/v1/web-scanner-rules/{id}">client.webScannerRules.<a href="./src/resources/web-scanner-rules.ts">delete</a>(id) -> WebScannerRuleDeleteResponse</code>
+
+# WebScanners
+
+Types:
+
+- <code><a href="./src/resources/web-scanners.ts">WebScannerListResponse</a></code>
+- <code><a href="./src/resources/web-scanners.ts">WebScannerCreateResponse</a></code>
+- <code><a href="./src/resources/web-scanners.ts">WebScannerRetrieveResponse</a></code>
+- <code><a href="./src/resources/web-scanners.ts">WebScannerUpdateResponse</a></code>
+- <code><a href="./src/resources/web-scanners.ts">WebScannerDeleteResponse</a></code>
+- <code><a href="./src/resources/web-scanners.ts">WebScannerTriggerResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/web-scanners">client.webScanners.<a href="./src/resources/web-scanners.ts">list</a>() -> WebScannerListResponse</code>
+- <code title="post /rest/v1/web-scanners">client.webScanners.<a href="./src/resources/web-scanners.ts">create</a>({ ...params }) -> WebScannerCreateResponse</code>
+- <code title="get /rest/v1/web-scanners/{id}">client.webScanners.<a href="./src/resources/web-scanners.ts">retrieve</a>(id) -> WebScannerRetrieveResponse</code>
+- <code title="patch /rest/v1/web-scanners/{id}">client.webScanners.<a href="./src/resources/web-scanners.ts">update</a>(id, { ...params }) -> WebScannerUpdateResponse</code>
+- <code title="delete /rest/v1/web-scanners/{id}">client.webScanners.<a href="./src/resources/web-scanners.ts">delete</a>(id) -> WebScannerDeleteResponse</code>
+- <code title="post /rest/v1/web-scanners/{id}/trigger">client.webScanners.<a href="./src/resources/web-scanners.ts">trigger</a>(id) -> WebScannerTriggerResponse</code>
