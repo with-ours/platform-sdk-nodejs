@@ -23,9 +23,7 @@ export class TagManagers extends APIResource {
    * `GET /tag-manager-triggers?tagManagerId={id}` right after create to grab their
    * server-assigned ids so you can reuse them in `fireTriggerIds` instead of
    * redundantly creating a second `PageView`/`DomReady`/`Initialization`. Returns
-   * the bare entity. Accounts have a per-account tag manager limit — exceeding it
-   * returns 409 with the reason in the response `error` field. Requires scope:
-   * tagManagers:create
+   * the bare entity. Requires scope: tagManagers:create
    */
   create(body: TagManagerCreateParams, options?: RequestOptions): APIPromise<TagManagerCreateResponse> {
     return this._client.post('/rest/v1/tag-managers', { body, ...options });
