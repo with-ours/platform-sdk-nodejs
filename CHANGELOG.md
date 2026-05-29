@@ -1,0 +1,169 @@
+# Changelog
+
+## 1.8.2 (2026-04-23)
+
+Full Changelog: [v1.8.1...v1.8.2](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.8.1...v1.8.2)
+
+### Chores
+
+* **internal:** more robust bootstrap script ([ef1af13](https://github.com/with-ours/platform-sdk-nodejs/commit/ef1af13e10b7f4ca9d6130964e2f79ed2f2e37e1))
+
+## 1.8.1 (2026-04-18)
+
+Full Changelog: [v1.8.0...v1.8.1](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.8.0...v1.8.1)
+
+### Chores
+
+* **tests:** bump steady to v0.22.1 ([d6b7566](https://github.com/with-ours/platform-sdk-nodejs/commit/d6b7566ee75d4de9b82bdd9c63afb40695699445))
+
+## 1.8.0 (2026-04-09)
+
+Full Changelog: [v1.7.0...v1.8.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.7.0...v1.8.0)
+
+### Features
+
+* **api:** api update ([0e97ec0](https://github.com/with-ours/platform-sdk-nodejs/commit/0e97ec0214c7a20668a3d3c037c2d3c4520be77c))
+
+
+### Chores
+
+* **internal:** codegen related update ([74cc468](https://github.com/with-ours/platform-sdk-nodejs/commit/74cc46834e9fc5e6e642bd8a24fa8e9ce0183366))
+
+## 1.7.0 (2026-04-01)
+
+Full Changelog: [v1.6.0...v1.7.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.6.0...v1.7.0)
+
+### Features
+
+* **api:** api update ([daa6b48](https://github.com/with-ours/platform-sdk-nodejs/commit/daa6b48de7f95a454c98d83beb70afb79fc52d6a))
+
+
+### Chores
+
+* **tests:** bump steady to v0.20.1 ([c79377f](https://github.com/with-ours/platform-sdk-nodejs/commit/c79377f4fd9b3572ddd0aefb46de5ac36d915216))
+* **tests:** bump steady to v0.20.2 ([53eed75](https://github.com/with-ours/platform-sdk-nodejs/commit/53eed75e0c6fff97fa294d2665c52c52f6503dbd))
+
+## 1.6.0 (2026-03-27)
+
+Full Changelog: [v1.5.2...v1.6.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.5.2...v1.6.0)
+
+### Features
+
+* **api:** api update ([09ddd46](https://github.com/with-ours/platform-sdk-nodejs/commit/09ddd46f144105b87dbc080d703938946083daaf))
+
+
+### Chores
+
+* **internal:** update multipart form array serialization ([4d9b29a](https://github.com/with-ours/platform-sdk-nodejs/commit/4d9b29a858565d43e6cf88f155a5856b8caa2f49))
+
+## 1.5.2 (2026-03-25)
+
+Full Changelog: [v1.5.1...v1.5.2](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.5.1...v1.5.2)
+
+### Chores
+
+* **ci:** skip lint on metadata-only changes ([a4e66b0](https://github.com/with-ours/platform-sdk-nodejs/commit/a4e66b02d263f9d17d5a5e168bc6626a984e307f))
+* **tests:** bump steady to v0.19.7 ([5c0b527](https://github.com/with-ours/platform-sdk-nodejs/commit/5c0b5273cfb15e49c50df524881265a9ba93f3f1))
+
+## 1.5.1 (2026-03-24)
+
+Full Changelog: [v1.5.0...v1.5.1](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.5.0...v1.5.1)
+
+### Chores
+
+* **internal:** update gitignore ([3663904](https://github.com/with-ours/platform-sdk-nodejs/commit/36639045b170e36aa7c9b38b325d259fee4add85))
+* **tests:** bump steady to v0.19.6 ([fa7dc09](https://github.com/with-ours/platform-sdk-nodejs/commit/fa7dc09c5375cefae6be3522effd24f8dbb3d44d))
+
+## 1.5.0 (2026-03-21)
+
+Full Changelog: [v1.4.1...v1.5.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.4.1...v1.5.0)
+
+### Features
+
+* **api:** api update ([48030a5](https://github.com/with-ours/platform-sdk-nodejs/commit/48030a52162c8bc2dafd8440346206a3c9f45cb3))
+
+
+### Chores
+
+* **tests:** bump steady to v0.19.4 ([dc8a1d0](https://github.com/with-ours/platform-sdk-nodejs/commit/dc8a1d01ab8a6d02eeb6bc3f2f7f592462b319d1))
+* **tests:** bump steady to v0.19.5 ([cf274f5](https://github.com/with-ours/platform-sdk-nodejs/commit/cf274f562c51028fb54a45630641a3540e1a9966))
+
+## 1.4.1 (2026-03-20)
+
+Full Changelog: [v1.4.0...v1.4.1](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.4.0...v1.4.1)
+
+### Refactors
+
+* **tests:** switch from prism to steady ([eecf2e2](https://github.com/with-ours/platform-sdk-nodejs/commit/eecf2e2a336181395f3309f5d8888f7f6113083d))
+
+## 1.4.0 (2026-03-17)
+
+Full Changelog: [v1.3.1...v1.4.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.3.1...v1.4.0)
+
+### Features
+
+* **api:** api update ([b283191](https://github.com/with-ours/platform-sdk-nodejs/commit/b283191a58b1bf0300bacaef8b7cacd1a4c127ef))
+
+
+### Chores
+
+* **internal:** tweak CI branches ([d0f8052](https://github.com/with-ours/platform-sdk-nodejs/commit/d0f8052591b9c9a8f76995a042262c4b76a88e9e))
+
+## 1.3.1 (2026-03-10)
+
+Full Changelog: [v1.3.0...v1.3.1](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.3.0...v1.3.1)
+
+### Chores
+
+* **internal:** update dependencies to address dependabot vulnerabilities ([73285bf](https://github.com/with-ours/platform-sdk-nodejs/commit/73285bf661c09e55b8c1f64e28b50def185e6eb5))
+
+## 1.3.0 (2026-03-07)
+
+Full Changelog: [v1.2.0...v1.3.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.2.0...v1.3.0)
+
+### Features
+
+* **api:** manual updates ([1621826](https://github.com/with-ours/platform-sdk-nodejs/commit/1621826b63f3f364b3619dd9378af07f669aa5c4))
+
+## 1.2.0 (2026-03-07)
+
+Full Changelog: [v1.1.0...v1.2.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.1.0...v1.2.0)
+
+### Features
+
+* **api:** api update ([19aed90](https://github.com/with-ours/platform-sdk-nodejs/commit/19aed901d76be3b95e4795ae022701a336754bfd))
+* **api:** api update ([b7fe9af](https://github.com/with-ours/platform-sdk-nodejs/commit/b7fe9afcd52b0a82d7cae7744f58049051d77448))
+* **api:** api update ([65fa8d1](https://github.com/with-ours/platform-sdk-nodejs/commit/65fa8d132e85500a4623ceeaa6995058628b23a9))
+
+
+### Bug Fixes
+
+* **client:** preserve URL params already embedded in path ([a698163](https://github.com/with-ours/platform-sdk-nodejs/commit/a698163caead275d011d757d57207c1ff7992ef1))
+* **docs/contributing:** correct pnpm link command ([0e875e6](https://github.com/with-ours/platform-sdk-nodejs/commit/0e875e62034d6cf02bffc7d91154b1f0ad356524))
+* fix request delays for retrying to be more respectful of high requested delays ([0bfa6ea](https://github.com/with-ours/platform-sdk-nodejs/commit/0bfa6eae0e4f52dfb2ad5f1a5c8afa59cf5d2c7f))
+
+
+### Chores
+
+* **ci:** skip uploading artifacts on stainless-internal branches ([15d3f51](https://github.com/with-ours/platform-sdk-nodejs/commit/15d3f51b2468fc94a1637efddb39ea95302ff9f5))
+* **internal:** move stringifyQuery implementation to internal function ([d11f2fe](https://github.com/with-ours/platform-sdk-nodejs/commit/d11f2fe88cb060bcd23278ff028c825b35c4adae))
+* **internal:** upgrade pnpm version ([24af327](https://github.com/with-ours/platform-sdk-nodejs/commit/24af327fec91ac745c1201364854a5dccc75c9b0))
+* **test:** do not count install time for mock server timeout ([089bffd](https://github.com/with-ours/platform-sdk-nodejs/commit/089bffdc350a81ff30cc551f00f3118ec3c17d15))
+
+## 1.1.0 (2026-02-20)
+
+Full Changelog: [v1.0.0...v1.1.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.0.0...v1.1.0)
+
+### Features
+
+* **api:** api update ([8bb967c](https://github.com/with-ours/platform-sdk-nodejs/commit/8bb967cc04af4869276c8fc01bbf595f670d57cf))
+
+## 1.0.0 (2026-02-20)
+
+Full Changelog: [v0.0.1...v1.0.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v0.0.1...v1.0.0)
+
+### Features
+
+* **api:** manual updates ([fd0d96f](https://github.com/with-ours/platform-sdk-nodejs/commit/fd0d96fca9717863f8818ffabe803b0395cbc0e0))
+* **api:** manual updates ([b8ac966](https://github.com/with-ours/platform-sdk-nodejs/commit/b8ac966848e850bd5d42a0a67698e87504fcd3df))
+* **api:** manual updates ([95962e9](https://github.com/with-ours/platform-sdk-nodejs/commit/95962e9d77e91ad8b32fbbb8ab3c7228ad339143))
