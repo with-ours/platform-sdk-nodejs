@@ -82,6 +82,7 @@ export interface SourceListResponse {
   type:
     | 'AlchemerWebhook'
     | 'AndroidNativeApi'
+    | 'Branch'
     | 'CSharpApi'
     | 'CalComWebhooks'
     | 'CalendlyWebhook'
@@ -171,6 +172,7 @@ export interface SourceCreateResponse {
   type:
     | 'AlchemerWebhook'
     | 'AndroidNativeApi'
+    | 'Branch'
     | 'CSharpApi'
     | 'CalComWebhooks'
     | 'CalendlyWebhook'
@@ -260,6 +262,7 @@ export interface SourceRetrieveResponse {
   type:
     | 'AlchemerWebhook'
     | 'AndroidNativeApi'
+    | 'Branch'
     | 'CSharpApi'
     | 'CalComWebhooks'
     | 'CalendlyWebhook'
@@ -349,6 +352,7 @@ export interface SourceUpdateResponse {
   type:
     | 'AlchemerWebhook'
     | 'AndroidNativeApi'
+    | 'Branch'
     | 'CSharpApi'
     | 'CalComWebhooks'
     | 'CalendlyWebhook'
@@ -517,6 +521,7 @@ export interface SourceListParams extends CursorParams {
   type?:
     | 'AlchemerWebhook'
     | 'AndroidNativeApi'
+    | 'Branch'
     | 'CSharpApi'
     | 'CalComWebhooks'
     | 'CalendlyWebhook'
@@ -552,6 +557,7 @@ export interface SourceCreateParams {
   type:
     | 'AlchemerWebhook'
     | 'AndroidNativeApi'
+    | 'Branch'
     | 'CSharpApi'
     | 'CalComWebhooks'
     | 'CalendlyWebhook'
