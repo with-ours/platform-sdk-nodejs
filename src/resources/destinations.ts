@@ -159,6 +159,7 @@ export interface DestinationListResponse {
     | 'Vibe'
     | 'Woopra'
     | 'XAds'
+    | 'YelpCAPI'
     | 'Zendesk'
     | 'ZoomInfo';
 
@@ -262,6 +263,7 @@ export interface DestinationCreateResponse {
     | 'Vibe'
     | 'Woopra'
     | 'XAds'
+    | 'YelpCAPI'
     | 'Zendesk'
     | 'ZoomInfo';
 
@@ -365,6 +367,7 @@ export interface DestinationRetrieveResponse {
     | 'Vibe'
     | 'Woopra'
     | 'XAds'
+    | 'YelpCAPI'
     | 'Zendesk'
     | 'ZoomInfo';
 
@@ -468,6 +471,7 @@ export interface DestinationUpdateResponse {
     | 'Vibe'
     | 'Woopra'
     | 'XAds'
+    | 'YelpCAPI'
     | 'Zendesk'
     | 'ZoomInfo';
 
@@ -522,6 +526,7 @@ export namespace DestinationTypesResponse {
       | 'Mailchimp'
       | 'AWSKinesis'
       | 'AWSLambda'
+      | 'AWSSNS'
       | 'GooglePubSub'
       | 'LinkedInAdsCAPI'
       | 'ActiveCampaignApi'
@@ -559,7 +564,8 @@ export namespace DestinationTypesResponse {
       | 'BeeswaxPostback'
       | 'AdobeAnalytics'
       | 'UniversalAds'
-      | 'OpenAIAds';
+      | 'OpenAIAds'
+      | 'YelpCAPI';
 
     capabilities: Entity.Capabilities;
 
@@ -746,6 +752,7 @@ export interface DestinationListParams extends CursorParams {
     | 'Vibe'
     | 'Woopra'
     | 'XAds'
+    | 'YelpCAPI'
     | 'Zendesk'
     | 'ZoomInfo';
 }
@@ -788,6 +795,7 @@ export interface DestinationCreateParams {
     | 'Mailchimp'
     | 'AWSKinesis'
     | 'AWSLambda'
+    | 'AWSSNS'
     | 'GooglePubSub'
     | 'LinkedInAdsCAPI'
     | 'ActiveCampaignApi'
@@ -825,7 +833,8 @@ export interface DestinationCreateParams {
     | 'BeeswaxPostback'
     | 'AdobeAnalytics'
     | 'UniversalAds'
-    | 'OpenAIAds';
+    | 'OpenAIAds'
+    | 'YelpCAPI';
 
   name?: string | null;
 
