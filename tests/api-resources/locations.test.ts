@@ -58,7 +58,7 @@ describe('resource locations', () => {
       client.locations.embedCode(
         'id',
         {
-          color: '#B33E3E',
+          color: '#007EA8',
           colorScheme: 'light',
           includeAddressBox: true,
           includeControls: 'yes',
