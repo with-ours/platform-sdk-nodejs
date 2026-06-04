@@ -136,6 +136,7 @@ export interface DestinationListResponse {
     | 'NextdoorAds'
     | 'OpenAIAds'
     | 'OursSyntheticData'
+    | 'Outbrain'
     | 'Partnerize'
     | 'Pinterest'
     | 'Plausible'
@@ -159,6 +160,7 @@ export interface DestinationListResponse {
     | 'Vibe'
     | 'Woopra'
     | 'XAds'
+    | 'YelpCAPI'
     | 'Zendesk'
     | 'ZoomInfo';
 
@@ -239,6 +241,7 @@ export interface DestinationCreateResponse {
     | 'NextdoorAds'
     | 'OpenAIAds'
     | 'OursSyntheticData'
+    | 'Outbrain'
     | 'Partnerize'
     | 'Pinterest'
     | 'Plausible'
@@ -262,6 +265,7 @@ export interface DestinationCreateResponse {
     | 'Vibe'
     | 'Woopra'
     | 'XAds'
+    | 'YelpCAPI'
     | 'Zendesk'
     | 'ZoomInfo';
 
@@ -342,6 +346,7 @@ export interface DestinationRetrieveResponse {
     | 'NextdoorAds'
     | 'OpenAIAds'
     | 'OursSyntheticData'
+    | 'Outbrain'
     | 'Partnerize'
     | 'Pinterest'
     | 'Plausible'
@@ -365,6 +370,7 @@ export interface DestinationRetrieveResponse {
     | 'Vibe'
     | 'Woopra'
     | 'XAds'
+    | 'YelpCAPI'
     | 'Zendesk'
     | 'ZoomInfo';
 
@@ -445,6 +451,7 @@ export interface DestinationUpdateResponse {
     | 'NextdoorAds'
     | 'OpenAIAds'
     | 'OursSyntheticData'
+    | 'Outbrain'
     | 'Partnerize'
     | 'Pinterest'
     | 'Plausible'
@@ -468,6 +475,7 @@ export interface DestinationUpdateResponse {
     | 'Vibe'
     | 'Woopra'
     | 'XAds'
+    | 'YelpCAPI'
     | 'Zendesk'
     | 'ZoomInfo';
 
@@ -493,6 +501,7 @@ export namespace DestinationTypesResponse {
     id:
       | 'Audiohook'
       | 'BasisPostback'
+      | 'Outbrain'
       | 'OursSyntheticData'
       | 'FullContact'
       | 'ZoomInfo'
@@ -522,6 +531,7 @@ export namespace DestinationTypesResponse {
       | 'Mailchimp'
       | 'AWSKinesis'
       | 'AWSLambda'
+      | 'AWSSNS'
       | 'GooglePubSub'
       | 'LinkedInAdsCAPI'
       | 'ActiveCampaignApi'
@@ -559,7 +569,8 @@ export namespace DestinationTypesResponse {
       | 'BeeswaxPostback'
       | 'AdobeAnalytics'
       | 'UniversalAds'
-      | 'OpenAIAds';
+      | 'OpenAIAds'
+      | 'YelpCAPI';
 
     capabilities: Entity.Capabilities;
 
@@ -723,6 +734,7 @@ export interface DestinationListParams extends CursorParams {
     | 'NextdoorAds'
     | 'OpenAIAds'
     | 'OursSyntheticData'
+    | 'Outbrain'
     | 'Partnerize'
     | 'Pinterest'
     | 'Plausible'
@@ -746,6 +758,7 @@ export interface DestinationListParams extends CursorParams {
     | 'Vibe'
     | 'Woopra'
     | 'XAds'
+    | 'YelpCAPI'
     | 'Zendesk'
     | 'ZoomInfo';
 }
@@ -759,6 +772,7 @@ export interface DestinationCreateParams {
   type:
     | 'Audiohook'
     | 'BasisPostback'
+    | 'Outbrain'
     | 'OursSyntheticData'
     | 'FullContact'
     | 'ZoomInfo'
@@ -788,6 +802,7 @@ export interface DestinationCreateParams {
     | 'Mailchimp'
     | 'AWSKinesis'
     | 'AWSLambda'
+    | 'AWSSNS'
     | 'GooglePubSub'
     | 'LinkedInAdsCAPI'
     | 'ActiveCampaignApi'
@@ -825,7 +840,8 @@ export interface DestinationCreateParams {
     | 'BeeswaxPostback'
     | 'AdobeAnalytics'
     | 'UniversalAds'
-    | 'OpenAIAds';
+    | 'OpenAIAds'
+    | 'YelpCAPI';
 
   name?: string | null;
 
