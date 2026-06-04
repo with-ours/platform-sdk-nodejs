@@ -2187,6 +2187,15 @@ export interface ExperimentCreateParams {
   name: string;
 
   /**
+   * Weight of the auto-created control variant, as a percentage (1–100). Defaults to
+   * 100 (a new experiment is all control until treatments are added). The control
+   * must keep at least 1% — a 0% control leaves visitors with no bucket to assign at
+   * runtime. As treatments are added the control is reconciled to the remainder (100
+   * − Σ treatment weights), so it normally does not need to be set explicitly.
+   */
+  controlWeight?: number | null;
+
+  /**
    * Optional hypothesis or operator note.
    */
   description?: string | null;
