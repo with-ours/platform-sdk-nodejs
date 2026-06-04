@@ -407,7 +407,7 @@ export namespace ExperimentListResponse {
       /**
        * Comparison operator applied to the query string value.
        */
-      operator: 'contains' | 'equals' | 'exists' | 'not_equals' | 'not_exists';
+      operator: 'contains' | 'equals' | 'exists' | 'not_equals' | 'not_exists' | 'regex';
 
       /**
        * Comparison value used by operators that require one. Omit for `exists` and
@@ -705,7 +705,7 @@ export namespace ExperimentCreateResponse {
       /**
        * Comparison operator applied to the query string value.
        */
-      operator: 'contains' | 'equals' | 'exists' | 'not_equals' | 'not_exists';
+      operator: 'contains' | 'equals' | 'exists' | 'not_equals' | 'not_exists' | 'regex';
 
       /**
        * Comparison value used by operators that require one. Omit for `exists` and
@@ -1003,7 +1003,7 @@ export namespace ExperimentRetrieveResponse {
       /**
        * Comparison operator applied to the query string value.
        */
-      operator: 'contains' | 'equals' | 'exists' | 'not_equals' | 'not_exists';
+      operator: 'contains' | 'equals' | 'exists' | 'not_equals' | 'not_exists' | 'regex';
 
       /**
        * Comparison value used by operators that require one. Omit for `exists` and
@@ -1186,7 +1186,7 @@ export namespace ExperimentUpdateResponse {
       /**
        * Comparison operator applied to the query string value.
        */
-      operator: 'contains' | 'equals' | 'exists' | 'not_equals' | 'not_exists';
+      operator: 'contains' | 'equals' | 'exists' | 'not_equals' | 'not_exists' | 'regex';
 
       /**
        * Comparison value used by operators that require one. Omit for `exists` and
@@ -1392,7 +1392,7 @@ export namespace ExperimentStartResponse {
         /**
          * Comparison operator applied to the query string value.
          */
-        operator: 'contains' | 'equals' | 'exists' | 'not_equals' | 'not_exists';
+        operator: 'contains' | 'equals' | 'exists' | 'not_equals' | 'not_exists' | 'regex';
 
         /**
          * Comparison value used by operators that require one. Omit for `exists` and
@@ -1594,7 +1594,7 @@ export namespace ExperimentStopResponse {
         /**
          * Comparison operator applied to the query string value.
          */
-        operator: 'contains' | 'equals' | 'exists' | 'not_equals' | 'not_exists';
+        operator: 'contains' | 'equals' | 'exists' | 'not_equals' | 'not_exists' | 'regex';
 
         /**
          * Comparison value used by operators that require one. Omit for `exists` and
@@ -1796,7 +1796,7 @@ export namespace ExperimentPauseResponse {
         /**
          * Comparison operator applied to the query string value.
          */
-        operator: 'contains' | 'equals' | 'exists' | 'not_equals' | 'not_exists';
+        operator: 'contains' | 'equals' | 'exists' | 'not_equals' | 'not_exists' | 'regex';
 
         /**
          * Comparison value used by operators that require one. Omit for `exists` and
@@ -1998,7 +1998,7 @@ export namespace ExperimentResumeResponse {
         /**
          * Comparison operator applied to the query string value.
          */
-        operator: 'contains' | 'equals' | 'exists' | 'not_equals' | 'not_exists';
+        operator: 'contains' | 'equals' | 'exists' | 'not_equals' | 'not_exists' | 'regex';
 
         /**
          * Comparison value used by operators that require one. Omit for `exists` and
@@ -2338,7 +2338,7 @@ export namespace ExperimentCreateParams {
       /**
        * Comparison operator applied to the query string value.
        */
-      operator: 'contains' | 'equals' | 'exists' | 'not_equals' | 'not_exists';
+      operator: 'contains' | 'equals' | 'exists' | 'not_equals' | 'not_exists' | 'regex';
 
       /**
        * Comparison value used by operators that require one. Omit for `exists` and
@@ -2490,7 +2490,7 @@ export namespace ExperimentUpdateParams {
       /**
        * Comparison operator applied to the query string value.
        */
-      operator: 'contains' | 'equals' | 'exists' | 'not_equals' | 'not_exists';
+      operator: 'contains' | 'equals' | 'exists' | 'not_equals' | 'not_exists' | 'regex';
 
       /**
        * Comparison value used by operators that require one. Omit for `exists` and
