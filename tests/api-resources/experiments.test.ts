@@ -53,6 +53,7 @@ describe('resource experiments', () => {
     const response = await client.experiments.create({
       experimentSettingsId: 'settings_01HZX9BB73EY2Q37VGK5A0VW7A',
       name: 'Homepage Hero Headline Test',
+      controlWeight: 34,
       description: 'description',
       includeQueryString: true,
       key: 'homepage-hero-headline-test',
