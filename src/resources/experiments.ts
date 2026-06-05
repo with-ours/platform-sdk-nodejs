@@ -61,9 +61,9 @@ export class Experiments extends APIResource {
 
   /**
    * Partially update an experiment. Only the fields you send are changed. Edits are
-   * only accepted while the experiment is in `draft` status — running, paused, and
-   * completed experiments return 409 with
-   * `Experiment can only be edited in draft status`. Use the lifecycle endpoints
+   * allowed on draft, running, and paused experiments and are recorded in the change
+   * log. Only completed experiments return 409 with
+   * `A completed experiment can no longer be edited`. Use the lifecycle endpoints
    * (`/start`, `/pause`, `/resume`, `/stop`) to change status. Requires scope:
    * experiment:update
    *
