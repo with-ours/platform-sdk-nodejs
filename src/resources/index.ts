@@ -274,6 +274,12 @@ export {
   type WebScannerUpdateResponse,
   type WebScannerDeleteResponse,
   type WebScannerTriggerResponse,
+  type WebScannerFindingsResponse,
+  type WebScannerCookiesResponse,
+  type WebScannerSummaryResponse,
   type WebScannerCreateParams,
   type WebScannerUpdateParams,
+  type WebScannerFindingsParams,
+  type WebScannerCookiesParams,
+  type WebScannerSummaryParams,
 } from './web-scanners';

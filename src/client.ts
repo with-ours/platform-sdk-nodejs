@@ -286,11 +286,17 @@ import {
   WebScannerRules,
 } from './resources/web-scanner-rules';
 import {
+  WebScannerCookiesParams,
+  WebScannerCookiesResponse,
   WebScannerCreateParams,
   WebScannerCreateResponse,
   WebScannerDeleteResponse,
+  WebScannerFindingsParams,
+  WebScannerFindingsResponse,
   WebScannerListResponse,
   WebScannerRetrieveResponse,
+  WebScannerSummaryParams,
+  WebScannerSummaryResponse,
   WebScannerTriggerResponse,
   WebScannerUpdateParams,
   WebScannerUpdateResponse,
@@ -1383,7 +1389,13 @@ export declare namespace OursPrivacyPlatform {
     type WebScannerUpdateResponse as WebScannerUpdateResponse,
     type WebScannerDeleteResponse as WebScannerDeleteResponse,
     type WebScannerTriggerResponse as WebScannerTriggerResponse,
+    type WebScannerFindingsResponse as WebScannerFindingsResponse,
+    type WebScannerCookiesResponse as WebScannerCookiesResponse,
+    type WebScannerSummaryResponse as WebScannerSummaryResponse,
     type WebScannerCreateParams as WebScannerCreateParams,
     type WebScannerUpdateParams as WebScannerUpdateParams,
+    type WebScannerFindingsParams as WebScannerFindingsParams,
+    type WebScannerCookiesParams as WebScannerCookiesParams,
+    type WebScannerSummaryParams as WebScannerSummaryParams,
   };
 }
