@@ -191,6 +191,13 @@ export namespace ConsentSettingListResponse {
     customDomain?: string | null;
 
     /**
+     * Cookie/localStorage key for the visitor (device) ID. Must exactly match the web
+     * SDK's cookie_names.device_id (default "ours_device_id") so consent and SDK
+     * events resolve to the same visitor.
+     */
+    deviceIdCookieName?: string | null;
+
+    /**
      * Revision counter. Bump this to force users who already consented to see the
      * modal again (the SDK compares the persisted revision against this value).
      */
@@ -615,6 +622,13 @@ export interface ConsentSettingCreateResponse {
    * consent.example.com).
    */
   customDomain?: string | null;
+
+  /**
+   * Cookie/localStorage key for the visitor (device) ID. Must exactly match the web
+   * SDK's cookie_names.device_id (default "ours_device_id") so consent and SDK
+   * events resolve to the same visitor.
+   */
+  deviceIdCookieName?: string | null;
 
   /**
    * Revision counter. Bump this to force users who already consented to see the
@@ -1042,6 +1056,13 @@ export interface ConsentSettingRetrieveResponse {
   customDomain?: string | null;
 
   /**
+   * Cookie/localStorage key for the visitor (device) ID. Must exactly match the web
+   * SDK's cookie_names.device_id (default "ours_device_id") so consent and SDK
+   * events resolve to the same visitor.
+   */
+  deviceIdCookieName?: string | null;
+
+  /**
    * Revision counter. Bump this to force users who already consented to see the
    * modal again (the SDK compares the persisted revision against this value).
    */
@@ -1465,6 +1486,13 @@ export interface ConsentSettingReplaceResponse {
    * consent.example.com).
    */
   customDomain?: string | null;
+
+  /**
+   * Cookie/localStorage key for the visitor (device) ID. Must exactly match the web
+   * SDK's cookie_names.device_id (default "ours_device_id") so consent and SDK
+   * events resolve to the same visitor.
+   */
+  deviceIdCookieName?: string | null;
 
   /**
    * Revision counter. Bump this to force users who already consented to see the
@@ -1892,6 +1920,13 @@ export interface ConsentSettingUpdateResponse {
   customDomain?: string | null;
 
   /**
+   * Cookie/localStorage key for the visitor (device) ID. Must exactly match the web
+   * SDK's cookie_names.device_id (default "ours_device_id") so consent and SDK
+   * events resolve to the same visitor.
+   */
+  deviceIdCookieName?: string | null;
+
+  /**
    * Revision counter. Bump this to force users who already consented to see the
    * modal again (the SDK compares the persisted revision against this value).
    */
@@ -2315,6 +2350,13 @@ export interface ConsentSettingDeleteResponse {
    * consent.example.com).
    */
   customDomain?: string | null;
+
+  /**
+   * Cookie/localStorage key for the visitor (device) ID. Must exactly match the web
+   * SDK's cookie_names.device_id (default "ours_device_id") so consent and SDK
+   * events resolve to the same visitor.
+   */
+  deviceIdCookieName?: string | null;
 
   /**
    * Revision counter. Bump this to force users who already consented to see the
@@ -2835,6 +2877,12 @@ export interface ConsentSettingReplaceParams {
   customDomain?: string | null;
 
   /**
+   * Cookie/localStorage key for the visitor (device) ID. Must exactly match the web
+   * SDK's cookie_names.device_id (default "ours_device_id"). Pass null to clear.
+   */
+  deviceIdCookieName?: string | null;
+
+  /**
    * Revision counter. Bump to re-prompt users who already consented.
    */
   revision?: number | null;
@@ -3210,6 +3258,12 @@ export interface ConsentSettingUpdateParams {
    * Replace the default rule wholesale. Omit to leave it untouched.
    */
   default?: ConsentSettingUpdateParams.Default;
+
+  /**
+   * Cookie/localStorage key for the visitor (device) ID. Must exactly match the web
+   * SDK's cookie_names.device_id (default "ours_device_id"). Pass null to clear.
+   */
+  deviceIdCookieName?: string | null;
 
   /**
    * Rename the consent settings record.

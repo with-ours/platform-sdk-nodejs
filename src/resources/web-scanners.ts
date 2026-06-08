@@ -477,6 +477,17 @@ export interface WebScannerSummaryResponse {
 
   vendorCount: number;
 
+  /**
+   * Automated accessibility (WCAG 2.1/2.2 A + AA) rollup for the run: `score` is a
+   * 0-100 site score (mean of per-page scores; higher is better), with distinct
+   * rule-violation `countsByImpact` and the most frequently violated rules in
+   * `topViolations` (each with the number of pages it appears on). Covers only the
+   * machine-detectable subset of WCAG (~30-40%) — a high score is not a
+   * certification of full conformance; manual audit is still required. Null when the
+   * run audited no pages.
+   */
+  accessibility?: WebScannerSummaryResponse.Accessibility | null;
+
   delta?: WebScannerSummaryResponse.Delta | null;
 
   runDate?: string | null;
@@ -561,6 +572,73 @@ export namespace WebScannerSummaryResponse {
       path?: string | null;
 
       value?: string | null;
+    }
+  }
+
+  /**
+   * Automated accessibility (WCAG 2.1/2.2 A + AA) rollup for the run: `score` is a
+   * 0-100 site score (mean of per-page scores; higher is better), with distinct
+   * rule-violation `countsByImpact` and the most frequently violated rules in
+   * `topViolations` (each with the number of pages it appears on). Covers only the
+   * machine-detectable subset of WCAG (~30-40%) — a high score is not a
+   * certification of full conformance; manual audit is still required. Null when the
+   * run audited no pages.
+   */
+  export interface Accessibility {
+    countsByImpact: Accessibility.CountsByImpact;
+
+    engine: string;
+
+    pagesEvaluated: number;
+
+    score: number;
+
+    topViolations: Array<Accessibility.TopViolation>;
+
+    totalNodes: number;
+
+    totalViolations: number;
+  }
+
+  export namespace Accessibility {
+    export interface CountsByImpact {
+      critical: number;
+
+      minor: number;
+
+      moderate: number;
+
+      serious: number;
+    }
+
+    export interface TopViolation {
+      id: string;
+
+      help: string;
+
+      helpUrl: string;
+
+      nodeCount: number;
+
+      pageCount: number;
+
+      pages: Array<string>;
+
+      sampleNodes: Array<TopViolation.SampleNode>;
+
+      wcagTags: Array<string>;
+
+      impact?: string | null;
+    }
+
+    export namespace TopViolation {
+      export interface SampleNode {
+        html: string;
+
+        target: Array<string>;
+
+        failureSummary?: string | null;
+      }
     }
   }
 

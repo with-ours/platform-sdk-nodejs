@@ -192,6 +192,7 @@ describe('resource consentSettings', () => {
       status: 'Disabled',
       consentCookieName: 'consentCookieName',
       customDomain: 'customDomain',
+      deviceIdCookieName: 'deviceIdCookieName',
       revision: 0,
       skipBlockingClassNames: ['string'],
       webSDKToken: 'webSDKToken',

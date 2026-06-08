@@ -131,6 +131,7 @@ export interface DestinationListResponse {
     | 'LinkedInAdsCAPI'
     | 'LiveIntent'
     | 'LiveRampWarehouse'
+    | 'MNTN'
     | 'Mailchimp'
     | 'Mixpanel'
     | 'NextdoorAds'
@@ -236,6 +237,7 @@ export interface DestinationCreateResponse {
     | 'LinkedInAdsCAPI'
     | 'LiveIntent'
     | 'LiveRampWarehouse'
+    | 'MNTN'
     | 'Mailchimp'
     | 'Mixpanel'
     | 'NextdoorAds'
@@ -341,6 +343,7 @@ export interface DestinationRetrieveResponse {
     | 'LinkedInAdsCAPI'
     | 'LiveIntent'
     | 'LiveRampWarehouse'
+    | 'MNTN'
     | 'Mailchimp'
     | 'Mixpanel'
     | 'NextdoorAds'
@@ -446,6 +449,7 @@ export interface DestinationUpdateResponse {
     | 'LinkedInAdsCAPI'
     | 'LiveIntent'
     | 'LiveRampWarehouse'
+    | 'MNTN'
     | 'Mailchimp'
     | 'Mixpanel'
     | 'NextdoorAds'
@@ -570,7 +574,8 @@ export namespace DestinationTypesResponse {
       | 'AdobeAnalytics'
       | 'UniversalAds'
       | 'OpenAIAds'
-      | 'YelpCAPI';
+      | 'YelpCAPI'
+      | 'MNTN';
 
     capabilities: Entity.Capabilities;
 
@@ -729,6 +734,7 @@ export interface DestinationListParams extends CursorParams {
     | 'LinkedInAdsCAPI'
     | 'LiveIntent'
     | 'LiveRampWarehouse'
+    | 'MNTN'
     | 'Mailchimp'
     | 'Mixpanel'
     | 'NextdoorAds'
@@ -841,7 +847,8 @@ export interface DestinationCreateParams {
     | 'AdobeAnalytics'
     | 'UniversalAds'
     | 'OpenAIAds'
-    | 'YelpCAPI';
+    | 'YelpCAPI'
+    | 'MNTN';
 
   name?: string | null;
 
