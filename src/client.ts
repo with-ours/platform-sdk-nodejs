@@ -260,6 +260,7 @@ import {
   TagManagers,
 } from './resources/tag-managers';
 import {
+  VersionAbandonResponse,
   VersionCreateParams,
   VersionCreateResponse,
   VersionDiffParams,
@@ -269,6 +270,8 @@ import {
   VersionListResponsesCursor,
   VersionPublishResponse,
   VersionRetrieveResponse,
+  VersionRevertParams,
+  VersionRevertResponse,
   VersionSnapshotResponse,
   VersionUpdateParams,
   VersionUpdateResponse,
@@ -1362,11 +1365,14 @@ export declare namespace OursPrivacyPlatform {
     type VersionPublishResponse as VersionPublishResponse,
     type VersionSnapshotResponse as VersionSnapshotResponse,
     type VersionDiffResponse as VersionDiffResponse,
+    type VersionRevertResponse as VersionRevertResponse,
+    type VersionAbandonResponse as VersionAbandonResponse,
     type VersionListResponsesCursor as VersionListResponsesCursor,
     type VersionListParams as VersionListParams,
     type VersionCreateParams as VersionCreateParams,
     type VersionUpdateParams as VersionUpdateParams,
     type VersionDiffParams as VersionDiffParams,
+    type VersionRevertParams as VersionRevertParams,
   };
 
   export {
