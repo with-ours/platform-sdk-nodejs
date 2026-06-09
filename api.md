@@ -383,6 +383,8 @@ Types:
 - <code><a href="./src/resources/versions.ts">VersionPublishResponse</a></code>
 - <code><a href="./src/resources/versions.ts">VersionSnapshotResponse</a></code>
 - <code><a href="./src/resources/versions.ts">VersionDiffResponse</a></code>
+- <code><a href="./src/resources/versions.ts">VersionRevertResponse</a></code>
+- <code><a href="./src/resources/versions.ts">VersionAbandonResponse</a></code>
 
 Methods:
 
@@ -393,6 +395,8 @@ Methods:
 - <code title="post /rest/v1/versions/{id}/publish">client.versions.<a href="./src/resources/versions.ts">publish</a>(id) -> VersionPublishResponse</code>
 - <code title="get /rest/v1/versions/{id}/snapshot">client.versions.<a href="./src/resources/versions.ts">snapshot</a>(id) -> VersionSnapshotResponse</code>
 - <code title="get /rest/v1/versions/{id}/diff">client.versions.<a href="./src/resources/versions.ts">diff</a>(id, { ...params }) -> VersionDiffResponse</code>
+- <code title="post /rest/v1/versions/{id}/revert">client.versions.<a href="./src/resources/versions.ts">revert</a>(id, { ...params }) -> VersionRevertResponse</code>
+- <code title="post /rest/v1/versions/{id}/abandon">client.versions.<a href="./src/resources/versions.ts">abandon</a>(id) -> VersionAbandonResponse</code>
 
 # WebScannerRules
 

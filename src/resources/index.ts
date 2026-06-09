@@ -249,10 +249,13 @@ export {
   type VersionPublishResponse,
   type VersionSnapshotResponse,
   type VersionDiffResponse,
+  type VersionRevertResponse,
+  type VersionAbandonResponse,
   type VersionListParams,
   type VersionCreateParams,
   type VersionUpdateParams,
   type VersionDiffParams,
+  type VersionRevertParams,
   type VersionListResponsesCursor,
 } from './versions';
 export {
