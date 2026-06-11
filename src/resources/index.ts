@@ -249,10 +249,13 @@ export {
   type VersionPublishResponse,
   type VersionSnapshotResponse,
   type VersionDiffResponse,
+  type VersionRevertResponse,
+  type VersionAbandonResponse,
   type VersionListParams,
   type VersionCreateParams,
   type VersionUpdateParams,
   type VersionDiffParams,
+  type VersionRevertParams,
   type VersionListResponsesCursor,
 } from './versions';
 export {
@@ -274,6 +277,12 @@ export {
   type WebScannerUpdateResponse,
   type WebScannerDeleteResponse,
   type WebScannerTriggerResponse,
+  type WebScannerFindingsResponse,
+  type WebScannerCookiesResponse,
+  type WebScannerSummaryResponse,
   type WebScannerCreateParams,
   type WebScannerUpdateParams,
+  type WebScannerFindingsParams,
+  type WebScannerCookiesParams,
+  type WebScannerSummaryParams,
 } from './web-scanners';

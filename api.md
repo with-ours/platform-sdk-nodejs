@@ -383,6 +383,8 @@ Types:
 - <code><a href="./src/resources/versions.ts">VersionPublishResponse</a></code>
 - <code><a href="./src/resources/versions.ts">VersionSnapshotResponse</a></code>
 - <code><a href="./src/resources/versions.ts">VersionDiffResponse</a></code>
+- <code><a href="./src/resources/versions.ts">VersionRevertResponse</a></code>
+- <code><a href="./src/resources/versions.ts">VersionAbandonResponse</a></code>
 
 Methods:
 
@@ -393,6 +395,8 @@ Methods:
 - <code title="post /rest/v1/versions/{id}/publish">client.versions.<a href="./src/resources/versions.ts">publish</a>(id) -> VersionPublishResponse</code>
 - <code title="get /rest/v1/versions/{id}/snapshot">client.versions.<a href="./src/resources/versions.ts">snapshot</a>(id) -> VersionSnapshotResponse</code>
 - <code title="get /rest/v1/versions/{id}/diff">client.versions.<a href="./src/resources/versions.ts">diff</a>(id, { ...params }) -> VersionDiffResponse</code>
+- <code title="post /rest/v1/versions/{id}/revert">client.versions.<a href="./src/resources/versions.ts">revert</a>(id, { ...params }) -> VersionRevertResponse</code>
+- <code title="post /rest/v1/versions/{id}/abandon">client.versions.<a href="./src/resources/versions.ts">abandon</a>(id) -> VersionAbandonResponse</code>
 
 # WebScannerRules
 
@@ -422,6 +426,9 @@ Types:
 - <code><a href="./src/resources/web-scanners.ts">WebScannerUpdateResponse</a></code>
 - <code><a href="./src/resources/web-scanners.ts">WebScannerDeleteResponse</a></code>
 - <code><a href="./src/resources/web-scanners.ts">WebScannerTriggerResponse</a></code>
+- <code><a href="./src/resources/web-scanners.ts">WebScannerFindingsResponse</a></code>
+- <code><a href="./src/resources/web-scanners.ts">WebScannerCookiesResponse</a></code>
+- <code><a href="./src/resources/web-scanners.ts">WebScannerSummaryResponse</a></code>
 
 Methods:
 
@@ -431,3 +438,6 @@ Methods:
 - <code title="patch /rest/v1/web-scanners/{id}">client.webScanners.<a href="./src/resources/web-scanners.ts">update</a>(id, { ...params }) -> WebScannerUpdateResponse</code>
 - <code title="delete /rest/v1/web-scanners/{id}">client.webScanners.<a href="./src/resources/web-scanners.ts">delete</a>(id) -> WebScannerDeleteResponse</code>
 - <code title="post /rest/v1/web-scanners/{id}/trigger">client.webScanners.<a href="./src/resources/web-scanners.ts">trigger</a>(id) -> WebScannerTriggerResponse</code>
+- <code title="get /rest/v1/web-scanners/{id}/findings">client.webScanners.<a href="./src/resources/web-scanners.ts">findings</a>(id, { ...params }) -> WebScannerFindingsResponse</code>
+- <code title="get /rest/v1/web-scanners/{id}/cookies">client.webScanners.<a href="./src/resources/web-scanners.ts">cookies</a>(id, { ...params }) -> WebScannerCookiesResponse</code>
+- <code title="get /rest/v1/web-scanners/{id}/summary">client.webScanners.<a href="./src/resources/web-scanners.ts">summary</a>(id, { ...params }) -> WebScannerSummaryResponse</code>

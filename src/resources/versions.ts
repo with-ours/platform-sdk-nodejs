@@ -106,6 +106,45 @@ export class Versions extends APIResource {
   ): APIPromise<VersionDiffResponse> {
     return this._client.get(path`/rest/v1/versions/${id}/diff`, { query, ...options });
   }
+
+  /**
+   * Revert one or more pending draft changes back to the latest published version
+   * (the "abandon a change" action). Send a body listing the entities to revert;
+   * each is handled independently — a modified entity is restored to its published
+   * values, a deleted entity is recreated, and a newly-added entity is discarded. An
+   * entity that already matches the published version is left untouched and is not
+   * counted (a no-op). An entity present in neither the draft nor the published
+   * version is reported in `notFoundCount`. `remainingChanges` is the total number
+   * of pending draft changes left after this call, which may stay above zero when
+   * other unreverted changes remain.
+   *
+   * The `experiments` and `experimentVariants` collections are not supported here —
+   * use the experiment lifecycle endpoints (`/start`, `/stop`) for those — but
+   * `experimentSettings` is supported. To discard every pending change at once, use
+   * `POST /rest/v1/versions/draft/abandon`. (`draft` is a literal path segment
+   * identifying the live draft as the target.) Requires scope: version:publish
+   */
+  revert(
+    id: 'draft',
+    body: VersionRevertParams,
+    options?: RequestOptions,
+  ): APIPromise<VersionRevertResponse> {
+    return this._client.post(path`/rest/v1/versions/${id}/revert`, { body, ...options });
+  }
+
+  /**
+   * Abandon ALL pending draft changes, resetting every supported entity collection
+   * back to the latest published version. Running experiments and experiment
+   * variants are not affected (ship those via the experiment lifecycle endpoints),
+   * but experiment settings are reset. Returns HTTP 409 when there is no published
+   * version to revert to, or when another publish or abandon is already in flight.
+   * To revert only specific changes, use `POST /rest/v1/versions/draft/revert`.
+   * (`draft` is a literal path segment identifying the live draft as the target.)
+   * Requires scope: version:publish
+   */
+  abandon(id: 'draft', options?: RequestOptions): APIPromise<VersionAbandonResponse> {
+    return this._client.post(path`/rest/v1/versions/${id}/abandon`, options);
+  }
 }
 
 export type VersionListResponsesCursor = Cursor<VersionListResponse>;
@@ -272,6 +311,8 @@ export namespace VersionDiffResponse {
     replaySettings: Differences.ReplaySettings;
 
     sources: Differences.Sources;
+
+    tagManagers: Differences.TagManagers;
 
     tagManagerTags: Differences.TagManagerTags;
 
@@ -1984,6 +2025,137 @@ export namespace VersionDiffResponse {
       }
     }
 
+    export interface TagManagers {
+      added: Array<TagManagers.Added>;
+
+      /**
+       * Entities present in both snapshots but with at least one field changed. `old` is
+       * the snapshot of the entity in the baseline (latest published); `new` is the
+       * snapshot in the comparison target (the draft).
+       */
+      modified: Array<TagManagers.Modified>;
+
+      removed: Array<TagManagers.Removed>;
+    }
+
+    export namespace TagManagers {
+      export interface Added {
+        id: string;
+
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
+        name?: string | null;
+
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
+        summary?: string | null;
+
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
+        tagManagerId?: string | null;
+      }
+
+      export interface Modified {
+        new: Modified.New;
+
+        old: Modified.Old;
+      }
+
+      export namespace Modified {
+        export interface New {
+          id: string;
+
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
+          name?: string | null;
+
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
+          summary?: string | null;
+
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
+          tagManagerId?: string | null;
+        }
+
+        export interface Old {
+          id: string;
+
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Use the `id` to
+           * fetch full detail.
+           */
+          name?: string | null;
+
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
+          summary?: string | null;
+
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
+          tagManagerId?: string | null;
+        }
+      }
+
+      export interface Removed {
+        id: string;
+
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Use the `id` to
+         * fetch full detail.
+         */
+        name?: string | null;
+
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
+        summary?: string | null;
+
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
+        tagManagerId?: string | null;
+      }
+    }
+
     export interface TagManagerTags {
       added: Array<TagManagerTags.Added>;
 
@@ -2379,6 +2551,62 @@ export namespace VersionDiffResponse {
   }
 }
 
+export interface VersionRevertResponse {
+  /**
+   * Newly-added draft entities that were deleted.
+   */
+  discardedCount: number;
+
+  /**
+   * Requested entities present in neither the draft nor the latest published
+   * version.
+   */
+  notFoundCount: number;
+
+  /**
+   * Total pending draft changes remaining after this operation.
+   */
+  remainingChanges: number;
+
+  /**
+   * Entities recreated because they had been deleted from the draft.
+   */
+  restoredCount: number;
+
+  /**
+   * Entities overwritten back to their published values.
+   */
+  revertedCount: number;
+}
+
+export interface VersionAbandonResponse {
+  /**
+   * Newly-added draft entities that were deleted.
+   */
+  discardedCount: number;
+
+  /**
+   * Requested entities present in neither the draft nor the latest published
+   * version.
+   */
+  notFoundCount: number;
+
+  /**
+   * Total pending draft changes remaining after this operation.
+   */
+  remainingChanges: number;
+
+  /**
+   * Entities recreated because they had been deleted from the draft.
+   */
+  restoredCount: number;
+
+  /**
+   * Entities overwritten back to their published values.
+   */
+  revertedCount: number;
+}
+
 export interface VersionListParams extends CursorParams {
   /**
    * Filter to only published or unpublished versions.
@@ -2512,6 +2740,47 @@ export interface VersionDiffParams {
   against?: string;
 }
 
+export interface VersionRevertParams {
+  /**
+   * Draft entities to revert back to the latest published version. Each entry is
+   * processed independently: a modified entity is restored to its published values,
+   * a deleted entity is recreated, and a newly-added entity is discarded. Pass a
+   * single entry to revert one change.
+   */
+  entities: Array<VersionRevertParams.Entity>;
+}
+
+export namespace VersionRevertParams {
+  export interface Entity {
+    /**
+     * Id of the draft entity to revert.
+     */
+    id: string;
+
+    /**
+     * Entity collection the id belongs to. `experiments` and `experimentVariants` are
+     * not supported — use the experiment lifecycle endpoints for those — but
+     * `experimentSettings` is.
+     */
+    collection:
+      | 'allowedEvents'
+      | 'consentSettings'
+      | 'dataGovernanceEvents'
+      | 'dataGovernanceRules'
+      | 'destinations'
+      | 'experimentSettings'
+      | 'externalAllowedEventData'
+      | 'globalDispatchCenters'
+      | 'mappings'
+      | 'replaySettings'
+      | 'sources'
+      | 'tagManagerTags'
+      | 'tagManagerTriggers'
+      | 'tagManagerVariables'
+      | 'tagManagers';
+  }
+}
+
 export declare namespace Versions {
   export {
     type VersionListResponse as VersionListResponse,
@@ -2521,10 +2790,13 @@ export declare namespace Versions {
     type VersionPublishResponse as VersionPublishResponse,
     type VersionSnapshotResponse as VersionSnapshotResponse,
     type VersionDiffResponse as VersionDiffResponse,
+    type VersionRevertResponse as VersionRevertResponse,
+    type VersionAbandonResponse as VersionAbandonResponse,
     type VersionListResponsesCursor as VersionListResponsesCursor,
     type VersionListParams as VersionListParams,
     type VersionCreateParams as VersionCreateParams,
     type VersionUpdateParams as VersionUpdateParams,
     type VersionDiffParams as VersionDiffParams,
+    type VersionRevertParams as VersionRevertParams,
   };
 }
