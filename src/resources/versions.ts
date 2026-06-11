@@ -361,6 +361,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
 
       export interface Modified {
@@ -395,6 +402,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
 
         export interface Old {
@@ -422,6 +436,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
       }
 
@@ -450,6 +471,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
     }
 
@@ -492,6 +520,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
 
       export interface Modified {
@@ -526,6 +561,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
 
         export interface Old {
@@ -553,6 +595,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
       }
 
@@ -581,6 +630,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
     }
 
@@ -623,6 +679,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
 
       export interface Modified {
@@ -657,6 +720,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
 
         export interface Old {
@@ -684,6 +754,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
       }
 
@@ -712,6 +789,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
     }
 
@@ -754,6 +838,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
 
       export interface Modified {
@@ -788,6 +879,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
 
         export interface Old {
@@ -815,6 +913,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
       }
 
@@ -843,6 +948,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
     }
 
@@ -885,6 +997,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
 
       export interface Modified {
@@ -919,6 +1038,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
 
         export interface Old {
@@ -946,6 +1072,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
       }
 
@@ -974,6 +1107,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
     }
 
@@ -1016,6 +1156,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
 
       export interface Modified {
@@ -1050,6 +1197,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
 
         export interface Old {
@@ -1077,6 +1231,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
       }
 
@@ -1105,6 +1266,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
     }
 
@@ -1147,6 +1315,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
 
       export interface Modified {
@@ -1181,6 +1356,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
 
         export interface Old {
@@ -1208,6 +1390,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
       }
 
@@ -1236,6 +1425,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
     }
 
@@ -1278,6 +1474,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
 
       export interface Modified {
@@ -1312,6 +1515,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
 
         export interface Old {
@@ -1339,6 +1549,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
       }
 
@@ -1367,6 +1584,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
     }
 
@@ -1409,6 +1633,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
 
       export interface Modified {
@@ -1443,6 +1674,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
 
         export interface Old {
@@ -1470,6 +1708,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
       }
 
@@ -1498,6 +1743,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
     }
 
@@ -1540,6 +1792,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
 
       export interface Modified {
@@ -1574,6 +1833,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
 
         export interface Old {
@@ -1601,6 +1867,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
       }
 
@@ -1629,6 +1902,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
     }
 
@@ -1671,6 +1951,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
 
       export interface Modified {
@@ -1705,6 +1992,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
 
         export interface Old {
@@ -1732,6 +2026,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
       }
 
@@ -1760,6 +2061,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
     }
 
@@ -1802,6 +2110,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
 
       export interface Modified {
@@ -1836,6 +2151,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
 
         export interface Old {
@@ -1863,6 +2185,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
       }
 
@@ -1891,6 +2220,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
     }
 
@@ -1933,6 +2269,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
 
       export interface Modified {
@@ -1967,6 +2310,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
 
         export interface Old {
@@ -1994,6 +2344,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
       }
 
@@ -2022,6 +2379,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
     }
 
@@ -2064,6 +2428,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
 
       export interface Modified {
@@ -2098,6 +2469,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
 
         export interface Old {
@@ -2125,6 +2503,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
       }
 
@@ -2153,6 +2538,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
     }
 
@@ -2195,6 +2587,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
 
       export interface Modified {
@@ -2229,6 +2628,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
 
         export interface Old {
@@ -2256,6 +2662,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
       }
 
@@ -2284,6 +2697,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
     }
 
@@ -2326,6 +2746,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
 
       export interface Modified {
@@ -2360,6 +2787,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
 
         export interface Old {
@@ -2387,6 +2821,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
       }
 
@@ -2415,6 +2856,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
     }
 
@@ -2457,6 +2905,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
 
       export interface Modified {
@@ -2491,6 +2946,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
 
         export interface Old {
@@ -2518,6 +2980,13 @@ export namespace VersionDiffResponse {
            * `tagManagerVariables`. `null` for every other collection.
            */
           tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
         }
       }
 
@@ -2546,6 +3015,13 @@ export namespace VersionDiffResponse {
          * `tagManagerVariables`. `null` for every other collection.
          */
         tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
       }
     }
   }
