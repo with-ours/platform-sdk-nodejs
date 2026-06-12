@@ -62,7 +62,7 @@ describe('resource experiments', () => {
         secondary: [{ eventName: 'demo_requested', funnelId: 'funnelId' }],
       },
       targetingRules: {
-        urlPatterns: ['/pricing*', '/enterprise'],
+        urlPatterns: ['/pricing*', 'get.example.com/learn-more'],
         audienceId: 'audienceId',
         queryParams: [
           {

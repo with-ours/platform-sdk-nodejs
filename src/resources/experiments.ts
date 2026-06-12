@@ -362,10 +362,14 @@ export namespace ExperimentListResponse {
    */
   export interface TargetingRules {
     /**
-     * Glob-style URL patterns that must match for the experiment to be eligible. Up to
-     * 200 patterns; each pattern up to 2000 characters. An empty array (or omitting
-     * the field) matches all URLs — equivalent to `['**']`. The host(s) targeted here
-     * must also appear in the parent experiment settings' `whitelistDomains` — that
+     * Glob-style URL patterns that must match for the experiment to be eligible. Each
+     * pattern is either a path (`/pricing`, matched on any domain) or a host-qualified
+     * pattern (`get.example.com/pricing` or `https://get.example.com/pricing`, matched
+     * against the full URL so a single domain or subdomain can be targeted). Use `*`
+     * to match within a path segment and `**` to match across segments. Up to 200
+     * patterns; each pattern up to 2000 characters. An empty array (or omitting the
+     * field) matches all URLs — equivalent to `['**']`. The host(s) targeted here must
+     * also appear in the parent experiment settings' `whitelistDomains` — that
      * allowlist is what limits which domains can load your experiments (see
      * `GET /experiment-settings`). If the host is missing, the SDK refuses to load
      * there and the experiment never runs, even after `POST /experiments/{id}/start`
@@ -660,10 +664,14 @@ export namespace ExperimentCreateResponse {
    */
   export interface TargetingRules {
     /**
-     * Glob-style URL patterns that must match for the experiment to be eligible. Up to
-     * 200 patterns; each pattern up to 2000 characters. An empty array (or omitting
-     * the field) matches all URLs — equivalent to `['**']`. The host(s) targeted here
-     * must also appear in the parent experiment settings' `whitelistDomains` — that
+     * Glob-style URL patterns that must match for the experiment to be eligible. Each
+     * pattern is either a path (`/pricing`, matched on any domain) or a host-qualified
+     * pattern (`get.example.com/pricing` or `https://get.example.com/pricing`, matched
+     * against the full URL so a single domain or subdomain can be targeted). Use `*`
+     * to match within a path segment and `**` to match across segments. Up to 200
+     * patterns; each pattern up to 2000 characters. An empty array (or omitting the
+     * field) matches all URLs — equivalent to `['**']`. The host(s) targeted here must
+     * also appear in the parent experiment settings' `whitelistDomains` — that
      * allowlist is what limits which domains can load your experiments (see
      * `GET /experiment-settings`). If the host is missing, the SDK refuses to load
      * there and the experiment never runs, even after `POST /experiments/{id}/start`
@@ -958,10 +966,14 @@ export namespace ExperimentRetrieveResponse {
    */
   export interface TargetingRules {
     /**
-     * Glob-style URL patterns that must match for the experiment to be eligible. Up to
-     * 200 patterns; each pattern up to 2000 characters. An empty array (or omitting
-     * the field) matches all URLs — equivalent to `['**']`. The host(s) targeted here
-     * must also appear in the parent experiment settings' `whitelistDomains` — that
+     * Glob-style URL patterns that must match for the experiment to be eligible. Each
+     * pattern is either a path (`/pricing`, matched on any domain) or a host-qualified
+     * pattern (`get.example.com/pricing` or `https://get.example.com/pricing`, matched
+     * against the full URL so a single domain or subdomain can be targeted). Use `*`
+     * to match within a path segment and `**` to match across segments. Up to 200
+     * patterns; each pattern up to 2000 characters. An empty array (or omitting the
+     * field) matches all URLs — equivalent to `['**']`. The host(s) targeted here must
+     * also appear in the parent experiment settings' `whitelistDomains` — that
      * allowlist is what limits which domains can load your experiments (see
      * `GET /experiment-settings`). If the host is missing, the SDK refuses to load
      * there and the experiment never runs, even after `POST /experiments/{id}/start`
@@ -1141,10 +1153,14 @@ export namespace ExperimentUpdateResponse {
    */
   export interface TargetingRules {
     /**
-     * Glob-style URL patterns that must match for the experiment to be eligible. Up to
-     * 200 patterns; each pattern up to 2000 characters. An empty array (or omitting
-     * the field) matches all URLs — equivalent to `['**']`. The host(s) targeted here
-     * must also appear in the parent experiment settings' `whitelistDomains` — that
+     * Glob-style URL patterns that must match for the experiment to be eligible. Each
+     * pattern is either a path (`/pricing`, matched on any domain) or a host-qualified
+     * pattern (`get.example.com/pricing` or `https://get.example.com/pricing`, matched
+     * against the full URL so a single domain or subdomain can be targeted). Use `*`
+     * to match within a path segment and `**` to match across segments. Up to 200
+     * patterns; each pattern up to 2000 characters. An empty array (or omitting the
+     * field) matches all URLs — equivalent to `['**']`. The host(s) targeted here must
+     * also appear in the parent experiment settings' `whitelistDomains` — that
      * allowlist is what limits which domains can load your experiments (see
      * `GET /experiment-settings`). If the host is missing, the SDK refuses to load
      * there and the experiment never runs, even after `POST /experiments/{id}/start`
@@ -1347,10 +1363,14 @@ export namespace ExperimentStartResponse {
      */
     export interface TargetingRules {
       /**
-       * Glob-style URL patterns that must match for the experiment to be eligible. Up to
-       * 200 patterns; each pattern up to 2000 characters. An empty array (or omitting
-       * the field) matches all URLs — equivalent to `['**']`. The host(s) targeted here
-       * must also appear in the parent experiment settings' `whitelistDomains` — that
+       * Glob-style URL patterns that must match for the experiment to be eligible. Each
+       * pattern is either a path (`/pricing`, matched on any domain) or a host-qualified
+       * pattern (`get.example.com/pricing` or `https://get.example.com/pricing`, matched
+       * against the full URL so a single domain or subdomain can be targeted). Use `*`
+       * to match within a path segment and `**` to match across segments. Up to 200
+       * patterns; each pattern up to 2000 characters. An empty array (or omitting the
+       * field) matches all URLs — equivalent to `['**']`. The host(s) targeted here must
+       * also appear in the parent experiment settings' `whitelistDomains` — that
        * allowlist is what limits which domains can load your experiments (see
        * `GET /experiment-settings`). If the host is missing, the SDK refuses to load
        * there and the experiment never runs, even after `POST /experiments/{id}/start`
@@ -1549,10 +1569,14 @@ export namespace ExperimentStopResponse {
      */
     export interface TargetingRules {
       /**
-       * Glob-style URL patterns that must match for the experiment to be eligible. Up to
-       * 200 patterns; each pattern up to 2000 characters. An empty array (or omitting
-       * the field) matches all URLs — equivalent to `['**']`. The host(s) targeted here
-       * must also appear in the parent experiment settings' `whitelistDomains` — that
+       * Glob-style URL patterns that must match for the experiment to be eligible. Each
+       * pattern is either a path (`/pricing`, matched on any domain) or a host-qualified
+       * pattern (`get.example.com/pricing` or `https://get.example.com/pricing`, matched
+       * against the full URL so a single domain or subdomain can be targeted). Use `*`
+       * to match within a path segment and `**` to match across segments. Up to 200
+       * patterns; each pattern up to 2000 characters. An empty array (or omitting the
+       * field) matches all URLs — equivalent to `['**']`. The host(s) targeted here must
+       * also appear in the parent experiment settings' `whitelistDomains` — that
        * allowlist is what limits which domains can load your experiments (see
        * `GET /experiment-settings`). If the host is missing, the SDK refuses to load
        * there and the experiment never runs, even after `POST /experiments/{id}/start`
@@ -1751,10 +1775,14 @@ export namespace ExperimentPauseResponse {
      */
     export interface TargetingRules {
       /**
-       * Glob-style URL patterns that must match for the experiment to be eligible. Up to
-       * 200 patterns; each pattern up to 2000 characters. An empty array (or omitting
-       * the field) matches all URLs — equivalent to `['**']`. The host(s) targeted here
-       * must also appear in the parent experiment settings' `whitelistDomains` — that
+       * Glob-style URL patterns that must match for the experiment to be eligible. Each
+       * pattern is either a path (`/pricing`, matched on any domain) or a host-qualified
+       * pattern (`get.example.com/pricing` or `https://get.example.com/pricing`, matched
+       * against the full URL so a single domain or subdomain can be targeted). Use `*`
+       * to match within a path segment and `**` to match across segments. Up to 200
+       * patterns; each pattern up to 2000 characters. An empty array (or omitting the
+       * field) matches all URLs — equivalent to `['**']`. The host(s) targeted here must
+       * also appear in the parent experiment settings' `whitelistDomains` — that
        * allowlist is what limits which domains can load your experiments (see
        * `GET /experiment-settings`). If the host is missing, the SDK refuses to load
        * there and the experiment never runs, even after `POST /experiments/{id}/start`
@@ -1953,10 +1981,14 @@ export namespace ExperimentResumeResponse {
      */
     export interface TargetingRules {
       /**
-       * Glob-style URL patterns that must match for the experiment to be eligible. Up to
-       * 200 patterns; each pattern up to 2000 characters. An empty array (or omitting
-       * the field) matches all URLs — equivalent to `['**']`. The host(s) targeted here
-       * must also appear in the parent experiment settings' `whitelistDomains` — that
+       * Glob-style URL patterns that must match for the experiment to be eligible. Each
+       * pattern is either a path (`/pricing`, matched on any domain) or a host-qualified
+       * pattern (`get.example.com/pricing` or `https://get.example.com/pricing`, matched
+       * against the full URL so a single domain or subdomain can be targeted). Use `*`
+       * to match within a path segment and `**` to match across segments. Up to 200
+       * patterns; each pattern up to 2000 characters. An empty array (or omitting the
+       * field) matches all URLs — equivalent to `['**']`. The host(s) targeted here must
+       * also appear in the parent experiment settings' `whitelistDomains` — that
        * allowlist is what limits which domains can load your experiments (see
        * `GET /experiment-settings`). If the host is missing, the SDK refuses to load
        * there and the experiment never runs, even after `POST /experiments/{id}/start`
@@ -2293,10 +2325,14 @@ export namespace ExperimentCreateParams {
    */
   export interface TargetingRules {
     /**
-     * Glob-style URL patterns that must match for the experiment to be eligible. Up to
-     * 200 patterns; each pattern up to 2000 characters. An empty array (or omitting
-     * the field) matches all URLs — equivalent to `['**']`. The host(s) targeted here
-     * must also appear in the parent experiment settings' `whitelistDomains` — that
+     * Glob-style URL patterns that must match for the experiment to be eligible. Each
+     * pattern is either a path (`/pricing`, matched on any domain) or a host-qualified
+     * pattern (`get.example.com/pricing` or `https://get.example.com/pricing`, matched
+     * against the full URL so a single domain or subdomain can be targeted). Use `*`
+     * to match within a path segment and `**` to match across segments. Up to 200
+     * patterns; each pattern up to 2000 characters. An empty array (or omitting the
+     * field) matches all URLs — equivalent to `['**']`. The host(s) targeted here must
+     * also appear in the parent experiment settings' `whitelistDomains` — that
      * allowlist is what limits which domains can load your experiments (see
      * `GET /experiment-settings`). If the host is missing, the SDK refuses to load
      * there and the experiment never runs, even after `POST /experiments/{id}/start`
@@ -2445,10 +2481,14 @@ export namespace ExperimentUpdateParams {
    */
   export interface TargetingRules {
     /**
-     * Glob-style URL patterns that must match for the experiment to be eligible. Up to
-     * 200 patterns; each pattern up to 2000 characters. An empty array (or omitting
-     * the field) matches all URLs — equivalent to `['**']`. The host(s) targeted here
-     * must also appear in the parent experiment settings' `whitelistDomains` — that
+     * Glob-style URL patterns that must match for the experiment to be eligible. Each
+     * pattern is either a path (`/pricing`, matched on any domain) or a host-qualified
+     * pattern (`get.example.com/pricing` or `https://get.example.com/pricing`, matched
+     * against the full URL so a single domain or subdomain can be targeted). Use `*`
+     * to match within a path segment and `**` to match across segments. Up to 200
+     * patterns; each pattern up to 2000 characters. An empty array (or omitting the
+     * field) matches all URLs — equivalent to `['**']`. The host(s) targeted here must
+     * also appear in the parent experiment settings' `whitelistDomains` — that
      * allowlist is what limits which domains can load your experiments (see
      * `GET /experiment-settings`). If the host is missing, the SDK refuses to load
      * there and the experiment never runs, even after `POST /experiments/{id}/start`
