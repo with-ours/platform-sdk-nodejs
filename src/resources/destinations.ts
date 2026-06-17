@@ -163,6 +163,7 @@ export interface DestinationListResponse {
     | 'XAds'
     | 'YelpCAPI'
     | 'Zendesk'
+    | 'ZohoCRM'
     | 'ZoomInfo';
 
   hashingSalt?: string | null;
@@ -269,6 +270,7 @@ export interface DestinationCreateResponse {
     | 'XAds'
     | 'YelpCAPI'
     | 'Zendesk'
+    | 'ZohoCRM'
     | 'ZoomInfo';
 
   hashingSalt?: string | null;
@@ -375,6 +377,7 @@ export interface DestinationRetrieveResponse {
     | 'XAds'
     | 'YelpCAPI'
     | 'Zendesk'
+    | 'ZohoCRM'
     | 'ZoomInfo';
 
   hashingSalt?: string | null;
@@ -481,6 +484,7 @@ export interface DestinationUpdateResponse {
     | 'XAds'
     | 'YelpCAPI'
     | 'Zendesk'
+    | 'ZohoCRM'
     | 'ZoomInfo';
 
   hashingSalt?: string | null;
@@ -575,7 +579,8 @@ export namespace DestinationTypesResponse {
       | 'UniversalAds'
       | 'OpenAIAds'
       | 'YelpCAPI'
-      | 'MNTN';
+      | 'MNTN'
+      | 'ZohoCRM';
 
     capabilities: Entity.Capabilities;
 
@@ -621,6 +626,8 @@ export namespace DestinationTypesResponse {
       options: Array<UnionMember1.Option>;
 
       type: 'Select';
+
+      defaultValue?: string | null;
 
       required?: boolean | null;
 
@@ -766,6 +773,7 @@ export interface DestinationListParams extends CursorParams {
     | 'XAds'
     | 'YelpCAPI'
     | 'Zendesk'
+    | 'ZohoCRM'
     | 'ZoomInfo';
 }
 
@@ -848,7 +856,8 @@ export interface DestinationCreateParams {
     | 'UniversalAds'
     | 'OpenAIAds'
     | 'YelpCAPI'
-    | 'MNTN';
+    | 'MNTN'
+    | 'ZohoCRM';
 
   name?: string | null;
 
