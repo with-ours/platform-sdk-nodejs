@@ -116,7 +116,9 @@ export class Experiments extends APIResource {
 
   /**
    * Stop an experiment. The request body is optional — send `{}` to stop without
-   * recording a winner. Requires scope: experiment:stop
+   * recording a winner. Optionally pass `winnerVariantId` to record the winner
+   * (reporting only) and/or `rolloutVariantId` to keep that variant serving to all
+   * traffic. Requires scope: experiment:stop
    *
    * @example
    * ```ts
@@ -129,6 +131,62 @@ export class Experiments extends APIResource {
     options?: RequestOptions,
   ): APIPromise<ExperimentStopResponse> {
     return this._client.post(path`/rest/v1/experiments/${id}/stop`, { body, ...options });
+  }
+
+  /**
+   * Roll a non-control variant out to 100% of targeted traffic on a completed
+   * experiment — the explicit, reversible serving decision that makes a winning
+   * experience the ongoing default. Publishes. Reverse with `/end-rollout`. Returns
+   * 409 if the experiment is not completed or the variant is the control. Requires
+   * scope: experiment:stop
+   *
+   * @example
+   * ```ts
+   * const response = await client.experiments.rollout('id', {
+   *   variantId: 'var_01HZX8YJH3Z3W1R2Q4M5N6P7Q8',
+   * });
+   * ```
+   */
+  rollout(
+    id: string,
+    body: ExperimentRolloutParams,
+    options?: RequestOptions,
+  ): APIPromise<ExperimentRolloutResponse> {
+    return this._client.post(path`/rest/v1/experiments/${id}/rollout`, { body, ...options });
+  }
+
+  /**
+   * End an active rollout: stop serving the rolled-out variant so every matching
+   * visitor reverts to the original experience. The declared winner is left intact.
+   * Publishes. Returns 409 if the experiment is not currently rolled out. Requires
+   * scope: experiment:stop
+   *
+   * @example
+   * ```ts
+   * const response = await client.experiments.endRollout('id');
+   * ```
+   */
+  endRollout(id: string, options?: RequestOptions): APIPromise<ExperimentEndRolloutResponse> {
+    return this._client.post(path`/rest/v1/experiments/${id}/end-rollout`, options);
+  }
+
+  /**
+   * Declare, change, or clear the winning variant on a completed experiment.
+   * Reporting metadata only — it does not change what visitors see and does not
+   * republish. Omit `winnerVariantId` to clear. To make the winner live, use
+   * `/rollout`. Requires scope: experiment:stop
+   *
+   * @example
+   * ```ts
+   * const response = await client.experiments.winner('id');
+   * ```
+   */
+  winner(
+    id: string,
+    body: ExperimentWinnerParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ExperimentWinnerResponse> {
+    return this._client.post(path`/rest/v1/experiments/${id}/winner`, { body, ...options });
   }
 
   /**
@@ -289,6 +347,15 @@ export interface ExperimentListResponse {
   metrics?: ExperimentListResponse.Metrics | null;
 
   /**
+   * Variant currently rolled out to 100% of targeted traffic on a completed
+   * experiment. When set (and not the control), the runtime keeps serving it to
+   * every matching visitor — a winning redirect becomes an ongoing redirect.
+   * Independent of `winnerVariantId`. Set via `POST /experiments/{id}/rollout`;
+   * cleared via `POST /experiments/{id}/end-rollout`.
+   */
+  rolloutVariantId?: string | null;
+
+  /**
    * ISO-8601 timestamp when the experiment most recently entered a running state.
    */
   startedAt?: string | null;
@@ -317,8 +384,9 @@ export interface ExperimentListResponse {
   updatedAt?: string | null;
 
   /**
-   * Variant ID persisted as the winner when the experiment was stopped. Set via
-   * `POST /experiments/{id}/stop` with a `winnerVariantId` body field.
+   * Declared winning variant — reporting metadata only. Records which variant won;
+   * does NOT change what visitors are served. Set at stop time or later via
+   * `POST /experiments/{id}/winner`.
    */
   winnerVariantId?: string | null;
 }
@@ -483,6 +551,15 @@ export interface ExperimentCreateResponse {
   metrics?: ExperimentCreateResponse.Metrics | null;
 
   /**
+   * Variant currently rolled out to 100% of targeted traffic on a completed
+   * experiment. When set (and not the control), the runtime keeps serving it to
+   * every matching visitor — a winning redirect becomes an ongoing redirect.
+   * Independent of `winnerVariantId`. Set via `POST /experiments/{id}/rollout`;
+   * cleared via `POST /experiments/{id}/end-rollout`.
+   */
+  rolloutVariantId?: string | null;
+
+  /**
    * ISO-8601 timestamp when the experiment most recently entered a running state.
    */
   startedAt?: string | null;
@@ -511,8 +588,9 @@ export interface ExperimentCreateResponse {
   updatedAt?: string | null;
 
   /**
-   * Variant ID persisted as the winner when the experiment was stopped. Set via
-   * `POST /experiments/{id}/stop` with a `winnerVariantId` body field.
+   * Declared winning variant — reporting metadata only. Records which variant won;
+   * does NOT change what visitors are served. Set at stop time or later via
+   * `POST /experiments/{id}/winner`.
    */
   winnerVariantId?: string | null;
 }
@@ -785,6 +863,15 @@ export interface ExperimentRetrieveResponse {
   metrics?: ExperimentRetrieveResponse.Metrics | null;
 
   /**
+   * Variant currently rolled out to 100% of targeted traffic on a completed
+   * experiment. When set (and not the control), the runtime keeps serving it to
+   * every matching visitor — a winning redirect becomes an ongoing redirect.
+   * Independent of `winnerVariantId`. Set via `POST /experiments/{id}/rollout`;
+   * cleared via `POST /experiments/{id}/end-rollout`.
+   */
+  rolloutVariantId?: string | null;
+
+  /**
    * ISO-8601 timestamp when the experiment most recently entered a running state.
    */
   startedAt?: string | null;
@@ -813,8 +900,9 @@ export interface ExperimentRetrieveResponse {
   updatedAt?: string | null;
 
   /**
-   * Variant ID persisted as the winner when the experiment was stopped. Set via
-   * `POST /experiments/{id}/stop` with a `winnerVariantId` body field.
+   * Declared winning variant — reporting metadata only. Records which variant won;
+   * does NOT change what visitors are served. Set at stop time or later via
+   * `POST /experiments/{id}/winner`.
    */
   winnerVariantId?: string | null;
 }
@@ -1080,6 +1168,15 @@ export interface ExperimentUpdateResponse {
   metrics?: ExperimentUpdateResponse.Metrics | null;
 
   /**
+   * Variant currently rolled out to 100% of targeted traffic on a completed
+   * experiment. When set (and not the control), the runtime keeps serving it to
+   * every matching visitor — a winning redirect becomes an ongoing redirect.
+   * Independent of `winnerVariantId`. Set via `POST /experiments/{id}/rollout`;
+   * cleared via `POST /experiments/{id}/end-rollout`.
+   */
+  rolloutVariantId?: string | null;
+
+  /**
    * ISO-8601 timestamp when the experiment most recently entered a running state.
    */
   startedAt?: string | null;
@@ -1108,8 +1205,9 @@ export interface ExperimentUpdateResponse {
   updatedAt?: string | null;
 
   /**
-   * Variant ID persisted as the winner when the experiment was stopped. Set via
-   * `POST /experiments/{id}/stop` with a `winnerVariantId` body field.
+   * Declared winning variant — reporting metadata only. Records which variant won;
+   * does NOT change what visitors are served. Set at stop time or later via
+   * `POST /experiments/{id}/winner`.
    */
   winnerVariantId?: string | null;
 }
@@ -1290,6 +1388,15 @@ export namespace ExperimentStartResponse {
     metrics?: Experiment.Metrics | null;
 
     /**
+     * Variant currently rolled out to 100% of targeted traffic on a completed
+     * experiment. When set (and not the control), the runtime keeps serving it to
+     * every matching visitor — a winning redirect becomes an ongoing redirect.
+     * Independent of `winnerVariantId`. Set via `POST /experiments/{id}/rollout`;
+     * cleared via `POST /experiments/{id}/end-rollout`.
+     */
+    rolloutVariantId?: string | null;
+
+    /**
      * ISO-8601 timestamp when the experiment most recently entered a running state.
      */
     startedAt?: string | null;
@@ -1318,8 +1425,9 @@ export namespace ExperimentStartResponse {
     updatedAt?: string | null;
 
     /**
-     * Variant ID persisted as the winner when the experiment was stopped. Set via
-     * `POST /experiments/{id}/stop` with a `winnerVariantId` body field.
+     * Declared winning variant — reporting metadata only. Records which variant won;
+     * does NOT change what visitors are served. Set at stop time or later via
+     * `POST /experiments/{id}/winner`.
      */
     winnerVariantId?: string | null;
   }
@@ -1496,6 +1604,15 @@ export namespace ExperimentStopResponse {
     metrics?: Experiment.Metrics | null;
 
     /**
+     * Variant currently rolled out to 100% of targeted traffic on a completed
+     * experiment. When set (and not the control), the runtime keeps serving it to
+     * every matching visitor — a winning redirect becomes an ongoing redirect.
+     * Independent of `winnerVariantId`. Set via `POST /experiments/{id}/rollout`;
+     * cleared via `POST /experiments/{id}/end-rollout`.
+     */
+    rolloutVariantId?: string | null;
+
+    /**
      * ISO-8601 timestamp when the experiment most recently entered a running state.
      */
     startedAt?: string | null;
@@ -1524,8 +1641,9 @@ export namespace ExperimentStopResponse {
     updatedAt?: string | null;
 
     /**
-     * Variant ID persisted as the winner when the experiment was stopped. Set via
-     * `POST /experiments/{id}/stop` with a `winnerVariantId` body field.
+     * Declared winning variant — reporting metadata only. Records which variant won;
+     * does NOT change what visitors are served. Set at stop time or later via
+     * `POST /experiments/{id}/winner`.
      */
     winnerVariantId?: string | null;
   }
@@ -1630,6 +1748,635 @@ export namespace ExperimentStopResponse {
   }
 }
 
+export interface ExperimentRolloutResponse {
+  /**
+   * Number of unpublished version changes detected at the time of the lifecycle
+   * action. Values greater than 1 mean other unpublished work exists besides this
+   * experiment state change.
+   */
+  concurrentVersionChanges: number;
+
+  experiment: ExperimentRolloutResponse.Experiment;
+
+  /**
+   * Whether the status change was also published to the current live version
+   * immediately.
+   */
+  publishStatus: 'pending_publish' | 'published';
+}
+
+export namespace ExperimentRolloutResponse {
+  export interface Experiment {
+    /**
+     * Unique identifier for the experiment.
+     */
+    id: string;
+
+    /**
+     * ISO-8601 timestamp when the experiment was created.
+     */
+    createdAt: string;
+
+    /**
+     * Stable code-facing key for the experiment. Use this with the headless SDK
+     * `getExperimentByKey()` API instead of hard-coding opaque experiment IDs into
+     * application code.
+     */
+    key: string;
+
+    /**
+     * Short, human-readable experiment name.
+     */
+    name: string;
+
+    /**
+     * Lifecycle state. `draft` is editable, `running` is active, `paused` is
+     * temporarily inactive, and `completed` is permanently stopped.
+     */
+    status: 'completed' | 'draft' | 'paused' | 'running';
+
+    /**
+     * Percent of eligible traffic assigned into the experiment. Use 0 to fully disable
+     * enrollment without deleting the experiment.
+     */
+    trafficAllocation: number;
+
+    /**
+     * Optional human-readable hypothesis or summary. In GraphQL this is backed by the
+     * experiment hypothesis field.
+     */
+    description?: string | null;
+
+    /**
+     * For redirect variants, whether the original page query string should be
+     * forwarded onto the redirect URL.
+     */
+    includeQueryString?: boolean | null;
+
+    /**
+     * Configured success metrics. The read shape mirrors the write shape — `metrics`
+     * from a GET response can be PATCHed back without modification.
+     */
+    metrics?: Experiment.Metrics | null;
+
+    /**
+     * Variant currently rolled out to 100% of targeted traffic on a completed
+     * experiment. When set (and not the control), the runtime keeps serving it to
+     * every matching visitor — a winning redirect becomes an ongoing redirect.
+     * Independent of `winnerVariantId`. Set via `POST /experiments/{id}/rollout`;
+     * cleared via `POST /experiments/{id}/end-rollout`.
+     */
+    rolloutVariantId?: string | null;
+
+    /**
+     * ISO-8601 timestamp when the experiment most recently entered a running state.
+     */
+    startedAt?: string | null;
+
+    /**
+     * ISO-8601 timestamp when the experiment was completed, if it has been stopped.
+     */
+    stoppedAt?: string | null;
+
+    /**
+     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
+     * visitor status, and (server-side) visitor properties. Same shape as the
+     * create/patch input.
+     */
+    targetingRules?: Experiment.TargetingRules | null;
+
+    /**
+     * Experiment mode. `ab` and `multivariate` use traffic allocation and results;
+     * `personalization` is always-on targeting.
+     */
+    type?: 'ab' | 'multivariate' | 'personalization' | null;
+
+    /**
+     * ISO-8601 timestamp for the last persisted update, if any.
+     */
+    updatedAt?: string | null;
+
+    /**
+     * Declared winning variant — reporting metadata only. Records which variant won;
+     * does NOT change what visitors are served. Set at stop time or later via
+     * `POST /experiments/{id}/winner`.
+     */
+    winnerVariantId?: string | null;
+  }
+
+  export namespace Experiment {
+    /**
+     * Configured success metrics. The read shape mirrors the write shape — `metrics`
+     * from a GET response can be PATCHed back without modification.
+     */
+    export interface Metrics {
+      /**
+       * Primary success metric used in the results report.
+       */
+      primary?: unknown | null;
+
+      /**
+       * Optional secondary metrics tracked alongside the primary goal.
+       */
+      secondary?: Array<Metrics.Secondary> | null;
+    }
+
+    export namespace Metrics {
+      export interface Secondary {
+        /**
+         * Name of the event used to measure success for this metric.
+         */
+        eventName?: string | null;
+
+        /**
+         * Optional funnel identifier when the metric is derived from an existing funnel
+         * definition.
+         */
+        funnelId?: string | null;
+      }
+    }
+
+    /**
+     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
+     * visitor status, and (server-side) visitor properties. Same shape as the
+     * create/patch input.
+     */
+    export interface TargetingRules {
+      /**
+       * Glob-style URL patterns that must match for the experiment to be eligible. Each
+       * pattern is either a path (`/pricing`, matched on any domain) or a host-qualified
+       * pattern (`get.example.com/pricing` or `https://get.example.com/pricing`, matched
+       * against the full URL so a single domain or subdomain can be targeted). Use `*`
+       * to match within a path segment and `**` to match across segments. Up to 200
+       * patterns; each pattern up to 2000 characters. An empty array (or omitting the
+       * field) matches all URLs — equivalent to `['**']`. The host(s) targeted here must
+       * also appear in the parent experiment settings' `whitelistDomains` — that
+       * allowlist is what limits which domains can load your experiments (see
+       * `GET /experiment-settings`). If the host is missing, the SDK refuses to load
+       * there and the experiment never runs, even after `POST /experiments/{id}/start`
+       * succeeds.
+       */
+      urlPatterns: Array<string>;
+
+      /**
+       * Optional audience identifier used for server-side eligibility filtering.
+       */
+      audienceId?: string | null;
+
+      /**
+       * Additional query-string conditions that must all match for the visitor to
+       * qualify.
+       */
+      queryParams?: Array<TargetingRules.QueryParam> | null;
+
+      /**
+       * Optional visitor-property matching rules. These are passed through as JSON for
+       * experimentation targeting.
+       */
+      visitorProperties?: unknown | null;
+
+      /**
+       * Whether the experiment should target new visitors, returning visitors, or any
+       * visitor.
+       */
+      visitorStatus?: string | null;
+    }
+
+    export namespace TargetingRules {
+      export interface QueryParam {
+        /**
+         * Query string key to inspect on the current page URL.
+         */
+        key: string;
+
+        /**
+         * Comparison operator applied to the query string value.
+         */
+        operator: 'contains' | 'equals' | 'exists' | 'not_equals' | 'not_exists' | 'regex';
+
+        /**
+         * Comparison value used by operators that require one. Omit for `exists` and
+         * `not_exists`.
+         */
+        value?: string | null;
+      }
+    }
+  }
+}
+
+export interface ExperimentEndRolloutResponse {
+  /**
+   * Number of unpublished version changes detected at the time of the lifecycle
+   * action. Values greater than 1 mean other unpublished work exists besides this
+   * experiment state change.
+   */
+  concurrentVersionChanges: number;
+
+  experiment: ExperimentEndRolloutResponse.Experiment;
+
+  /**
+   * Whether the status change was also published to the current live version
+   * immediately.
+   */
+  publishStatus: 'pending_publish' | 'published';
+}
+
+export namespace ExperimentEndRolloutResponse {
+  export interface Experiment {
+    /**
+     * Unique identifier for the experiment.
+     */
+    id: string;
+
+    /**
+     * ISO-8601 timestamp when the experiment was created.
+     */
+    createdAt: string;
+
+    /**
+     * Stable code-facing key for the experiment. Use this with the headless SDK
+     * `getExperimentByKey()` API instead of hard-coding opaque experiment IDs into
+     * application code.
+     */
+    key: string;
+
+    /**
+     * Short, human-readable experiment name.
+     */
+    name: string;
+
+    /**
+     * Lifecycle state. `draft` is editable, `running` is active, `paused` is
+     * temporarily inactive, and `completed` is permanently stopped.
+     */
+    status: 'completed' | 'draft' | 'paused' | 'running';
+
+    /**
+     * Percent of eligible traffic assigned into the experiment. Use 0 to fully disable
+     * enrollment without deleting the experiment.
+     */
+    trafficAllocation: number;
+
+    /**
+     * Optional human-readable hypothesis or summary. In GraphQL this is backed by the
+     * experiment hypothesis field.
+     */
+    description?: string | null;
+
+    /**
+     * For redirect variants, whether the original page query string should be
+     * forwarded onto the redirect URL.
+     */
+    includeQueryString?: boolean | null;
+
+    /**
+     * Configured success metrics. The read shape mirrors the write shape — `metrics`
+     * from a GET response can be PATCHed back without modification.
+     */
+    metrics?: Experiment.Metrics | null;
+
+    /**
+     * Variant currently rolled out to 100% of targeted traffic on a completed
+     * experiment. When set (and not the control), the runtime keeps serving it to
+     * every matching visitor — a winning redirect becomes an ongoing redirect.
+     * Independent of `winnerVariantId`. Set via `POST /experiments/{id}/rollout`;
+     * cleared via `POST /experiments/{id}/end-rollout`.
+     */
+    rolloutVariantId?: string | null;
+
+    /**
+     * ISO-8601 timestamp when the experiment most recently entered a running state.
+     */
+    startedAt?: string | null;
+
+    /**
+     * ISO-8601 timestamp when the experiment was completed, if it has been stopped.
+     */
+    stoppedAt?: string | null;
+
+    /**
+     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
+     * visitor status, and (server-side) visitor properties. Same shape as the
+     * create/patch input.
+     */
+    targetingRules?: Experiment.TargetingRules | null;
+
+    /**
+     * Experiment mode. `ab` and `multivariate` use traffic allocation and results;
+     * `personalization` is always-on targeting.
+     */
+    type?: 'ab' | 'multivariate' | 'personalization' | null;
+
+    /**
+     * ISO-8601 timestamp for the last persisted update, if any.
+     */
+    updatedAt?: string | null;
+
+    /**
+     * Declared winning variant — reporting metadata only. Records which variant won;
+     * does NOT change what visitors are served. Set at stop time or later via
+     * `POST /experiments/{id}/winner`.
+     */
+    winnerVariantId?: string | null;
+  }
+
+  export namespace Experiment {
+    /**
+     * Configured success metrics. The read shape mirrors the write shape — `metrics`
+     * from a GET response can be PATCHed back without modification.
+     */
+    export interface Metrics {
+      /**
+       * Primary success metric used in the results report.
+       */
+      primary?: unknown | null;
+
+      /**
+       * Optional secondary metrics tracked alongside the primary goal.
+       */
+      secondary?: Array<Metrics.Secondary> | null;
+    }
+
+    export namespace Metrics {
+      export interface Secondary {
+        /**
+         * Name of the event used to measure success for this metric.
+         */
+        eventName?: string | null;
+
+        /**
+         * Optional funnel identifier when the metric is derived from an existing funnel
+         * definition.
+         */
+        funnelId?: string | null;
+      }
+    }
+
+    /**
+     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
+     * visitor status, and (server-side) visitor properties. Same shape as the
+     * create/patch input.
+     */
+    export interface TargetingRules {
+      /**
+       * Glob-style URL patterns that must match for the experiment to be eligible. Each
+       * pattern is either a path (`/pricing`, matched on any domain) or a host-qualified
+       * pattern (`get.example.com/pricing` or `https://get.example.com/pricing`, matched
+       * against the full URL so a single domain or subdomain can be targeted). Use `*`
+       * to match within a path segment and `**` to match across segments. Up to 200
+       * patterns; each pattern up to 2000 characters. An empty array (or omitting the
+       * field) matches all URLs — equivalent to `['**']`. The host(s) targeted here must
+       * also appear in the parent experiment settings' `whitelistDomains` — that
+       * allowlist is what limits which domains can load your experiments (see
+       * `GET /experiment-settings`). If the host is missing, the SDK refuses to load
+       * there and the experiment never runs, even after `POST /experiments/{id}/start`
+       * succeeds.
+       */
+      urlPatterns: Array<string>;
+
+      /**
+       * Optional audience identifier used for server-side eligibility filtering.
+       */
+      audienceId?: string | null;
+
+      /**
+       * Additional query-string conditions that must all match for the visitor to
+       * qualify.
+       */
+      queryParams?: Array<TargetingRules.QueryParam> | null;
+
+      /**
+       * Optional visitor-property matching rules. These are passed through as JSON for
+       * experimentation targeting.
+       */
+      visitorProperties?: unknown | null;
+
+      /**
+       * Whether the experiment should target new visitors, returning visitors, or any
+       * visitor.
+       */
+      visitorStatus?: string | null;
+    }
+
+    export namespace TargetingRules {
+      export interface QueryParam {
+        /**
+         * Query string key to inspect on the current page URL.
+         */
+        key: string;
+
+        /**
+         * Comparison operator applied to the query string value.
+         */
+        operator: 'contains' | 'equals' | 'exists' | 'not_equals' | 'not_exists' | 'regex';
+
+        /**
+         * Comparison value used by operators that require one. Omit for `exists` and
+         * `not_exists`.
+         */
+        value?: string | null;
+      }
+    }
+  }
+}
+
+export interface ExperimentWinnerResponse {
+  /**
+   * Unique identifier for the experiment.
+   */
+  id: string;
+
+  /**
+   * ISO-8601 timestamp when the experiment was created.
+   */
+  createdAt: string;
+
+  /**
+   * Stable code-facing key for the experiment. Use this with the headless SDK
+   * `getExperimentByKey()` API instead of hard-coding opaque experiment IDs into
+   * application code.
+   */
+  key: string;
+
+  /**
+   * Short, human-readable experiment name.
+   */
+  name: string;
+
+  /**
+   * Lifecycle state. `draft` is editable, `running` is active, `paused` is
+   * temporarily inactive, and `completed` is permanently stopped.
+   */
+  status: 'completed' | 'draft' | 'paused' | 'running';
+
+  /**
+   * Percent of eligible traffic assigned into the experiment. Use 0 to fully disable
+   * enrollment without deleting the experiment.
+   */
+  trafficAllocation: number;
+
+  /**
+   * Optional human-readable hypothesis or summary. In GraphQL this is backed by the
+   * experiment hypothesis field.
+   */
+  description?: string | null;
+
+  /**
+   * For redirect variants, whether the original page query string should be
+   * forwarded onto the redirect URL.
+   */
+  includeQueryString?: boolean | null;
+
+  /**
+   * Configured success metrics. The read shape mirrors the write shape — `metrics`
+   * from a GET response can be PATCHed back without modification.
+   */
+  metrics?: ExperimentWinnerResponse.Metrics | null;
+
+  /**
+   * Variant currently rolled out to 100% of targeted traffic on a completed
+   * experiment. When set (and not the control), the runtime keeps serving it to
+   * every matching visitor — a winning redirect becomes an ongoing redirect.
+   * Independent of `winnerVariantId`. Set via `POST /experiments/{id}/rollout`;
+   * cleared via `POST /experiments/{id}/end-rollout`.
+   */
+  rolloutVariantId?: string | null;
+
+  /**
+   * ISO-8601 timestamp when the experiment most recently entered a running state.
+   */
+  startedAt?: string | null;
+
+  /**
+   * ISO-8601 timestamp when the experiment was completed, if it has been stopped.
+   */
+  stoppedAt?: string | null;
+
+  /**
+   * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
+   * visitor status, and (server-side) visitor properties. Same shape as the
+   * create/patch input.
+   */
+  targetingRules?: ExperimentWinnerResponse.TargetingRules | null;
+
+  /**
+   * Experiment mode. `ab` and `multivariate` use traffic allocation and results;
+   * `personalization` is always-on targeting.
+   */
+  type?: 'ab' | 'multivariate' | 'personalization' | null;
+
+  /**
+   * ISO-8601 timestamp for the last persisted update, if any.
+   */
+  updatedAt?: string | null;
+
+  /**
+   * Declared winning variant — reporting metadata only. Records which variant won;
+   * does NOT change what visitors are served. Set at stop time or later via
+   * `POST /experiments/{id}/winner`.
+   */
+  winnerVariantId?: string | null;
+}
+
+export namespace ExperimentWinnerResponse {
+  /**
+   * Configured success metrics. The read shape mirrors the write shape — `metrics`
+   * from a GET response can be PATCHed back without modification.
+   */
+  export interface Metrics {
+    /**
+     * Primary success metric used in the results report.
+     */
+    primary?: unknown | null;
+
+    /**
+     * Optional secondary metrics tracked alongside the primary goal.
+     */
+    secondary?: Array<Metrics.Secondary> | null;
+  }
+
+  export namespace Metrics {
+    export interface Secondary {
+      /**
+       * Name of the event used to measure success for this metric.
+       */
+      eventName?: string | null;
+
+      /**
+       * Optional funnel identifier when the metric is derived from an existing funnel
+       * definition.
+       */
+      funnelId?: string | null;
+    }
+  }
+
+  /**
+   * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
+   * visitor status, and (server-side) visitor properties. Same shape as the
+   * create/patch input.
+   */
+  export interface TargetingRules {
+    /**
+     * Glob-style URL patterns that must match for the experiment to be eligible. Each
+     * pattern is either a path (`/pricing`, matched on any domain) or a host-qualified
+     * pattern (`get.example.com/pricing` or `https://get.example.com/pricing`, matched
+     * against the full URL so a single domain or subdomain can be targeted). Use `*`
+     * to match within a path segment and `**` to match across segments. Up to 200
+     * patterns; each pattern up to 2000 characters. An empty array (or omitting the
+     * field) matches all URLs — equivalent to `['**']`. The host(s) targeted here must
+     * also appear in the parent experiment settings' `whitelistDomains` — that
+     * allowlist is what limits which domains can load your experiments (see
+     * `GET /experiment-settings`). If the host is missing, the SDK refuses to load
+     * there and the experiment never runs, even after `POST /experiments/{id}/start`
+     * succeeds.
+     */
+    urlPatterns: Array<string>;
+
+    /**
+     * Optional audience identifier used for server-side eligibility filtering.
+     */
+    audienceId?: string | null;
+
+    /**
+     * Additional query-string conditions that must all match for the visitor to
+     * qualify.
+     */
+    queryParams?: Array<TargetingRules.QueryParam> | null;
+
+    /**
+     * Optional visitor-property matching rules. These are passed through as JSON for
+     * experimentation targeting.
+     */
+    visitorProperties?: unknown | null;
+
+    /**
+     * Whether the experiment should target new visitors, returning visitors, or any
+     * visitor.
+     */
+    visitorStatus?: string | null;
+  }
+
+  export namespace TargetingRules {
+    export interface QueryParam {
+      /**
+       * Query string key to inspect on the current page URL.
+       */
+      key: string;
+
+      /**
+       * Comparison operator applied to the query string value.
+       */
+      operator: 'contains' | 'equals' | 'exists' | 'not_equals' | 'not_exists' | 'regex';
+
+      /**
+       * Comparison value used by operators that require one. Omit for `exists` and
+       * `not_exists`.
+       */
+      value?: string | null;
+    }
+  }
+}
+
 export interface ExperimentPauseResponse {
   /**
    * Number of unpublished version changes detected at the time of the lifecycle
@@ -1702,6 +2449,15 @@ export namespace ExperimentPauseResponse {
     metrics?: Experiment.Metrics | null;
 
     /**
+     * Variant currently rolled out to 100% of targeted traffic on a completed
+     * experiment. When set (and not the control), the runtime keeps serving it to
+     * every matching visitor — a winning redirect becomes an ongoing redirect.
+     * Independent of `winnerVariantId`. Set via `POST /experiments/{id}/rollout`;
+     * cleared via `POST /experiments/{id}/end-rollout`.
+     */
+    rolloutVariantId?: string | null;
+
+    /**
      * ISO-8601 timestamp when the experiment most recently entered a running state.
      */
     startedAt?: string | null;
@@ -1730,8 +2486,9 @@ export namespace ExperimentPauseResponse {
     updatedAt?: string | null;
 
     /**
-     * Variant ID persisted as the winner when the experiment was stopped. Set via
-     * `POST /experiments/{id}/stop` with a `winnerVariantId` body field.
+     * Declared winning variant — reporting metadata only. Records which variant won;
+     * does NOT change what visitors are served. Set at stop time or later via
+     * `POST /experiments/{id}/winner`.
      */
     winnerVariantId?: string | null;
   }
@@ -1908,6 +2665,15 @@ export namespace ExperimentResumeResponse {
     metrics?: Experiment.Metrics | null;
 
     /**
+     * Variant currently rolled out to 100% of targeted traffic on a completed
+     * experiment. When set (and not the control), the runtime keeps serving it to
+     * every matching visitor — a winning redirect becomes an ongoing redirect.
+     * Independent of `winnerVariantId`. Set via `POST /experiments/{id}/rollout`;
+     * cleared via `POST /experiments/{id}/end-rollout`.
+     */
+    rolloutVariantId?: string | null;
+
+    /**
      * ISO-8601 timestamp when the experiment most recently entered a running state.
      */
     startedAt?: string | null;
@@ -1936,8 +2702,9 @@ export namespace ExperimentResumeResponse {
     updatedAt?: string | null;
 
     /**
-     * Variant ID persisted as the winner when the experiment was stopped. Set via
-     * `POST /experiments/{id}/stop` with a `winnerVariantId` body field.
+     * Declared winning variant — reporting metadata only. Records which variant won;
+     * does NOT change what visitors are served. Set at stop time or later via
+     * `POST /experiments/{id}/winner`.
      */
     winnerVariantId?: string | null;
   }
@@ -2556,7 +3323,35 @@ export interface ExperimentStartParams {
 
 export interface ExperimentStopParams {
   /**
-   * Optional winning variant ID to persist when completing the experiment.
+   * Optional variant to roll out to 100% of traffic immediately on stop — the
+   * explicit serving decision that keeps the winning experience live (a winning
+   * redirect becomes an ongoing redirect). Must be a non-control variant. Reverse
+   * later via `POST /experiments/{id}/end-rollout`.
+   */
+  rolloutVariantId?: string;
+
+  /**
+   * Optional declared winner to record (reporting metadata only — does not change
+   * what visitors are served).
+   */
+  winnerVariantId?: string;
+}
+
+export interface ExperimentRolloutParams {
+  /**
+   * Non-control variant to roll out to 100% of targeted traffic. The runtime keeps
+   * serving it to every matching visitor — a winning redirect becomes an ongoing
+   * redirect. Reverse via `POST /experiments/{id}/end-rollout`. The experiment must
+   * be completed.
+   */
+  variantId: string;
+}
+
+export interface ExperimentWinnerParams {
+  /**
+   * Variant to record as the declared winner (reporting metadata only — does not
+   * change what visitors are served). Omit to clear the declared winner. The
+   * experiment must be completed.
    */
   winnerVariantId?: string;
 }
@@ -2641,6 +3436,9 @@ export declare namespace Experiments {
     type ExperimentDeleteResponse as ExperimentDeleteResponse,
     type ExperimentStartResponse as ExperimentStartResponse,
     type ExperimentStopResponse as ExperimentStopResponse,
+    type ExperimentRolloutResponse as ExperimentRolloutResponse,
+    type ExperimentEndRolloutResponse as ExperimentEndRolloutResponse,
+    type ExperimentWinnerResponse as ExperimentWinnerResponse,
     type ExperimentPauseResponse as ExperimentPauseResponse,
     type ExperimentResumeResponse as ExperimentResumeResponse,
     type ExperimentResultsResponse as ExperimentResultsResponse,
@@ -2652,6 +3450,8 @@ export declare namespace Experiments {
     type ExperimentUpdateParams as ExperimentUpdateParams,
     type ExperimentStartParams as ExperimentStartParams,
     type ExperimentStopParams as ExperimentStopParams,
+    type ExperimentRolloutParams as ExperimentRolloutParams,
+    type ExperimentWinnerParams as ExperimentWinnerParams,
     type ExperimentPauseParams as ExperimentPauseParams,
     type ExperimentResumeParams as ExperimentResumeParams,
     type ExperimentResultsParams as ExperimentResultsParams,

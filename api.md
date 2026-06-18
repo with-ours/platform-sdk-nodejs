@@ -151,6 +151,9 @@ Types:
 - <code><a href="./src/resources/experiments.ts">ExperimentDeleteResponse</a></code>
 - <code><a href="./src/resources/experiments.ts">ExperimentStartResponse</a></code>
 - <code><a href="./src/resources/experiments.ts">ExperimentStopResponse</a></code>
+- <code><a href="./src/resources/experiments.ts">ExperimentRolloutResponse</a></code>
+- <code><a href="./src/resources/experiments.ts">ExperimentEndRolloutResponse</a></code>
+- <code><a href="./src/resources/experiments.ts">ExperimentWinnerResponse</a></code>
 - <code><a href="./src/resources/experiments.ts">ExperimentPauseResponse</a></code>
 - <code><a href="./src/resources/experiments.ts">ExperimentResumeResponse</a></code>
 - <code><a href="./src/resources/experiments.ts">ExperimentResultsResponse</a></code>
@@ -166,6 +169,9 @@ Methods:
 - <code title="delete /rest/v1/experiments/{id}">client.experiments.<a href="./src/resources/experiments.ts">delete</a>(id) -> ExperimentDeleteResponse</code>
 - <code title="post /rest/v1/experiments/{id}/start">client.experiments.<a href="./src/resources/experiments.ts">start</a>(id, { ...params }) -> ExperimentStartResponse</code>
 - <code title="post /rest/v1/experiments/{id}/stop">client.experiments.<a href="./src/resources/experiments.ts">stop</a>(id, { ...params }) -> ExperimentStopResponse</code>
+- <code title="post /rest/v1/experiments/{id}/rollout">client.experiments.<a href="./src/resources/experiments.ts">rollout</a>(id, { ...params }) -> ExperimentRolloutResponse</code>
+- <code title="post /rest/v1/experiments/{id}/end-rollout">client.experiments.<a href="./src/resources/experiments.ts">endRollout</a>(id) -> ExperimentEndRolloutResponse</code>
+- <code title="post /rest/v1/experiments/{id}/winner">client.experiments.<a href="./src/resources/experiments.ts">winner</a>(id, { ...params }) -> ExperimentWinnerResponse</code>
 - <code title="post /rest/v1/experiments/{id}/pause">client.experiments.<a href="./src/resources/experiments.ts">pause</a>(id, { ...params }) -> ExperimentPauseResponse</code>
 - <code title="post /rest/v1/experiments/{id}/resume">client.experiments.<a href="./src/resources/experiments.ts">resume</a>(id, { ...params }) -> ExperimentResumeResponse</code>
 - <code title="get /rest/v1/experiments/{id}/results">client.experiments.<a href="./src/resources/experiments.ts">results</a>(id, { ...params }) -> ExperimentResultsResponse</code>
