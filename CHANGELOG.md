@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.34.0 (2026-06-17)
+
+Full Changelog: [v1.33.0...v1.34.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.33.0...v1.34.0)
+
+### Features
+
+* **api:** api update ([bab3766](https://github.com/with-ours/platform-sdk-nodejs/commit/bab3766d3b644d66daf05a83e0abc4498c84649f))
+
+
+### Bug Fixes
+
+* **client:** send content-type header for requests with an omitted optional body ([e4b2813](https://github.com/with-ours/platform-sdk-nodejs/commit/e4b2813ef2879fe263242a6f958db14261eb8196))
+
 ## 1.33.0 (2026-06-12)
 
 Full Changelog: [v1.32.0...v1.33.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.32.0...v1.33.0)
