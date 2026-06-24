@@ -146,6 +146,57 @@ describe('resource experiments', () => {
     await expect(
       client.experiments.stop(
         'id',
+        {
+          rolloutVariantId: 'var_01HZX8YJH3Z3W1R2Q4M5N6P7Q8',
+          winnerVariantId: 'var_01HZX8YJH3Z3W1R2Q4M5N6P7Q8',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
+  });
+
+  test('rollout: only required params', async () => {
+    const responsePromise = client.experiments.rollout('id', { variantId: 'var_01HZX8YJH3Z3W1R2Q4M5N6P7Q8' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('rollout: required and optional params', async () => {
+    const response = await client.experiments.rollout('id', { variantId: 'var_01HZX8YJH3Z3W1R2Q4M5N6P7Q8' });
+  });
+
+  test('endRollout', async () => {
+    const responsePromise = client.experiments.endRollout('id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('winner', async () => {
+    const responsePromise = client.experiments.winner('id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('winner: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.experiments.winner(
+        'id',
         { winnerVariantId: 'var_01HZX8YJH3Z3W1R2Q4M5N6P7Q8' },
         { path: '/_stainless_unknown_path' },
       ),
