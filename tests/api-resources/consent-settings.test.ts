@@ -238,6 +238,8 @@ describe('resource consentSettings', () => {
       from: '2026-04-01',
       to: '2026-04-30',
       compareWithPreviousPeriod: true,
+      comparisonFrom: '2026-03-01',
+      comparisonTo: '2026-03-14',
       granularity: 'DAILY',
       pagePath: '/pricing',
       regions: 'California',

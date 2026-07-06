@@ -3665,6 +3665,23 @@ export interface ConsentSettingAnalyticsParams {
   compareWithPreviousPeriod?: boolean;
 
   /**
+   * Optional custom comparison-window lower bound, as a UTC calendar day in
+   * `YYYY-MM-DD` format. Provide together with `comparisonTo`; the window between
+   * them must be the same length as `from`–`to` (a mismatch returns `400`). When
+   * omitted (with `compareWithPreviousPeriod=true`), the immediately preceding
+   * equal-length period is used.
+   */
+  comparisonFrom?: string;
+
+  /**
+   * Optional custom comparison-window upper bound, as a UTC calendar day in
+   * `YYYY-MM-DD` format. Provide together with `comparisonFrom`; the window must
+   * match the `from`–`to` length. Ignored unless both comparison bounds are
+   * supplied.
+   */
+  comparisonTo?: string;
+
+  /**
    * Bucket size for the time-series rollup. `DAILY` (default) buckets per UTC day;
    * `HOURLY` buckets per UTC hour and limits the window to 14 days.
    */
