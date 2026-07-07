@@ -66,6 +66,15 @@ export class Destinations extends APIResource {
   types(options?: RequestOptions): APIPromise<DestinationTypesResponse> {
     return this._client.get('/rest/v1/destinations/types', options);
   }
+
+  /**
+   * Snapshot of dispatch health for this destination over the trailing 24 hours:
+   * counts of succeeded, failed, and intentionally stopped/blocked dispatches, plus
+   * a derived `status`. Requires scope: destination:find
+   */
+  health(id: string, options?: RequestOptions): APIPromise<DestinationHealthResponse> {
+    return this._client.get(path`/rest/v1/destinations/${id}/health`, options);
+  }
 }
 
 export type DestinationListResponsesCursor = Cursor<DestinationListResponse>;
@@ -682,6 +691,54 @@ export namespace DestinationTypesResponse {
   }
 }
 
+export interface DestinationHealthResponse {
+  failureCount: number;
+
+  /**
+   * Dispatches blocked by an account-wide dispatch rule (not a failure).
+   */
+  globalStopCount: number;
+
+  /**
+   * HEALTHY (>=95% of decisive dispatches succeeded), DEGRADED (50-95%), UNHEALTHY
+   * (<50%), or NO_DATA (no succeeded/failed dispatches in the window).
+   */
+  status: 'DEGRADED' | 'HEALTHY' | 'NO_DATA' | 'UNHEALTHY';
+
+  /**
+   * Dispatches intentionally stopped before send (not a failure).
+   */
+  stoppedCount: number;
+
+  successCount: number;
+
+  /**
+   * All dispatch attempts in the window, including stopped/blocked ones.
+   */
+  totalDispatches: number;
+
+  /**
+   * End of the snapshot window (ISO 8601).
+   */
+  windowEnd: string;
+
+  /**
+   * Start of the snapshot window (ISO 8601).
+   */
+  windowStart: string;
+
+  /**
+   * Timestamp of the most recent dispatch attempt to this destination, if any.
+   */
+  lastDispatchedAt?: string | null;
+
+  /**
+   * successCount / (successCount + failureCount). Null when there were no
+   * succeeded/failed dispatches in the window.
+   */
+  successRate?: number | null;
+}
+
 export interface DestinationListParams extends CursorParams {
   /**
    * Filter destinations by status.
@@ -892,6 +949,7 @@ export declare namespace Destinations {
     type DestinationUpdateResponse as DestinationUpdateResponse,
     type DestinationDeleteResponse as DestinationDeleteResponse,
     type DestinationTypesResponse as DestinationTypesResponse,
+    type DestinationHealthResponse as DestinationHealthResponse,
     type DestinationListResponsesCursor as DestinationListResponsesCursor,
     type DestinationListParams as DestinationListParams,
     type DestinationCreateParams as DestinationCreateParams,
