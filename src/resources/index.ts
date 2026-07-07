@@ -72,6 +72,7 @@ export {
   type DestinationUpdateResponse,
   type DestinationDeleteResponse,
   type DestinationTypesResponse,
+  type DestinationHealthResponse,
   type DestinationListParams,
   type DestinationCreateParams,
   type DestinationUpdateParams,
