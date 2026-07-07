@@ -30,6 +30,19 @@ import {
   AllowedEvents,
 } from './resources/allowed-events';
 import {
+  Attribution,
+  AttributionAudienceConversionParams,
+  AttributionAudienceConversionResponse,
+  AttributionConversionParams,
+  AttributionConversionResponse,
+  AttributionInitialParams,
+  AttributionInitialResponse,
+  AttributionLastTouchParams,
+  AttributionLastTouchResponse,
+  AttributionUtmComparisonParams,
+  AttributionUtmComparisonResponse,
+} from './resources/attribution';
+import {
   ConsentAnalytics,
   ConsentAnalyticsListParams,
   ConsentAnalyticsListResponse,
@@ -136,6 +149,13 @@ import {
   ExperimentWinnerResponse,
   Experiments,
 } from './resources/experiments';
+import {
+  FunnelListResponse,
+  FunnelResultsParams,
+  FunnelResultsResponse,
+  FunnelRetrieveResponse,
+  Funnels,
+} from './resources/funnels';
 import {
   HeatmapPageListParams,
   HeatmapPageListResponse,
@@ -1077,6 +1097,8 @@ export class OursPrivacyPlatform {
   versions: API.Versions = new API.Versions(this);
   webScannerRules: API.WebScannerRules = new API.WebScannerRules(this);
   webScanners: API.WebScanners = new API.WebScanners(this);
+  attribution: API.Attribution = new API.Attribution(this);
+  funnels: API.Funnels = new API.Funnels(this);
 }
 
 OursPrivacyPlatform.AllowedEvents = AllowedEvents;
@@ -1102,6 +1124,8 @@ OursPrivacyPlatform.TagManagerAssetFolders = TagManagerAssetFolders;
 OursPrivacyPlatform.Versions = Versions;
 OursPrivacyPlatform.WebScannerRules = WebScannerRules;
 OursPrivacyPlatform.WebScanners = WebScanners;
+OursPrivacyPlatform.Attribution = Attribution;
+OursPrivacyPlatform.Funnels = Funnels;
 
 export declare namespace OursPrivacyPlatform {
   export type RequestOptions = Opts.RequestOptions;
@@ -1421,5 +1445,27 @@ export declare namespace OursPrivacyPlatform {
     type WebScannerFindingsParams as WebScannerFindingsParams,
     type WebScannerCookiesParams as WebScannerCookiesParams,
     type WebScannerSummaryParams as WebScannerSummaryParams,
+  };
+
+  export {
+    Attribution as Attribution,
+    type AttributionInitialResponse as AttributionInitialResponse,
+    type AttributionLastTouchResponse as AttributionLastTouchResponse,
+    type AttributionConversionResponse as AttributionConversionResponse,
+    type AttributionAudienceConversionResponse as AttributionAudienceConversionResponse,
+    type AttributionUtmComparisonResponse as AttributionUtmComparisonResponse,
+    type AttributionInitialParams as AttributionInitialParams,
+    type AttributionLastTouchParams as AttributionLastTouchParams,
+    type AttributionConversionParams as AttributionConversionParams,
+    type AttributionAudienceConversionParams as AttributionAudienceConversionParams,
+    type AttributionUtmComparisonParams as AttributionUtmComparisonParams,
+  };
+
+  export {
+    Funnels as Funnels,
+    type FunnelListResponse as FunnelListResponse,
+    type FunnelRetrieveResponse as FunnelRetrieveResponse,
+    type FunnelResultsResponse as FunnelResultsResponse,
+    type FunnelResultsParams as FunnelResultsParams,
   };
 }
