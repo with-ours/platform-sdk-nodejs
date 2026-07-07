@@ -11,6 +11,19 @@ export {
   type AllowedEventUpdateParams,
 } from './allowed-events';
 export {
+  Attribution,
+  type AttributionInitialResponse,
+  type AttributionLastTouchResponse,
+  type AttributionConversionResponse,
+  type AttributionAudienceConversionResponse,
+  type AttributionUtmComparisonResponse,
+  type AttributionInitialParams,
+  type AttributionLastTouchParams,
+  type AttributionConversionParams,
+  type AttributionAudienceConversionParams,
+  type AttributionUtmComparisonParams,
+} from './attribution';
+export {
   ConsentAnalytics,
   type ConsentAnalyticsListResponse,
   type ConsentAnalyticsListParams,
@@ -117,6 +130,13 @@ export {
   type ExperimentSessionReplaysParams,
   type ExperimentListResponsesCursor,
 } from './experiments';
+export {
+  Funnels,
+  type FunnelListResponse,
+  type FunnelRetrieveResponse,
+  type FunnelResultsResponse,
+  type FunnelResultsParams,
+} from './funnels';
 export {
   HeatmapPages,
   type HeatmapPageListResponse,
