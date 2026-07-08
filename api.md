@@ -94,6 +94,7 @@ Types:
 - <code><a href="./src/resources/destinations.ts">DestinationUpdateResponse</a></code>
 - <code><a href="./src/resources/destinations.ts">DestinationDeleteResponse</a></code>
 - <code><a href="./src/resources/destinations.ts">DestinationTypesResponse</a></code>
+- <code><a href="./src/resources/destinations.ts">DestinationHealthResponse</a></code>
 
 Methods:
 
@@ -103,6 +104,7 @@ Methods:
 - <code title="patch /rest/v1/destinations/{id}">client.destinations.<a href="./src/resources/destinations.ts">update</a>(id, { ...params }) -> DestinationUpdateResponse</code>
 - <code title="delete /rest/v1/destinations/{id}">client.destinations.<a href="./src/resources/destinations.ts">delete</a>(id) -> DestinationDeleteResponse</code>
 - <code title="get /rest/v1/destinations/types">client.destinations.<a href="./src/resources/destinations.ts">types</a>() -> DestinationTypesResponse</code>
+- <code title="get /rest/v1/destinations/{id}/health">client.destinations.<a href="./src/resources/destinations.ts">health</a>(id) -> DestinationHealthResponse</code>
 
 # ExperimentSettings
 
