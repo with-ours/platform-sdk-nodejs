@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.38.1 (2026-07-11)
+
+Full Changelog: [v1.38.0...v1.38.1](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.38.0...v1.38.1)
+
+### Bug Fixes
+
+* **ci:** bump @arethetypeswrong/cli to ^0.18.0 and run CI workflows on Node 24 ([1aa38d9](https://github.com/with-ours/platform-sdk-nodejs/commit/1aa38d97dc5db127f0305f40368ab5e12e1808e2))
+
 ## 1.38.0 (2026-07-07)
 
 Full Changelog: [v1.37.0...v1.38.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.37.0...v1.38.0)
