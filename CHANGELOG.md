@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.39.0 (2026-07-18)
+
+Full Changelog: [v1.38.1...v1.39.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.38.1...v1.39.0)
+
+### Features
+
+* **stlc:** configurable CI runner and private-production-repo support in workflow templates ([b80bf8f](https://github.com/with-ours/platform-sdk-nodejs/commit/b80bf8f4162778686f028990c2aded7d7615ab20))
+
 ## 1.38.1 (2026-07-11)
 
 Full Changelog: [v1.38.0...v1.38.1](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.38.0...v1.38.1)
