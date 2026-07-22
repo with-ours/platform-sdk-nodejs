@@ -288,6 +288,24 @@ Methods:
 
 # ShortLinks
 
+Types:
+
+- <code><a href="./src/resources/short-links.ts">ShortLinkListResponse</a></code>
+- <code><a href="./src/resources/short-links.ts">ShortLinkCreateResponse</a></code>
+- <code><a href="./src/resources/short-links.ts">ShortLinkRetrieveResponse</a></code>
+- <code><a href="./src/resources/short-links.ts">ShortLinkUpdateResponse</a></code>
+- <code><a href="./src/resources/short-links.ts">ShortLinkDeleteResponse</a></code>
+- <code><a href="./src/resources/short-links.ts">ShortLinkResultsResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/short-links">client.shortLinks.<a href="./src/resources/short-links.ts">list</a>({ ...params }) -> ShortLinkListResponsesCursor</code>
+- <code title="post /rest/v1/short-links">client.shortLinks.<a href="./src/resources/short-links.ts">create</a>({ ...params }) -> ShortLinkCreateResponse</code>
+- <code title="get /rest/v1/short-links/{id}">client.shortLinks.<a href="./src/resources/short-links.ts">retrieve</a>(id) -> ShortLinkRetrieveResponse</code>
+- <code title="patch /rest/v1/short-links/{id}">client.shortLinks.<a href="./src/resources/short-links.ts">update</a>(id, { ...params }) -> ShortLinkUpdateResponse</code>
+- <code title="delete /rest/v1/short-links/{id}">client.shortLinks.<a href="./src/resources/short-links.ts">delete</a>(id) -> ShortLinkDeleteResponse</code>
+- <code title="get /rest/v1/short-links/{id}/results">client.shortLinks.<a href="./src/resources/short-links.ts">results</a>(id, { ...params }) -> ShortLinkResultsResponse</code>
+
 # Sources
 
 Types:

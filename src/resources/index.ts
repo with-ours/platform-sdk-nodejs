@@ -187,7 +187,20 @@ export {
   type ReplaySettingUpdateParams,
   type ReplaySettingListResponsesCursor,
 } from './replay-settings';
-export { ShortLinks } from './short-links';
+export {
+  ShortLinks,
+  type ShortLinkListResponse,
+  type ShortLinkCreateResponse,
+  type ShortLinkRetrieveResponse,
+  type ShortLinkUpdateResponse,
+  type ShortLinkDeleteResponse,
+  type ShortLinkResultsResponse,
+  type ShortLinkListParams,
+  type ShortLinkCreateParams,
+  type ShortLinkUpdateParams,
+  type ShortLinkResultsParams,
+  type ShortLinkListResponsesCursor,
+} from './short-links';
 export {
   Sources,
   type SourceListResponse,
