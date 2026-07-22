@@ -16,6 +16,24 @@ Methods:
 - <code title="patch /rest/v1/allowed-events/{id}">client.allowedEvents.<a href="./src/resources/allowed-events.ts">update</a>(id, { ...params }) -> AllowedEventUpdateResponse</code>
 - <code title="delete /rest/v1/allowed-events/{id}">client.allowedEvents.<a href="./src/resources/allowed-events.ts">delete</a>(id) -> AllowedEventDeleteResponse</code>
 
+# Attribution
+
+Types:
+
+- <code><a href="./src/resources/attribution.ts">AttributionInitialResponse</a></code>
+- <code><a href="./src/resources/attribution.ts">AttributionLastTouchResponse</a></code>
+- <code><a href="./src/resources/attribution.ts">AttributionConversionResponse</a></code>
+- <code><a href="./src/resources/attribution.ts">AttributionAudienceConversionResponse</a></code>
+- <code><a href="./src/resources/attribution.ts">AttributionUtmComparisonResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/attribution/initial">client.attribution.<a href="./src/resources/attribution.ts">initial</a>({ ...params }) -> AttributionInitialResponse</code>
+- <code title="get /rest/v1/attribution/last-touch">client.attribution.<a href="./src/resources/attribution.ts">lastTouch</a>({ ...params }) -> AttributionLastTouchResponse</code>
+- <code title="get /rest/v1/attribution/conversion">client.attribution.<a href="./src/resources/attribution.ts">conversion</a>({ ...params }) -> AttributionConversionResponse</code>
+- <code title="get /rest/v1/attribution/audience-conversion">client.attribution.<a href="./src/resources/attribution.ts">audienceConversion</a>({ ...params }) -> AttributionAudienceConversionResponse</code>
+- <code title="get /rest/v1/attribution/utm-comparison">client.attribution.<a href="./src/resources/attribution.ts">utmComparison</a>({ ...params }) -> AttributionUtmComparisonResponse</code>
+
 # ConsentAnalytics
 
 Types:
@@ -180,6 +198,20 @@ Methods:
 - <code title="get /rest/v1/experiments/{id}/results-time-series">client.experiments.<a href="./src/resources/experiments.ts">resultsTimeSeries</a>(id, { ...params }) -> ExperimentResultsTimeSeriesResponse</code>
 - <code title="get /rest/v1/experiments/{id}/session-replays">client.experiments.<a href="./src/resources/experiments.ts">sessionReplays</a>(id, { ...params }) -> ExperimentSessionReplaysResponse</code>
 
+# Funnels
+
+Types:
+
+- <code><a href="./src/resources/funnels.ts">FunnelListResponse</a></code>
+- <code><a href="./src/resources/funnels.ts">FunnelRetrieveResponse</a></code>
+- <code><a href="./src/resources/funnels.ts">FunnelResultsResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/funnels">client.funnels.<a href="./src/resources/funnels.ts">list</a>() -> FunnelListResponse</code>
+- <code title="get /rest/v1/funnels/{id}">client.funnels.<a href="./src/resources/funnels.ts">retrieve</a>(id) -> FunnelRetrieveResponse</code>
+- <code title="get /rest/v1/funnels/{id}/results">client.funnels.<a href="./src/resources/funnels.ts">results</a>(id, { ...params }) -> FunnelResultsResponse</code>
+
 # HeatmapPages
 
 Types:
@@ -253,6 +285,8 @@ Methods:
 - <code title="get /rest/v1/replay-settings/{id}">client.replaySettings.<a href="./src/resources/replay-settings.ts">retrieve</a>(id) -> ReplaySettingRetrieveResponse | null</code>
 - <code title="patch /rest/v1/replay-settings/{id}">client.replaySettings.<a href="./src/resources/replay-settings.ts">update</a>(id, { ...params }) -> ReplaySettingUpdateResponse</code>
 - <code title="delete /rest/v1/replay-settings/{id}">client.replaySettings.<a href="./src/resources/replay-settings.ts">delete</a>(id) -> ReplaySettingDeleteResponse</code>
+
+# ShortLinks
 
 # Sources
 
@@ -449,35 +483,3 @@ Methods:
 - <code title="get /rest/v1/web-scanners/{id}/findings">client.webScanners.<a href="./src/resources/web-scanners.ts">findings</a>(id, { ...params }) -> WebScannerFindingsResponse</code>
 - <code title="get /rest/v1/web-scanners/{id}/cookies">client.webScanners.<a href="./src/resources/web-scanners.ts">cookies</a>(id, { ...params }) -> WebScannerCookiesResponse</code>
 - <code title="get /rest/v1/web-scanners/{id}/summary">client.webScanners.<a href="./src/resources/web-scanners.ts">summary</a>(id, { ...params }) -> WebScannerSummaryResponse</code>
-
-# Attribution
-
-Types:
-
-- <code><a href="./src/resources/attribution.ts">AttributionInitialResponse</a></code>
-- <code><a href="./src/resources/attribution.ts">AttributionLastTouchResponse</a></code>
-- <code><a href="./src/resources/attribution.ts">AttributionConversionResponse</a></code>
-- <code><a href="./src/resources/attribution.ts">AttributionAudienceConversionResponse</a></code>
-- <code><a href="./src/resources/attribution.ts">AttributionUtmComparisonResponse</a></code>
-
-Methods:
-
-- <code title="get /rest/v1/attribution/initial">client.attribution.<a href="./src/resources/attribution.ts">initial</a>({ ...params }) -> AttributionInitialResponse</code>
-- <code title="get /rest/v1/attribution/last-touch">client.attribution.<a href="./src/resources/attribution.ts">lastTouch</a>({ ...params }) -> AttributionLastTouchResponse</code>
-- <code title="get /rest/v1/attribution/conversion">client.attribution.<a href="./src/resources/attribution.ts">conversion</a>({ ...params }) -> AttributionConversionResponse</code>
-- <code title="get /rest/v1/attribution/audience-conversion">client.attribution.<a href="./src/resources/attribution.ts">audienceConversion</a>({ ...params }) -> AttributionAudienceConversionResponse</code>
-- <code title="get /rest/v1/attribution/utm-comparison">client.attribution.<a href="./src/resources/attribution.ts">utmComparison</a>({ ...params }) -> AttributionUtmComparisonResponse</code>
-
-# Funnels
-
-Types:
-
-- <code><a href="./src/resources/funnels.ts">FunnelListResponse</a></code>
-- <code><a href="./src/resources/funnels.ts">FunnelRetrieveResponse</a></code>
-- <code><a href="./src/resources/funnels.ts">FunnelResultsResponse</a></code>
-
-Methods:
-
-- <code title="get /rest/v1/funnels">client.funnels.<a href="./src/resources/funnels.ts">list</a>() -> FunnelListResponse</code>
-- <code title="get /rest/v1/funnels/{id}">client.funnels.<a href="./src/resources/funnels.ts">retrieve</a>(id) -> FunnelRetrieveResponse</code>
-- <code title="get /rest/v1/funnels/{id}/results">client.funnels.<a href="./src/resources/funnels.ts">results</a>(id, { ...params }) -> FunnelResultsResponse</code>

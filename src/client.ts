@@ -206,6 +206,7 @@ import {
   ReplaySettingUpdateResponse,
   ReplaySettings,
 } from './resources/replay-settings';
+import { ShortLinks } from './resources/short-links';
 import {
   SourceCreateParams,
   SourceCreateResponse,
@@ -1076,6 +1077,7 @@ export class OursPrivacyPlatform {
   static toFile = Uploads.toFile;
 
   allowedEvents: API.AllowedEvents = new API.AllowedEvents(this);
+  attribution: API.Attribution = new API.Attribution(this);
   consentAnalytics: API.ConsentAnalytics = new API.ConsentAnalytics(this);
   consentSettings: API.ConsentSettings = new API.ConsentSettings(this);
   dataGovernance: API.DataGovernance = new API.DataGovernance(this);
@@ -1084,10 +1086,12 @@ export class OursPrivacyPlatform {
   experimentSettings: API.ExperimentSettings = new API.ExperimentSettings(this);
   experimentVariants: API.ExperimentVariants = new API.ExperimentVariants(this);
   experiments: API.Experiments = new API.Experiments(this);
+  funnels: API.Funnels = new API.Funnels(this);
   heatmapPages: API.HeatmapPages = new API.HeatmapPages(this);
   locations: API.Locations = new API.Locations(this);
   mappings: API.Mappings = new API.Mappings(this);
   replaySettings: API.ReplaySettings = new API.ReplaySettings(this);
+  shortLinks: API.ShortLinks = new API.ShortLinks(this);
   sources: API.Sources = new API.Sources(this);
   tagManagers: API.TagManagers = new API.TagManagers(this);
   tagManagerTags: API.TagManagerTags = new API.TagManagerTags(this);
@@ -1098,11 +1102,10 @@ export class OursPrivacyPlatform {
   versions: API.Versions = new API.Versions(this);
   webScannerRules: API.WebScannerRules = new API.WebScannerRules(this);
   webScanners: API.WebScanners = new API.WebScanners(this);
-  attribution: API.Attribution = new API.Attribution(this);
-  funnels: API.Funnels = new API.Funnels(this);
 }
 
 OursPrivacyPlatform.AllowedEvents = AllowedEvents;
+OursPrivacyPlatform.Attribution = Attribution;
 OursPrivacyPlatform.ConsentAnalytics = ConsentAnalytics;
 OursPrivacyPlatform.ConsentSettings = ConsentSettings;
 OursPrivacyPlatform.DataGovernance = DataGovernance;
@@ -1111,10 +1114,12 @@ OursPrivacyPlatform.Destinations = Destinations;
 OursPrivacyPlatform.ExperimentSettings = ExperimentSettings;
 OursPrivacyPlatform.ExperimentVariants = ExperimentVariants;
 OursPrivacyPlatform.Experiments = Experiments;
+OursPrivacyPlatform.Funnels = Funnels;
 OursPrivacyPlatform.HeatmapPages = HeatmapPages;
 OursPrivacyPlatform.Locations = Locations;
 OursPrivacyPlatform.Mappings = Mappings;
 OursPrivacyPlatform.ReplaySettings = ReplaySettings;
+OursPrivacyPlatform.ShortLinks = ShortLinks;
 OursPrivacyPlatform.Sources = Sources;
 OursPrivacyPlatform.TagManagers = TagManagers;
 OursPrivacyPlatform.TagManagerTags = TagManagerTags;
@@ -1125,8 +1130,6 @@ OursPrivacyPlatform.TagManagerAssetFolders = TagManagerAssetFolders;
 OursPrivacyPlatform.Versions = Versions;
 OursPrivacyPlatform.WebScannerRules = WebScannerRules;
 OursPrivacyPlatform.WebScanners = WebScanners;
-OursPrivacyPlatform.Attribution = Attribution;
-OursPrivacyPlatform.Funnels = Funnels;
 
 export declare namespace OursPrivacyPlatform {
   export type RequestOptions = Opts.RequestOptions;
@@ -1143,6 +1146,20 @@ export declare namespace OursPrivacyPlatform {
     type AllowedEventDeleteResponse as AllowedEventDeleteResponse,
     type AllowedEventCreateParams as AllowedEventCreateParams,
     type AllowedEventUpdateParams as AllowedEventUpdateParams,
+  };
+
+  export {
+    Attribution as Attribution,
+    type AttributionInitialResponse as AttributionInitialResponse,
+    type AttributionLastTouchResponse as AttributionLastTouchResponse,
+    type AttributionConversionResponse as AttributionConversionResponse,
+    type AttributionAudienceConversionResponse as AttributionAudienceConversionResponse,
+    type AttributionUtmComparisonResponse as AttributionUtmComparisonResponse,
+    type AttributionInitialParams as AttributionInitialParams,
+    type AttributionLastTouchParams as AttributionLastTouchParams,
+    type AttributionConversionParams as AttributionConversionParams,
+    type AttributionAudienceConversionParams as AttributionAudienceConversionParams,
+    type AttributionUtmComparisonParams as AttributionUtmComparisonParams,
   };
 
   export {
@@ -1262,6 +1279,14 @@ export declare namespace OursPrivacyPlatform {
   };
 
   export {
+    Funnels as Funnels,
+    type FunnelListResponse as FunnelListResponse,
+    type FunnelRetrieveResponse as FunnelRetrieveResponse,
+    type FunnelResultsResponse as FunnelResultsResponse,
+    type FunnelResultsParams as FunnelResultsParams,
+  };
+
+  export {
     HeatmapPages as HeatmapPages,
     type HeatmapPageListResponse as HeatmapPageListResponse,
     type HeatmapPageSummaryResponse as HeatmapPageSummaryResponse,
@@ -1313,6 +1338,8 @@ export declare namespace OursPrivacyPlatform {
     type ReplaySettingCreateParams as ReplaySettingCreateParams,
     type ReplaySettingUpdateParams as ReplaySettingUpdateParams,
   };
+
+  export { ShortLinks as ShortLinks };
 
   export {
     Sources as Sources,
@@ -1447,27 +1474,5 @@ export declare namespace OursPrivacyPlatform {
     type WebScannerFindingsParams as WebScannerFindingsParams,
     type WebScannerCookiesParams as WebScannerCookiesParams,
     type WebScannerSummaryParams as WebScannerSummaryParams,
-  };
-
-  export {
-    Attribution as Attribution,
-    type AttributionInitialResponse as AttributionInitialResponse,
-    type AttributionLastTouchResponse as AttributionLastTouchResponse,
-    type AttributionConversionResponse as AttributionConversionResponse,
-    type AttributionAudienceConversionResponse as AttributionAudienceConversionResponse,
-    type AttributionUtmComparisonResponse as AttributionUtmComparisonResponse,
-    type AttributionInitialParams as AttributionInitialParams,
-    type AttributionLastTouchParams as AttributionLastTouchParams,
-    type AttributionConversionParams as AttributionConversionParams,
-    type AttributionAudienceConversionParams as AttributionAudienceConversionParams,
-    type AttributionUtmComparisonParams as AttributionUtmComparisonParams,
-  };
-
-  export {
-    Funnels as Funnels,
-    type FunnelListResponse as FunnelListResponse,
-    type FunnelRetrieveResponse as FunnelRetrieveResponse,
-    type FunnelResultsResponse as FunnelResultsResponse,
-    type FunnelResultsParams as FunnelResultsParams,
   };
 }
