@@ -187,6 +187,7 @@ export {
   type ReplaySettingUpdateParams,
   type ReplaySettingListResponsesCursor,
 } from './replay-settings';
+export { ShortLinks } from './short-links';
 export {
   Sources,
   type SourceListResponse,
