@@ -206,6 +206,7 @@ import {
   ReplaySettingUpdateResponse,
   ReplaySettings,
 } from './resources/replay-settings';
+import { ShortLinks } from './resources/short-links';
 import {
   SourceCreateParams,
   SourceCreateResponse,
@@ -1088,6 +1089,7 @@ export class OursPrivacyPlatform {
   locations: API.Locations = new API.Locations(this);
   mappings: API.Mappings = new API.Mappings(this);
   replaySettings: API.ReplaySettings = new API.ReplaySettings(this);
+  shortLinks: API.ShortLinks = new API.ShortLinks(this);
   sources: API.Sources = new API.Sources(this);
   tagManagers: API.TagManagers = new API.TagManagers(this);
   tagManagerTags: API.TagManagerTags = new API.TagManagerTags(this);
@@ -1115,6 +1117,7 @@ OursPrivacyPlatform.HeatmapPages = HeatmapPages;
 OursPrivacyPlatform.Locations = Locations;
 OursPrivacyPlatform.Mappings = Mappings;
 OursPrivacyPlatform.ReplaySettings = ReplaySettings;
+OursPrivacyPlatform.ShortLinks = ShortLinks;
 OursPrivacyPlatform.Sources = Sources;
 OursPrivacyPlatform.TagManagers = TagManagers;
 OursPrivacyPlatform.TagManagerTags = TagManagerTags;
@@ -1313,6 +1316,8 @@ export declare namespace OursPrivacyPlatform {
     type ReplaySettingCreateParams as ReplaySettingCreateParams,
     type ReplaySettingUpdateParams as ReplaySettingUpdateParams,
   };
+
+  export { ShortLinks as ShortLinks };
 
   export {
     Sources as Sources,
