@@ -206,7 +206,20 @@ import {
   ReplaySettingUpdateResponse,
   ReplaySettings,
 } from './resources/replay-settings';
-import { ShortLinks } from './resources/short-links';
+import {
+  ShortLinkCreateParams,
+  ShortLinkCreateResponse,
+  ShortLinkDeleteResponse,
+  ShortLinkListParams,
+  ShortLinkListResponse,
+  ShortLinkListResponsesCursor,
+  ShortLinkResultsParams,
+  ShortLinkResultsResponse,
+  ShortLinkRetrieveResponse,
+  ShortLinkUpdateParams,
+  ShortLinkUpdateResponse,
+  ShortLinks,
+} from './resources/short-links';
 import {
   SourceCreateParams,
   SourceCreateResponse,
@@ -1339,7 +1352,20 @@ export declare namespace OursPrivacyPlatform {
     type ReplaySettingUpdateParams as ReplaySettingUpdateParams,
   };
 
-  export { ShortLinks as ShortLinks };
+  export {
+    ShortLinks as ShortLinks,
+    type ShortLinkListResponse as ShortLinkListResponse,
+    type ShortLinkCreateResponse as ShortLinkCreateResponse,
+    type ShortLinkRetrieveResponse as ShortLinkRetrieveResponse,
+    type ShortLinkUpdateResponse as ShortLinkUpdateResponse,
+    type ShortLinkDeleteResponse as ShortLinkDeleteResponse,
+    type ShortLinkResultsResponse as ShortLinkResultsResponse,
+    type ShortLinkListResponsesCursor as ShortLinkListResponsesCursor,
+    type ShortLinkListParams as ShortLinkListParams,
+    type ShortLinkCreateParams as ShortLinkCreateParams,
+    type ShortLinkUpdateParams as ShortLinkUpdateParams,
+    type ShortLinkResultsParams as ShortLinkResultsParams,
+  };
 
   export {
     Sources as Sources,

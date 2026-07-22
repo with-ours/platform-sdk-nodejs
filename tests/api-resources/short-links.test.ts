@@ -7,9 +7,9 @@ const client = new OursPrivacyPlatform({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource sources', () => {
+describe('resource shortLinks', () => {
   test('list', async () => {
-    const responsePromise = client.sources.list();
+    const responsePromise = client.shortLinks.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -22,21 +22,20 @@ describe('resource sources', () => {
   test('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.sources.list(
+      client.shortLinks.list(
         {
           cursor: 'cursor',
           limit: 25,
           nameContains: 'nameContains',
           status: 'Disabled',
-          type: 'AlchemerWebhook',
         },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
   });
 
-  test('create: only required params', async () => {
-    const responsePromise = client.sources.create({ type: 'AlchemerWebhook' });
+  test('create', async () => {
+    const responsePromise = client.shortLinks.create();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -46,16 +45,23 @@ describe('resource sources', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('create: required and optional params', async () => {
-    const response = await client.sources.create({
-      type: 'AlchemerWebhook',
-      name: 'name',
-      redirectUrl: 'redirectUrl',
-    });
+  test('create: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.shortLinks.create(
+        {
+          name: 'Spring Sale QR',
+          qr: {},
+          redirectUrl: 'https://example.com/spring',
+          utm: {},
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
   });
 
   test('retrieve', async () => {
-    const responsePromise = client.sources.retrieve('id');
+    const responsePromise = client.shortLinks.retrieve('id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -66,7 +72,7 @@ describe('resource sources', () => {
   });
 
   test('update', async () => {
-    const responsePromise = client.sources.update('id', {});
+    const responsePromise = client.shortLinks.update('id', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -77,7 +83,7 @@ describe('resource sources', () => {
   });
 
   test('delete', async () => {
-    const responsePromise = client.sources.delete('id');
+    const responsePromise = client.shortLinks.delete('id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -87,8 +93,8 @@ describe('resource sources', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('tokens', async () => {
-    const responsePromise = client.sources.tokens('id');
+  test('results: only required params', async () => {
+    const responsePromise = client.shortLinks.results('id', { from: '2026-06-01', to: '2026-06-30' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -96,5 +102,14 @@ describe('resource sources', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('results: required and optional params', async () => {
+    const response = await client.shortLinks.results('id', {
+      from: '2026-06-01',
+      to: '2026-06-30',
+      excludeBots: true,
+      granularity: 'DAILY',
+    });
   });
 });
