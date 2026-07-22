@@ -589,6 +589,12 @@ export interface SourceCreateParams {
     | 'iOSNativeApi';
 
   name?: string | null;
+
+  /**
+   * Destination URL for a RedirectSource (short link). Ignored by other source
+   * types. Must be a valid http(s) URL.
+   */
+  redirectUrl?: string | null;
 }
 
 export interface SourceUpdateParams {
