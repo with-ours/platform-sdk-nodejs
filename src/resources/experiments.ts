@@ -8,9 +8,11 @@ import { path } from '../internal/utils/path';
 
 export class Experiments extends APIResource {
   /**
-   * List experiments for this account. Supports cursor pagination and filtering by
-   * `status`, `type`, and free-text `search` matched against experiment id, name,
-   * and description. Combine filters with AND semantics. Requires scope:
+   * List experiments for this account. Each experiment includes its full `variants`
+   * array (redirect URLs and DOM modifications), so a single paginated call returns
+   * a complete client-side experiment config. Supports cursor pagination and
+   * filtering by `status`, `type`, and free-text `search` matched against experiment
+   * id, name, and description. Combine filters with AND semantics. Requires scope:
    * experiment:list
    *
    * @example
@@ -329,6 +331,14 @@ export interface ExperimentListResponse {
   trafficAllocation: number;
 
   /**
+   * All persisted variants for this experiment, including the control variant. A
+   * non-personalization experiment needs at least two variants before it can be
+   * started. Reading variants requires the `experiment:find` scope in addition to
+   * `experiment:list`; an API key without it receives an empty array here.
+   */
+  variants: Array<ExperimentListResponse.Variant>;
+
+  /**
    * Optional human-readable hypothesis or summary. In GraphQL this is backed by the
    * experiment hypothesis field.
    */
@@ -392,6 +402,114 @@ export interface ExperimentListResponse {
 }
 
 export namespace ExperimentListResponse {
+  export interface Variant {
+    /**
+     * Unique identifier for this experiment variant.
+     */
+    id: string;
+
+    /**
+     * Parent experiment ID this variant belongs to.
+     */
+    experimentId: string;
+
+    /**
+     * Whether this is the baseline control variant.
+     */
+    isControl: boolean;
+
+    /**
+     * Human-readable variant name shown in the dashboard and results.
+     */
+    name: string;
+
+    /**
+     * Relative traffic weight used when assigning visitors among variants in an active
+     * experiment.
+     */
+    weight: number;
+
+    /**
+     * Ordered list of declarative DOM mutations applied when this variant is assigned.
+     */
+    domModifications?: Array<Variant.DomModification> | null;
+
+    /**
+     * Target URL for redirect variants. Use either a site-relative path such as
+     * `/pricing-v2` or an absolute `https://` URL. Cross-origin `http://` URLs are
+     * rejected. Omit for DOM modification variants.
+     */
+    redirectUrl?: string | null;
+
+    /**
+     * How this variant changes the user experience. `dom_modifications` for on-page
+     * changes or `redirect` for redirect tests.
+     */
+    variantType?: string | null;
+  }
+
+  export namespace Variant {
+    export interface DomModification {
+      /**
+       * Mutation to apply when the selector matches. Use `redirectUrl` instead of DOM
+       * modifications for redirect variants.
+       */
+      action:
+        | 'customCss'
+        | 'customJs'
+        | 'insertAfter'
+        | 'insertBefore'
+        | 'remove'
+        | 'setAttribute'
+        | 'setHtml'
+        | 'setImage'
+        | 'setStyle'
+        | 'setText';
+
+      /**
+       * CSS selector used to find the element to modify on the page at runtime.
+       */
+      selector: string;
+
+      /**
+       * Canonical action payload. For `setText` / `setHtml` / `customCss` / `customJs` /
+       * `setImage` / `insertBefore` / `insertAfter` this is the literal
+       * text/HTML/CSS/JS/URL. For `setStyle` and `setAttribute` it is a JSON-stringified
+       * `{key: value}` object — prefer the structured `styles` / `attribute` fields
+       * below to avoid manual JSON encoding.
+       */
+      value: string;
+
+      /**
+       * Populated on read for `setAttribute` modifications, parsed from `value`.
+       * Customers may also send this field instead of a JSON-stringified `value` on
+       * write — see `domModificationInputSchema`.
+       */
+      attribute?: unknown | null;
+
+      /**
+       * Populated on read for `setStyle` modifications, parsed from `value`. Customers
+       * may also send this field instead of a JSON-stringified `value` on write — see
+       * `domModificationInputSchema`.
+       */
+      styles?: Array<DomModification.Style> | null;
+    }
+
+    export namespace DomModification {
+      export interface Style {
+        /**
+         * CSS property name in camelCase or kebab-case.
+         */
+        property: string;
+
+        /**
+         * CSS value to assign to the property.
+         */
+        value: string;
+      }
+    }
+  }
+
   /**
    * Configured success metrics. The read shape mirrors the write shape — `metrics`
    * from a GET response can be PATCHed back without modification.
@@ -528,7 +646,8 @@ export interface ExperimentCreateResponse {
   /**
    * All persisted variants for this experiment, including the control variant. A
    * non-personalization experiment needs at least two variants before it can be
-   * started.
+   * started. Reading variants requires the `experiment:find` scope in addition to
+   * `experiment:list`; an API key without it receives an empty array here.
    */
   variants: Array<ExperimentCreateResponse.Variant>;
 
@@ -840,7 +959,8 @@ export interface ExperimentRetrieveResponse {
   /**
    * All persisted variants for this experiment, including the control variant. A
    * non-personalization experiment needs at least two variants before it can be
-   * started.
+   * started. Reading variants requires the `experiment:find` scope in addition to
+   * `experiment:list`; an API key without it receives an empty array here.
    */
   variants: Array<ExperimentRetrieveResponse.Variant>;
 
@@ -1150,6 +1270,14 @@ export interface ExperimentUpdateResponse {
   trafficAllocation: number;
 
   /**
+   * All persisted variants for this experiment, including the control variant. A
+   * non-personalization experiment needs at least two variants before it can be
+   * started. Reading variants requires the `experiment:find` scope in addition to
+   * `experiment:list`; an API key without it receives an empty array here.
+   */
+  variants: Array<ExperimentUpdateResponse.Variant>;
+
+  /**
    * Optional human-readable hypothesis or summary. In GraphQL this is backed by the
    * experiment hypothesis field.
    */
@@ -1213,6 +1341,114 @@ export interface ExperimentUpdateResponse {
 }
 
 export namespace ExperimentUpdateResponse {
+  export interface Variant {
+    /**
+     * Unique identifier for this experiment variant.
+     */
+    id: string;
+
+    /**
+     * Parent experiment ID this variant belongs to.
+     */
+    experimentId: string;
+
+    /**
+     * Whether this is the baseline control variant.
+     */
+    isControl: boolean;
+
+    /**
+     * Human-readable variant name shown in the dashboard and results.
+     */
+    name: string;
+
+    /**
+     * Relative traffic weight used when assigning visitors among variants in an active
+     * experiment.
+     */
+    weight: number;
+
+    /**
+     * Ordered list of declarative DOM mutations applied when this variant is assigned.
+     */
+    domModifications?: Array<Variant.DomModification> | null;
+
+    /**
+     * Target URL for redirect variants. Use either a site-relative path such as
+     * `/pricing-v2` or an absolute `https://` URL. Cross-origin `http://` URLs are
+     * rejected. Omit for DOM modification variants.
+     */
+    redirectUrl?: string | null;
+
+    /**
+     * How this variant changes the user experience. `dom_modifications` for on-page
+     * changes or `redirect` for redirect tests.
+     */
+    variantType?: string | null;
+  }
+
+  export namespace Variant {
+    export interface DomModification {
+      /**
+       * Mutation to apply when the selector matches. Use `redirectUrl` instead of DOM
+       * modifications for redirect variants.
+       */
+      action:
+        | 'customCss'
+        | 'customJs'
+        | 'insertAfter'
+        | 'insertBefore'
+        | 'remove'
+        | 'setAttribute'
+        | 'setHtml'
+        | 'setImage'
+        | 'setStyle'
+        | 'setText';
+
+      /**
+       * CSS selector used to find the element to modify on the page at runtime.
+       */
+      selector: string;
+
+      /**
+       * Canonical action payload. For `setText` / `setHtml` / `customCss` / `customJs` /
+       * `setImage` / `insertBefore` / `insertAfter` this is the literal
+       * text/HTML/CSS/JS/URL. For `setStyle` and `setAttribute` it is a JSON-stringified
+       * `{key: value}` object — prefer the structured `styles` / `attribute` fields
+       * below to avoid manual JSON encoding.
+       */
+      value: string;
+
+      /**
+       * Populated on read for `setAttribute` modifications, parsed from `value`.
+       * Customers may also send this field instead of a JSON-stringified `value` on
+       * write — see `domModificationInputSchema`.
+       */
+      attribute?: unknown | null;
+
+      /**
+       * Populated on read for `setStyle` modifications, parsed from `value`. Customers
+       * may also send this field instead of a JSON-stringified `value` on write — see
+       * `domModificationInputSchema`.
+       */
+      styles?: Array<DomModification.Style> | null;
+    }
+
+    export namespace DomModification {
+      export interface Style {
+        /**
+         * CSS property name in camelCase or kebab-case.
+         */
+        property: string;
+
+        /**
+         * CSS value to assign to the property.
+         */
+        value: string;
+      }
+    }
+  }
+
   /**
    * Configured success metrics. The read shape mirrors the write shape — `metrics`
    * from a GET response can be PATCHed back without modification.
