@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.42.1 (2026-08-03)
+
+Full Changelog: [v1.42.0...v1.42.1](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.42.0...v1.42.1)
+
+### Bug Fixes
+
+* patch js-yaml and brace-expansion DoS vulnerabilities ([cf9f437](https://github.com/with-ours/platform-sdk-nodejs/commit/cf9f4378a533d6d1eb9868c5f86583c34ca5f7a6))
+
+
+### Chores
+
+* add CODEOWNERS ([#59](https://github.com/with-ours/platform-sdk-nodejs/issues/59)) ([e2bb496](https://github.com/with-ours/platform-sdk-nodejs/commit/e2bb4966443e06d92d96696cd31a09f3c1052d60))
+* add Dependabot config for weekly dependency updates ([3ee03a8](https://github.com/with-ours/platform-sdk-nodejs/commit/3ee03a85ba7df96e2b836f06fb7b733e3eec09ac))
+
 ## 1.42.0 (2026-07-22)
 
 Full Changelog: [v1.41.0...v1.42.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.41.0...v1.42.0)
