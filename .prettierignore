@@ -5,3 +5,6 @@ CHANGELOG.md
 
 # don't format tsc output, will break source maps
 /dist
+
+# Dependabot rewrites this file with double quotes; exclude from prettier
+.github/dependabot.yml
