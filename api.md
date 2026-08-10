@@ -70,6 +70,24 @@ Methods:
 - <code title="get /rest/v1/consent-settings/{id}/page-analysis">client.consentSettings.<a href="./src/resources/consent-settings.ts">pageAnalysis</a>(id, { ...params }) -> ConsentSettingPageAnalysisResponse</code>
 - <code title="get /rest/v1/consent-settings/{id}/analytics-by-region">client.consentSettings.<a href="./src/resources/consent-settings.ts">analyticsByRegion</a>(id, { ...params }) -> ConsentSettingAnalyticsByRegionResponse</code>
 
+# ConversionJourneySummaries
+
+Types:
+
+- <code><a href="./src/resources/conversion-journey-summaries.ts">ConversionJourneySummaryListResponse</a></code>
+- <code><a href="./src/resources/conversion-journey-summaries.ts">ConversionJourneySummaryCreateResponse</a></code>
+- <code><a href="./src/resources/conversion-journey-summaries.ts">ConversionJourneySummaryRetrieveResponse</a></code>
+- <code><a href="./src/resources/conversion-journey-summaries.ts">ConversionJourneySummaryUpdateResponse</a></code>
+- <code><a href="./src/resources/conversion-journey-summaries.ts">ConversionJourneySummaryDeleteResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/conversion-journey-summaries">client.conversionJourneySummaries.<a href="./src/resources/conversion-journey-summaries.ts">list</a>({ ...params }) -> ConversionJourneySummaryListResponsesCursor</code>
+- <code title="post /rest/v1/conversion-journey-summaries">client.conversionJourneySummaries.<a href="./src/resources/conversion-journey-summaries.ts">create</a>({ ...params }) -> ConversionJourneySummaryCreateResponse</code>
+- <code title="get /rest/v1/conversion-journey-summaries/{id}">client.conversionJourneySummaries.<a href="./src/resources/conversion-journey-summaries.ts">retrieve</a>(id) -> ConversionJourneySummaryRetrieveResponse</code>
+- <code title="patch /rest/v1/conversion-journey-summaries/{id}">client.conversionJourneySummaries.<a href="./src/resources/conversion-journey-summaries.ts">update</a>(id, { ...params }) -> ConversionJourneySummaryUpdateResponse</code>
+- <code title="delete /rest/v1/conversion-journey-summaries/{id}">client.conversionJourneySummaries.<a href="./src/resources/conversion-journey-summaries.ts">delete</a>(id) -> ConversionJourneySummaryDeleteResponse</code>
+
 # DataGovernance
 
 Types:

@@ -46,6 +46,18 @@ export {
   type ConsentSettingAnalyticsByRegionParams,
 } from './consent-settings';
 export {
+  ConversionJourneySummaries,
+  type ConversionJourneySummaryListResponse,
+  type ConversionJourneySummaryCreateResponse,
+  type ConversionJourneySummaryRetrieveResponse,
+  type ConversionJourneySummaryUpdateResponse,
+  type ConversionJourneySummaryDeleteResponse,
+  type ConversionJourneySummaryListParams,
+  type ConversionJourneySummaryCreateParams,
+  type ConversionJourneySummaryUpdateParams,
+  type ConversionJourneySummaryListResponsesCursor,
+} from './conversion-journey-summaries';
+export {
   DataGovernance,
   type DataGovernanceListResponse,
   type DataGovernanceCreateResponse,

@@ -65,6 +65,18 @@ import {
   ConsentSettings,
 } from './resources/consent-settings';
 import {
+  ConversionJourneySummaries,
+  ConversionJourneySummaryCreateParams,
+  ConversionJourneySummaryCreateResponse,
+  ConversionJourneySummaryDeleteResponse,
+  ConversionJourneySummaryListParams,
+  ConversionJourneySummaryListResponse,
+  ConversionJourneySummaryListResponsesCursor,
+  ConversionJourneySummaryRetrieveResponse,
+  ConversionJourneySummaryUpdateParams,
+  ConversionJourneySummaryUpdateResponse,
+} from './resources/conversion-journey-summaries';
+import {
   DataGovernance,
   DataGovernanceCreateParams,
   DataGovernanceCreateResponse,
@@ -1093,6 +1105,7 @@ export class OursPrivacyPlatform {
   attribution: API.Attribution = new API.Attribution(this);
   consentAnalytics: API.ConsentAnalytics = new API.ConsentAnalytics(this);
   consentSettings: API.ConsentSettings = new API.ConsentSettings(this);
+  conversionJourneySummaries: API.ConversionJourneySummaries = new API.ConversionJourneySummaries(this);
   dataGovernance: API.DataGovernance = new API.DataGovernance(this);
   defaultMappings: API.DefaultMappings = new API.DefaultMappings(this);
   destinations: API.Destinations = new API.Destinations(this);
@@ -1121,6 +1134,7 @@ OursPrivacyPlatform.AllowedEvents = AllowedEvents;
 OursPrivacyPlatform.Attribution = Attribution;
 OursPrivacyPlatform.ConsentAnalytics = ConsentAnalytics;
 OursPrivacyPlatform.ConsentSettings = ConsentSettings;
+OursPrivacyPlatform.ConversionJourneySummaries = ConversionJourneySummaries;
 OursPrivacyPlatform.DataGovernance = DataGovernance;
 OursPrivacyPlatform.DefaultMappings = DefaultMappings;
 OursPrivacyPlatform.Destinations = Destinations;
@@ -1197,6 +1211,19 @@ export declare namespace OursPrivacyPlatform {
     type ConsentSettingAnalyticsParams as ConsentSettingAnalyticsParams,
     type ConsentSettingPageAnalysisParams as ConsentSettingPageAnalysisParams,
     type ConsentSettingAnalyticsByRegionParams as ConsentSettingAnalyticsByRegionParams,
+  };
+
+  export {
+    ConversionJourneySummaries as ConversionJourneySummaries,
+    type ConversionJourneySummaryListResponse as ConversionJourneySummaryListResponse,
+    type ConversionJourneySummaryCreateResponse as ConversionJourneySummaryCreateResponse,
+    type ConversionJourneySummaryRetrieveResponse as ConversionJourneySummaryRetrieveResponse,
+    type ConversionJourneySummaryUpdateResponse as ConversionJourneySummaryUpdateResponse,
+    type ConversionJourneySummaryDeleteResponse as ConversionJourneySummaryDeleteResponse,
+    type ConversionJourneySummaryListResponsesCursor as ConversionJourneySummaryListResponsesCursor,
+    type ConversionJourneySummaryListParams as ConversionJourneySummaryListParams,
+    type ConversionJourneySummaryCreateParams as ConversionJourneySummaryCreateParams,
+    type ConversionJourneySummaryUpdateParams as ConversionJourneySummaryUpdateParams,
   };
 
   export {
