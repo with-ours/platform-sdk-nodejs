@@ -36,6 +36,7 @@ describe('resource webScanners', () => {
       excludedPatterns: ['string'],
       includedUrls: ['string'],
       name: 'name',
+      scanSchedule: 'daily',
       status: 'Disabled',
       urlLimit: 0,
     });
