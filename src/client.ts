@@ -330,6 +330,25 @@ import {
   Versions,
 } from './resources/versions';
 import {
+  VideoAnalyticsParams,
+  VideoAnalyticsResponse,
+  VideoAnalyticsTimeseriesParams,
+  VideoAnalyticsTimeseriesResponse,
+  VideoCreateParams,
+  VideoCreateResponse,
+  VideoDeleteResponse,
+  VideoListParams,
+  VideoListResponse,
+  VideoListResponsesCursor,
+  VideoRetrieveResponse,
+  VideoTranscriptResponse,
+  VideoUpdateParams,
+  VideoUpdateResponse,
+  VideoUpdateTranscriptParams,
+  VideoUpdateTranscriptResponse,
+  Videos,
+} from './resources/videos';
+import {
   WebScannerRuleCreateParams,
   WebScannerRuleCreateResponse,
   WebScannerRuleDeleteResponse,
@@ -1126,6 +1145,7 @@ export class OursPrivacyPlatform {
   tagManagerFolders: API.TagManagerFolders = new API.TagManagerFolders(this);
   tagManagerAssetFolders: API.TagManagerAssetFolders = new API.TagManagerAssetFolders(this);
   versions: API.Versions = new API.Versions(this);
+  videos: API.Videos = new API.Videos(this);
   webScannerRules: API.WebScannerRules = new API.WebScannerRules(this);
   webScanners: API.WebScanners = new API.WebScanners(this);
 }
@@ -1155,6 +1175,7 @@ OursPrivacyPlatform.TagManagerVariables = TagManagerVariables;
 OursPrivacyPlatform.TagManagerFolders = TagManagerFolders;
 OursPrivacyPlatform.TagManagerAssetFolders = TagManagerAssetFolders;
 OursPrivacyPlatform.Versions = Versions;
+OursPrivacyPlatform.Videos = Videos;
 OursPrivacyPlatform.WebScannerRules = WebScannerRules;
 OursPrivacyPlatform.WebScanners = WebScanners;
 
@@ -1497,6 +1518,26 @@ export declare namespace OursPrivacyPlatform {
     type VersionUpdateParams as VersionUpdateParams,
     type VersionDiffParams as VersionDiffParams,
     type VersionRevertParams as VersionRevertParams,
+  };
+
+  export {
+    Videos as Videos,
+    type VideoListResponse as VideoListResponse,
+    type VideoCreateResponse as VideoCreateResponse,
+    type VideoRetrieveResponse as VideoRetrieveResponse,
+    type VideoUpdateResponse as VideoUpdateResponse,
+    type VideoDeleteResponse as VideoDeleteResponse,
+    type VideoAnalyticsResponse as VideoAnalyticsResponse,
+    type VideoAnalyticsTimeseriesResponse as VideoAnalyticsTimeseriesResponse,
+    type VideoTranscriptResponse as VideoTranscriptResponse,
+    type VideoUpdateTranscriptResponse as VideoUpdateTranscriptResponse,
+    type VideoListResponsesCursor as VideoListResponsesCursor,
+    type VideoListParams as VideoListParams,
+    type VideoCreateParams as VideoCreateParams,
+    type VideoUpdateParams as VideoUpdateParams,
+    type VideoAnalyticsParams as VideoAnalyticsParams,
+    type VideoAnalyticsTimeseriesParams as VideoAnalyticsTimeseriesParams,
+    type VideoUpdateTranscriptParams as VideoUpdateTranscriptParams,
   };
 
   export {

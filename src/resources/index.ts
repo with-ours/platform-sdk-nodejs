@@ -311,6 +311,25 @@ export {
   type VersionListResponsesCursor,
 } from './versions';
 export {
+  Videos,
+  type VideoListResponse,
+  type VideoCreateResponse,
+  type VideoRetrieveResponse,
+  type VideoUpdateResponse,
+  type VideoDeleteResponse,
+  type VideoAnalyticsResponse,
+  type VideoAnalyticsTimeseriesResponse,
+  type VideoTranscriptResponse,
+  type VideoUpdateTranscriptResponse,
+  type VideoListParams,
+  type VideoCreateParams,
+  type VideoUpdateParams,
+  type VideoAnalyticsParams,
+  type VideoAnalyticsTimeseriesParams,
+  type VideoUpdateTranscriptParams,
+  type VideoListResponsesCursor,
+} from './videos';
+export {
   WebScannerRules,
   type WebScannerRuleListResponse,
   type WebScannerRuleCreateResponse,
