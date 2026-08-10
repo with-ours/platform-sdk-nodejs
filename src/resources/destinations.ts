@@ -87,8 +87,8 @@ export interface DestinationListResponse {
   status: 'Disabled' | 'Enabled';
 
   /**
-   * Destination type. Read responses may include warehouse or cloud-storage types
-   * that are not creatable through POST /rest/v1/destinations.
+   * Destination type. Read responses may include warehouse, cloud-storage, and
+   * audience-sync types that are not creatable through POST /rest/v1/destinations.
    */
   type:
     | 'AWSEventBridge'
@@ -117,6 +117,7 @@ export interface DestinationListResponse {
     | 'DomoWarehouse'
     | 'Everflow'
     | 'Facebook'
+    | 'FacebookAudience'
     | 'FloodlightSGTM'
     | 'FullContact'
     | 'G4Analytics'
@@ -125,6 +126,7 @@ export interface DestinationListResponse {
     | 'Google'
     | 'GoogleAds360'
     | 'GoogleAdsServerContainer'
+    | 'GoogleAudience'
     | 'GoogleBigQuery'
     | 'GoogleBigQueryWarehouse'
     | 'GoogleDataManagerEventIngest'
@@ -141,6 +143,7 @@ export interface DestinationListResponse {
     | 'LiveIntent'
     | 'LiveRampWarehouse'
     | 'MNTN'
+    | 'MNTNAudience'
     | 'Mailchimp'
     | 'Mixpanel'
     | 'NextdoorAds'
@@ -155,12 +158,14 @@ export interface DestinationListResponse {
     | 'QuantcastCAPI'
     | 'QuoraAds'
     | 'Reddit'
+    | 'Rokt'
     | 'RokuCAPI'
     | 'SnapchatAdsCapi'
     | 'Spotify'
     | 'StackAdaptAPI'
     | 'Taboola'
     | 'Tatari'
+    | 'TatariCAPI'
     | 'TheTradeDesk'
     | 'TikTok'
     | 'UniversalAds'
@@ -168,6 +173,7 @@ export interface DestinationListResponse {
     | 'Viant'
     | 'ViantCAPI'
     | 'Vibe'
+    | 'VibeAudience'
     | 'Woopra'
     | 'XAds'
     | 'YelpCAPI'
@@ -194,8 +200,8 @@ export interface DestinationCreateResponse {
   status: 'Disabled' | 'Enabled';
 
   /**
-   * Destination type. Read responses may include warehouse or cloud-storage types
-   * that are not creatable through POST /rest/v1/destinations.
+   * Destination type. Read responses may include warehouse, cloud-storage, and
+   * audience-sync types that are not creatable through POST /rest/v1/destinations.
    */
   type:
     | 'AWSEventBridge'
@@ -224,6 +230,7 @@ export interface DestinationCreateResponse {
     | 'DomoWarehouse'
     | 'Everflow'
     | 'Facebook'
+    | 'FacebookAudience'
     | 'FloodlightSGTM'
     | 'FullContact'
     | 'G4Analytics'
@@ -232,6 +239,7 @@ export interface DestinationCreateResponse {
     | 'Google'
     | 'GoogleAds360'
     | 'GoogleAdsServerContainer'
+    | 'GoogleAudience'
     | 'GoogleBigQuery'
     | 'GoogleBigQueryWarehouse'
     | 'GoogleDataManagerEventIngest'
@@ -248,6 +256,7 @@ export interface DestinationCreateResponse {
     | 'LiveIntent'
     | 'LiveRampWarehouse'
     | 'MNTN'
+    | 'MNTNAudience'
     | 'Mailchimp'
     | 'Mixpanel'
     | 'NextdoorAds'
@@ -262,12 +271,14 @@ export interface DestinationCreateResponse {
     | 'QuantcastCAPI'
     | 'QuoraAds'
     | 'Reddit'
+    | 'Rokt'
     | 'RokuCAPI'
     | 'SnapchatAdsCapi'
     | 'Spotify'
     | 'StackAdaptAPI'
     | 'Taboola'
     | 'Tatari'
+    | 'TatariCAPI'
     | 'TheTradeDesk'
     | 'TikTok'
     | 'UniversalAds'
@@ -275,6 +286,7 @@ export interface DestinationCreateResponse {
     | 'Viant'
     | 'ViantCAPI'
     | 'Vibe'
+    | 'VibeAudience'
     | 'Woopra'
     | 'XAds'
     | 'YelpCAPI'
@@ -301,8 +313,8 @@ export interface DestinationRetrieveResponse {
   status: 'Disabled' | 'Enabled';
 
   /**
-   * Destination type. Read responses may include warehouse or cloud-storage types
-   * that are not creatable through POST /rest/v1/destinations.
+   * Destination type. Read responses may include warehouse, cloud-storage, and
+   * audience-sync types that are not creatable through POST /rest/v1/destinations.
    */
   type:
     | 'AWSEventBridge'
@@ -331,6 +343,7 @@ export interface DestinationRetrieveResponse {
     | 'DomoWarehouse'
     | 'Everflow'
     | 'Facebook'
+    | 'FacebookAudience'
     | 'FloodlightSGTM'
     | 'FullContact'
     | 'G4Analytics'
@@ -339,6 +352,7 @@ export interface DestinationRetrieveResponse {
     | 'Google'
     | 'GoogleAds360'
     | 'GoogleAdsServerContainer'
+    | 'GoogleAudience'
     | 'GoogleBigQuery'
     | 'GoogleBigQueryWarehouse'
     | 'GoogleDataManagerEventIngest'
@@ -355,6 +369,7 @@ export interface DestinationRetrieveResponse {
     | 'LiveIntent'
     | 'LiveRampWarehouse'
     | 'MNTN'
+    | 'MNTNAudience'
     | 'Mailchimp'
     | 'Mixpanel'
     | 'NextdoorAds'
@@ -369,12 +384,14 @@ export interface DestinationRetrieveResponse {
     | 'QuantcastCAPI'
     | 'QuoraAds'
     | 'Reddit'
+    | 'Rokt'
     | 'RokuCAPI'
     | 'SnapchatAdsCapi'
     | 'Spotify'
     | 'StackAdaptAPI'
     | 'Taboola'
     | 'Tatari'
+    | 'TatariCAPI'
     | 'TheTradeDesk'
     | 'TikTok'
     | 'UniversalAds'
@@ -382,6 +399,7 @@ export interface DestinationRetrieveResponse {
     | 'Viant'
     | 'ViantCAPI'
     | 'Vibe'
+    | 'VibeAudience'
     | 'Woopra'
     | 'XAds'
     | 'YelpCAPI'
@@ -408,8 +426,8 @@ export interface DestinationUpdateResponse {
   status: 'Disabled' | 'Enabled';
 
   /**
-   * Destination type. Read responses may include warehouse or cloud-storage types
-   * that are not creatable through POST /rest/v1/destinations.
+   * Destination type. Read responses may include warehouse, cloud-storage, and
+   * audience-sync types that are not creatable through POST /rest/v1/destinations.
    */
   type:
     | 'AWSEventBridge'
@@ -438,6 +456,7 @@ export interface DestinationUpdateResponse {
     | 'DomoWarehouse'
     | 'Everflow'
     | 'Facebook'
+    | 'FacebookAudience'
     | 'FloodlightSGTM'
     | 'FullContact'
     | 'G4Analytics'
@@ -446,6 +465,7 @@ export interface DestinationUpdateResponse {
     | 'Google'
     | 'GoogleAds360'
     | 'GoogleAdsServerContainer'
+    | 'GoogleAudience'
     | 'GoogleBigQuery'
     | 'GoogleBigQueryWarehouse'
     | 'GoogleDataManagerEventIngest'
@@ -462,6 +482,7 @@ export interface DestinationUpdateResponse {
     | 'LiveIntent'
     | 'LiveRampWarehouse'
     | 'MNTN'
+    | 'MNTNAudience'
     | 'Mailchimp'
     | 'Mixpanel'
     | 'NextdoorAds'
@@ -476,12 +497,14 @@ export interface DestinationUpdateResponse {
     | 'QuantcastCAPI'
     | 'QuoraAds'
     | 'Reddit'
+    | 'Rokt'
     | 'RokuCAPI'
     | 'SnapchatAdsCapi'
     | 'Spotify'
     | 'StackAdaptAPI'
     | 'Taboola'
     | 'Tatari'
+    | 'TatariCAPI'
     | 'TheTradeDesk'
     | 'TikTok'
     | 'UniversalAds'
@@ -489,6 +512,7 @@ export interface DestinationUpdateResponse {
     | 'Viant'
     | 'ViantCAPI'
     | 'Vibe'
+    | 'VibeAudience'
     | 'Woopra'
     | 'XAds'
     | 'YelpCAPI'
@@ -775,6 +799,7 @@ export interface DestinationListParams extends CursorParams {
     | 'DomoWarehouse'
     | 'Everflow'
     | 'Facebook'
+    | 'FacebookAudience'
     | 'FloodlightSGTM'
     | 'FullContact'
     | 'G4Analytics'
@@ -783,6 +808,7 @@ export interface DestinationListParams extends CursorParams {
     | 'Google'
     | 'GoogleAds360'
     | 'GoogleAdsServerContainer'
+    | 'GoogleAudience'
     | 'GoogleBigQuery'
     | 'GoogleBigQueryWarehouse'
     | 'GoogleDataManagerEventIngest'
@@ -799,6 +825,7 @@ export interface DestinationListParams extends CursorParams {
     | 'LiveIntent'
     | 'LiveRampWarehouse'
     | 'MNTN'
+    | 'MNTNAudience'
     | 'Mailchimp'
     | 'Mixpanel'
     | 'NextdoorAds'
@@ -813,12 +840,14 @@ export interface DestinationListParams extends CursorParams {
     | 'QuantcastCAPI'
     | 'QuoraAds'
     | 'Reddit'
+    | 'Rokt'
     | 'RokuCAPI'
     | 'SnapchatAdsCapi'
     | 'Spotify'
     | 'StackAdaptAPI'
     | 'Taboola'
     | 'Tatari'
+    | 'TatariCAPI'
     | 'TheTradeDesk'
     | 'TikTok'
     | 'UniversalAds'
@@ -826,6 +855,7 @@ export interface DestinationListParams extends CursorParams {
     | 'Viant'
     | 'ViantCAPI'
     | 'Vibe'
+    | 'VibeAudience'
     | 'Woopra'
     | 'XAds'
     | 'YelpCAPI'
@@ -836,9 +866,10 @@ export interface DestinationListParams extends CursorParams {
 
 export interface DestinationCreateParams {
   /**
-   * Event-dispatch destination type to create. Warehouse and cloud-storage
-   * destination types may appear on read responses but are not creatable through
-   * POST.
+   * Event-dispatch destination type to create. Warehouse, cloud-storage, and
+   * audience-sync destination types may appear on read responses but are not
+   * creatable through POST. Audience destinations receive audience membership from
+   * Audience Builder on a daily schedule and are configured in the dashboard.
    */
   type:
     | 'Audiohook'
@@ -886,6 +917,7 @@ export interface DestinationCreateParams {
     | 'Partnerize'
     | 'NextdoorAds'
     | 'Tatari'
+    | 'TatariCAPI'
     | 'Viant'
     | 'ViantCAPI'
     | 'Impact'
@@ -914,7 +946,8 @@ export interface DestinationCreateParams {
     | 'OpenAIAds'
     | 'YelpCAPI'
     | 'MNTN'
-    | 'ZohoCRM';
+    | 'ZohoCRM'
+    | 'Rokt';
 
   name?: string | null;
 
