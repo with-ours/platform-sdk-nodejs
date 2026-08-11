@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.43.0 (2026-08-11)
+
+Full Changelog: [v1.42.2...v1.43.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.42.2...v1.43.0)
+
+### Features
+
+* sync SDK with platform spec changes ([1b68ef6](https://github.com/with-ours/platform-sdk-nodejs/commit/1b68ef60049d5ae59875bba1e476c54daf1003ae))
+
 ## 1.42.2 (2026-08-11)
 
 Full Changelog: [v1.42.1...v1.42.2](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.42.1...v1.42.2)
