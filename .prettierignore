@@ -8,3 +8,6 @@ CHANGELOG.md
 
 # Dependabot rewrites this file with double quotes; exclude from prettier
 .github/dependabot.yml
+
+# pnpm rewrites this file on every install, undoing prettier; exclude from prettier
+pnpm-lock.yaml
