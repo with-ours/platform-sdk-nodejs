@@ -65,6 +65,18 @@ import {
   ConsentSettings,
 } from './resources/consent-settings';
 import {
+  ConversionJourneySummaries,
+  ConversionJourneySummaryCreateParams,
+  ConversionJourneySummaryCreateResponse,
+  ConversionJourneySummaryDeleteResponse,
+  ConversionJourneySummaryListParams,
+  ConversionJourneySummaryListResponse,
+  ConversionJourneySummaryListResponsesCursor,
+  ConversionJourneySummaryRetrieveResponse,
+  ConversionJourneySummaryUpdateParams,
+  ConversionJourneySummaryUpdateResponse,
+} from './resources/conversion-journey-summaries';
+import {
   DataGovernance,
   DataGovernanceCreateParams,
   DataGovernanceCreateResponse,
@@ -317,6 +329,25 @@ import {
   VersionUpdateResponse,
   Versions,
 } from './resources/versions';
+import {
+  VideoAnalyticsParams,
+  VideoAnalyticsResponse,
+  VideoAnalyticsTimeseriesParams,
+  VideoAnalyticsTimeseriesResponse,
+  VideoCreateParams,
+  VideoCreateResponse,
+  VideoDeleteResponse,
+  VideoListParams,
+  VideoListResponse,
+  VideoListResponsesCursor,
+  VideoRetrieveResponse,
+  VideoTranscriptResponse,
+  VideoUpdateParams,
+  VideoUpdateResponse,
+  VideoUpdateTranscriptParams,
+  VideoUpdateTranscriptResponse,
+  Videos,
+} from './resources/videos';
 import {
   WebScannerRuleCreateParams,
   WebScannerRuleCreateResponse,
@@ -1093,6 +1124,7 @@ export class OursPrivacyPlatform {
   attribution: API.Attribution = new API.Attribution(this);
   consentAnalytics: API.ConsentAnalytics = new API.ConsentAnalytics(this);
   consentSettings: API.ConsentSettings = new API.ConsentSettings(this);
+  conversionJourneySummaries: API.ConversionJourneySummaries = new API.ConversionJourneySummaries(this);
   dataGovernance: API.DataGovernance = new API.DataGovernance(this);
   defaultMappings: API.DefaultMappings = new API.DefaultMappings(this);
   destinations: API.Destinations = new API.Destinations(this);
@@ -1113,6 +1145,7 @@ export class OursPrivacyPlatform {
   tagManagerFolders: API.TagManagerFolders = new API.TagManagerFolders(this);
   tagManagerAssetFolders: API.TagManagerAssetFolders = new API.TagManagerAssetFolders(this);
   versions: API.Versions = new API.Versions(this);
+  videos: API.Videos = new API.Videos(this);
   webScannerRules: API.WebScannerRules = new API.WebScannerRules(this);
   webScanners: API.WebScanners = new API.WebScanners(this);
 }
@@ -1121,6 +1154,7 @@ OursPrivacyPlatform.AllowedEvents = AllowedEvents;
 OursPrivacyPlatform.Attribution = Attribution;
 OursPrivacyPlatform.ConsentAnalytics = ConsentAnalytics;
 OursPrivacyPlatform.ConsentSettings = ConsentSettings;
+OursPrivacyPlatform.ConversionJourneySummaries = ConversionJourneySummaries;
 OursPrivacyPlatform.DataGovernance = DataGovernance;
 OursPrivacyPlatform.DefaultMappings = DefaultMappings;
 OursPrivacyPlatform.Destinations = Destinations;
@@ -1141,6 +1175,7 @@ OursPrivacyPlatform.TagManagerVariables = TagManagerVariables;
 OursPrivacyPlatform.TagManagerFolders = TagManagerFolders;
 OursPrivacyPlatform.TagManagerAssetFolders = TagManagerAssetFolders;
 OursPrivacyPlatform.Versions = Versions;
+OursPrivacyPlatform.Videos = Videos;
 OursPrivacyPlatform.WebScannerRules = WebScannerRules;
 OursPrivacyPlatform.WebScanners = WebScanners;
 
@@ -1197,6 +1232,19 @@ export declare namespace OursPrivacyPlatform {
     type ConsentSettingAnalyticsParams as ConsentSettingAnalyticsParams,
     type ConsentSettingPageAnalysisParams as ConsentSettingPageAnalysisParams,
     type ConsentSettingAnalyticsByRegionParams as ConsentSettingAnalyticsByRegionParams,
+  };
+
+  export {
+    ConversionJourneySummaries as ConversionJourneySummaries,
+    type ConversionJourneySummaryListResponse as ConversionJourneySummaryListResponse,
+    type ConversionJourneySummaryCreateResponse as ConversionJourneySummaryCreateResponse,
+    type ConversionJourneySummaryRetrieveResponse as ConversionJourneySummaryRetrieveResponse,
+    type ConversionJourneySummaryUpdateResponse as ConversionJourneySummaryUpdateResponse,
+    type ConversionJourneySummaryDeleteResponse as ConversionJourneySummaryDeleteResponse,
+    type ConversionJourneySummaryListResponsesCursor as ConversionJourneySummaryListResponsesCursor,
+    type ConversionJourneySummaryListParams as ConversionJourneySummaryListParams,
+    type ConversionJourneySummaryCreateParams as ConversionJourneySummaryCreateParams,
+    type ConversionJourneySummaryUpdateParams as ConversionJourneySummaryUpdateParams,
   };
 
   export {
@@ -1470,6 +1518,26 @@ export declare namespace OursPrivacyPlatform {
     type VersionUpdateParams as VersionUpdateParams,
     type VersionDiffParams as VersionDiffParams,
     type VersionRevertParams as VersionRevertParams,
+  };
+
+  export {
+    Videos as Videos,
+    type VideoListResponse as VideoListResponse,
+    type VideoCreateResponse as VideoCreateResponse,
+    type VideoRetrieveResponse as VideoRetrieveResponse,
+    type VideoUpdateResponse as VideoUpdateResponse,
+    type VideoDeleteResponse as VideoDeleteResponse,
+    type VideoAnalyticsResponse as VideoAnalyticsResponse,
+    type VideoAnalyticsTimeseriesResponse as VideoAnalyticsTimeseriesResponse,
+    type VideoTranscriptResponse as VideoTranscriptResponse,
+    type VideoUpdateTranscriptResponse as VideoUpdateTranscriptResponse,
+    type VideoListResponsesCursor as VideoListResponsesCursor,
+    type VideoListParams as VideoListParams,
+    type VideoCreateParams as VideoCreateParams,
+    type VideoUpdateParams as VideoUpdateParams,
+    type VideoAnalyticsParams as VideoAnalyticsParams,
+    type VideoAnalyticsTimeseriesParams as VideoAnalyticsTimeseriesParams,
+    type VideoUpdateTranscriptParams as VideoUpdateTranscriptParams,
   };
 
   export {

@@ -70,6 +70,24 @@ Methods:
 - <code title="get /rest/v1/consent-settings/{id}/page-analysis">client.consentSettings.<a href="./src/resources/consent-settings.ts">pageAnalysis</a>(id, { ...params }) -> ConsentSettingPageAnalysisResponse</code>
 - <code title="get /rest/v1/consent-settings/{id}/analytics-by-region">client.consentSettings.<a href="./src/resources/consent-settings.ts">analyticsByRegion</a>(id, { ...params }) -> ConsentSettingAnalyticsByRegionResponse</code>
 
+# ConversionJourneySummaries
+
+Types:
+
+- <code><a href="./src/resources/conversion-journey-summaries.ts">ConversionJourneySummaryListResponse</a></code>
+- <code><a href="./src/resources/conversion-journey-summaries.ts">ConversionJourneySummaryCreateResponse</a></code>
+- <code><a href="./src/resources/conversion-journey-summaries.ts">ConversionJourneySummaryRetrieveResponse</a></code>
+- <code><a href="./src/resources/conversion-journey-summaries.ts">ConversionJourneySummaryUpdateResponse</a></code>
+- <code><a href="./src/resources/conversion-journey-summaries.ts">ConversionJourneySummaryDeleteResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/conversion-journey-summaries">client.conversionJourneySummaries.<a href="./src/resources/conversion-journey-summaries.ts">list</a>({ ...params }) -> ConversionJourneySummaryListResponsesCursor</code>
+- <code title="post /rest/v1/conversion-journey-summaries">client.conversionJourneySummaries.<a href="./src/resources/conversion-journey-summaries.ts">create</a>({ ...params }) -> ConversionJourneySummaryCreateResponse</code>
+- <code title="get /rest/v1/conversion-journey-summaries/{id}">client.conversionJourneySummaries.<a href="./src/resources/conversion-journey-summaries.ts">retrieve</a>(id) -> ConversionJourneySummaryRetrieveResponse</code>
+- <code title="patch /rest/v1/conversion-journey-summaries/{id}">client.conversionJourneySummaries.<a href="./src/resources/conversion-journey-summaries.ts">update</a>(id, { ...params }) -> ConversionJourneySummaryUpdateResponse</code>
+- <code title="delete /rest/v1/conversion-journey-summaries/{id}">client.conversionJourneySummaries.<a href="./src/resources/conversion-journey-summaries.ts">delete</a>(id) -> ConversionJourneySummaryDeleteResponse</code>
+
 # DataGovernance
 
 Types:
@@ -457,6 +475,32 @@ Methods:
 - <code title="get /rest/v1/versions/{id}/diff">client.versions.<a href="./src/resources/versions.ts">diff</a>(id, { ...params }) -> VersionDiffResponse</code>
 - <code title="post /rest/v1/versions/{id}/revert">client.versions.<a href="./src/resources/versions.ts">revert</a>(id, { ...params }) -> VersionRevertResponse</code>
 - <code title="post /rest/v1/versions/{id}/abandon">client.versions.<a href="./src/resources/versions.ts">abandon</a>(id) -> VersionAbandonResponse</code>
+
+# Videos
+
+Types:
+
+- <code><a href="./src/resources/videos.ts">VideoListResponse</a></code>
+- <code><a href="./src/resources/videos.ts">VideoCreateResponse</a></code>
+- <code><a href="./src/resources/videos.ts">VideoRetrieveResponse</a></code>
+- <code><a href="./src/resources/videos.ts">VideoUpdateResponse</a></code>
+- <code><a href="./src/resources/videos.ts">VideoDeleteResponse</a></code>
+- <code><a href="./src/resources/videos.ts">VideoAnalyticsResponse</a></code>
+- <code><a href="./src/resources/videos.ts">VideoAnalyticsTimeseriesResponse</a></code>
+- <code><a href="./src/resources/videos.ts">VideoTranscriptResponse</a></code>
+- <code><a href="./src/resources/videos.ts">VideoUpdateTranscriptResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/videos">client.videos.<a href="./src/resources/videos.ts">list</a>({ ...params }) -> VideoListResponsesCursor</code>
+- <code title="post /rest/v1/videos">client.videos.<a href="./src/resources/videos.ts">create</a>({ ...params }) -> VideoCreateResponse</code>
+- <code title="get /rest/v1/videos/{id}">client.videos.<a href="./src/resources/videos.ts">retrieve</a>(id) -> VideoRetrieveResponse</code>
+- <code title="patch /rest/v1/videos/{id}">client.videos.<a href="./src/resources/videos.ts">update</a>(id, { ...params }) -> VideoUpdateResponse</code>
+- <code title="delete /rest/v1/videos/{id}">client.videos.<a href="./src/resources/videos.ts">delete</a>(id) -> VideoDeleteResponse</code>
+- <code title="get /rest/v1/videos/analytics">client.videos.<a href="./src/resources/videos.ts">analytics</a>({ ...params }) -> VideoAnalyticsResponse</code>
+- <code title="get /rest/v1/videos/{id}/analytics">client.videos.<a href="./src/resources/videos.ts">analyticsTimeseries</a>(id, { ...params }) -> VideoAnalyticsTimeseriesResponse</code>
+- <code title="get /rest/v1/videos/{id}/transcript">client.videos.<a href="./src/resources/videos.ts">transcript</a>(id) -> VideoTranscriptResponse</code>
+- <code title="put /rest/v1/videos/{id}/transcript">client.videos.<a href="./src/resources/videos.ts">updateTranscript</a>(id, { ...params }) -> VideoUpdateTranscriptResponse</code>
 
 # WebScannerRules
 

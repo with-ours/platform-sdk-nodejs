@@ -46,6 +46,18 @@ export {
   type ConsentSettingAnalyticsByRegionParams,
 } from './consent-settings';
 export {
+  ConversionJourneySummaries,
+  type ConversionJourneySummaryListResponse,
+  type ConversionJourneySummaryCreateResponse,
+  type ConversionJourneySummaryRetrieveResponse,
+  type ConversionJourneySummaryUpdateResponse,
+  type ConversionJourneySummaryDeleteResponse,
+  type ConversionJourneySummaryListParams,
+  type ConversionJourneySummaryCreateParams,
+  type ConversionJourneySummaryUpdateParams,
+  type ConversionJourneySummaryListResponsesCursor,
+} from './conversion-journey-summaries';
+export {
   DataGovernance,
   type DataGovernanceListResponse,
   type DataGovernanceCreateResponse,
@@ -298,6 +310,25 @@ export {
   type VersionRevertParams,
   type VersionListResponsesCursor,
 } from './versions';
+export {
+  Videos,
+  type VideoListResponse,
+  type VideoCreateResponse,
+  type VideoRetrieveResponse,
+  type VideoUpdateResponse,
+  type VideoDeleteResponse,
+  type VideoAnalyticsResponse,
+  type VideoAnalyticsTimeseriesResponse,
+  type VideoTranscriptResponse,
+  type VideoUpdateTranscriptResponse,
+  type VideoListParams,
+  type VideoCreateParams,
+  type VideoUpdateParams,
+  type VideoAnalyticsParams,
+  type VideoAnalyticsTimeseriesParams,
+  type VideoUpdateTranscriptParams,
+  type VideoListResponsesCursor,
+} from './videos';
 export {
   WebScannerRules,
   type WebScannerRuleListResponse,

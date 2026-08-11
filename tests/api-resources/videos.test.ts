@@ -7,9 +7,9 @@ const client = new OursPrivacyPlatform({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource webScanners', () => {
+describe('resource videos', () => {
   test('list', async () => {
-    const responsePromise = client.webScanners.list();
+    const responsePromise = client.videos.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -19,8 +19,18 @@ describe('resource webScanners', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
+  test('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.videos.list(
+        { cursor: 'cursor', limit: 25, nameContains: 'nameContains' },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
+  });
+
   test('create: only required params', async () => {
-    const responsePromise = client.webScanners.create({ rootDomain: 'x' });
+    const responsePromise = client.videos.create({ mimeType: 'MP4' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -31,19 +41,15 @@ describe('resource webScanners', () => {
   });
 
   test('create: required and optional params', async () => {
-    const response = await client.webScanners.create({
-      rootDomain: 'x',
-      excludedPatterns: ['string'],
-      includedUrls: ['string'],
+    const response = await client.videos.create({
+      mimeType: 'MP4',
+      description: 'description',
       name: 'name',
-      scanSchedule: 'daily',
-      status: 'Disabled',
-      urlLimit: 0,
     });
   });
 
   test('retrieve', async () => {
-    const responsePromise = client.webScanners.retrieve('id');
+    const responsePromise = client.videos.retrieve('id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -54,7 +60,7 @@ describe('resource webScanners', () => {
   });
 
   test('update', async () => {
-    const responsePromise = client.webScanners.update('id', {});
+    const responsePromise = client.videos.update('id', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -65,7 +71,7 @@ describe('resource webScanners', () => {
   });
 
   test('delete', async () => {
-    const responsePromise = client.webScanners.delete('id');
+    const responsePromise = client.videos.delete('id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -75,8 +81,8 @@ describe('resource webScanners', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('trigger', async () => {
-    const responsePromise = client.webScanners.trigger('id');
+  test('analytics: only required params', async () => {
+    const responsePromise = client.videos.analytics({ from: '2019-12-27', to: '2019-12-27' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -86,8 +92,17 @@ describe('resource webScanners', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('findings', async () => {
-    const responsePromise = client.webScanners.findings('id');
+  test('analytics: required and optional params', async () => {
+    const response = await client.videos.analytics({
+      from: '2019-12-27',
+      to: '2019-12-27',
+      limit: 1,
+      offset: 0,
+    });
+  });
+
+  test('analyticsTimeseries: only required params', async () => {
+    const responsePromise = client.videos.analyticsTimeseries('id', { from: '2019-12-27', to: '2019-12-27' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -97,23 +112,16 @@ describe('resource webScanners', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('findings: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.webScanners.findings(
-        'id',
-        {
-          date: '2026-05-15T00:00:00Z',
-          limit: 1,
-          offset: 0,
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
+  test('analyticsTimeseries: required and optional params', async () => {
+    const response = await client.videos.analyticsTimeseries('id', {
+      from: '2019-12-27',
+      to: '2019-12-27',
+      granularity: 'DAILY',
+    });
   });
 
-  test('cookies', async () => {
-    const responsePromise = client.webScanners.cookies('id');
+  test('transcript', async () => {
+    const responsePromise = client.videos.transcript('id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -123,23 +131,8 @@ describe('resource webScanners', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('cookies: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.webScanners.cookies(
-        'id',
-        {
-          date: '2026-05-15T00:00:00Z',
-          limit: 1,
-          offset: 0,
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
-  });
-
-  test('summary', async () => {
-    const responsePromise = client.webScanners.summary('id');
+  test('updateTranscript: only required params', async () => {
+    const responsePromise = client.videos.updateTranscript('id', { content: 'x', format: 'SRT' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -149,14 +142,7 @@ describe('resource webScanners', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('summary: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.webScanners.summary(
-        'id',
-        { date: '2026-05-15T00:00:00Z' },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
+  test('updateTranscript: required and optional params', async () => {
+    const response = await client.videos.updateTranscript('id', { content: 'x', format: 'SRT' });
   });
 });

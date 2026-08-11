@@ -11,3 +11,6 @@ CHANGELOG.md
 
 # pnpm rewrites this file on every install, undoing prettier; exclude from prettier
 pnpm-lock.yaml
+
+# Generated: the committed OpenAPI spec the mock server runs against
+openapi.json

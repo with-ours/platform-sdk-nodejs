@@ -168,6 +168,8 @@ export namespace WebScannerListResponse {
 
     name?: string | null;
 
+    nextScheduledScanAt?: string | null;
+
     updatedAt?: string | null;
 
     urlLimit?: number | null;
@@ -181,6 +183,8 @@ export interface WebScannerCreateResponse {
 
   rootDomain: string;
 
+  scanSchedule: 'daily' | 'manual' | 'monthly' | 'weekly';
+
   scanStatus: 'idle' | 'scanning';
 
   status: 'Disabled' | 'Enabled';
@@ -204,6 +208,8 @@ export interface WebScannerCreateResponse {
   lastScanStartedAt?: string | null;
 
   name?: string | null;
+
+  nextScheduledScanAt?: string | null;
 
   updatedAt?: string | null;
 
@@ -217,6 +223,8 @@ export interface WebScannerRetrieveResponse {
 
   rootDomain: string;
 
+  scanSchedule: 'daily' | 'manual' | 'monthly' | 'weekly';
+
   scanStatus: 'idle' | 'scanning';
 
   status: 'Disabled' | 'Enabled';
@@ -240,6 +248,8 @@ export interface WebScannerRetrieveResponse {
   lastScanStartedAt?: string | null;
 
   name?: string | null;
+
+  nextScheduledScanAt?: string | null;
 
   updatedAt?: string | null;
 
@@ -253,6 +263,8 @@ export interface WebScannerUpdateResponse {
 
   rootDomain: string;
 
+  scanSchedule: 'daily' | 'manual' | 'monthly' | 'weekly';
+
   scanStatus: 'idle' | 'scanning';
 
   status: 'Disabled' | 'Enabled';
@@ -276,6 +288,8 @@ export interface WebScannerUpdateResponse {
   lastScanStartedAt?: string | null;
 
   name?: string | null;
+
+  nextScheduledScanAt?: string | null;
 
   updatedAt?: string | null;
 
@@ -301,6 +315,8 @@ export interface WebScannerTriggerResponse {
 
   rootDomain: string;
 
+  scanSchedule: 'daily' | 'manual' | 'monthly' | 'weekly';
+
   scanStatus: 'idle' | 'scanning';
 
   status: 'Disabled' | 'Enabled';
@@ -324,6 +340,8 @@ export interface WebScannerTriggerResponse {
   lastScanStartedAt?: string | null;
 
   name?: string | null;
+
+  nextScheduledScanAt?: string | null;
 
   updatedAt?: string | null;
 
@@ -461,6 +479,20 @@ export interface WebScannerSummaryResponse {
 
   localStorageCount: number;
 
+  /**
+   * Distinct privacy policies captured for first-party hostnames in the selected
+   * scan run, including the bounded visible policy text.
+   */
+  privacyPolicies: Array<WebScannerSummaryResponse.PrivacyPolicy>;
+
+  privacyPolicyCount: number;
+
+  /**
+   * Every successfully crawled first-party hostname and its captured privacy policy
+   * URL. A null privacyPolicyUrl means no policy was captured for that hostname.
+   */
+  privacyPolicyHosts: Array<WebScannerSummaryResponse.PrivacyPolicyHost>;
+
   rootDomain: string;
 
   scannerId: string;
@@ -519,6 +551,20 @@ export namespace WebScannerSummaryResponse {
     needsDecisionHostCount: number;
 
     totalHostCount: number;
+  }
+
+  export interface PrivacyPolicy {
+    hostnames: Array<string>;
+
+    text: string;
+
+    url: string;
+  }
+
+  export interface PrivacyPolicyHost {
+    hostname: string;
+
+    privacyPolicyUrl?: string | null;
   }
 
   export interface TopUncoveredHost {
@@ -672,6 +718,14 @@ export interface WebScannerCreateParams {
 
   name?: string | null;
 
+  /**
+   * How often the scanner crawls this monitor on its own: `daily`, `weekly`,
+   * `monthly`, or `manual` to disable scheduled crawls and only run on demand.
+   * Defaults to `weekly`. Cadences advance on UTC calendar days from the last
+   * completed scan.
+   */
+  scanSchedule?: 'daily' | 'manual' | 'monthly' | 'weekly';
+
   status?: 'Disabled' | 'Enabled';
 
   /**
@@ -692,6 +746,14 @@ export interface WebScannerUpdateParams {
    * HTTP 400 with the validation reason in `details`.
    */
   rootDomain?: string | null;
+
+  /**
+   * How often the scanner crawls this monitor on its own: `daily`, `weekly`,
+   * `monthly`, or `manual` to disable scheduled crawls and only run on demand.
+   * Defaults to `weekly`. Cadences advance on UTC calendar days from the last
+   * completed scan. Omit to leave the current cadence unchanged.
+   */
+  scanSchedule?: 'daily' | 'manual' | 'monthly' | 'weekly';
 
   status?: 'Disabled' | 'Enabled';
 

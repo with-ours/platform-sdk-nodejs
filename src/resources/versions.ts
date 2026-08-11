@@ -169,6 +169,16 @@ export interface VersionListResponse {
    * determine the current live version.
    */
   publishedAt?: string | null;
+
+  /**
+   * Identifier of the user who most recently published this version.
+   */
+  publishedByUserId?: string | null;
+
+  /**
+   * Display name of the user who most recently published this version.
+   */
+  publishedByUserName?: string | null;
 }
 
 export interface VersionCreateResponse {
@@ -191,6 +201,16 @@ export interface VersionCreateResponse {
    * determine the current live version.
    */
   publishedAt?: string | null;
+
+  /**
+   * Identifier of the user who most recently published this version.
+   */
+  publishedByUserId?: string | null;
+
+  /**
+   * Display name of the user who most recently published this version.
+   */
+  publishedByUserName?: string | null;
 }
 
 export interface VersionRetrieveResponse {
@@ -213,6 +233,16 @@ export interface VersionRetrieveResponse {
    * determine the current live version.
    */
   publishedAt?: string | null;
+
+  /**
+   * Identifier of the user who most recently published this version.
+   */
+  publishedByUserId?: string | null;
+
+  /**
+   * Display name of the user who most recently published this version.
+   */
+  publishedByUserName?: string | null;
 }
 
 export interface VersionUpdateResponse {
@@ -235,6 +265,16 @@ export interface VersionUpdateResponse {
    * determine the current live version.
    */
   publishedAt?: string | null;
+
+  /**
+   * Identifier of the user who most recently published this version.
+   */
+  publishedByUserId?: string | null;
+
+  /**
+   * Display name of the user who most recently published this version.
+   */
+  publishedByUserName?: string | null;
 }
 
 export interface VersionPublishResponse {
@@ -257,6 +297,16 @@ export interface VersionPublishResponse {
    * determine the current live version.
    */
   publishedAt?: string | null;
+
+  /**
+   * Identifier of the user who most recently published this version.
+   */
+  publishedByUserId?: string | null;
+
+  /**
+   * Display name of the user who most recently published this version.
+   */
+  publishedByUserName?: string | null;
 }
 
 export interface VersionSnapshotResponse {
