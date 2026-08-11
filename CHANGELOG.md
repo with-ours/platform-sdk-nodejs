@@ -1,5 +1,27 @@
 # Changelog
 
+## 1.42.2 (2026-08-11)
+
+Full Changelog: [v1.42.1...v1.42.2](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.42.1...v1.42.2)
+
+### Bug Fixes
+
+* bump actions/checkout from 6.0.2 to 7.0.1 ([#55](https://github.com/with-ours/platform-sdk-nodejs/issues/55)) ([0d64740](https://github.com/with-ours/platform-sdk-nodejs/commit/0d64740223a1a9b9df22e416078f221c0503b428))
+* bump actions/github-script from 8.0.0 to 9.0.0 ([#57](https://github.com/with-ours/platform-sdk-nodejs/issues/57)) ([0abb0e7](https://github.com/with-ours/platform-sdk-nodejs/commit/0abb0e7f99f07d47f980f13a993649aa27457a1d))
+* bump actions/setup-node from 3.9.1 to 7.0.0 ([#56](https://github.com/with-ours/platform-sdk-nodejs/issues/56)) ([6c24ba3](https://github.com/with-ours/platform-sdk-nodejs/commit/6c24ba374cea5f96c067504fc154f60d075d66fc))
+* bump pnpm/action-setup from 4.3.0 to 6.0.9 ([#54](https://github.com/with-ours/platform-sdk-nodejs/issues/54)) ([f7fb0b8](https://github.com/with-ours/platform-sdk-nodejs/commit/f7fb0b8037d4acb230b9aeda60fb0e67fdf89c86))
+
+
+### Chores
+
+* bump the all-deps group across 1 directory with 15 updates ([#58](https://github.com/with-ours/platform-sdk-nodejs/issues/58)) ([1078b31](https://github.com/with-ours/platform-sdk-nodejs/commit/1078b316868dbe722ee8f1289bf9623e50ec4477))
+* exclude dependabot.yml from prettier ([a5fdd7e](https://github.com/with-ours/platform-sdk-nodejs/commit/a5fdd7e875aa8b00cf3ed5d4af7809c828d36f1d))
+
+
+### Styles
+
+* reformat for prettier 3.9.6 ([9d0d6eb](https://github.com/with-ours/platform-sdk-nodejs/commit/9d0d6eb7dc7e928e2f6aee3d37629ebf90a87449))
+
 ## 1.42.1 (2026-08-03)
 
 Full Changelog: [v1.42.0...v1.42.1](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.42.0...v1.42.1)
