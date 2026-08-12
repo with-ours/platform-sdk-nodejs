@@ -502,6 +502,32 @@ Methods:
 - <code title="post /rest/v1/versions/{id}/revert">client.versions.<a href="./src/resources/versions.ts">revert</a>(id, { ...params }) -> VersionRevertResponse</code>
 - <code title="post /rest/v1/versions/{id}/abandon">client.versions.<a href="./src/resources/versions.ts">abandon</a>(id) -> VersionAbandonResponse</code>
 
+# VideoChannels
+
+Types:
+
+- <code><a href="./src/resources/video-channels.ts">VideoChannelListResponse</a></code>
+- <code><a href="./src/resources/video-channels.ts">VideoChannelCreateResponse</a></code>
+- <code><a href="./src/resources/video-channels.ts">VideoChannelRetrieveResponse</a></code>
+- <code><a href="./src/resources/video-channels.ts">VideoChannelUpdateResponse</a></code>
+- <code><a href="./src/resources/video-channels.ts">VideoChannelDeleteResponse</a></code>
+- <code><a href="./src/resources/video-channels.ts">VideoChannelMediaResponse</a></code>
+- <code><a href="./src/resources/video-channels.ts">VideoChannelAssignMediaResponse</a></code>
+- <code><a href="./src/resources/video-channels.ts">VideoChannelRemoveMediaResponse</a></code>
+- <code><a href="./src/resources/video-channels.ts">VideoChannelReorderResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/video-channels">client.videoChannels.<a href="./src/resources/video-channels.ts">list</a>({ ...params }) -> VideoChannelListResponsesCursor</code>
+- <code title="post /rest/v1/video-channels">client.videoChannels.<a href="./src/resources/video-channels.ts">create</a>({ ...params }) -> VideoChannelCreateResponse</code>
+- <code title="get /rest/v1/video-channels/{id}">client.videoChannels.<a href="./src/resources/video-channels.ts">retrieve</a>(id) -> VideoChannelRetrieveResponse</code>
+- <code title="patch /rest/v1/video-channels/{id}">client.videoChannels.<a href="./src/resources/video-channels.ts">update</a>(id, { ...params }) -> VideoChannelUpdateResponse</code>
+- <code title="delete /rest/v1/video-channels/{id}">client.videoChannels.<a href="./src/resources/video-channels.ts">delete</a>(id) -> VideoChannelDeleteResponse</code>
+- <code title="get /rest/v1/video-channels/{id}/media">client.videoChannels.<a href="./src/resources/video-channels.ts">media</a>(id) -> VideoChannelMediaResponse</code>
+- <code title="post /rest/v1/video-channels/{id}/media">client.videoChannels.<a href="./src/resources/video-channels.ts">assignMedia</a>(id, { ...params }) -> VideoChannelAssignMediaResponse</code>
+- <code title="delete /rest/v1/video-channels/{id}/media">client.videoChannels.<a href="./src/resources/video-channels.ts">removeMedia</a>(id, { ...params }) -> VideoChannelRemoveMediaResponse</code>
+- <code title="post /rest/v1/video-channels/{id}/reorder">client.videoChannels.<a href="./src/resources/video-channels.ts">reorder</a>(id, { ...params }) -> VideoChannelReorderResponse</code>
+
 # Videos
 
 Types:

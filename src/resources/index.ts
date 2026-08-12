@@ -328,6 +328,25 @@ export {
   type VersionListResponsesCursor,
 } from './versions';
 export {
+  VideoChannels,
+  type VideoChannelListResponse,
+  type VideoChannelCreateResponse,
+  type VideoChannelRetrieveResponse,
+  type VideoChannelUpdateResponse,
+  type VideoChannelDeleteResponse,
+  type VideoChannelMediaResponse,
+  type VideoChannelAssignMediaResponse,
+  type VideoChannelRemoveMediaResponse,
+  type VideoChannelReorderResponse,
+  type VideoChannelListParams,
+  type VideoChannelCreateParams,
+  type VideoChannelUpdateParams,
+  type VideoChannelAssignMediaParams,
+  type VideoChannelRemoveMediaParams,
+  type VideoChannelReorderParams,
+  type VideoChannelListResponsesCursor,
+} from './video-channels';
+export {
   Videos,
   type VideoListResponse,
   type VideoCreateResponse,
