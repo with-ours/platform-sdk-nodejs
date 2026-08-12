@@ -175,10 +175,15 @@ import {
   Experiments,
 } from './resources/experiments';
 import {
+  FunnelCreateParams,
+  FunnelCreateResponse,
+  FunnelDeleteResponse,
   FunnelListResponse,
   FunnelResultsParams,
   FunnelResultsResponse,
   FunnelRetrieveResponse,
+  FunnelUpdateParams,
+  FunnelUpdateResponse,
   Funnels,
 } from './resources/funnels';
 import {
@@ -1369,8 +1374,13 @@ export declare namespace OursPrivacyPlatform {
   export {
     Funnels as Funnels,
     type FunnelListResponse as FunnelListResponse,
+    type FunnelCreateResponse as FunnelCreateResponse,
     type FunnelRetrieveResponse as FunnelRetrieveResponse,
+    type FunnelUpdateResponse as FunnelUpdateResponse,
+    type FunnelDeleteResponse as FunnelDeleteResponse,
     type FunnelResultsResponse as FunnelResultsResponse,
+    type FunnelCreateParams as FunnelCreateParams,
+    type FunnelUpdateParams as FunnelUpdateParams,
     type FunnelResultsParams as FunnelResultsParams,
   };
 

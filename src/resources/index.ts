@@ -158,8 +158,13 @@ export {
 export {
   Funnels,
   type FunnelListResponse,
+  type FunnelCreateResponse,
   type FunnelRetrieveResponse,
+  type FunnelUpdateResponse,
+  type FunnelDeleteResponse,
   type FunnelResultsResponse,
+  type FunnelCreateParams,
+  type FunnelUpdateParams,
   type FunnelResultsParams,
 } from './funnels';
 export {

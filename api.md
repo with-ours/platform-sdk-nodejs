@@ -241,13 +241,19 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/funnels.ts">FunnelListResponse</a></code>
+- <code><a href="./src/resources/funnels.ts">FunnelCreateResponse</a></code>
 - <code><a href="./src/resources/funnels.ts">FunnelRetrieveResponse</a></code>
+- <code><a href="./src/resources/funnels.ts">FunnelUpdateResponse</a></code>
+- <code><a href="./src/resources/funnels.ts">FunnelDeleteResponse</a></code>
 - <code><a href="./src/resources/funnels.ts">FunnelResultsResponse</a></code>
 
 Methods:
 
 - <code title="get /rest/v1/funnels">client.funnels.<a href="./src/resources/funnels.ts">list</a>() -> FunnelListResponse</code>
+- <code title="post /rest/v1/funnels">client.funnels.<a href="./src/resources/funnels.ts">create</a>({ ...params }) -> FunnelCreateResponse</code>
 - <code title="get /rest/v1/funnels/{id}">client.funnels.<a href="./src/resources/funnels.ts">retrieve</a>(id) -> FunnelRetrieveResponse</code>
+- <code title="patch /rest/v1/funnels/{id}">client.funnels.<a href="./src/resources/funnels.ts">update</a>(id, { ...params }) -> FunnelUpdateResponse</code>
+- <code title="delete /rest/v1/funnels/{id}">client.funnels.<a href="./src/resources/funnels.ts">delete</a>(id) -> FunnelDeleteResponse</code>
 - <code title="get /rest/v1/funnels/{id}/results">client.funnels.<a href="./src/resources/funnels.ts">results</a>(id, { ...params }) -> FunnelResultsResponse</code>
 
 # HeatmapPages
