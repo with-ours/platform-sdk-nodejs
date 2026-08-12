@@ -24,6 +24,18 @@ export {
   type AttributionUtmComparisonParams,
 } from './attribution';
 export {
+  AudienceConversionReports,
+  type AudienceConversionReportListResponse,
+  type AudienceConversionReportCreateResponse,
+  type AudienceConversionReportRetrieveResponse,
+  type AudienceConversionReportUpdateResponse,
+  type AudienceConversionReportDeleteResponse,
+  type AudienceConversionReportResultsResponse,
+  type AudienceConversionReportCreateParams,
+  type AudienceConversionReportUpdateParams,
+  type AudienceConversionReportResultsParams,
+} from './audience-conversion-reports';
+export {
   ConsentAnalytics,
   type ConsentAnalyticsListResponse,
   type ConsentAnalyticsListParams,

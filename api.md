@@ -34,6 +34,26 @@ Methods:
 - <code title="get /rest/v1/attribution/audience-conversion">client.attribution.<a href="./src/resources/attribution.ts">audienceConversion</a>({ ...params }) -> AttributionAudienceConversionResponse</code>
 - <code title="get /rest/v1/attribution/utm-comparison">client.attribution.<a href="./src/resources/attribution.ts">utmComparison</a>({ ...params }) -> AttributionUtmComparisonResponse</code>
 
+# AudienceConversionReports
+
+Types:
+
+- <code><a href="./src/resources/audience-conversion-reports.ts">AudienceConversionReportListResponse</a></code>
+- <code><a href="./src/resources/audience-conversion-reports.ts">AudienceConversionReportCreateResponse</a></code>
+- <code><a href="./src/resources/audience-conversion-reports.ts">AudienceConversionReportRetrieveResponse</a></code>
+- <code><a href="./src/resources/audience-conversion-reports.ts">AudienceConversionReportUpdateResponse</a></code>
+- <code><a href="./src/resources/audience-conversion-reports.ts">AudienceConversionReportDeleteResponse</a></code>
+- <code><a href="./src/resources/audience-conversion-reports.ts">AudienceConversionReportResultsResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/audience-conversion-reports">client.audienceConversionReports.<a href="./src/resources/audience-conversion-reports.ts">list</a>() -> AudienceConversionReportListResponse</code>
+- <code title="post /rest/v1/audience-conversion-reports">client.audienceConversionReports.<a href="./src/resources/audience-conversion-reports.ts">create</a>({ ...params }) -> AudienceConversionReportCreateResponse</code>
+- <code title="get /rest/v1/audience-conversion-reports/{id}">client.audienceConversionReports.<a href="./src/resources/audience-conversion-reports.ts">retrieve</a>(id) -> AudienceConversionReportRetrieveResponse</code>
+- <code title="patch /rest/v1/audience-conversion-reports/{id}">client.audienceConversionReports.<a href="./src/resources/audience-conversion-reports.ts">update</a>(id, { ...params }) -> AudienceConversionReportUpdateResponse</code>
+- <code title="delete /rest/v1/audience-conversion-reports/{id}">client.audienceConversionReports.<a href="./src/resources/audience-conversion-reports.ts">delete</a>(id) -> AudienceConversionReportDeleteResponse</code>
+- <code title="get /rest/v1/audience-conversion-reports/{id}/results">client.audienceConversionReports.<a href="./src/resources/audience-conversion-reports.ts">results</a>(id, { ...params }) -> AudienceConversionReportResultsResponse</code>
+
 # ConsentAnalytics
 
 Types:

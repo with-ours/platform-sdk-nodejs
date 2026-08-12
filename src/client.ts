@@ -43,6 +43,18 @@ import {
   AttributionUtmComparisonResponse,
 } from './resources/attribution';
 import {
+  AudienceConversionReportCreateParams,
+  AudienceConversionReportCreateResponse,
+  AudienceConversionReportDeleteResponse,
+  AudienceConversionReportListResponse,
+  AudienceConversionReportResultsParams,
+  AudienceConversionReportResultsResponse,
+  AudienceConversionReportRetrieveResponse,
+  AudienceConversionReportUpdateParams,
+  AudienceConversionReportUpdateResponse,
+  AudienceConversionReports,
+} from './resources/audience-conversion-reports';
+import {
   ConsentAnalytics,
   ConsentAnalyticsListParams,
   ConsentAnalyticsListResponse,
@@ -1122,6 +1134,7 @@ export class OursPrivacyPlatform {
 
   allowedEvents: API.AllowedEvents = new API.AllowedEvents(this);
   attribution: API.Attribution = new API.Attribution(this);
+  audienceConversionReports: API.AudienceConversionReports = new API.AudienceConversionReports(this);
   consentAnalytics: API.ConsentAnalytics = new API.ConsentAnalytics(this);
   consentSettings: API.ConsentSettings = new API.ConsentSettings(this);
   conversionJourneySummaries: API.ConversionJourneySummaries = new API.ConversionJourneySummaries(this);
@@ -1152,6 +1165,7 @@ export class OursPrivacyPlatform {
 
 OursPrivacyPlatform.AllowedEvents = AllowedEvents;
 OursPrivacyPlatform.Attribution = Attribution;
+OursPrivacyPlatform.AudienceConversionReports = AudienceConversionReports;
 OursPrivacyPlatform.ConsentAnalytics = ConsentAnalytics;
 OursPrivacyPlatform.ConsentSettings = ConsentSettings;
 OursPrivacyPlatform.ConversionJourneySummaries = ConversionJourneySummaries;
@@ -1208,6 +1222,19 @@ export declare namespace OursPrivacyPlatform {
     type AttributionConversionParams as AttributionConversionParams,
     type AttributionAudienceConversionParams as AttributionAudienceConversionParams,
     type AttributionUtmComparisonParams as AttributionUtmComparisonParams,
+  };
+
+  export {
+    AudienceConversionReports as AudienceConversionReports,
+    type AudienceConversionReportListResponse as AudienceConversionReportListResponse,
+    type AudienceConversionReportCreateResponse as AudienceConversionReportCreateResponse,
+    type AudienceConversionReportRetrieveResponse as AudienceConversionReportRetrieveResponse,
+    type AudienceConversionReportUpdateResponse as AudienceConversionReportUpdateResponse,
+    type AudienceConversionReportDeleteResponse as AudienceConversionReportDeleteResponse,
+    type AudienceConversionReportResultsResponse as AudienceConversionReportResultsResponse,
+    type AudienceConversionReportCreateParams as AudienceConversionReportCreateParams,
+    type AudienceConversionReportUpdateParams as AudienceConversionReportUpdateParams,
+    type AudienceConversionReportResultsParams as AudienceConversionReportResultsParams,
   };
 
   export {
