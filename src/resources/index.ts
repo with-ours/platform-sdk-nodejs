@@ -24,6 +24,18 @@ export {
   type AttributionUtmComparisonParams,
 } from './attribution';
 export {
+  AudienceConversionReports,
+  type AudienceConversionReportListResponse,
+  type AudienceConversionReportCreateResponse,
+  type AudienceConversionReportRetrieveResponse,
+  type AudienceConversionReportUpdateResponse,
+  type AudienceConversionReportDeleteResponse,
+  type AudienceConversionReportResultsResponse,
+  type AudienceConversionReportCreateParams,
+  type AudienceConversionReportUpdateParams,
+  type AudienceConversionReportResultsParams,
+} from './audience-conversion-reports';
+export {
   ConsentAnalytics,
   type ConsentAnalyticsListResponse,
   type ConsentAnalyticsListParams,
@@ -146,8 +158,13 @@ export {
 export {
   Funnels,
   type FunnelListResponse,
+  type FunnelCreateResponse,
   type FunnelRetrieveResponse,
+  type FunnelUpdateResponse,
+  type FunnelDeleteResponse,
   type FunnelResultsResponse,
+  type FunnelCreateParams,
+  type FunnelUpdateParams,
   type FunnelResultsParams,
 } from './funnels';
 export {
@@ -310,6 +327,25 @@ export {
   type VersionRevertParams,
   type VersionListResponsesCursor,
 } from './versions';
+export {
+  VideoChannels,
+  type VideoChannelListResponse,
+  type VideoChannelCreateResponse,
+  type VideoChannelRetrieveResponse,
+  type VideoChannelUpdateResponse,
+  type VideoChannelDeleteResponse,
+  type VideoChannelMediaResponse,
+  type VideoChannelAssignMediaResponse,
+  type VideoChannelRemoveMediaResponse,
+  type VideoChannelReorderResponse,
+  type VideoChannelListParams,
+  type VideoChannelCreateParams,
+  type VideoChannelUpdateParams,
+  type VideoChannelAssignMediaParams,
+  type VideoChannelRemoveMediaParams,
+  type VideoChannelReorderParams,
+  type VideoChannelListResponsesCursor,
+} from './video-channels';
 export {
   Videos,
   type VideoListResponse,

@@ -34,6 +34,26 @@ Methods:
 - <code title="get /rest/v1/attribution/audience-conversion">client.attribution.<a href="./src/resources/attribution.ts">audienceConversion</a>({ ...params }) -> AttributionAudienceConversionResponse</code>
 - <code title="get /rest/v1/attribution/utm-comparison">client.attribution.<a href="./src/resources/attribution.ts">utmComparison</a>({ ...params }) -> AttributionUtmComparisonResponse</code>
 
+# AudienceConversionReports
+
+Types:
+
+- <code><a href="./src/resources/audience-conversion-reports.ts">AudienceConversionReportListResponse</a></code>
+- <code><a href="./src/resources/audience-conversion-reports.ts">AudienceConversionReportCreateResponse</a></code>
+- <code><a href="./src/resources/audience-conversion-reports.ts">AudienceConversionReportRetrieveResponse</a></code>
+- <code><a href="./src/resources/audience-conversion-reports.ts">AudienceConversionReportUpdateResponse</a></code>
+- <code><a href="./src/resources/audience-conversion-reports.ts">AudienceConversionReportDeleteResponse</a></code>
+- <code><a href="./src/resources/audience-conversion-reports.ts">AudienceConversionReportResultsResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/audience-conversion-reports">client.audienceConversionReports.<a href="./src/resources/audience-conversion-reports.ts">list</a>() -> AudienceConversionReportListResponse</code>
+- <code title="post /rest/v1/audience-conversion-reports">client.audienceConversionReports.<a href="./src/resources/audience-conversion-reports.ts">create</a>({ ...params }) -> AudienceConversionReportCreateResponse</code>
+- <code title="get /rest/v1/audience-conversion-reports/{id}">client.audienceConversionReports.<a href="./src/resources/audience-conversion-reports.ts">retrieve</a>(id) -> AudienceConversionReportRetrieveResponse</code>
+- <code title="patch /rest/v1/audience-conversion-reports/{id}">client.audienceConversionReports.<a href="./src/resources/audience-conversion-reports.ts">update</a>(id, { ...params }) -> AudienceConversionReportUpdateResponse</code>
+- <code title="delete /rest/v1/audience-conversion-reports/{id}">client.audienceConversionReports.<a href="./src/resources/audience-conversion-reports.ts">delete</a>(id) -> AudienceConversionReportDeleteResponse</code>
+- <code title="get /rest/v1/audience-conversion-reports/{id}/results">client.audienceConversionReports.<a href="./src/resources/audience-conversion-reports.ts">results</a>(id, { ...params }) -> AudienceConversionReportResultsResponse</code>
+
 # ConsentAnalytics
 
 Types:
@@ -221,13 +241,19 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/funnels.ts">FunnelListResponse</a></code>
+- <code><a href="./src/resources/funnels.ts">FunnelCreateResponse</a></code>
 - <code><a href="./src/resources/funnels.ts">FunnelRetrieveResponse</a></code>
+- <code><a href="./src/resources/funnels.ts">FunnelUpdateResponse</a></code>
+- <code><a href="./src/resources/funnels.ts">FunnelDeleteResponse</a></code>
 - <code><a href="./src/resources/funnels.ts">FunnelResultsResponse</a></code>
 
 Methods:
 
 - <code title="get /rest/v1/funnels">client.funnels.<a href="./src/resources/funnels.ts">list</a>() -> FunnelListResponse</code>
+- <code title="post /rest/v1/funnels">client.funnels.<a href="./src/resources/funnels.ts">create</a>({ ...params }) -> FunnelCreateResponse</code>
 - <code title="get /rest/v1/funnels/{id}">client.funnels.<a href="./src/resources/funnels.ts">retrieve</a>(id) -> FunnelRetrieveResponse</code>
+- <code title="patch /rest/v1/funnels/{id}">client.funnels.<a href="./src/resources/funnels.ts">update</a>(id, { ...params }) -> FunnelUpdateResponse</code>
+- <code title="delete /rest/v1/funnels/{id}">client.funnels.<a href="./src/resources/funnels.ts">delete</a>(id) -> FunnelDeleteResponse</code>
 - <code title="get /rest/v1/funnels/{id}/results">client.funnels.<a href="./src/resources/funnels.ts">results</a>(id, { ...params }) -> FunnelResultsResponse</code>
 
 # HeatmapPages
@@ -475,6 +501,32 @@ Methods:
 - <code title="get /rest/v1/versions/{id}/diff">client.versions.<a href="./src/resources/versions.ts">diff</a>(id, { ...params }) -> VersionDiffResponse</code>
 - <code title="post /rest/v1/versions/{id}/revert">client.versions.<a href="./src/resources/versions.ts">revert</a>(id, { ...params }) -> VersionRevertResponse</code>
 - <code title="post /rest/v1/versions/{id}/abandon">client.versions.<a href="./src/resources/versions.ts">abandon</a>(id) -> VersionAbandonResponse</code>
+
+# VideoChannels
+
+Types:
+
+- <code><a href="./src/resources/video-channels.ts">VideoChannelListResponse</a></code>
+- <code><a href="./src/resources/video-channels.ts">VideoChannelCreateResponse</a></code>
+- <code><a href="./src/resources/video-channels.ts">VideoChannelRetrieveResponse</a></code>
+- <code><a href="./src/resources/video-channels.ts">VideoChannelUpdateResponse</a></code>
+- <code><a href="./src/resources/video-channels.ts">VideoChannelDeleteResponse</a></code>
+- <code><a href="./src/resources/video-channels.ts">VideoChannelMediaResponse</a></code>
+- <code><a href="./src/resources/video-channels.ts">VideoChannelAssignMediaResponse</a></code>
+- <code><a href="./src/resources/video-channels.ts">VideoChannelRemoveMediaResponse</a></code>
+- <code><a href="./src/resources/video-channels.ts">VideoChannelReorderResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/video-channels">client.videoChannels.<a href="./src/resources/video-channels.ts">list</a>({ ...params }) -> VideoChannelListResponsesCursor</code>
+- <code title="post /rest/v1/video-channels">client.videoChannels.<a href="./src/resources/video-channels.ts">create</a>({ ...params }) -> VideoChannelCreateResponse</code>
+- <code title="get /rest/v1/video-channels/{id}">client.videoChannels.<a href="./src/resources/video-channels.ts">retrieve</a>(id) -> VideoChannelRetrieveResponse</code>
+- <code title="patch /rest/v1/video-channels/{id}">client.videoChannels.<a href="./src/resources/video-channels.ts">update</a>(id, { ...params }) -> VideoChannelUpdateResponse</code>
+- <code title="delete /rest/v1/video-channels/{id}">client.videoChannels.<a href="./src/resources/video-channels.ts">delete</a>(id) -> VideoChannelDeleteResponse</code>
+- <code title="get /rest/v1/video-channels/{id}/media">client.videoChannels.<a href="./src/resources/video-channels.ts">media</a>(id) -> VideoChannelMediaResponse</code>
+- <code title="post /rest/v1/video-channels/{id}/media">client.videoChannels.<a href="./src/resources/video-channels.ts">assignMedia</a>(id, { ...params }) -> VideoChannelAssignMediaResponse</code>
+- <code title="delete /rest/v1/video-channels/{id}/media">client.videoChannels.<a href="./src/resources/video-channels.ts">removeMedia</a>(id, { ...params }) -> VideoChannelRemoveMediaResponse</code>
+- <code title="post /rest/v1/video-channels/{id}/reorder">client.videoChannels.<a href="./src/resources/video-channels.ts">reorder</a>(id, { ...params }) -> VideoChannelReorderResponse</code>
 
 # Videos
 

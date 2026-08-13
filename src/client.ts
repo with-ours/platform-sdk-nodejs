@@ -43,6 +43,18 @@ import {
   AttributionUtmComparisonResponse,
 } from './resources/attribution';
 import {
+  AudienceConversionReportCreateParams,
+  AudienceConversionReportCreateResponse,
+  AudienceConversionReportDeleteResponse,
+  AudienceConversionReportListResponse,
+  AudienceConversionReportResultsParams,
+  AudienceConversionReportResultsResponse,
+  AudienceConversionReportRetrieveResponse,
+  AudienceConversionReportUpdateParams,
+  AudienceConversionReportUpdateResponse,
+  AudienceConversionReports,
+} from './resources/audience-conversion-reports';
+import {
   ConsentAnalytics,
   ConsentAnalyticsListParams,
   ConsentAnalyticsListResponse,
@@ -163,10 +175,15 @@ import {
   Experiments,
 } from './resources/experiments';
 import {
+  FunnelCreateParams,
+  FunnelCreateResponse,
+  FunnelDeleteResponse,
   FunnelListResponse,
   FunnelResultsParams,
   FunnelResultsResponse,
   FunnelRetrieveResponse,
+  FunnelUpdateParams,
+  FunnelUpdateResponse,
   Funnels,
 } from './resources/funnels';
 import {
@@ -329,6 +346,25 @@ import {
   VersionUpdateResponse,
   Versions,
 } from './resources/versions';
+import {
+  VideoChannelAssignMediaParams,
+  VideoChannelAssignMediaResponse,
+  VideoChannelCreateParams,
+  VideoChannelCreateResponse,
+  VideoChannelDeleteResponse,
+  VideoChannelListParams,
+  VideoChannelListResponse,
+  VideoChannelListResponsesCursor,
+  VideoChannelMediaResponse,
+  VideoChannelRemoveMediaParams,
+  VideoChannelRemoveMediaResponse,
+  VideoChannelReorderParams,
+  VideoChannelReorderResponse,
+  VideoChannelRetrieveResponse,
+  VideoChannelUpdateParams,
+  VideoChannelUpdateResponse,
+  VideoChannels,
+} from './resources/video-channels';
 import {
   VideoAnalyticsParams,
   VideoAnalyticsResponse,
@@ -1122,6 +1158,7 @@ export class OursPrivacyPlatform {
 
   allowedEvents: API.AllowedEvents = new API.AllowedEvents(this);
   attribution: API.Attribution = new API.Attribution(this);
+  audienceConversionReports: API.AudienceConversionReports = new API.AudienceConversionReports(this);
   consentAnalytics: API.ConsentAnalytics = new API.ConsentAnalytics(this);
   consentSettings: API.ConsentSettings = new API.ConsentSettings(this);
   conversionJourneySummaries: API.ConversionJourneySummaries = new API.ConversionJourneySummaries(this);
@@ -1145,6 +1182,7 @@ export class OursPrivacyPlatform {
   tagManagerFolders: API.TagManagerFolders = new API.TagManagerFolders(this);
   tagManagerAssetFolders: API.TagManagerAssetFolders = new API.TagManagerAssetFolders(this);
   versions: API.Versions = new API.Versions(this);
+  videoChannels: API.VideoChannels = new API.VideoChannels(this);
   videos: API.Videos = new API.Videos(this);
   webScannerRules: API.WebScannerRules = new API.WebScannerRules(this);
   webScanners: API.WebScanners = new API.WebScanners(this);
@@ -1152,6 +1190,7 @@ export class OursPrivacyPlatform {
 
 OursPrivacyPlatform.AllowedEvents = AllowedEvents;
 OursPrivacyPlatform.Attribution = Attribution;
+OursPrivacyPlatform.AudienceConversionReports = AudienceConversionReports;
 OursPrivacyPlatform.ConsentAnalytics = ConsentAnalytics;
 OursPrivacyPlatform.ConsentSettings = ConsentSettings;
 OursPrivacyPlatform.ConversionJourneySummaries = ConversionJourneySummaries;
@@ -1175,6 +1214,7 @@ OursPrivacyPlatform.TagManagerVariables = TagManagerVariables;
 OursPrivacyPlatform.TagManagerFolders = TagManagerFolders;
 OursPrivacyPlatform.TagManagerAssetFolders = TagManagerAssetFolders;
 OursPrivacyPlatform.Versions = Versions;
+OursPrivacyPlatform.VideoChannels = VideoChannels;
 OursPrivacyPlatform.Videos = Videos;
 OursPrivacyPlatform.WebScannerRules = WebScannerRules;
 OursPrivacyPlatform.WebScanners = WebScanners;
@@ -1208,6 +1248,19 @@ export declare namespace OursPrivacyPlatform {
     type AttributionConversionParams as AttributionConversionParams,
     type AttributionAudienceConversionParams as AttributionAudienceConversionParams,
     type AttributionUtmComparisonParams as AttributionUtmComparisonParams,
+  };
+
+  export {
+    AudienceConversionReports as AudienceConversionReports,
+    type AudienceConversionReportListResponse as AudienceConversionReportListResponse,
+    type AudienceConversionReportCreateResponse as AudienceConversionReportCreateResponse,
+    type AudienceConversionReportRetrieveResponse as AudienceConversionReportRetrieveResponse,
+    type AudienceConversionReportUpdateResponse as AudienceConversionReportUpdateResponse,
+    type AudienceConversionReportDeleteResponse as AudienceConversionReportDeleteResponse,
+    type AudienceConversionReportResultsResponse as AudienceConversionReportResultsResponse,
+    type AudienceConversionReportCreateParams as AudienceConversionReportCreateParams,
+    type AudienceConversionReportUpdateParams as AudienceConversionReportUpdateParams,
+    type AudienceConversionReportResultsParams as AudienceConversionReportResultsParams,
   };
 
   export {
@@ -1342,8 +1395,13 @@ export declare namespace OursPrivacyPlatform {
   export {
     Funnels as Funnels,
     type FunnelListResponse as FunnelListResponse,
+    type FunnelCreateResponse as FunnelCreateResponse,
     type FunnelRetrieveResponse as FunnelRetrieveResponse,
+    type FunnelUpdateResponse as FunnelUpdateResponse,
+    type FunnelDeleteResponse as FunnelDeleteResponse,
     type FunnelResultsResponse as FunnelResultsResponse,
+    type FunnelCreateParams as FunnelCreateParams,
+    type FunnelUpdateParams as FunnelUpdateParams,
     type FunnelResultsParams as FunnelResultsParams,
   };
 
@@ -1518,6 +1576,26 @@ export declare namespace OursPrivacyPlatform {
     type VersionUpdateParams as VersionUpdateParams,
     type VersionDiffParams as VersionDiffParams,
     type VersionRevertParams as VersionRevertParams,
+  };
+
+  export {
+    VideoChannels as VideoChannels,
+    type VideoChannelListResponse as VideoChannelListResponse,
+    type VideoChannelCreateResponse as VideoChannelCreateResponse,
+    type VideoChannelRetrieveResponse as VideoChannelRetrieveResponse,
+    type VideoChannelUpdateResponse as VideoChannelUpdateResponse,
+    type VideoChannelDeleteResponse as VideoChannelDeleteResponse,
+    type VideoChannelMediaResponse as VideoChannelMediaResponse,
+    type VideoChannelAssignMediaResponse as VideoChannelAssignMediaResponse,
+    type VideoChannelRemoveMediaResponse as VideoChannelRemoveMediaResponse,
+    type VideoChannelReorderResponse as VideoChannelReorderResponse,
+    type VideoChannelListResponsesCursor as VideoChannelListResponsesCursor,
+    type VideoChannelListParams as VideoChannelListParams,
+    type VideoChannelCreateParams as VideoChannelCreateParams,
+    type VideoChannelUpdateParams as VideoChannelUpdateParams,
+    type VideoChannelAssignMediaParams as VideoChannelAssignMediaParams,
+    type VideoChannelRemoveMediaParams as VideoChannelRemoveMediaParams,
+    type VideoChannelReorderParams as VideoChannelReorderParams,
   };
 
   export {

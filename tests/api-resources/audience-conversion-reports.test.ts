@@ -7,9 +7,9 @@ const client = new OursPrivacyPlatform({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource funnels', () => {
+describe('resource audienceConversionReports', () => {
   test('list', async () => {
-    const responsePromise = client.funnels.list();
+    const responsePromise = client.audienceConversionReports.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -20,12 +20,11 @@ describe('resource funnels', () => {
   });
 
   test('create: only required params', async () => {
-    const responsePromise = client.funnels.create({
-      name: 'name',
-      steps: [
-        { eventName: 'eventName', name: 'name', order: 0 },
-        { eventName: 'eventName', name: 'name', order: 0 },
-      ],
+    const responsePromise = client.audienceConversionReports.create({
+      attributionWindow: 'attributionWindow',
+      eventName: 'x',
+      name: 'x',
+      valueProperty: 'x',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -37,52 +36,21 @@ describe('resource funnels', () => {
   });
 
   test('create: required and optional params', async () => {
-    const response = await client.funnels.create({
-      name: 'name',
-      steps: [
-        {
-          eventName: 'eventName',
-          name: 'name',
-          order: 0,
-          filters: {},
-          logic: {
-            AND: [{}],
-            condition: { operator: 'Is', property: 'property', value: 'value' },
-            NOT: {},
-            OR: [{}],
-          },
-        },
-        {
-          eventName: 'eventName',
-          name: 'name',
-          order: 0,
-          filters: {},
-          logic: {
-            AND: [{}],
-            condition: { operator: 'Is', property: 'property', value: 'value' },
-            NOT: {},
-            OR: [{}],
-          },
-        },
-      ],
-      conversionWindow: {},
-      countingMethod: 'countingMethod',
-      description: 'description',
-      funnelType: 'SESSION_BASED',
-      globalLogic: {
-        AND: [{}],
-        condition: { operator: 'Is', property: 'property', value: 'value' },
-        NOT: {},
-        OR: [{}],
-      },
-      stepOrder: 'stepOrder',
-      utmFilters: {},
-      watched: true,
+    const response = await client.audienceConversionReports.create({
+      attributionWindow: 'attributionWindow',
+      eventName: 'x',
+      name: 'x',
+      valueProperty: 'x',
+      dateFrom: 'dateFrom',
+      dateTo: 'dateTo',
+      excludeBots: true,
+      filters: [{ dimension: 'browser', operator: 'CONTAINS', value: 'x', values: ['string'] }],
+      webSourceId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
     });
   });
 
   test('retrieve', async () => {
-    const responsePromise = client.funnels.retrieve('id');
+    const responsePromise = client.audienceConversionReports.retrieve('id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -93,7 +61,7 @@ describe('resource funnels', () => {
   });
 
   test('update', async () => {
-    const responsePromise = client.funnels.update('id', {});
+    const responsePromise = client.audienceConversionReports.update('id', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -104,7 +72,7 @@ describe('resource funnels', () => {
   });
 
   test('delete', async () => {
-    const responsePromise = client.funnels.delete('id');
+    const responsePromise = client.audienceConversionReports.delete('id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -114,8 +82,8 @@ describe('resource funnels', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('results: only required params', async () => {
-    const responsePromise = client.funnels.results('id', { from: '2026-06-01', to: '2026-06-30' });
+  test('results', async () => {
+    const responsePromise = client.audienceConversionReports.results('id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -123,20 +91,5 @@ describe('resource funnels', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('results: required and optional params', async () => {
-    const response = await client.funnels.results('id', {
-      from: '2026-06-01',
-      to: '2026-06-30',
-      attributionType: 'INITIAL',
-      deviceType: 'DESKTOP',
-      utmCampaign: 'x',
-      utmContent: 'x',
-      utmMedium: 'x',
-      utmName: 'x',
-      utmSource: 'x',
-      utmTerm: 'x',
-    });
   });
 });

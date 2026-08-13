@@ -112,14 +112,15 @@ export class WebScanners extends APIResource {
   /**
    * Compliance summary for a scan run — the rolled-up "what does this site look
    * like, and what still needs a decision" view, assembled server-side so you do not
-   * have to page every finding. Includes total host/vendor/cookie counts, a
-   * breakdown by risk and by category, coverage (how many hosts are already covered
-   * by a CMP consent service or a suppression rule vs. how many still need a
-   * decision), the new/removed host delta versus the previous run, and up to 10
-   * highest-risk hosts that still need a decision. Defaults to the latest run; pass
-   * `date` (an ISO-8601 timestamp; only the calendar day is used to select the run)
-   * to read an earlier run. Clear a host that needs a decision by adding it to a CMP
-   * consent service or creating a suppression rule with
+   * have to page every finding. Includes total host/vendor/cookie counts, captured
+   * privacy policies and host coverage, a breakdown by risk and by category, coverage
+   * (how many hosts are already covered by a CMP consent service or a suppression
+   * rule vs. how many still need a decision), the new/removed host delta versus the
+   * previous run, and up to 10 highest-risk hosts that still need a decision. A null
+   * privacyPolicyUrl means that no policy was captured for the hostname. Defaults to
+   * the latest run; pass `date` (an ISO-8601 timestamp; only the calendar day is used
+   * to select the run) to read an earlier run. Clear a host that needs a decision by
+   * adding it to a CMP consent service or creating a suppression rule with
    * `POST /rest/v1/web-scanner-rules`. When the scanner has no completed runs, every
    * count is 0 and `runDate` is null. Requires scope: webScanner:find
    */
@@ -143,6 +144,8 @@ export namespace WebScannerListResponse {
     accountId: string;
 
     rootDomain: string;
+
+    scanSchedule: 'daily' | 'manual' | 'monthly' | 'weekly';
 
     scanStatus: 'idle' | 'scanning';
 
