@@ -217,6 +217,13 @@ export {
   type ReplaySettingListResponsesCursor,
 } from './replay-settings';
 export {
+  SessionReplays,
+  type SessionReplayListResponse,
+  type SessionReplayOverviewResponse,
+  type SessionReplayListParams,
+  type SessionReplayOverviewParams,
+} from './session-replays';
+export {
   ShortLinks,
   type ShortLinkListResponse,
   type ShortLinkCreateResponse,

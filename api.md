@@ -330,6 +330,18 @@ Methods:
 - <code title="patch /rest/v1/replay-settings/{id}">client.replaySettings.<a href="./src/resources/replay-settings.ts">update</a>(id, { ...params }) -> ReplaySettingUpdateResponse</code>
 - <code title="delete /rest/v1/replay-settings/{id}">client.replaySettings.<a href="./src/resources/replay-settings.ts">delete</a>(id) -> ReplaySettingDeleteResponse</code>
 
+# SessionReplays
+
+Types:
+
+- <code><a href="./src/resources/session-replays.ts">SessionReplayListResponse</a></code>
+- <code><a href="./src/resources/session-replays.ts">SessionReplayOverviewResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/session-replays">client.sessionReplays.<a href="./src/resources/session-replays.ts">list</a>({ ...params }) -> SessionReplayListResponse</code>
+- <code title="get /rest/v1/session-replays/overview">client.sessionReplays.<a href="./src/resources/session-replays.ts">overview</a>({ ...params }) -> SessionReplayOverviewResponse</code>
+
 # ShortLinks
 
 Types:

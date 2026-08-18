@@ -236,6 +236,13 @@ import {
   ReplaySettings,
 } from './resources/replay-settings';
 import {
+  SessionReplayListParams,
+  SessionReplayListResponse,
+  SessionReplayOverviewParams,
+  SessionReplayOverviewResponse,
+  SessionReplays,
+} from './resources/session-replays';
+import {
   ShortLinkCreateParams,
   ShortLinkCreateResponse,
   ShortLinkDeleteResponse,
@@ -1173,6 +1180,7 @@ export class OursPrivacyPlatform {
   locations: API.Locations = new API.Locations(this);
   mappings: API.Mappings = new API.Mappings(this);
   replaySettings: API.ReplaySettings = new API.ReplaySettings(this);
+  sessionReplays: API.SessionReplays = new API.SessionReplays(this);
   shortLinks: API.ShortLinks = new API.ShortLinks(this);
   sources: API.Sources = new API.Sources(this);
   tagManagers: API.TagManagers = new API.TagManagers(this);
@@ -1205,6 +1213,7 @@ OursPrivacyPlatform.HeatmapPages = HeatmapPages;
 OursPrivacyPlatform.Locations = Locations;
 OursPrivacyPlatform.Mappings = Mappings;
 OursPrivacyPlatform.ReplaySettings = ReplaySettings;
+OursPrivacyPlatform.SessionReplays = SessionReplays;
 OursPrivacyPlatform.ShortLinks = ShortLinks;
 OursPrivacyPlatform.Sources = Sources;
 OursPrivacyPlatform.TagManagers = TagManagers;
@@ -1456,6 +1465,14 @@ export declare namespace OursPrivacyPlatform {
     type ReplaySettingListParams as ReplaySettingListParams,
     type ReplaySettingCreateParams as ReplaySettingCreateParams,
     type ReplaySettingUpdateParams as ReplaySettingUpdateParams,
+  };
+
+  export {
+    SessionReplays as SessionReplays,
+    type SessionReplayListResponse as SessionReplayListResponse,
+    type SessionReplayOverviewResponse as SessionReplayOverviewResponse,
+    type SessionReplayListParams as SessionReplayListParams,
+    type SessionReplayOverviewParams as SessionReplayOverviewParams,
   };
 
   export {
