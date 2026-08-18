@@ -336,6 +336,11 @@ import {
   TagManagers,
 } from './resources/tag-managers';
 import {
+  TranslationWidgetAnalyticsParams,
+  TranslationWidgetAnalyticsResponse,
+  TranslationWidgets,
+} from './resources/translation-widgets';
+import {
   VersionAbandonResponse,
   VersionCreateParams,
   VersionCreateResponse,
@@ -1189,6 +1194,7 @@ export class OursPrivacyPlatform {
   tagManagerVariables: API.TagManagerVariables = new API.TagManagerVariables(this);
   tagManagerFolders: API.TagManagerFolders = new API.TagManagerFolders(this);
   tagManagerAssetFolders: API.TagManagerAssetFolders = new API.TagManagerAssetFolders(this);
+  translationWidgets: API.TranslationWidgets = new API.TranslationWidgets(this);
   versions: API.Versions = new API.Versions(this);
   videoChannels: API.VideoChannels = new API.VideoChannels(this);
   videos: API.Videos = new API.Videos(this);
@@ -1222,6 +1228,7 @@ OursPrivacyPlatform.TagManagerTriggers = TagManagerTriggers;
 OursPrivacyPlatform.TagManagerVariables = TagManagerVariables;
 OursPrivacyPlatform.TagManagerFolders = TagManagerFolders;
 OursPrivacyPlatform.TagManagerAssetFolders = TagManagerAssetFolders;
+OursPrivacyPlatform.TranslationWidgets = TranslationWidgets;
 OursPrivacyPlatform.Versions = Versions;
 OursPrivacyPlatform.VideoChannels = VideoChannels;
 OursPrivacyPlatform.Videos = Videos;
@@ -1574,6 +1581,12 @@ export declare namespace OursPrivacyPlatform {
     TagManagerAssetFolders as TagManagerAssetFolders,
     type TagManagerAssetFolderCreateResponse as TagManagerAssetFolderCreateResponse,
     type TagManagerAssetFolderCreateParams as TagManagerAssetFolderCreateParams,
+  };
+
+  export {
+    TranslationWidgets as TranslationWidgets,
+    type TranslationWidgetAnalyticsResponse as TranslationWidgetAnalyticsResponse,
+    type TranslationWidgetAnalyticsParams as TranslationWidgetAnalyticsParams,
   };
 
   export {

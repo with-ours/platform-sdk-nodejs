@@ -488,6 +488,16 @@ Methods:
 
 - <code title="post /rest/v1/tag-manager-asset-folders">client.tagManagerAssetFolders.<a href="./src/resources/tag-manager-asset-folders.ts">create</a>({ ...params }) -> TagManagerAssetFolderCreateResponse</code>
 
+# TranslationWidgets
+
+Types:
+
+- <code><a href="./src/resources/translation-widgets.ts">TranslationWidgetAnalyticsResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/translation-widgets/{id}/analytics">client.translationWidgets.<a href="./src/resources/translation-widgets.ts">analytics</a>(id, { ...params }) -> TranslationWidgetAnalyticsResponse</code>
+
 # Versions
 
 Types:

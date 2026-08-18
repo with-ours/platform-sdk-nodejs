@@ -317,6 +317,11 @@ export {
   type TagManagerUpdateParams,
 } from './tag-managers';
 export {
+  TranslationWidgets,
+  type TranslationWidgetAnalyticsResponse,
+  type TranslationWidgetAnalyticsParams,
+} from './translation-widgets';
+export {
   Versions,
   type VersionListResponse,
   type VersionCreateResponse,
