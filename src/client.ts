@@ -236,6 +236,13 @@ import {
   ReplaySettings,
 } from './resources/replay-settings';
 import {
+  SessionReplayListParams,
+  SessionReplayListResponse,
+  SessionReplayOverviewParams,
+  SessionReplayOverviewResponse,
+  SessionReplays,
+} from './resources/session-replays';
+import {
   ShortLinkCreateParams,
   ShortLinkCreateResponse,
   ShortLinkDeleteResponse,
@@ -329,6 +336,11 @@ import {
   TagManagers,
 } from './resources/tag-managers';
 import {
+  TranslationWidgetAnalyticsParams,
+  TranslationWidgetAnalyticsResponse,
+  TranslationWidgets,
+} from './resources/translation-widgets';
+import {
   VersionAbandonResponse,
   VersionCreateParams,
   VersionCreateResponse,
@@ -384,6 +396,23 @@ import {
   VideoUpdateTranscriptResponse,
   Videos,
 } from './resources/videos';
+import {
+  WebAnalytics,
+  WebAnalyticsCurrentVisitorsParams,
+  WebAnalyticsCurrentVisitorsResponse,
+  WebAnalyticsDevicesParams,
+  WebAnalyticsDevicesResponse,
+  WebAnalyticsJourneyParams,
+  WebAnalyticsJourneyResponse,
+  WebAnalyticsLocationsParams,
+  WebAnalyticsLocationsResponse,
+  WebAnalyticsOverviewParams,
+  WebAnalyticsOverviewResponse,
+  WebAnalyticsPagesParams,
+  WebAnalyticsPagesResponse,
+  WebAnalyticsSourcesParams,
+  WebAnalyticsSourcesResponse,
+} from './resources/web-analytics';
 import {
   WebScannerRuleCreateParams,
   WebScannerRuleCreateResponse,
@@ -1173,6 +1202,7 @@ export class OursPrivacyPlatform {
   locations: API.Locations = new API.Locations(this);
   mappings: API.Mappings = new API.Mappings(this);
   replaySettings: API.ReplaySettings = new API.ReplaySettings(this);
+  sessionReplays: API.SessionReplays = new API.SessionReplays(this);
   shortLinks: API.ShortLinks = new API.ShortLinks(this);
   sources: API.Sources = new API.Sources(this);
   tagManagers: API.TagManagers = new API.TagManagers(this);
@@ -1181,9 +1211,11 @@ export class OursPrivacyPlatform {
   tagManagerVariables: API.TagManagerVariables = new API.TagManagerVariables(this);
   tagManagerFolders: API.TagManagerFolders = new API.TagManagerFolders(this);
   tagManagerAssetFolders: API.TagManagerAssetFolders = new API.TagManagerAssetFolders(this);
+  translationWidgets: API.TranslationWidgets = new API.TranslationWidgets(this);
   versions: API.Versions = new API.Versions(this);
   videoChannels: API.VideoChannels = new API.VideoChannels(this);
   videos: API.Videos = new API.Videos(this);
+  webAnalytics: API.WebAnalytics = new API.WebAnalytics(this);
   webScannerRules: API.WebScannerRules = new API.WebScannerRules(this);
   webScanners: API.WebScanners = new API.WebScanners(this);
 }
@@ -1205,6 +1237,7 @@ OursPrivacyPlatform.HeatmapPages = HeatmapPages;
 OursPrivacyPlatform.Locations = Locations;
 OursPrivacyPlatform.Mappings = Mappings;
 OursPrivacyPlatform.ReplaySettings = ReplaySettings;
+OursPrivacyPlatform.SessionReplays = SessionReplays;
 OursPrivacyPlatform.ShortLinks = ShortLinks;
 OursPrivacyPlatform.Sources = Sources;
 OursPrivacyPlatform.TagManagers = TagManagers;
@@ -1213,9 +1246,11 @@ OursPrivacyPlatform.TagManagerTriggers = TagManagerTriggers;
 OursPrivacyPlatform.TagManagerVariables = TagManagerVariables;
 OursPrivacyPlatform.TagManagerFolders = TagManagerFolders;
 OursPrivacyPlatform.TagManagerAssetFolders = TagManagerAssetFolders;
+OursPrivacyPlatform.TranslationWidgets = TranslationWidgets;
 OursPrivacyPlatform.Versions = Versions;
 OursPrivacyPlatform.VideoChannels = VideoChannels;
 OursPrivacyPlatform.Videos = Videos;
+OursPrivacyPlatform.WebAnalytics = WebAnalytics;
 OursPrivacyPlatform.WebScannerRules = WebScannerRules;
 OursPrivacyPlatform.WebScanners = WebScanners;
 
@@ -1459,6 +1494,14 @@ export declare namespace OursPrivacyPlatform {
   };
 
   export {
+    SessionReplays as SessionReplays,
+    type SessionReplayListResponse as SessionReplayListResponse,
+    type SessionReplayOverviewResponse as SessionReplayOverviewResponse,
+    type SessionReplayListParams as SessionReplayListParams,
+    type SessionReplayOverviewParams as SessionReplayOverviewParams,
+  };
+
+  export {
     ShortLinks as ShortLinks,
     type ShortLinkListResponse as ShortLinkListResponse,
     type ShortLinkCreateResponse as ShortLinkCreateResponse,
@@ -1560,6 +1603,12 @@ export declare namespace OursPrivacyPlatform {
   };
 
   export {
+    TranslationWidgets as TranslationWidgets,
+    type TranslationWidgetAnalyticsResponse as TranslationWidgetAnalyticsResponse,
+    type TranslationWidgetAnalyticsParams as TranslationWidgetAnalyticsParams,
+  };
+
+  export {
     Versions as Versions,
     type VersionListResponse as VersionListResponse,
     type VersionCreateResponse as VersionCreateResponse,
@@ -1616,6 +1665,24 @@ export declare namespace OursPrivacyPlatform {
     type VideoAnalyticsParams as VideoAnalyticsParams,
     type VideoAnalyticsTimeseriesParams as VideoAnalyticsTimeseriesParams,
     type VideoUpdateTranscriptParams as VideoUpdateTranscriptParams,
+  };
+
+  export {
+    WebAnalytics as WebAnalytics,
+    type WebAnalyticsCurrentVisitorsResponse as WebAnalyticsCurrentVisitorsResponse,
+    type WebAnalyticsDevicesResponse as WebAnalyticsDevicesResponse,
+    type WebAnalyticsJourneyResponse as WebAnalyticsJourneyResponse,
+    type WebAnalyticsLocationsResponse as WebAnalyticsLocationsResponse,
+    type WebAnalyticsOverviewResponse as WebAnalyticsOverviewResponse,
+    type WebAnalyticsPagesResponse as WebAnalyticsPagesResponse,
+    type WebAnalyticsSourcesResponse as WebAnalyticsSourcesResponse,
+    type WebAnalyticsCurrentVisitorsParams as WebAnalyticsCurrentVisitorsParams,
+    type WebAnalyticsDevicesParams as WebAnalyticsDevicesParams,
+    type WebAnalyticsJourneyParams as WebAnalyticsJourneyParams,
+    type WebAnalyticsLocationsParams as WebAnalyticsLocationsParams,
+    type WebAnalyticsOverviewParams as WebAnalyticsOverviewParams,
+    type WebAnalyticsPagesParams as WebAnalyticsPagesParams,
+    type WebAnalyticsSourcesParams as WebAnalyticsSourcesParams,
   };
 
   export {
