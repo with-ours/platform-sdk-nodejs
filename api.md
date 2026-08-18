@@ -576,6 +576,28 @@ Methods:
 - <code title="get /rest/v1/videos/{id}/transcript">client.videos.<a href="./src/resources/videos.ts">transcript</a>(id) -> VideoTranscriptResponse</code>
 - <code title="put /rest/v1/videos/{id}/transcript">client.videos.<a href="./src/resources/videos.ts">updateTranscript</a>(id, { ...params }) -> VideoUpdateTranscriptResponse</code>
 
+# WebAnalytics
+
+Types:
+
+- <code><a href="./src/resources/web-analytics.ts">WebAnalyticsCurrentVisitorsResponse</a></code>
+- <code><a href="./src/resources/web-analytics.ts">WebAnalyticsDevicesResponse</a></code>
+- <code><a href="./src/resources/web-analytics.ts">WebAnalyticsJourneyResponse</a></code>
+- <code><a href="./src/resources/web-analytics.ts">WebAnalyticsLocationsResponse</a></code>
+- <code><a href="./src/resources/web-analytics.ts">WebAnalyticsOverviewResponse</a></code>
+- <code><a href="./src/resources/web-analytics.ts">WebAnalyticsPagesResponse</a></code>
+- <code><a href="./src/resources/web-analytics.ts">WebAnalyticsSourcesResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/web-analytics/current-visitors">client.webAnalytics.<a href="./src/resources/web-analytics.ts">currentVisitors</a>({ ...params }) -> WebAnalyticsCurrentVisitorsResponse</code>
+- <code title="get /rest/v1/web-analytics/devices">client.webAnalytics.<a href="./src/resources/web-analytics.ts">devices</a>({ ...params }) -> WebAnalyticsDevicesResponse</code>
+- <code title="get /rest/v1/web-analytics/journey">client.webAnalytics.<a href="./src/resources/web-analytics.ts">journey</a>({ ...params }) -> WebAnalyticsJourneyResponse</code>
+- <code title="get /rest/v1/web-analytics/locations">client.webAnalytics.<a href="./src/resources/web-analytics.ts">locations</a>({ ...params }) -> WebAnalyticsLocationsResponse</code>
+- <code title="get /rest/v1/web-analytics/overview">client.webAnalytics.<a href="./src/resources/web-analytics.ts">overview</a>({ ...params }) -> WebAnalyticsOverviewResponse</code>
+- <code title="get /rest/v1/web-analytics/pages">client.webAnalytics.<a href="./src/resources/web-analytics.ts">pages</a>({ ...params }) -> WebAnalyticsPagesResponse</code>
+- <code title="get /rest/v1/web-analytics/sources">client.webAnalytics.<a href="./src/resources/web-analytics.ts">sources</a>({ ...params }) -> WebAnalyticsSourcesResponse</code>
+
 # WebScannerRules
 
 Types:

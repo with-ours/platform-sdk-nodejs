@@ -378,6 +378,23 @@ export {
   type VideoListResponsesCursor,
 } from './videos';
 export {
+  WebAnalytics,
+  type WebAnalyticsCurrentVisitorsResponse,
+  type WebAnalyticsDevicesResponse,
+  type WebAnalyticsJourneyResponse,
+  type WebAnalyticsLocationsResponse,
+  type WebAnalyticsOverviewResponse,
+  type WebAnalyticsPagesResponse,
+  type WebAnalyticsSourcesResponse,
+  type WebAnalyticsCurrentVisitorsParams,
+  type WebAnalyticsDevicesParams,
+  type WebAnalyticsJourneyParams,
+  type WebAnalyticsLocationsParams,
+  type WebAnalyticsOverviewParams,
+  type WebAnalyticsPagesParams,
+  type WebAnalyticsSourcesParams,
+} from './web-analytics';
+export {
   WebScannerRules,
   type WebScannerRuleListResponse,
   type WebScannerRuleCreateResponse,

@@ -397,6 +397,23 @@ import {
   Videos,
 } from './resources/videos';
 import {
+  WebAnalytics,
+  WebAnalyticsCurrentVisitorsParams,
+  WebAnalyticsCurrentVisitorsResponse,
+  WebAnalyticsDevicesParams,
+  WebAnalyticsDevicesResponse,
+  WebAnalyticsJourneyParams,
+  WebAnalyticsJourneyResponse,
+  WebAnalyticsLocationsParams,
+  WebAnalyticsLocationsResponse,
+  WebAnalyticsOverviewParams,
+  WebAnalyticsOverviewResponse,
+  WebAnalyticsPagesParams,
+  WebAnalyticsPagesResponse,
+  WebAnalyticsSourcesParams,
+  WebAnalyticsSourcesResponse,
+} from './resources/web-analytics';
+import {
   WebScannerRuleCreateParams,
   WebScannerRuleCreateResponse,
   WebScannerRuleDeleteResponse,
@@ -1198,6 +1215,7 @@ export class OursPrivacyPlatform {
   versions: API.Versions = new API.Versions(this);
   videoChannels: API.VideoChannels = new API.VideoChannels(this);
   videos: API.Videos = new API.Videos(this);
+  webAnalytics: API.WebAnalytics = new API.WebAnalytics(this);
   webScannerRules: API.WebScannerRules = new API.WebScannerRules(this);
   webScanners: API.WebScanners = new API.WebScanners(this);
 }
@@ -1232,6 +1250,7 @@ OursPrivacyPlatform.TranslationWidgets = TranslationWidgets;
 OursPrivacyPlatform.Versions = Versions;
 OursPrivacyPlatform.VideoChannels = VideoChannels;
 OursPrivacyPlatform.Videos = Videos;
+OursPrivacyPlatform.WebAnalytics = WebAnalytics;
 OursPrivacyPlatform.WebScannerRules = WebScannerRules;
 OursPrivacyPlatform.WebScanners = WebScanners;
 
@@ -1646,6 +1665,24 @@ export declare namespace OursPrivacyPlatform {
     type VideoAnalyticsParams as VideoAnalyticsParams,
     type VideoAnalyticsTimeseriesParams as VideoAnalyticsTimeseriesParams,
     type VideoUpdateTranscriptParams as VideoUpdateTranscriptParams,
+  };
+
+  export {
+    WebAnalytics as WebAnalytics,
+    type WebAnalyticsCurrentVisitorsResponse as WebAnalyticsCurrentVisitorsResponse,
+    type WebAnalyticsDevicesResponse as WebAnalyticsDevicesResponse,
+    type WebAnalyticsJourneyResponse as WebAnalyticsJourneyResponse,
+    type WebAnalyticsLocationsResponse as WebAnalyticsLocationsResponse,
+    type WebAnalyticsOverviewResponse as WebAnalyticsOverviewResponse,
+    type WebAnalyticsPagesResponse as WebAnalyticsPagesResponse,
+    type WebAnalyticsSourcesResponse as WebAnalyticsSourcesResponse,
+    type WebAnalyticsCurrentVisitorsParams as WebAnalyticsCurrentVisitorsParams,
+    type WebAnalyticsDevicesParams as WebAnalyticsDevicesParams,
+    type WebAnalyticsJourneyParams as WebAnalyticsJourneyParams,
+    type WebAnalyticsLocationsParams as WebAnalyticsLocationsParams,
+    type WebAnalyticsOverviewParams as WebAnalyticsOverviewParams,
+    type WebAnalyticsPagesParams as WebAnalyticsPagesParams,
+    type WebAnalyticsSourcesParams as WebAnalyticsSourcesParams,
   };
 
   export {
