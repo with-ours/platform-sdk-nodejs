@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.44.1 (2026-08-20)
+
+Full Changelog: [v1.44.0...v1.44.1](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.44.0...v1.44.1)
+
+### Chores
+
+* bump the all-deps group with 4 updates ([4ae7581](https://github.com/with-ours/platform-sdk-nodejs/commit/4ae75811439687a7ea1f374310a94dbaf092f46e))
+* **internal:** allow the mock server port to be set with STAINLESS_MOCK_PORT ([230b110](https://github.com/with-ours/platform-sdk-nodejs/commit/230b110d8754f0be9e3dd841219111afc8dd3f1c))
+
 ## 1.44.0 (2026-08-13)
 
 Full Changelog: [v1.43.0...v1.44.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.43.0...v1.44.0)
