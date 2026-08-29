@@ -330,6 +330,18 @@ Methods:
 - <code title="patch /rest/v1/replay-settings/{id}">client.replaySettings.<a href="./src/resources/replay-settings.ts">update</a>(id, { ...params }) -> ReplaySettingUpdateResponse</code>
 - <code title="delete /rest/v1/replay-settings/{id}">client.replaySettings.<a href="./src/resources/replay-settings.ts">delete</a>(id) -> ReplaySettingDeleteResponse</code>
 
+# SessionReplays
+
+Types:
+
+- <code><a href="./src/resources/session-replays.ts">SessionReplayListResponse</a></code>
+- <code><a href="./src/resources/session-replays.ts">SessionReplayOverviewResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/session-replays">client.sessionReplays.<a href="./src/resources/session-replays.ts">list</a>({ ...params }) -> SessionReplayListResponse</code>
+- <code title="get /rest/v1/session-replays/overview">client.sessionReplays.<a href="./src/resources/session-replays.ts">overview</a>({ ...params }) -> SessionReplayOverviewResponse</code>
+
 # ShortLinks
 
 Types:
@@ -476,6 +488,16 @@ Methods:
 
 - <code title="post /rest/v1/tag-manager-asset-folders">client.tagManagerAssetFolders.<a href="./src/resources/tag-manager-asset-folders.ts">create</a>({ ...params }) -> TagManagerAssetFolderCreateResponse</code>
 
+# TranslationWidgets
+
+Types:
+
+- <code><a href="./src/resources/translation-widgets.ts">TranslationWidgetAnalyticsResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/translation-widgets/{id}/analytics">client.translationWidgets.<a href="./src/resources/translation-widgets.ts">analytics</a>(id, { ...params }) -> TranslationWidgetAnalyticsResponse</code>
+
 # Versions
 
 Types:
@@ -553,6 +575,28 @@ Methods:
 - <code title="get /rest/v1/videos/{id}/analytics">client.videos.<a href="./src/resources/videos.ts">analyticsTimeseries</a>(id, { ...params }) -> VideoAnalyticsTimeseriesResponse</code>
 - <code title="get /rest/v1/videos/{id}/transcript">client.videos.<a href="./src/resources/videos.ts">transcript</a>(id) -> VideoTranscriptResponse</code>
 - <code title="put /rest/v1/videos/{id}/transcript">client.videos.<a href="./src/resources/videos.ts">updateTranscript</a>(id, { ...params }) -> VideoUpdateTranscriptResponse</code>
+
+# WebAnalytics
+
+Types:
+
+- <code><a href="./src/resources/web-analytics.ts">WebAnalyticsCurrentVisitorsResponse</a></code>
+- <code><a href="./src/resources/web-analytics.ts">WebAnalyticsDevicesResponse</a></code>
+- <code><a href="./src/resources/web-analytics.ts">WebAnalyticsJourneyResponse</a></code>
+- <code><a href="./src/resources/web-analytics.ts">WebAnalyticsLocationsResponse</a></code>
+- <code><a href="./src/resources/web-analytics.ts">WebAnalyticsOverviewResponse</a></code>
+- <code><a href="./src/resources/web-analytics.ts">WebAnalyticsPagesResponse</a></code>
+- <code><a href="./src/resources/web-analytics.ts">WebAnalyticsSourcesResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/web-analytics/current-visitors">client.webAnalytics.<a href="./src/resources/web-analytics.ts">currentVisitors</a>({ ...params }) -> WebAnalyticsCurrentVisitorsResponse</code>
+- <code title="get /rest/v1/web-analytics/devices">client.webAnalytics.<a href="./src/resources/web-analytics.ts">devices</a>({ ...params }) -> WebAnalyticsDevicesResponse</code>
+- <code title="get /rest/v1/web-analytics/journey">client.webAnalytics.<a href="./src/resources/web-analytics.ts">journey</a>({ ...params }) -> WebAnalyticsJourneyResponse</code>
+- <code title="get /rest/v1/web-analytics/locations">client.webAnalytics.<a href="./src/resources/web-analytics.ts">locations</a>({ ...params }) -> WebAnalyticsLocationsResponse</code>
+- <code title="get /rest/v1/web-analytics/overview">client.webAnalytics.<a href="./src/resources/web-analytics.ts">overview</a>({ ...params }) -> WebAnalyticsOverviewResponse</code>
+- <code title="get /rest/v1/web-analytics/pages">client.webAnalytics.<a href="./src/resources/web-analytics.ts">pages</a>({ ...params }) -> WebAnalyticsPagesResponse</code>
+- <code title="get /rest/v1/web-analytics/sources">client.webAnalytics.<a href="./src/resources/web-analytics.ts">sources</a>({ ...params }) -> WebAnalyticsSourcesResponse</code>
 
 # WebScannerRules
 

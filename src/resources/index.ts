@@ -217,6 +217,13 @@ export {
   type ReplaySettingListResponsesCursor,
 } from './replay-settings';
 export {
+  SessionReplays,
+  type SessionReplayListResponse,
+  type SessionReplayOverviewResponse,
+  type SessionReplayListParams,
+  type SessionReplayOverviewParams,
+} from './session-replays';
+export {
   ShortLinks,
   type ShortLinkListResponse,
   type ShortLinkCreateResponse,
@@ -310,6 +317,11 @@ export {
   type TagManagerUpdateParams,
 } from './tag-managers';
 export {
+  TranslationWidgets,
+  type TranslationWidgetAnalyticsResponse,
+  type TranslationWidgetAnalyticsParams,
+} from './translation-widgets';
+export {
   Versions,
   type VersionListResponse,
   type VersionCreateResponse,
@@ -365,6 +377,23 @@ export {
   type VideoUpdateTranscriptParams,
   type VideoListResponsesCursor,
 } from './videos';
+export {
+  WebAnalytics,
+  type WebAnalyticsCurrentVisitorsResponse,
+  type WebAnalyticsDevicesResponse,
+  type WebAnalyticsJourneyResponse,
+  type WebAnalyticsLocationsResponse,
+  type WebAnalyticsOverviewResponse,
+  type WebAnalyticsPagesResponse,
+  type WebAnalyticsSourcesResponse,
+  type WebAnalyticsCurrentVisitorsParams,
+  type WebAnalyticsDevicesParams,
+  type WebAnalyticsJourneyParams,
+  type WebAnalyticsLocationsParams,
+  type WebAnalyticsOverviewParams,
+  type WebAnalyticsPagesParams,
+  type WebAnalyticsSourcesParams,
+} from './web-analytics';
 export {
   WebScannerRules,
   type WebScannerRuleListResponse,
