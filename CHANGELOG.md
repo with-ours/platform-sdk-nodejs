@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.44.3 (2026-09-02)
+
+Full Changelog: [v1.44.2...v1.44.3](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.44.2...v1.44.3)
+
+### Chores
+
+* bump the all-deps group with 2 updates ([#74](https://github.com/with-ours/platform-sdk-nodejs/issues/74)) ([eaf234f](https://github.com/with-ours/platform-sdk-nodejs/commit/eaf234f27dd9b3d6af61340ef2c75f23b14042aa))
+
 ## 1.44.2 (2026-08-26)
 
 Full Changelog: [v1.44.1...v1.44.2](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.44.1...v1.44.2)
