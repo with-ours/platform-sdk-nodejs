@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.44.4 (2026-09-08)
+
+Full Changelog: [v1.44.3...v1.44.4](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.44.3...v1.44.4)
+
+### Chores
+
+* bump the all-deps group with 3 updates ([#76](https://github.com/with-ours/platform-sdk-nodejs/issues/76)) ([5064b70](https://github.com/with-ours/platform-sdk-nodejs/commit/5064b7049338130c78452a96bc3a9e13e04399bb))
+* **deps:** bump browserslist to 4.28.9 to fix ReDoS advisory ([4e63062](https://github.com/with-ours/platform-sdk-nodejs/commit/4e63062e0bf13502b02aada22d469773c3726e46))
+
 ## 1.44.3 (2026-09-02)
 
 Full Changelog: [v1.44.2...v1.44.3](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.44.2...v1.44.3)
