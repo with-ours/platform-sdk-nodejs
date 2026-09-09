@@ -50,6 +50,7 @@ describe('resource shortLinks', () => {
     await expect(
       client.shortLinks.create(
         {
+          code: 'code',
           name: 'Spring Sale QR',
           qr: {},
           redirectUrl: 'https://example.com/spring',

@@ -53,6 +53,7 @@ describe('resource experiments', () => {
     const response = await client.experiments.create({
       experimentSettingsId: 'settings_01HZX9BB73EY2Q37VGK5A0VW7A',
       name: 'Homepage Hero Headline Test',
+      analysisConfig: {},
       controlWeight: 34,
       description: 'description',
       includeQueryString: true,
@@ -103,6 +104,17 @@ describe('resource experiments', () => {
 
   test('delete', async () => {
     const responsePromise = client.experiments.delete('id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('duplicate', async () => {
+    const responsePromise = client.experiments.duplicate('id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -254,6 +266,28 @@ describe('resource experiments', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.experiments.results('id', { eventName: 'demo_requested' }, { path: '/_stainless_unknown_path' }),
+    ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
+  });
+
+  test('analysis', async () => {
+    const responsePromise = client.experiments.analysis('id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('analysis: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.experiments.analysis(
+        'id',
+        { eventName: 'demo_requested' },
+        { path: '/_stainless_unknown_path' },
+      ),
     ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
   });
 

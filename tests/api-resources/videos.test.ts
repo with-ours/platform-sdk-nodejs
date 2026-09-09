@@ -23,7 +23,11 @@ describe('resource videos', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.videos.list(
-        { cursor: 'cursor', limit: 25, nameContains: 'nameContains' },
+        {
+          cursor: 'cursor',
+          limit: 25,
+          nameContains: 'nameContains',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
@@ -81,8 +85,8 @@ describe('resource videos', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('analytics: only required params', async () => {
-    const responsePromise = client.videos.analytics({ from: '2019-12-27', to: '2019-12-27' });
+  test('upload: only required params', async () => {
+    const responsePromise = client.videos.upload('id', { mimeType: 'MP4' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -92,32 +96,8 @@ describe('resource videos', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('analytics: required and optional params', async () => {
-    const response = await client.videos.analytics({
-      from: '2019-12-27',
-      to: '2019-12-27',
-      limit: 1,
-      offset: 0,
-    });
-  });
-
-  test('analyticsTimeseries: only required params', async () => {
-    const responsePromise = client.videos.analyticsTimeseries('id', { from: '2019-12-27', to: '2019-12-27' });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('analyticsTimeseries: required and optional params', async () => {
-    const response = await client.videos.analyticsTimeseries('id', {
-      from: '2019-12-27',
-      to: '2019-12-27',
-      granularity: 'DAILY',
-    });
+  test('upload: required and optional params', async () => {
+    const response = await client.videos.upload('id', { mimeType: 'MP4' });
   });
 
   test('transcript', async () => {
@@ -144,5 +124,44 @@ describe('resource videos', () => {
 
   test('updateTranscript: required and optional params', async () => {
     const response = await client.videos.updateTranscript('id', { content: 'x', format: 'SRT' });
+  });
+
+  test('analytics: only required params', async () => {
+    const responsePromise = client.videos.analytics({ from: '7321-69-10', to: '7321-69-10' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('analytics: required and optional params', async () => {
+    const response = await client.videos.analytics({
+      from: '7321-69-10',
+      to: '7321-69-10',
+      limit: 1,
+      offset: 0,
+    });
+  });
+
+  test('analyticsTimeseries: only required params', async () => {
+    const responsePromise = client.videos.analyticsTimeseries('id', { from: '7321-69-10', to: '7321-69-10' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('analyticsTimeseries: required and optional params', async () => {
+    const response = await client.videos.analyticsTimeseries('id', {
+      from: '7321-69-10',
+      to: '7321-69-10',
+      granularity: 'DAILY',
+    });
   });
 });

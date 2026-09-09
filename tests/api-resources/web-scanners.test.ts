@@ -86,6 +86,95 @@ describe('resource webScanners', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
+  test('authenticatedScan: only required params', async () => {
+    const responsePromise = client.webScanners.authenticatedScan('id', {
+      credentials: [
+        {
+          location: 'header',
+          name: 'Authorization',
+          value: 'Bearer YOUR_TOKEN',
+        },
+      ],
+      expiresInHours: 2,
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('authenticatedScan: required and optional params', async () => {
+    const response = await client.webScanners.authenticatedScan('id', {
+      credentials: [
+        {
+          location: 'header',
+          name: 'Authorization',
+          value: 'Bearer YOUR_TOKEN',
+        },
+      ],
+      expiresInHours: 2,
+    });
+  });
+
+  test('targetedScan: only required params', async () => {
+    const responsePromise = client.webScanners.targetedScan('id', {
+      targetUrl: 'https://example.com/privacy',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('targetedScan: required and optional params', async () => {
+    const response = await client.webScanners.targetedScan('id', {
+      targetUrl: 'https://example.com/privacy',
+    });
+  });
+
+  test('verificationRun: only required params', async () => {
+    const responsePromise = client.webScanners.verificationRun('id', {
+      runId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('verificationRun: required and optional params', async () => {
+    const response = await client.webScanners.verificationRun('id', {
+      runId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    });
+  });
+
+  test('verificationRuns', async () => {
+    const responsePromise = client.webScanners.verificationRuns('id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('verificationRuns: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.webScanners.verificationRuns('id', { limit: 20 }, { path: '/_stainless_unknown_path' }),
+    ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
+  });
+
   test('findings', async () => {
     const responsePromise = client.webScanners.findings('id');
     const rawResponse = await responsePromise.asResponse();

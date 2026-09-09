@@ -12,6 +12,14 @@ export class ConversionJourneySummaries extends APIResource {
    * first. Supports cursor pagination. Each result contains the conversion event,
    * analysis window, attribution window, filters, and bot/source settings needed to
    * reopen the saved analysis. Requires scope: web-analytics:view
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const conversionJourneySummaryListResponse of client.conversionJourneySummaries.list()) {
+   *   // ...
+   * }
+   * ```
    */
   list(
     query: ConversionJourneySummaryListParams | null | undefined = {},
@@ -28,6 +36,18 @@ export class ConversionJourneySummaries extends APIResource {
    * Save a named Conversion Journey Summary configuration. Returns the full saved
    * summary so callers can reopen the same analysis without a follow-up request.
    * Each account can save up to 100 summaries. Requires scope: web-analytics:write
+   *
+   * @example
+   * ```ts
+   * const conversionJourneySummary =
+   *   await client.conversionJourneySummaries.create({
+   *     dateFrom: '2026-06-01',
+   *     dateTo: '2026-06-30',
+   *     eventName: 'x',
+   *     name: 'x',
+   *     windowDays: 1,
+   *   });
+   * ```
    */
   create(
     body: ConversionJourneySummaryCreateParams,
@@ -39,6 +59,12 @@ export class ConversionJourneySummaries extends APIResource {
   /**
    * Fetch a saved Conversion Journey Summary by its id. Returns 404 when it does not
    * exist. Requires scope: web-analytics:view
+   *
+   * @example
+   * ```ts
+   * const conversionJourneySummary =
+   *   await client.conversionJourneySummaries.retrieve('id');
+   * ```
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<ConversionJourneySummaryRetrieveResponse> {
     return this._client.get(path`/rest/v1/conversion-journey-summaries/${id}`, options);
@@ -49,6 +75,12 @@ export class ConversionJourneySummaries extends APIResource {
    * remain unchanged. When provided, `filters` replaces the complete saved filter
    * list. Send `null` for `webSourceId` or `excludeBots` to clear that optional
    * setting. Requires scope: web-analytics:write
+   *
+   * @example
+   * ```ts
+   * const conversionJourneySummary =
+   *   await client.conversionJourneySummaries.update('id');
+   * ```
    */
   update(
     id: string,
@@ -61,6 +93,12 @@ export class ConversionJourneySummaries extends APIResource {
   /**
    * Delete a saved Conversion Journey Summary. The underlying analytics data is
    * unaffected. Requires scope: web-analytics:write
+   *
+   * @example
+   * ```ts
+   * const conversionJourneySummary =
+   *   await client.conversionJourneySummaries.delete('id');
+   * ```
    */
   delete(id: string, options?: RequestOptions): APIPromise<ConversionJourneySummaryDeleteResponse> {
     return this._client.delete(path`/rest/v1/conversion-journey-summaries/${id}`, options);

@@ -21,10 +21,18 @@ describe('resource funnels', () => {
 
   test('create: only required params', async () => {
     const responsePromise = client.funnels.create({
-      name: 'name',
+      name: 'x',
       steps: [
-        { eventName: 'eventName', name: 'name', order: 0 },
-        { eventName: 'eventName', name: 'name', order: 0 },
+        {
+          eventName: 'x',
+          name: 'x',
+          order: 0,
+        },
+        {
+          eventName: 'x',
+          name: 'x',
+          order: 0,
+        },
       ],
     });
     const rawResponse = await responsePromise.asResponse();
@@ -38,28 +46,36 @@ describe('resource funnels', () => {
 
   test('create: required and optional params', async () => {
     const response = await client.funnels.create({
-      name: 'name',
+      name: 'x',
       steps: [
         {
-          eventName: 'eventName',
-          name: 'name',
+          eventName: 'x',
+          name: 'x',
           order: 0,
           filters: {},
           logic: {
             AND: [{}],
-            condition: { operator: 'Is', property: 'property', value: 'value' },
+            condition: {
+              operator: 'Is',
+              property: 'property',
+              value: 'value',
+            },
             NOT: {},
             OR: [{}],
           },
         },
         {
-          eventName: 'eventName',
-          name: 'name',
+          eventName: 'x',
+          name: 'x',
           order: 0,
           filters: {},
           logic: {
             AND: [{}],
-            condition: { operator: 'Is', property: 'property', value: 'value' },
+            condition: {
+              operator: 'Is',
+              property: 'property',
+              value: 'value',
+            },
             NOT: {},
             OR: [{}],
           },
@@ -71,7 +87,11 @@ describe('resource funnels', () => {
       funnelType: 'SESSION_BASED',
       globalLogic: {
         AND: [{}],
-        condition: { operator: 'Is', property: 'property', value: 'value' },
+        condition: {
+          operator: 'Is',
+          property: 'property',
+          value: 'value',
+        },
         NOT: {},
         OR: [{}],
       },
@@ -114,6 +134,17 @@ describe('resource funnels', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
+  test('duplicate', async () => {
+    const responsePromise = client.funnels.duplicate('id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
   test('results: only required params', async () => {
     const responsePromise = client.funnels.results('id', { from: '2026-06-01', to: '2026-06-30' });
     const rawResponse = await responsePromise.asResponse();
@@ -131,11 +162,11 @@ describe('resource funnels', () => {
       to: '2026-06-30',
       attributionType: 'INITIAL',
       deviceType: 'DESKTOP',
-      utmCampaign: 'x',
+      utmCampaign: 'spring-promo',
       utmContent: 'x',
-      utmMedium: 'x',
+      utmMedium: 'cpc',
       utmName: 'x',
-      utmSource: 'x',
+      utmSource: 'google',
       utmTerm: 'x',
     });
   });

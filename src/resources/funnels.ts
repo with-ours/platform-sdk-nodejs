@@ -52,12 +52,21 @@ export class Funnels extends APIResource {
   }
 
   /**
+   * Duplicate a funnel configuration in the same account. The copy keeps the funnel
+   * steps and settings, receives a new ID, and is named `Copy of …`. Requires scope:
+   * web-analytics:write
+   */
+  duplicate(id: string, options?: RequestOptions): APIPromise<FunnelDuplicateResponse> {
+    return this._client.post(path`/rest/v1/funnels/${id}/duplicate`, options);
+  }
+
+  /**
    * Compute funnel step analytics for a funnel over a date window. Returns per-step
    * visitor counts, conversion rates, drop-off rates, average time to next step, and
    * sample session IDs for replay. Results are computed on demand from event data at
    * request time, so any date window within the supported range returns current
-   * results. `to` must be on or after `from`, and the window may span at most 31 days
-   * including both endpoints. Requires scope: web-analytics:view
+   * results. `to` must be on or after `from`, and the window may span at most 31
+   * days including both endpoints. Requires scope: web-analytics:view
    */
   results(
     id: string,
@@ -148,7 +157,7 @@ export namespace FunnelListResponse {
          */
         AND?: Array<unknown> | null;
 
-        condition?: Logic.Condition;
+        condition?: Logic.Condition | null;
 
         /**
          * Negates a single child logic node.
@@ -243,7 +252,7 @@ export namespace FunnelListResponse {
        */
       AND?: Array<unknown> | null;
 
-      condition?: GlobalLogic.Condition;
+      condition?: GlobalLogic.Condition | null;
 
       /**
        * Negates a single child logic node.
@@ -328,9 +337,6 @@ export namespace FunnelListResponse {
   }
 }
 
-/**
- * Created funnel configuration
- */
 export interface FunnelCreateResponse {
   createdAt: string;
 
@@ -403,7 +409,7 @@ export namespace FunnelCreateResponse {
        */
       AND?: Array<unknown> | null;
 
-      condition?: Logic.Condition;
+      condition?: Logic.Condition | null;
 
       /**
        * Negates a single child logic node.
@@ -498,7 +504,7 @@ export namespace FunnelCreateResponse {
      */
     AND?: Array<unknown> | null;
 
-    condition?: GlobalLogic.Condition;
+    condition?: GlobalLogic.Condition | null;
 
     /**
      * Negates a single child logic node.
@@ -657,7 +663,7 @@ export namespace FunnelRetrieveResponse {
        */
       AND?: Array<unknown> | null;
 
-      condition?: Logic.Condition;
+      condition?: Logic.Condition | null;
 
       /**
        * Negates a single child logic node.
@@ -752,7 +758,7 @@ export namespace FunnelRetrieveResponse {
      */
     AND?: Array<unknown> | null;
 
-    condition?: GlobalLogic.Condition;
+    condition?: GlobalLogic.Condition | null;
 
     /**
      * Negates a single child logic node.
@@ -836,9 +842,6 @@ export namespace FunnelRetrieveResponse {
   }
 }
 
-/**
- * Updated funnel configuration
- */
 export interface FunnelUpdateResponse {
   createdAt: string;
 
@@ -911,7 +914,7 @@ export namespace FunnelUpdateResponse {
        */
       AND?: Array<unknown> | null;
 
-      condition?: Logic.Condition;
+      condition?: Logic.Condition | null;
 
       /**
        * Negates a single child logic node.
@@ -1006,7 +1009,7 @@ export namespace FunnelUpdateResponse {
      */
     AND?: Array<unknown> | null;
 
-    condition?: GlobalLogic.Condition;
+    condition?: GlobalLogic.Condition | null;
 
     /**
      * Negates a single child logic node.
@@ -1091,9 +1094,260 @@ export namespace FunnelUpdateResponse {
 }
 
 export interface FunnelDeleteResponse {
-  deleted: true;
-
   id: string;
+
+  deleted: true;
+}
+
+export interface FunnelDuplicateResponse {
+  createdAt: string;
+
+  funnelId: string;
+
+  funnelType: 'SESSION_BASED' | 'VISITOR_BASED';
+
+  name: string;
+
+  status: 'READY' | 'PROCESSING';
+
+  steps: Array<FunnelDuplicateResponse.Step>;
+
+  updatedAt: string;
+
+  conversionWindow?: FunnelDuplicateResponse.ConversionWindow | null;
+
+  countingMethod?: 'UNIQUES' | 'TOTALS' | 'SESSIONS' | null;
+
+  description?: string | null;
+
+  /**
+   * Nested visitor logic for the entire funnel. When supplied, this replaces legacy
+   * UTM filters.
+   */
+  globalLogic?: FunnelDuplicateResponse.GlobalLogic | null;
+
+  reportDateRange?: FunnelDuplicateResponse.ReportDateRange | null;
+
+  stepOrder?: 'EXACT' | 'ANY' | null;
+
+  /**
+   * Legacy exact-match UTM filters. Do not combine with globalLogic; globalLogic
+   * takes precedence.
+   */
+  utmFilters?: unknown | null;
+
+  watched?: boolean | null;
+}
+
+export namespace FunnelDuplicateResponse {
+  export interface Step {
+    eventName: string;
+
+    name: string;
+
+    order: number;
+
+    stepId: string;
+
+    /**
+     * Step-level event filters (JSON object).
+     */
+    filters?: unknown;
+
+    /**
+     * Step-level event logic.
+     */
+    logic?: Step.Logic | null;
+  }
+
+  export namespace Step {
+    /**
+     * Step-level event logic.
+     */
+    export interface Logic {
+      /**
+       * All child nodes must match. Each child is itself a logic node (leaf `condition`
+       * or combinator).
+       */
+      AND?: Array<unknown> | null;
+
+      condition?: Logic.Condition | null;
+
+      /**
+       * Negates a single child logic node.
+       */
+      NOT?: unknown;
+
+      /**
+       * Any child node must match. Each child is itself a logic node (leaf `condition`
+       * or combinator).
+       */
+      OR?: Array<unknown> | null;
+    }
+
+    export namespace Logic {
+      export interface Condition {
+        /**
+         * Comparison verb in PascalCase. Equality/text: `Is`, `IsNot`, `Contains`,
+         * `DoesNotContain`, `StartsWith`, `EndsWith`. Truthiness/nullability: `IsFalsy`,
+         * `IsTruthy`, `IsNull`, `IsNotNull`, `IsUndefined`, `IsNotUndefined`, `IsTrue`,
+         * `IsFalse`. Numeric: `IsGreaterThan`, `IsGreaterThanOrEqual`, `IsLessThan`,
+         * `IsLessThanOrEqual`. Set membership: `IsIn`, `IsNotIn`, `IsFoundIn`,
+         * `IsNotFoundIn`. Date: `IsBefore`, `IsAfter`, `IsBetween`, `IsOnOrBefore`,
+         * `IsOnOrAfter`. Regex: `MatchesRegex`, `MatchesRegexIgnoreCase`,
+         * `DoesNotMatchRegex`, `DoesNotMatchRegexIgnoreCase`.
+         */
+        operator:
+          | 'Is'
+          | 'IsNot'
+          | 'Contains'
+          | 'DoesNotContain'
+          | 'StartsWith'
+          | 'EndsWith'
+          | 'IsFalsy'
+          | 'IsTruthy'
+          | 'IsNull'
+          | 'IsNotNull'
+          | 'IsUndefined'
+          | 'IsNotUndefined'
+          | 'IsGreaterThan'
+          | 'IsGreaterThanOrEqual'
+          | 'IsLessThan'
+          | 'IsLessThanOrEqual'
+          | 'IsIn'
+          | 'IsNotIn'
+          | 'IsFoundIn'
+          | 'IsNotFoundIn'
+          | 'IsTrue'
+          | 'IsFalse'
+          | 'IsBefore'
+          | 'IsAfter'
+          | 'IsBetween'
+          | 'IsOnOrBefore'
+          | 'IsOnOrAfter'
+          | 'MatchesRegex'
+          | 'MatchesRegexIgnoreCase'
+          | 'DoesNotMatchRegex'
+          | 'DoesNotMatchRegexIgnoreCase';
+
+        /**
+         * Bare dotted path into the event/visitor record. Examples: `$event.event`,
+         * `$event.event_properties.value`, `visitor.consent.marketing`. The leading `$` is
+         * optional and stripped before lookup. Do **not** use `{{...}}` here — that
+         * template syntax is for mapping values (`mappings[].map`), not logic conditions,
+         * and would be compared as a literal string.
+         */
+        property: string;
+
+        /**
+         * String compared against the resolved property. Operators that take no value
+         * (`IsFalsy`, `IsTruthy`, `IsNull`, `IsNotNull`, `IsUndefined`, `IsNotUndefined`,
+         * `IsTrue`, `IsFalse`) ignore this field — send `""`.
+         */
+        value: string;
+      }
+    }
+  }
+
+  export interface ConversionWindow {
+    unit: 'MINUTES' | 'HOURS' | 'DAYS';
+
+    value: number;
+  }
+
+  /**
+   * Nested visitor logic for the entire funnel. When supplied, this replaces legacy
+   * UTM filters.
+   */
+  export interface GlobalLogic {
+    /**
+     * All child nodes must match. Each child is itself a logic node (leaf `condition`
+     * or combinator).
+     */
+    AND?: Array<unknown> | null;
+
+    condition?: GlobalLogic.Condition | null;
+
+    /**
+     * Negates a single child logic node.
+     */
+    NOT?: unknown;
+
+    /**
+     * Any child node must match. Each child is itself a logic node (leaf `condition`
+     * or combinator).
+     */
+    OR?: Array<unknown> | null;
+  }
+
+  export namespace GlobalLogic {
+    export interface Condition {
+      /**
+       * Comparison verb in PascalCase. Equality/text: `Is`, `IsNot`, `Contains`,
+       * `DoesNotContain`, `StartsWith`, `EndsWith`. Truthiness/nullability: `IsFalsy`,
+       * `IsTruthy`, `IsNull`, `IsNotNull`, `IsUndefined`, `IsNotUndefined`, `IsTrue`,
+       * `IsFalse`. Numeric: `IsGreaterThan`, `IsGreaterThanOrEqual`, `IsLessThan`,
+       * `IsLessThanOrEqual`. Set membership: `IsIn`, `IsNotIn`, `IsFoundIn`,
+       * `IsNotFoundIn`. Date: `IsBefore`, `IsAfter`, `IsBetween`, `IsOnOrBefore`,
+       * `IsOnOrAfter`. Regex: `MatchesRegex`, `MatchesRegexIgnoreCase`,
+       * `DoesNotMatchRegex`, `DoesNotMatchRegexIgnoreCase`.
+       */
+      operator:
+        | 'Is'
+        | 'IsNot'
+        | 'Contains'
+        | 'DoesNotContain'
+        | 'StartsWith'
+        | 'EndsWith'
+        | 'IsFalsy'
+        | 'IsTruthy'
+        | 'IsNull'
+        | 'IsNotNull'
+        | 'IsUndefined'
+        | 'IsNotUndefined'
+        | 'IsGreaterThan'
+        | 'IsGreaterThanOrEqual'
+        | 'IsLessThan'
+        | 'IsLessThanOrEqual'
+        | 'IsIn'
+        | 'IsNotIn'
+        | 'IsFoundIn'
+        | 'IsNotFoundIn'
+        | 'IsTrue'
+        | 'IsFalse'
+        | 'IsBefore'
+        | 'IsAfter'
+        | 'IsBetween'
+        | 'IsOnOrBefore'
+        | 'IsOnOrAfter'
+        | 'MatchesRegex'
+        | 'MatchesRegexIgnoreCase'
+        | 'DoesNotMatchRegex'
+        | 'DoesNotMatchRegexIgnoreCase';
+
+      /**
+       * Bare dotted path into the event/visitor record. Examples: `$event.event`,
+       * `$event.event_properties.value`, `visitor.consent.marketing`. The leading `$` is
+       * optional and stripped before lookup. Do **not** use `{{...}}` here — that
+       * template syntax is for mapping values (`mappings[].map`), not logic conditions,
+       * and would be compared as a literal string.
+       */
+      property: string;
+
+      /**
+       * String compared against the resolved property. Operators that take no value
+       * (`IsFalsy`, `IsTruthy`, `IsNull`, `IsNotNull`, `IsUndefined`, `IsNotUndefined`,
+       * `IsTrue`, `IsFalse`) ignore this field — send `""`.
+       */
+      value: string;
+    }
+  }
+
+  export interface ReportDateRange {
+    from: string;
+
+    to: string;
+  }
 }
 
 export interface FunnelResultsResponse {
@@ -1203,7 +1457,7 @@ export namespace FunnelCreateParams {
        */
       AND?: Array<unknown> | null;
 
-      condition?: Logic.Condition;
+      condition?: Logic.Condition | null;
 
       /**
        * Negates a single child logic node.
@@ -1292,7 +1546,7 @@ export namespace FunnelCreateParams {
      */
     AND?: Array<unknown> | null;
 
-    condition?: GlobalLogic.Condition;
+    condition?: GlobalLogic.Condition | null;
 
     /**
      * Negates a single child logic node.
@@ -1412,7 +1666,7 @@ export namespace FunnelUpdateParams {
      */
     AND?: Array<unknown> | null;
 
-    condition?: GlobalLogic.Condition;
+    condition?: GlobalLogic.Condition | null;
 
     /**
      * Negates a single child logic node.
@@ -1509,7 +1763,7 @@ export namespace FunnelUpdateParams {
        */
       AND?: Array<unknown> | null;
 
-      condition?: Logic.Condition;
+      condition?: Logic.Condition | null;
 
       /**
        * Negates a single child logic node.
@@ -1657,6 +1911,7 @@ export declare namespace Funnels {
     type FunnelRetrieveResponse as FunnelRetrieveResponse,
     type FunnelUpdateResponse as FunnelUpdateResponse,
     type FunnelDeleteResponse as FunnelDeleteResponse,
+    type FunnelDuplicateResponse as FunnelDuplicateResponse,
     type FunnelResultsResponse as FunnelResultsResponse,
     type FunnelCreateParams as FunnelCreateParams,
     type FunnelUpdateParams as FunnelUpdateParams,

@@ -942,7 +942,7 @@ export namespace MappingCreateParams {
      */
     AND?: Array<unknown> | null;
 
-    condition?: Logic.Condition;
+    condition?: Logic.Condition | null;
 
     /**
      * Negates a single child logic node.
@@ -1112,7 +1112,7 @@ export namespace MappingUpdateParams {
      */
     AND?: Array<unknown> | null;
 
-    condition?: Logic.Condition;
+    condition?: Logic.Condition | null;
 
     /**
      * Negates a single child logic node.

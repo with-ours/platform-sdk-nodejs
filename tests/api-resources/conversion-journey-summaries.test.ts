@@ -33,8 +33,8 @@ describe('resource conversionJourneySummaries', () => {
     const responsePromise = client.conversionJourneySummaries.create({
       dateFrom: '2026-06-01',
       dateTo: '2026-06-30',
-      eventName: 'eventName',
-      name: 'name',
+      eventName: 'x',
+      name: 'x',
       windowDays: 1,
     });
     const rawResponse = await responsePromise.asResponse();
@@ -50,11 +50,18 @@ describe('resource conversionJourneySummaries', () => {
     const response = await client.conversionJourneySummaries.create({
       dateFrom: '2026-06-01',
       dateTo: '2026-06-30',
-      eventName: 'eventName',
-      name: 'name',
+      eventName: 'x',
+      name: 'x',
       windowDays: 1,
       excludeBots: true,
-      filters: [{ dimension: 'browser', operator: 'CONTAINS', value: 'x', values: ['string'] }],
+      filters: [
+        {
+          dimension: 'browser',
+          operator: 'CONTAINS',
+          value: 'x',
+          values: ['x'],
+        },
+      ],
       webSourceId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
     });
   });

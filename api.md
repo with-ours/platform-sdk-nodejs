@@ -207,6 +207,7 @@ Types:
 - <code><a href="./src/resources/experiments.ts">ExperimentRetrieveResponse</a></code>
 - <code><a href="./src/resources/experiments.ts">ExperimentUpdateResponse</a></code>
 - <code><a href="./src/resources/experiments.ts">ExperimentDeleteResponse</a></code>
+- <code><a href="./src/resources/experiments.ts">ExperimentDuplicateResponse</a></code>
 - <code><a href="./src/resources/experiments.ts">ExperimentStartResponse</a></code>
 - <code><a href="./src/resources/experiments.ts">ExperimentStopResponse</a></code>
 - <code><a href="./src/resources/experiments.ts">ExperimentRolloutResponse</a></code>
@@ -215,6 +216,7 @@ Types:
 - <code><a href="./src/resources/experiments.ts">ExperimentPauseResponse</a></code>
 - <code><a href="./src/resources/experiments.ts">ExperimentResumeResponse</a></code>
 - <code><a href="./src/resources/experiments.ts">ExperimentResultsResponse</a></code>
+- <code><a href="./src/resources/experiments.ts">ExperimentAnalysisResponse</a></code>
 - <code><a href="./src/resources/experiments.ts">ExperimentResultsTimeSeriesResponse</a></code>
 - <code><a href="./src/resources/experiments.ts">ExperimentSessionReplaysResponse</a></code>
 
@@ -225,6 +227,7 @@ Methods:
 - <code title="get /rest/v1/experiments/{id}">client.experiments.<a href="./src/resources/experiments.ts">retrieve</a>(id) -> ExperimentRetrieveResponse</code>
 - <code title="patch /rest/v1/experiments/{id}">client.experiments.<a href="./src/resources/experiments.ts">update</a>(id, { ...params }) -> ExperimentUpdateResponse</code>
 - <code title="delete /rest/v1/experiments/{id}">client.experiments.<a href="./src/resources/experiments.ts">delete</a>(id) -> ExperimentDeleteResponse</code>
+- <code title="post /rest/v1/experiments/{id}/duplicate">client.experiments.<a href="./src/resources/experiments.ts">duplicate</a>(id) -> ExperimentDuplicateResponse</code>
 - <code title="post /rest/v1/experiments/{id}/start">client.experiments.<a href="./src/resources/experiments.ts">start</a>(id, { ...params }) -> ExperimentStartResponse</code>
 - <code title="post /rest/v1/experiments/{id}/stop">client.experiments.<a href="./src/resources/experiments.ts">stop</a>(id, { ...params }) -> ExperimentStopResponse</code>
 - <code title="post /rest/v1/experiments/{id}/rollout">client.experiments.<a href="./src/resources/experiments.ts">rollout</a>(id, { ...params }) -> ExperimentRolloutResponse</code>
@@ -233,6 +236,7 @@ Methods:
 - <code title="post /rest/v1/experiments/{id}/pause">client.experiments.<a href="./src/resources/experiments.ts">pause</a>(id, { ...params }) -> ExperimentPauseResponse</code>
 - <code title="post /rest/v1/experiments/{id}/resume">client.experiments.<a href="./src/resources/experiments.ts">resume</a>(id, { ...params }) -> ExperimentResumeResponse</code>
 - <code title="get /rest/v1/experiments/{id}/results">client.experiments.<a href="./src/resources/experiments.ts">results</a>(id, { ...params }) -> ExperimentResultsResponse</code>
+- <code title="get /rest/v1/experiments/{id}/analysis">client.experiments.<a href="./src/resources/experiments.ts">analysis</a>(id, { ...params }) -> ExperimentAnalysisResponse</code>
 - <code title="get /rest/v1/experiments/{id}/results-time-series">client.experiments.<a href="./src/resources/experiments.ts">resultsTimeSeries</a>(id, { ...params }) -> ExperimentResultsTimeSeriesResponse</code>
 - <code title="get /rest/v1/experiments/{id}/session-replays">client.experiments.<a href="./src/resources/experiments.ts">sessionReplays</a>(id, { ...params }) -> ExperimentSessionReplaysResponse</code>
 
@@ -245,6 +249,7 @@ Types:
 - <code><a href="./src/resources/funnels.ts">FunnelRetrieveResponse</a></code>
 - <code><a href="./src/resources/funnels.ts">FunnelUpdateResponse</a></code>
 - <code><a href="./src/resources/funnels.ts">FunnelDeleteResponse</a></code>
+- <code><a href="./src/resources/funnels.ts">FunnelDuplicateResponse</a></code>
 - <code><a href="./src/resources/funnels.ts">FunnelResultsResponse</a></code>
 
 Methods:
@@ -254,6 +259,7 @@ Methods:
 - <code title="get /rest/v1/funnels/{id}">client.funnels.<a href="./src/resources/funnels.ts">retrieve</a>(id) -> FunnelRetrieveResponse</code>
 - <code title="patch /rest/v1/funnels/{id}">client.funnels.<a href="./src/resources/funnels.ts">update</a>(id, { ...params }) -> FunnelUpdateResponse</code>
 - <code title="delete /rest/v1/funnels/{id}">client.funnels.<a href="./src/resources/funnels.ts">delete</a>(id) -> FunnelDeleteResponse</code>
+- <code title="post /rest/v1/funnels/{id}/duplicate">client.funnels.<a href="./src/resources/funnels.ts">duplicate</a>(id) -> FunnelDuplicateResponse</code>
 - <code title="get /rest/v1/funnels/{id}/results">client.funnels.<a href="./src/resources/funnels.ts">results</a>(id, { ...params }) -> FunnelResultsResponse</code>
 
 # HeatmapPages
@@ -329,6 +335,18 @@ Methods:
 - <code title="get /rest/v1/replay-settings/{id}">client.replaySettings.<a href="./src/resources/replay-settings.ts">retrieve</a>(id) -> ReplaySettingRetrieveResponse | null</code>
 - <code title="patch /rest/v1/replay-settings/{id}">client.replaySettings.<a href="./src/resources/replay-settings.ts">update</a>(id, { ...params }) -> ReplaySettingUpdateResponse</code>
 - <code title="delete /rest/v1/replay-settings/{id}">client.replaySettings.<a href="./src/resources/replay-settings.ts">delete</a>(id) -> ReplaySettingDeleteResponse</code>
+
+# SessionReplays
+
+Types:
+
+- <code><a href="./src/resources/session-replays.ts">SessionReplayListResponse</a></code>
+- <code><a href="./src/resources/session-replays.ts">SessionReplayOverviewResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/session-replays">client.sessionReplays.<a href="./src/resources/session-replays.ts">list</a>({ ...params }) -> SessionReplayListResponse</code>
+- <code title="get /rest/v1/session-replays/overview">client.sessionReplays.<a href="./src/resources/session-replays.ts">overview</a>({ ...params }) -> SessionReplayOverviewResponse</code>
 
 # ShortLinks
 
@@ -476,6 +494,16 @@ Methods:
 
 - <code title="post /rest/v1/tag-manager-asset-folders">client.tagManagerAssetFolders.<a href="./src/resources/tag-manager-asset-folders.ts">create</a>({ ...params }) -> TagManagerAssetFolderCreateResponse</code>
 
+# TranslationWidgets
+
+Types:
+
+- <code><a href="./src/resources/translation-widgets.ts">TranslationWidgetAnalyticsResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/translation-widgets/{id}/analytics">client.translationWidgets.<a href="./src/resources/translation-widgets.ts">analytics</a>(id, { ...params }) -> TranslationWidgetAnalyticsResponse</code>
+
 # Versions
 
 Types:
@@ -501,6 +529,34 @@ Methods:
 - <code title="get /rest/v1/versions/{id}/diff">client.versions.<a href="./src/resources/versions.ts">diff</a>(id, { ...params }) -> VersionDiffResponse</code>
 - <code title="post /rest/v1/versions/{id}/revert">client.versions.<a href="./src/resources/versions.ts">revert</a>(id, { ...params }) -> VersionRevertResponse</code>
 - <code title="post /rest/v1/versions/{id}/abandon">client.versions.<a href="./src/resources/versions.ts">abandon</a>(id) -> VersionAbandonResponse</code>
+
+# Videos
+
+Types:
+
+- <code><a href="./src/resources/videos.ts">VideoListResponse</a></code>
+- <code><a href="./src/resources/videos.ts">VideoCreateResponse</a></code>
+- <code><a href="./src/resources/videos.ts">VideoRetrieveResponse</a></code>
+- <code><a href="./src/resources/videos.ts">VideoUpdateResponse</a></code>
+- <code><a href="./src/resources/videos.ts">VideoDeleteResponse</a></code>
+- <code><a href="./src/resources/videos.ts">VideoUploadResponse</a></code>
+- <code><a href="./src/resources/videos.ts">VideoTranscriptResponse</a></code>
+- <code><a href="./src/resources/videos.ts">VideoUpdateTranscriptResponse</a></code>
+- <code><a href="./src/resources/videos.ts">VideoAnalyticsResponse</a></code>
+- <code><a href="./src/resources/videos.ts">VideoAnalyticsTimeseriesResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/videos">client.videos.<a href="./src/resources/videos.ts">list</a>({ ...params }) -> VideoListResponsesCursor</code>
+- <code title="post /rest/v1/videos">client.videos.<a href="./src/resources/videos.ts">create</a>({ ...params }) -> VideoCreateResponse</code>
+- <code title="get /rest/v1/videos/{id}">client.videos.<a href="./src/resources/videos.ts">retrieve</a>(id) -> VideoRetrieveResponse</code>
+- <code title="patch /rest/v1/videos/{id}">client.videos.<a href="./src/resources/videos.ts">update</a>(id, { ...params }) -> VideoUpdateResponse</code>
+- <code title="delete /rest/v1/videos/{id}">client.videos.<a href="./src/resources/videos.ts">delete</a>(id) -> VideoDeleteResponse</code>
+- <code title="post /rest/v1/videos/{id}/upload">client.videos.<a href="./src/resources/videos.ts">upload</a>(id, { ...params }) -> VideoUploadResponse</code>
+- <code title="get /rest/v1/videos/{id}/transcript">client.videos.<a href="./src/resources/videos.ts">transcript</a>(id) -> VideoTranscriptResponse</code>
+- <code title="put /rest/v1/videos/{id}/transcript">client.videos.<a href="./src/resources/videos.ts">updateTranscript</a>(id, { ...params }) -> VideoUpdateTranscriptResponse</code>
+- <code title="get /rest/v1/videos/analytics">client.videos.<a href="./src/resources/videos.ts">analytics</a>({ ...params }) -> VideoAnalyticsResponse</code>
+- <code title="get /rest/v1/videos/{id}/analytics">client.videos.<a href="./src/resources/videos.ts">analyticsTimeseries</a>(id, { ...params }) -> VideoAnalyticsTimeseriesResponse</code>
 
 # VideoChannels
 
@@ -528,31 +584,27 @@ Methods:
 - <code title="delete /rest/v1/video-channels/{id}/media">client.videoChannels.<a href="./src/resources/video-channels.ts">removeMedia</a>(id, { ...params }) -> VideoChannelRemoveMediaResponse</code>
 - <code title="post /rest/v1/video-channels/{id}/reorder">client.videoChannels.<a href="./src/resources/video-channels.ts">reorder</a>(id, { ...params }) -> VideoChannelReorderResponse</code>
 
-# Videos
+# WebAnalytics
 
 Types:
 
-- <code><a href="./src/resources/videos.ts">VideoListResponse</a></code>
-- <code><a href="./src/resources/videos.ts">VideoCreateResponse</a></code>
-- <code><a href="./src/resources/videos.ts">VideoRetrieveResponse</a></code>
-- <code><a href="./src/resources/videos.ts">VideoUpdateResponse</a></code>
-- <code><a href="./src/resources/videos.ts">VideoDeleteResponse</a></code>
-- <code><a href="./src/resources/videos.ts">VideoAnalyticsResponse</a></code>
-- <code><a href="./src/resources/videos.ts">VideoAnalyticsTimeseriesResponse</a></code>
-- <code><a href="./src/resources/videos.ts">VideoTranscriptResponse</a></code>
-- <code><a href="./src/resources/videos.ts">VideoUpdateTranscriptResponse</a></code>
+- <code><a href="./src/resources/web-analytics.ts">WebAnalyticsOverviewResponse</a></code>
+- <code><a href="./src/resources/web-analytics.ts">WebAnalyticsSourcesResponse</a></code>
+- <code><a href="./src/resources/web-analytics.ts">WebAnalyticsPagesResponse</a></code>
+- <code><a href="./src/resources/web-analytics.ts">WebAnalyticsLocationsResponse</a></code>
+- <code><a href="./src/resources/web-analytics.ts">WebAnalyticsDevicesResponse</a></code>
+- <code><a href="./src/resources/web-analytics.ts">WebAnalyticsCurrentVisitorsResponse</a></code>
+- <code><a href="./src/resources/web-analytics.ts">WebAnalyticsJourneyResponse</a></code>
 
 Methods:
 
-- <code title="get /rest/v1/videos">client.videos.<a href="./src/resources/videos.ts">list</a>({ ...params }) -> VideoListResponsesCursor</code>
-- <code title="post /rest/v1/videos">client.videos.<a href="./src/resources/videos.ts">create</a>({ ...params }) -> VideoCreateResponse</code>
-- <code title="get /rest/v1/videos/{id}">client.videos.<a href="./src/resources/videos.ts">retrieve</a>(id) -> VideoRetrieveResponse</code>
-- <code title="patch /rest/v1/videos/{id}">client.videos.<a href="./src/resources/videos.ts">update</a>(id, { ...params }) -> VideoUpdateResponse</code>
-- <code title="delete /rest/v1/videos/{id}">client.videos.<a href="./src/resources/videos.ts">delete</a>(id) -> VideoDeleteResponse</code>
-- <code title="get /rest/v1/videos/analytics">client.videos.<a href="./src/resources/videos.ts">analytics</a>({ ...params }) -> VideoAnalyticsResponse</code>
-- <code title="get /rest/v1/videos/{id}/analytics">client.videos.<a href="./src/resources/videos.ts">analyticsTimeseries</a>(id, { ...params }) -> VideoAnalyticsTimeseriesResponse</code>
-- <code title="get /rest/v1/videos/{id}/transcript">client.videos.<a href="./src/resources/videos.ts">transcript</a>(id) -> VideoTranscriptResponse</code>
-- <code title="put /rest/v1/videos/{id}/transcript">client.videos.<a href="./src/resources/videos.ts">updateTranscript</a>(id, { ...params }) -> VideoUpdateTranscriptResponse</code>
+- <code title="get /rest/v1/web-analytics/overview">client.webAnalytics.<a href="./src/resources/web-analytics.ts">overview</a>({ ...params }) -> WebAnalyticsOverviewResponse</code>
+- <code title="get /rest/v1/web-analytics/sources">client.webAnalytics.<a href="./src/resources/web-analytics.ts">sources</a>({ ...params }) -> WebAnalyticsSourcesResponse</code>
+- <code title="get /rest/v1/web-analytics/pages">client.webAnalytics.<a href="./src/resources/web-analytics.ts">pages</a>({ ...params }) -> WebAnalyticsPagesResponse</code>
+- <code title="get /rest/v1/web-analytics/locations">client.webAnalytics.<a href="./src/resources/web-analytics.ts">locations</a>({ ...params }) -> WebAnalyticsLocationsResponse</code>
+- <code title="get /rest/v1/web-analytics/devices">client.webAnalytics.<a href="./src/resources/web-analytics.ts">devices</a>({ ...params }) -> WebAnalyticsDevicesResponse</code>
+- <code title="get /rest/v1/web-analytics/current-visitors">client.webAnalytics.<a href="./src/resources/web-analytics.ts">currentVisitors</a>({ ...params }) -> WebAnalyticsCurrentVisitorsResponse</code>
+- <code title="get /rest/v1/web-analytics/journey">client.webAnalytics.<a href="./src/resources/web-analytics.ts">journey</a>({ ...params }) -> WebAnalyticsJourneyResponse</code>
 
 # WebScannerRules
 
@@ -582,6 +634,10 @@ Types:
 - <code><a href="./src/resources/web-scanners.ts">WebScannerUpdateResponse</a></code>
 - <code><a href="./src/resources/web-scanners.ts">WebScannerDeleteResponse</a></code>
 - <code><a href="./src/resources/web-scanners.ts">WebScannerTriggerResponse</a></code>
+- <code><a href="./src/resources/web-scanners.ts">WebScannerAuthenticatedScanResponse</a></code>
+- <code><a href="./src/resources/web-scanners.ts">WebScannerTargetedScanResponse</a></code>
+- <code><a href="./src/resources/web-scanners.ts">WebScannerVerificationRunResponse</a></code>
+- <code><a href="./src/resources/web-scanners.ts">WebScannerVerificationRunsResponse</a></code>
 - <code><a href="./src/resources/web-scanners.ts">WebScannerFindingsResponse</a></code>
 - <code><a href="./src/resources/web-scanners.ts">WebScannerCookiesResponse</a></code>
 - <code><a href="./src/resources/web-scanners.ts">WebScannerSummaryResponse</a></code>
@@ -594,6 +650,10 @@ Methods:
 - <code title="patch /rest/v1/web-scanners/{id}">client.webScanners.<a href="./src/resources/web-scanners.ts">update</a>(id, { ...params }) -> WebScannerUpdateResponse</code>
 - <code title="delete /rest/v1/web-scanners/{id}">client.webScanners.<a href="./src/resources/web-scanners.ts">delete</a>(id) -> WebScannerDeleteResponse</code>
 - <code title="post /rest/v1/web-scanners/{id}/trigger">client.webScanners.<a href="./src/resources/web-scanners.ts">trigger</a>(id) -> WebScannerTriggerResponse</code>
+- <code title="post /rest/v1/web-scanners/{id}/authenticated-scan">client.webScanners.<a href="./src/resources/web-scanners.ts">authenticatedScan</a>(id, { ...params }) -> WebScannerAuthenticatedScanResponse</code>
+- <code title="post /rest/v1/web-scanners/{id}/targeted-scan">client.webScanners.<a href="./src/resources/web-scanners.ts">targetedScan</a>(id, { ...params }) -> WebScannerTargetedScanResponse</code>
+- <code title="get /rest/v1/web-scanners/{id}/verification-run">client.webScanners.<a href="./src/resources/web-scanners.ts">verificationRun</a>(id, { ...params }) -> WebScannerVerificationRunResponse</code>
+- <code title="get /rest/v1/web-scanners/{id}/verification-runs">client.webScanners.<a href="./src/resources/web-scanners.ts">verificationRuns</a>(id, { ...params }) -> WebScannerVerificationRunsResponse</code>
 - <code title="get /rest/v1/web-scanners/{id}/findings">client.webScanners.<a href="./src/resources/web-scanners.ts">findings</a>(id, { ...params }) -> WebScannerFindingsResponse</code>
 - <code title="get /rest/v1/web-scanners/{id}/cookies">client.webScanners.<a href="./src/resources/web-scanners.ts">cookies</a>(id, { ...params }) -> WebScannerCookiesResponse</code>
 - <code title="get /rest/v1/web-scanners/{id}/summary">client.webScanners.<a href="./src/resources/web-scanners.ts">summary</a>(id, { ...params }) -> WebScannerSummaryResponse</code>

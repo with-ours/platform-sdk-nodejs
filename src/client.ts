@@ -144,9 +144,12 @@ import {
   ExperimentVariants,
 } from './resources/experiment-variants';
 import {
+  ExperimentAnalysisParams,
+  ExperimentAnalysisResponse,
   ExperimentCreateParams,
   ExperimentCreateResponse,
   ExperimentDeleteResponse,
+  ExperimentDuplicateResponse,
   ExperimentEndRolloutResponse,
   ExperimentListParams,
   ExperimentListResponse,
@@ -178,6 +181,7 @@ import {
   FunnelCreateParams,
   FunnelCreateResponse,
   FunnelDeleteResponse,
+  FunnelDuplicateResponse,
   FunnelListResponse,
   FunnelResultsParams,
   FunnelResultsResponse,
@@ -235,6 +239,13 @@ import {
   ReplaySettingUpdateResponse,
   ReplaySettings,
 } from './resources/replay-settings';
+import {
+  SessionReplayListParams,
+  SessionReplayListResponse,
+  SessionReplayOverviewParams,
+  SessionReplayOverviewResponse,
+  SessionReplays,
+} from './resources/session-replays';
 import {
   ShortLinkCreateParams,
   ShortLinkCreateResponse,
@@ -329,6 +340,11 @@ import {
   TagManagers,
 } from './resources/tag-managers';
 import {
+  TranslationWidgetAnalyticsParams,
+  TranslationWidgetAnalyticsResponse,
+  TranslationWidgets,
+} from './resources/translation-widgets';
+import {
   VersionAbandonResponse,
   VersionCreateParams,
   VersionCreateResponse,
@@ -382,8 +398,27 @@ import {
   VideoUpdateResponse,
   VideoUpdateTranscriptParams,
   VideoUpdateTranscriptResponse,
+  VideoUploadParams,
+  VideoUploadResponse,
   Videos,
 } from './resources/videos';
+import {
+  WebAnalytics,
+  WebAnalyticsCurrentVisitorsParams,
+  WebAnalyticsCurrentVisitorsResponse,
+  WebAnalyticsDevicesParams,
+  WebAnalyticsDevicesResponse,
+  WebAnalyticsJourneyParams,
+  WebAnalyticsJourneyResponse,
+  WebAnalyticsLocationsParams,
+  WebAnalyticsLocationsResponse,
+  WebAnalyticsOverviewParams,
+  WebAnalyticsOverviewResponse,
+  WebAnalyticsPagesParams,
+  WebAnalyticsPagesResponse,
+  WebAnalyticsSourcesParams,
+  WebAnalyticsSourcesResponse,
+} from './resources/web-analytics';
 import {
   WebScannerRuleCreateParams,
   WebScannerRuleCreateResponse,
@@ -396,6 +431,8 @@ import {
   WebScannerRules,
 } from './resources/web-scanner-rules';
 import {
+  WebScannerAuthenticatedScanParams,
+  WebScannerAuthenticatedScanResponse,
   WebScannerCookiesParams,
   WebScannerCookiesResponse,
   WebScannerCreateParams,
@@ -407,9 +444,15 @@ import {
   WebScannerRetrieveResponse,
   WebScannerSummaryParams,
   WebScannerSummaryResponse,
+  WebScannerTargetedScanParams,
+  WebScannerTargetedScanResponse,
   WebScannerTriggerResponse,
   WebScannerUpdateParams,
   WebScannerUpdateResponse,
+  WebScannerVerificationRunParams,
+  WebScannerVerificationRunResponse,
+  WebScannerVerificationRunsParams,
+  WebScannerVerificationRunsResponse,
   WebScanners,
 } from './resources/web-scanners';
 import { type Fetch } from './internal/builtin-types';
@@ -548,7 +591,7 @@ export class OursPrivacyPlatform {
     };
 
     this.baseURL = options.baseURL!;
-    this.timeout = options.timeout ?? OursPrivacyPlatform.DEFAULT_TIMEOUT; /* 1 minute */
+    this.timeout = options.timeout ?? OursPrivacyPlatform.DEFAULT_TIMEOUT /* 1 minute */;
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
     // Set default logLevel early so that we can log a warning in parseLogLevel.
@@ -1173,6 +1216,7 @@ export class OursPrivacyPlatform {
   locations: API.Locations = new API.Locations(this);
   mappings: API.Mappings = new API.Mappings(this);
   replaySettings: API.ReplaySettings = new API.ReplaySettings(this);
+  sessionReplays: API.SessionReplays = new API.SessionReplays(this);
   shortLinks: API.ShortLinks = new API.ShortLinks(this);
   sources: API.Sources = new API.Sources(this);
   tagManagers: API.TagManagers = new API.TagManagers(this);
@@ -1181,9 +1225,11 @@ export class OursPrivacyPlatform {
   tagManagerVariables: API.TagManagerVariables = new API.TagManagerVariables(this);
   tagManagerFolders: API.TagManagerFolders = new API.TagManagerFolders(this);
   tagManagerAssetFolders: API.TagManagerAssetFolders = new API.TagManagerAssetFolders(this);
+  translationWidgets: API.TranslationWidgets = new API.TranslationWidgets(this);
   versions: API.Versions = new API.Versions(this);
-  videoChannels: API.VideoChannels = new API.VideoChannels(this);
   videos: API.Videos = new API.Videos(this);
+  videoChannels: API.VideoChannels = new API.VideoChannels(this);
+  webAnalytics: API.WebAnalytics = new API.WebAnalytics(this);
   webScannerRules: API.WebScannerRules = new API.WebScannerRules(this);
   webScanners: API.WebScanners = new API.WebScanners(this);
 }
@@ -1205,6 +1251,7 @@ OursPrivacyPlatform.HeatmapPages = HeatmapPages;
 OursPrivacyPlatform.Locations = Locations;
 OursPrivacyPlatform.Mappings = Mappings;
 OursPrivacyPlatform.ReplaySettings = ReplaySettings;
+OursPrivacyPlatform.SessionReplays = SessionReplays;
 OursPrivacyPlatform.ShortLinks = ShortLinks;
 OursPrivacyPlatform.Sources = Sources;
 OursPrivacyPlatform.TagManagers = TagManagers;
@@ -1213,9 +1260,11 @@ OursPrivacyPlatform.TagManagerTriggers = TagManagerTriggers;
 OursPrivacyPlatform.TagManagerVariables = TagManagerVariables;
 OursPrivacyPlatform.TagManagerFolders = TagManagerFolders;
 OursPrivacyPlatform.TagManagerAssetFolders = TagManagerAssetFolders;
+OursPrivacyPlatform.TranslationWidgets = TranslationWidgets;
 OursPrivacyPlatform.Versions = Versions;
-OursPrivacyPlatform.VideoChannels = VideoChannels;
 OursPrivacyPlatform.Videos = Videos;
+OursPrivacyPlatform.VideoChannels = VideoChannels;
+OursPrivacyPlatform.WebAnalytics = WebAnalytics;
 OursPrivacyPlatform.WebScannerRules = WebScannerRules;
 OursPrivacyPlatform.WebScanners = WebScanners;
 
@@ -1367,6 +1416,7 @@ export declare namespace OursPrivacyPlatform {
     type ExperimentRetrieveResponse as ExperimentRetrieveResponse,
     type ExperimentUpdateResponse as ExperimentUpdateResponse,
     type ExperimentDeleteResponse as ExperimentDeleteResponse,
+    type ExperimentDuplicateResponse as ExperimentDuplicateResponse,
     type ExperimentStartResponse as ExperimentStartResponse,
     type ExperimentStopResponse as ExperimentStopResponse,
     type ExperimentRolloutResponse as ExperimentRolloutResponse,
@@ -1375,6 +1425,7 @@ export declare namespace OursPrivacyPlatform {
     type ExperimentPauseResponse as ExperimentPauseResponse,
     type ExperimentResumeResponse as ExperimentResumeResponse,
     type ExperimentResultsResponse as ExperimentResultsResponse,
+    type ExperimentAnalysisResponse as ExperimentAnalysisResponse,
     type ExperimentResultsTimeSeriesResponse as ExperimentResultsTimeSeriesResponse,
     type ExperimentSessionReplaysResponse as ExperimentSessionReplaysResponse,
     type ExperimentListResponsesCursor as ExperimentListResponsesCursor,
@@ -1388,6 +1439,7 @@ export declare namespace OursPrivacyPlatform {
     type ExperimentPauseParams as ExperimentPauseParams,
     type ExperimentResumeParams as ExperimentResumeParams,
     type ExperimentResultsParams as ExperimentResultsParams,
+    type ExperimentAnalysisParams as ExperimentAnalysisParams,
     type ExperimentResultsTimeSeriesParams as ExperimentResultsTimeSeriesParams,
     type ExperimentSessionReplaysParams as ExperimentSessionReplaysParams,
   };
@@ -1399,6 +1451,7 @@ export declare namespace OursPrivacyPlatform {
     type FunnelRetrieveResponse as FunnelRetrieveResponse,
     type FunnelUpdateResponse as FunnelUpdateResponse,
     type FunnelDeleteResponse as FunnelDeleteResponse,
+    type FunnelDuplicateResponse as FunnelDuplicateResponse,
     type FunnelResultsResponse as FunnelResultsResponse,
     type FunnelCreateParams as FunnelCreateParams,
     type FunnelUpdateParams as FunnelUpdateParams,
@@ -1456,6 +1509,14 @@ export declare namespace OursPrivacyPlatform {
     type ReplaySettingListParams as ReplaySettingListParams,
     type ReplaySettingCreateParams as ReplaySettingCreateParams,
     type ReplaySettingUpdateParams as ReplaySettingUpdateParams,
+  };
+
+  export {
+    SessionReplays as SessionReplays,
+    type SessionReplayListResponse as SessionReplayListResponse,
+    type SessionReplayOverviewResponse as SessionReplayOverviewResponse,
+    type SessionReplayListParams as SessionReplayListParams,
+    type SessionReplayOverviewParams as SessionReplayOverviewParams,
   };
 
   export {
@@ -1560,6 +1621,12 @@ export declare namespace OursPrivacyPlatform {
   };
 
   export {
+    TranslationWidgets as TranslationWidgets,
+    type TranslationWidgetAnalyticsResponse as TranslationWidgetAnalyticsResponse,
+    type TranslationWidgetAnalyticsParams as TranslationWidgetAnalyticsParams,
+  };
+
+  export {
     Versions as Versions,
     type VersionListResponse as VersionListResponse,
     type VersionCreateResponse as VersionCreateResponse,
@@ -1576,6 +1643,28 @@ export declare namespace OursPrivacyPlatform {
     type VersionUpdateParams as VersionUpdateParams,
     type VersionDiffParams as VersionDiffParams,
     type VersionRevertParams as VersionRevertParams,
+  };
+
+  export {
+    Videos as Videos,
+    type VideoListResponse as VideoListResponse,
+    type VideoCreateResponse as VideoCreateResponse,
+    type VideoRetrieveResponse as VideoRetrieveResponse,
+    type VideoUpdateResponse as VideoUpdateResponse,
+    type VideoDeleteResponse as VideoDeleteResponse,
+    type VideoUploadResponse as VideoUploadResponse,
+    type VideoTranscriptResponse as VideoTranscriptResponse,
+    type VideoUpdateTranscriptResponse as VideoUpdateTranscriptResponse,
+    type VideoAnalyticsResponse as VideoAnalyticsResponse,
+    type VideoAnalyticsTimeseriesResponse as VideoAnalyticsTimeseriesResponse,
+    type VideoListResponsesCursor as VideoListResponsesCursor,
+    type VideoListParams as VideoListParams,
+    type VideoCreateParams as VideoCreateParams,
+    type VideoUpdateParams as VideoUpdateParams,
+    type VideoUploadParams as VideoUploadParams,
+    type VideoUpdateTranscriptParams as VideoUpdateTranscriptParams,
+    type VideoAnalyticsParams as VideoAnalyticsParams,
+    type VideoAnalyticsTimeseriesParams as VideoAnalyticsTimeseriesParams,
   };
 
   export {
@@ -1599,23 +1688,21 @@ export declare namespace OursPrivacyPlatform {
   };
 
   export {
-    Videos as Videos,
-    type VideoListResponse as VideoListResponse,
-    type VideoCreateResponse as VideoCreateResponse,
-    type VideoRetrieveResponse as VideoRetrieveResponse,
-    type VideoUpdateResponse as VideoUpdateResponse,
-    type VideoDeleteResponse as VideoDeleteResponse,
-    type VideoAnalyticsResponse as VideoAnalyticsResponse,
-    type VideoAnalyticsTimeseriesResponse as VideoAnalyticsTimeseriesResponse,
-    type VideoTranscriptResponse as VideoTranscriptResponse,
-    type VideoUpdateTranscriptResponse as VideoUpdateTranscriptResponse,
-    type VideoListResponsesCursor as VideoListResponsesCursor,
-    type VideoListParams as VideoListParams,
-    type VideoCreateParams as VideoCreateParams,
-    type VideoUpdateParams as VideoUpdateParams,
-    type VideoAnalyticsParams as VideoAnalyticsParams,
-    type VideoAnalyticsTimeseriesParams as VideoAnalyticsTimeseriesParams,
-    type VideoUpdateTranscriptParams as VideoUpdateTranscriptParams,
+    WebAnalytics as WebAnalytics,
+    type WebAnalyticsOverviewResponse as WebAnalyticsOverviewResponse,
+    type WebAnalyticsSourcesResponse as WebAnalyticsSourcesResponse,
+    type WebAnalyticsPagesResponse as WebAnalyticsPagesResponse,
+    type WebAnalyticsLocationsResponse as WebAnalyticsLocationsResponse,
+    type WebAnalyticsDevicesResponse as WebAnalyticsDevicesResponse,
+    type WebAnalyticsCurrentVisitorsResponse as WebAnalyticsCurrentVisitorsResponse,
+    type WebAnalyticsJourneyResponse as WebAnalyticsJourneyResponse,
+    type WebAnalyticsOverviewParams as WebAnalyticsOverviewParams,
+    type WebAnalyticsSourcesParams as WebAnalyticsSourcesParams,
+    type WebAnalyticsPagesParams as WebAnalyticsPagesParams,
+    type WebAnalyticsLocationsParams as WebAnalyticsLocationsParams,
+    type WebAnalyticsDevicesParams as WebAnalyticsDevicesParams,
+    type WebAnalyticsCurrentVisitorsParams as WebAnalyticsCurrentVisitorsParams,
+    type WebAnalyticsJourneyParams as WebAnalyticsJourneyParams,
   };
 
   export {
@@ -1638,11 +1725,19 @@ export declare namespace OursPrivacyPlatform {
     type WebScannerUpdateResponse as WebScannerUpdateResponse,
     type WebScannerDeleteResponse as WebScannerDeleteResponse,
     type WebScannerTriggerResponse as WebScannerTriggerResponse,
+    type WebScannerAuthenticatedScanResponse as WebScannerAuthenticatedScanResponse,
+    type WebScannerTargetedScanResponse as WebScannerTargetedScanResponse,
+    type WebScannerVerificationRunResponse as WebScannerVerificationRunResponse,
+    type WebScannerVerificationRunsResponse as WebScannerVerificationRunsResponse,
     type WebScannerFindingsResponse as WebScannerFindingsResponse,
     type WebScannerCookiesResponse as WebScannerCookiesResponse,
     type WebScannerSummaryResponse as WebScannerSummaryResponse,
     type WebScannerCreateParams as WebScannerCreateParams,
     type WebScannerUpdateParams as WebScannerUpdateParams,
+    type WebScannerAuthenticatedScanParams as WebScannerAuthenticatedScanParams,
+    type WebScannerTargetedScanParams as WebScannerTargetedScanParams,
+    type WebScannerVerificationRunParams as WebScannerVerificationRunParams,
+    type WebScannerVerificationRunsParams as WebScannerVerificationRunsParams,
     type WebScannerFindingsParams as WebScannerFindingsParams,
     type WebScannerCookiesParams as WebScannerCookiesParams,
     type WebScannerSummaryParams as WebScannerSummaryParams,

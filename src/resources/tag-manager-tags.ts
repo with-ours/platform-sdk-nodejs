@@ -26,8 +26,8 @@ export class TagManagerTags extends APIResource {
 
   /**
    * Create a new tag inside a tag manager. `tagManagerId` is required in the body.
-   * Newly created tags are not assigned to any folder — assign after creation via
-   * PATCH with `folderId`. Requires scope: tagManagers:update
+   * Newly created tags are not assigned to any folder — assign them with
+   * `POST /rest/v1/tag-manager-asset-folders`. Requires scope: tagManagers:update
    */
   create(body: TagManagerTagCreateParams, options?: RequestOptions): APIPromise<TagManagerTagCreateResponse> {
     return this._client.post('/rest/v1/tag-manager-tags', { body, ...options });

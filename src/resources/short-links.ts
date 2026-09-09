@@ -10,7 +10,7 @@ export class ShortLinks extends APIResource {
   /**
    * List all short links (QR codes / redirects) for this account, newest first.
    * Supports cursor pagination and optional `status` and `nameContains` filters.
-   * Each entity bundles the destination URL, the composed public `shortUrl`, and the
+   * Each entity bundles the destination URL, immutable code, path format, and
    * QR/campaign design. Requires scope: source:list
    *
    * @example
@@ -33,11 +33,11 @@ export class ShortLinks extends APIResource {
 
   /**
    * Create a short link (QR code / redirect) with its destination, campaign tags,
-   * and QR styling in a single call. The short code is generated automatically; the
-   * response `shortUrl` is the public URL the QR encodes. All body fields are
-   * optional — send `{}` to create an unconfigured link and fill it in later with
-   * PATCH. A newly created short link only resolves at the edge once a version is
-   * published. Requires scope: source:create
+   * and QR styling in a single call. The server atomically reserves an immutable
+   * compact code; `shortUrl` resolves as `/r/{pixel}` without tracking query
+   * parameters. All body fields are optional: send `{}` to create an unconfigured
+   * link and fill it in later with PATCH. A newly created short link only resolves
+   * at the edge once a version is published. Requires scope: source:create
    *
    * @example
    * ```ts
@@ -52,9 +52,9 @@ export class ShortLinks extends APIResource {
   }
 
   /**
-   * Fetch a single short link by id, including its destination, composed `shortUrl`,
-   * and QR/campaign design. Returns 404 when no short link matches the id or it
-   * belongs to a different account. Requires scope: source:view
+   * Fetch a single short link by id, including its destination, immutable code,
+   * composed `shortUrl`, and QR/campaign design. Returns 404 when no short link
+   * matches the id or it belongs to a different account. Requires scope: source:view
    *
    * @example
    * ```ts
@@ -138,6 +138,11 @@ export interface ShortLinkListResponse {
   status: 'Disabled' | 'Enabled';
 
   /**
+   * Whether a user selected this code instead of using a generated code.
+   */
+  hasCustomShortLinkCode?: boolean | null;
+
+  /**
    * Whether this short link exists in the currently published version. An
    * unpublished short link does not resolve at the edge.
    */
@@ -146,8 +151,8 @@ export interface ShortLinkListResponse {
   name?: string | null;
 
   /**
-   * The short code embedded in the public URL (`/redirect/{pixel}`).
-   * Server-assigned.
+   * The immutable short code embedded in the public URL (`/r/{pixel}` for new
+   * links). Server-assigned.
    */
   pixel?: string | null;
 
@@ -157,14 +162,19 @@ export interface ShortLinkListResponse {
   redirectUrl?: string | null;
 
   /**
+   * The public code embedded in the short-link URL.
+   */
+  shortLinkCode?: string | null;
+
+  /**
    * QR styling + campaign tags. Null until the link is styled.
    */
   shortLinkDesign?: unknown | null;
 
   /**
-   * The public short-link URL that the QR encodes and callers share. Composed from
-   * the short code, the link name (sent as the tracked event), and the campaign
-   * tags. Also resolves on any branded custom domains configured for the account.
+   * The public short-link URL that the QR encodes and callers share. New links use
+   * `/r/{pixel}`; tracked event and campaign defaults are stored server-side. Also
+   * resolves on branded custom domains configured for the account.
    */
   shortUrl?: string | null;
 }
@@ -182,6 +192,11 @@ export interface ShortLinkCreateResponse {
   status: 'Disabled' | 'Enabled';
 
   /**
+   * Whether a user selected this code instead of using a generated code.
+   */
+  hasCustomShortLinkCode?: boolean | null;
+
+  /**
    * Whether this short link exists in the currently published version. An
    * unpublished short link does not resolve at the edge.
    */
@@ -190,8 +205,8 @@ export interface ShortLinkCreateResponse {
   name?: string | null;
 
   /**
-   * The short code embedded in the public URL (`/redirect/{pixel}`).
-   * Server-assigned.
+   * The immutable short code embedded in the public URL (`/r/{pixel}` for new
+   * links). Server-assigned.
    */
   pixel?: string | null;
 
@@ -201,14 +216,19 @@ export interface ShortLinkCreateResponse {
   redirectUrl?: string | null;
 
   /**
+   * The public code embedded in the short-link URL.
+   */
+  shortLinkCode?: string | null;
+
+  /**
    * QR styling + campaign tags. Null until the link is styled.
    */
   shortLinkDesign?: unknown | null;
 
   /**
-   * The public short-link URL that the QR encodes and callers share. Composed from
-   * the short code, the link name (sent as the tracked event), and the campaign
-   * tags. Also resolves on any branded custom domains configured for the account.
+   * The public short-link URL that the QR encodes and callers share. New links use
+   * `/r/{pixel}`; tracked event and campaign defaults are stored server-side. Also
+   * resolves on branded custom domains configured for the account.
    */
   shortUrl?: string | null;
 }
@@ -226,6 +246,11 @@ export interface ShortLinkRetrieveResponse {
   status: 'Disabled' | 'Enabled';
 
   /**
+   * Whether a user selected this code instead of using a generated code.
+   */
+  hasCustomShortLinkCode?: boolean | null;
+
+  /**
    * Whether this short link exists in the currently published version. An
    * unpublished short link does not resolve at the edge.
    */
@@ -234,8 +259,8 @@ export interface ShortLinkRetrieveResponse {
   name?: string | null;
 
   /**
-   * The short code embedded in the public URL (`/redirect/{pixel}`).
-   * Server-assigned.
+   * The immutable short code embedded in the public URL (`/r/{pixel}` for new
+   * links). Server-assigned.
    */
   pixel?: string | null;
 
@@ -245,14 +270,19 @@ export interface ShortLinkRetrieveResponse {
   redirectUrl?: string | null;
 
   /**
+   * The public code embedded in the short-link URL.
+   */
+  shortLinkCode?: string | null;
+
+  /**
    * QR styling + campaign tags. Null until the link is styled.
    */
   shortLinkDesign?: unknown | null;
 
   /**
-   * The public short-link URL that the QR encodes and callers share. Composed from
-   * the short code, the link name (sent as the tracked event), and the campaign
-   * tags. Also resolves on any branded custom domains configured for the account.
+   * The public short-link URL that the QR encodes and callers share. New links use
+   * `/r/{pixel}`; tracked event and campaign defaults are stored server-side. Also
+   * resolves on branded custom domains configured for the account.
    */
   shortUrl?: string | null;
 }
@@ -270,6 +300,11 @@ export interface ShortLinkUpdateResponse {
   status: 'Disabled' | 'Enabled';
 
   /**
+   * Whether a user selected this code instead of using a generated code.
+   */
+  hasCustomShortLinkCode?: boolean | null;
+
+  /**
    * Whether this short link exists in the currently published version. An
    * unpublished short link does not resolve at the edge.
    */
@@ -278,8 +313,8 @@ export interface ShortLinkUpdateResponse {
   name?: string | null;
 
   /**
-   * The short code embedded in the public URL (`/redirect/{pixel}`).
-   * Server-assigned.
+   * The immutable short code embedded in the public URL (`/r/{pixel}` for new
+   * links). Server-assigned.
    */
   pixel?: string | null;
 
@@ -289,14 +324,19 @@ export interface ShortLinkUpdateResponse {
   redirectUrl?: string | null;
 
   /**
+   * The public code embedded in the short-link URL.
+   */
+  shortLinkCode?: string | null;
+
+  /**
    * QR styling + campaign tags. Null until the link is styled.
    */
   shortLinkDesign?: unknown | null;
 
   /**
-   * The public short-link URL that the QR encodes and callers share. Composed from
-   * the short code, the link name (sent as the tracked event), and the campaign
-   * tags. Also resolves on any branded custom domains configured for the account.
+   * The public short-link URL that the QR encodes and callers share. New links use
+   * `/r/{pixel}`; tracked event and campaign defaults are stored server-side. Also
+   * resolves on branded custom domains configured for the account.
    */
   shortUrl?: string | null;
 }
@@ -367,6 +407,11 @@ export interface ShortLinkListParams extends CursorParams {
 
 export interface ShortLinkCreateParams {
   /**
+   * Optional custom code in the shared public short-link namespace.
+   */
+  code?: string | null;
+
+  /**
    * Human-readable name. Also sent as the tracked event name on every click/scan.
    */
   name?: string | null;
@@ -388,6 +433,8 @@ export interface ShortLinkCreateParams {
 }
 
 export interface ShortLinkUpdateParams {
+  code?: string | null;
+
   name?: string | null;
 
   qr?: unknown | null;
