@@ -143,6 +143,7 @@ describe('resource videos', () => {
       to: '7321-69-10',
       limit: 1,
       offset: 0,
+      videoId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
     });
   });
 
