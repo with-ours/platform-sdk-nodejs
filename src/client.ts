@@ -1,0 +1,1650 @@
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+import type { RequestInit, RequestInfo, BodyInit } from './internal/builtin-types';
+import type { HTTPMethod, PromiseOrValue, MergedRequestInit, FinalizedRequestInit } from './internal/types';
+import { uuid4 } from './internal/utils/uuid';
+import { validatePositiveInteger, isAbsoluteURL, safeJSON } from './internal/utils/values';
+import { sleep } from './internal/utils/sleep';
+export type { Logger, LogLevel } from './internal/utils/log';
+import { castToError, isAbortError } from './internal/errors';
+import type { APIResponseProps } from './internal/parse';
+import { getPlatformHeaders } from './internal/detect-platform';
+import * as Shims from './internal/shims';
+import * as Opts from './internal/request-options';
+import { stringifyQuery } from './internal/utils/query';
+import { VERSION } from './version';
+import * as Errors from './core/error';
+import * as Pagination from './core/pagination';
+import { AbstractPage, type CursorParams, CursorResponse } from './core/pagination';
+import * as Uploads from './core/uploads';
+import * as API from './resources/index';
+import { APIPromise } from './core/api-promise';
+import {
+  AllowedEventCreateParams,
+  AllowedEventCreateResponse,
+  AllowedEventDeleteResponse,
+  AllowedEventListResponse,
+  AllowedEventRetrieveResponse,
+  AllowedEventUpdateParams,
+  AllowedEventUpdateResponse,
+  AllowedEvents,
+} from './resources/allowed-events';
+import {
+  Attribution,
+  AttributionAudienceConversionParams,
+  AttributionAudienceConversionResponse,
+  AttributionConversionParams,
+  AttributionConversionResponse,
+  AttributionInitialParams,
+  AttributionInitialResponse,
+  AttributionLastTouchParams,
+  AttributionLastTouchResponse,
+  AttributionUtmComparisonParams,
+  AttributionUtmComparisonResponse,
+} from './resources/attribution';
+import {
+  AudienceConversionReportCreateParams,
+  AudienceConversionReportCreateResponse,
+  AudienceConversionReportDeleteResponse,
+  AudienceConversionReportListResponse,
+  AudienceConversionReportResultsParams,
+  AudienceConversionReportResultsResponse,
+  AudienceConversionReportRetrieveResponse,
+  AudienceConversionReportUpdateParams,
+  AudienceConversionReportUpdateResponse,
+  AudienceConversionReports,
+} from './resources/audience-conversion-reports';
+import {
+  ConsentAnalytics,
+  ConsentAnalyticsListParams,
+  ConsentAnalyticsListResponse,
+} from './resources/consent-analytics';
+import {
+  ConsentSettingAnalyticsByRegionParams,
+  ConsentSettingAnalyticsByRegionResponse,
+  ConsentSettingAnalyticsParams,
+  ConsentSettingAnalyticsResponse,
+  ConsentSettingCreateResponse,
+  ConsentSettingDeleteResponse,
+  ConsentSettingListResponse,
+  ConsentSettingPageAnalysisParams,
+  ConsentSettingPageAnalysisResponse,
+  ConsentSettingReplaceParams,
+  ConsentSettingReplaceResponse,
+  ConsentSettingRetrieveResponse,
+  ConsentSettingUpdateParams,
+  ConsentSettingUpdateResponse,
+  ConsentSettings,
+} from './resources/consent-settings';
+import {
+  ConversionJourneySummaries,
+  ConversionJourneySummaryCreateParams,
+  ConversionJourneySummaryCreateResponse,
+  ConversionJourneySummaryDeleteResponse,
+  ConversionJourneySummaryListParams,
+  ConversionJourneySummaryListResponse,
+  ConversionJourneySummaryListResponsesCursor,
+  ConversionJourneySummaryRetrieveResponse,
+  ConversionJourneySummaryUpdateParams,
+  ConversionJourneySummaryUpdateResponse,
+} from './resources/conversion-journey-summaries';
+import {
+  DataGovernance,
+  DataGovernanceCreateParams,
+  DataGovernanceCreateResponse,
+  DataGovernanceDeleteResponse,
+  DataGovernanceListParams,
+  DataGovernanceListResponse,
+  DataGovernanceListResponsesCursor,
+  DataGovernanceRetrieveResponse,
+  DataGovernanceUpdateParams,
+  DataGovernanceUpdateResponse,
+} from './resources/data-governance';
+import {
+  DefaultMappingListResponse,
+  DefaultMappingReplaceParams,
+  DefaultMappingReplaceResponse,
+  DefaultMappingRetrieveResponse,
+  DefaultMappings,
+} from './resources/default-mappings';
+import {
+  DestinationCreateParams,
+  DestinationCreateResponse,
+  DestinationDeleteResponse,
+  DestinationHealthResponse,
+  DestinationListParams,
+  DestinationListResponse,
+  DestinationListResponsesCursor,
+  DestinationRetrieveResponse,
+  DestinationTypesResponse,
+  DestinationUpdateParams,
+  DestinationUpdateResponse,
+  Destinations,
+} from './resources/destinations';
+import {
+  ExperimentSettingCreateParams,
+  ExperimentSettingCreateResponse,
+  ExperimentSettingDeleteResponse,
+  ExperimentSettingListResponse,
+  ExperimentSettingRetrieveResponse,
+  ExperimentSettingUpdateParams,
+  ExperimentSettingUpdateResponse,
+  ExperimentSettings,
+} from './resources/experiment-settings';
+import {
+  ExperimentVariantCreateParams,
+  ExperimentVariantCreateResponse,
+  ExperimentVariantDeleteResponse,
+  ExperimentVariantListParams,
+  ExperimentVariantListResponse,
+  ExperimentVariantListResponsesCursor,
+  ExperimentVariantRetrieveResponse,
+  ExperimentVariantUpdateParams,
+  ExperimentVariantUpdateResponse,
+  ExperimentVariants,
+} from './resources/experiment-variants';
+import {
+  ExperimentCreateParams,
+  ExperimentCreateResponse,
+  ExperimentDeleteResponse,
+  ExperimentEndRolloutResponse,
+  ExperimentListParams,
+  ExperimentListResponse,
+  ExperimentListResponsesCursor,
+  ExperimentPauseParams,
+  ExperimentPauseResponse,
+  ExperimentResultsParams,
+  ExperimentResultsResponse,
+  ExperimentResultsTimeSeriesParams,
+  ExperimentResultsTimeSeriesResponse,
+  ExperimentResumeParams,
+  ExperimentResumeResponse,
+  ExperimentRetrieveResponse,
+  ExperimentRolloutParams,
+  ExperimentRolloutResponse,
+  ExperimentSessionReplaysParams,
+  ExperimentSessionReplaysResponse,
+  ExperimentStartParams,
+  ExperimentStartResponse,
+  ExperimentStopParams,
+  ExperimentStopResponse,
+  ExperimentUpdateParams,
+  ExperimentUpdateResponse,
+  ExperimentWinnerParams,
+  ExperimentWinnerResponse,
+  Experiments,
+} from './resources/experiments';
+import {
+  FunnelCreateParams,
+  FunnelCreateResponse,
+  FunnelDeleteResponse,
+  FunnelListResponse,
+  FunnelResultsParams,
+  FunnelResultsResponse,
+  FunnelRetrieveResponse,
+  FunnelUpdateParams,
+  FunnelUpdateResponse,
+  Funnels,
+} from './resources/funnels';
+import {
+  HeatmapPageListParams,
+  HeatmapPageListResponse,
+  HeatmapPageListResponsesCursor,
+  HeatmapPageSummaryParams,
+  HeatmapPageSummaryResponse,
+  HeatmapPages,
+} from './resources/heatmap-pages';
+import {
+  LocationCreateParams,
+  LocationCreateResponse,
+  LocationEmbedCodeParams,
+  LocationEmbedCodeResponse,
+  LocationListResponse,
+  LocationUpdateParams,
+  LocationUpdateResponse,
+  Locations,
+} from './resources/locations';
+import {
+  MappingCreateParams,
+  MappingCreateResponse,
+  MappingCustomVariablesResponse,
+  MappingDefaultVariablesResponse,
+  MappingDeleteResponse,
+  MappingListParams,
+  MappingListResponse,
+  MappingListResponsesCursor,
+  MappingModificationsResponse,
+  MappingReorderParams,
+  MappingReorderResponse,
+  MappingRetrieveResponse,
+  MappingTemplatesParams,
+  MappingTemplatesResponse,
+  MappingUpdateParams,
+  MappingUpdateResponse,
+  Mappings,
+} from './resources/mappings';
+import {
+  ReplaySettingCreateParams,
+  ReplaySettingCreateResponse,
+  ReplaySettingDeleteResponse,
+  ReplaySettingListParams,
+  ReplaySettingListResponse,
+  ReplaySettingListResponsesCursor,
+  ReplaySettingRetrieveResponse,
+  ReplaySettingUpdateParams,
+  ReplaySettingUpdateResponse,
+  ReplaySettings,
+} from './resources/replay-settings';
+import {
+  ShortLinkCreateParams,
+  ShortLinkCreateResponse,
+  ShortLinkDeleteResponse,
+  ShortLinkListParams,
+  ShortLinkListResponse,
+  ShortLinkListResponsesCursor,
+  ShortLinkResultsParams,
+  ShortLinkResultsResponse,
+  ShortLinkRetrieveResponse,
+  ShortLinkUpdateParams,
+  ShortLinkUpdateResponse,
+  ShortLinks,
+} from './resources/short-links';
+import {
+  SourceCreateParams,
+  SourceCreateResponse,
+  SourceDeleteResponse,
+  SourceListParams,
+  SourceListResponse,
+  SourceListResponsesCursor,
+  SourceRetrieveResponse,
+  SourceTokensResponse,
+  SourceUpdateParams,
+  SourceUpdateResponse,
+  Sources,
+} from './resources/sources';
+import {
+  TagManagerAssetFolderCreateParams,
+  TagManagerAssetFolderCreateResponse,
+  TagManagerAssetFolders,
+} from './resources/tag-manager-asset-folders';
+import {
+  TagManagerFolderCreateParams,
+  TagManagerFolderCreateResponse,
+  TagManagerFolderDeleteResponse,
+  TagManagerFolderListParams,
+  TagManagerFolderListResponse,
+  TagManagerFolderListResponsesCursor,
+  TagManagerFolderRetrieveResponse,
+  TagManagerFolderUpdateParams,
+  TagManagerFolderUpdateResponse,
+  TagManagerFolders,
+} from './resources/tag-manager-folders';
+import {
+  TagManagerTagCreateParams,
+  TagManagerTagCreateResponse,
+  TagManagerTagDeleteResponse,
+  TagManagerTagListParams,
+  TagManagerTagListResponse,
+  TagManagerTagListResponsesCursor,
+  TagManagerTagRetrieveResponse,
+  TagManagerTagTypesResponse,
+  TagManagerTagUpdateParams,
+  TagManagerTagUpdateResponse,
+  TagManagerTags,
+} from './resources/tag-manager-tags';
+import {
+  TagManagerTriggerCreateParams,
+  TagManagerTriggerCreateResponse,
+  TagManagerTriggerDeleteResponse,
+  TagManagerTriggerListParams,
+  TagManagerTriggerListResponse,
+  TagManagerTriggerListResponsesCursor,
+  TagManagerTriggerRetrieveResponse,
+  TagManagerTriggerTypesResponse,
+  TagManagerTriggerUpdateParams,
+  TagManagerTriggerUpdateResponse,
+  TagManagerTriggers,
+} from './resources/tag-manager-triggers';
+import {
+  TagManagerVariableCreateParams,
+  TagManagerVariableCreateResponse,
+  TagManagerVariableDeleteResponse,
+  TagManagerVariableListParams,
+  TagManagerVariableListResponse,
+  TagManagerVariableListResponsesCursor,
+  TagManagerVariableRetrieveResponse,
+  TagManagerVariableTypesResponse,
+  TagManagerVariableUpdateParams,
+  TagManagerVariableUpdateResponse,
+  TagManagerVariables,
+} from './resources/tag-manager-variables';
+import {
+  TagManagerCreateParams,
+  TagManagerCreateResponse,
+  TagManagerDeleteResponse,
+  TagManagerListResponse,
+  TagManagerRetrieveResponse,
+  TagManagerUpdateParams,
+  TagManagerUpdateResponse,
+  TagManagers,
+} from './resources/tag-managers';
+import {
+  VersionAbandonResponse,
+  VersionCreateParams,
+  VersionCreateResponse,
+  VersionDiffParams,
+  VersionDiffResponse,
+  VersionListParams,
+  VersionListResponse,
+  VersionListResponsesCursor,
+  VersionPublishResponse,
+  VersionRetrieveResponse,
+  VersionRevertParams,
+  VersionRevertResponse,
+  VersionSnapshotResponse,
+  VersionUpdateParams,
+  VersionUpdateResponse,
+  Versions,
+} from './resources/versions';
+import {
+  VideoChannelAssignMediaParams,
+  VideoChannelAssignMediaResponse,
+  VideoChannelCreateParams,
+  VideoChannelCreateResponse,
+  VideoChannelDeleteResponse,
+  VideoChannelListParams,
+  VideoChannelListResponse,
+  VideoChannelListResponsesCursor,
+  VideoChannelMediaResponse,
+  VideoChannelRemoveMediaParams,
+  VideoChannelRemoveMediaResponse,
+  VideoChannelReorderParams,
+  VideoChannelReorderResponse,
+  VideoChannelRetrieveResponse,
+  VideoChannelUpdateParams,
+  VideoChannelUpdateResponse,
+  VideoChannels,
+} from './resources/video-channels';
+import {
+  VideoAnalyticsParams,
+  VideoAnalyticsResponse,
+  VideoAnalyticsTimeseriesParams,
+  VideoAnalyticsTimeseriesResponse,
+  VideoCreateParams,
+  VideoCreateResponse,
+  VideoDeleteResponse,
+  VideoListParams,
+  VideoListResponse,
+  VideoListResponsesCursor,
+  VideoRetrieveResponse,
+  VideoTranscriptResponse,
+  VideoUpdateParams,
+  VideoUpdateResponse,
+  VideoUpdateTranscriptParams,
+  VideoUpdateTranscriptResponse,
+  Videos,
+} from './resources/videos';
+import {
+  WebScannerRuleCreateParams,
+  WebScannerRuleCreateResponse,
+  WebScannerRuleDeleteResponse,
+  WebScannerRuleListParams,
+  WebScannerRuleListResponse,
+  WebScannerRuleRetrieveResponse,
+  WebScannerRuleUpdateParams,
+  WebScannerRuleUpdateResponse,
+  WebScannerRules,
+} from './resources/web-scanner-rules';
+import {
+  WebScannerCookiesParams,
+  WebScannerCookiesResponse,
+  WebScannerCreateParams,
+  WebScannerCreateResponse,
+  WebScannerDeleteResponse,
+  WebScannerFindingsParams,
+  WebScannerFindingsResponse,
+  WebScannerListResponse,
+  WebScannerRetrieveResponse,
+  WebScannerSummaryParams,
+  WebScannerSummaryResponse,
+  WebScannerTriggerResponse,
+  WebScannerUpdateParams,
+  WebScannerUpdateResponse,
+  WebScanners,
+} from './resources/web-scanners';
+import { type Fetch } from './internal/builtin-types';
+import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
+import { FinalRequestOptions, RequestOptions } from './internal/request-options';
+import { readEnv } from './internal/utils/env';
+import {
+  type LogLevel,
+  type Logger,
+  formatRequestDetails,
+  loggerFor,
+  parseLogLevel,
+} from './internal/utils/log';
+import { isEmptyObj } from './internal/utils/values';
+
+export interface ClientOptions {
+  /**
+   * Defaults to process.env['OURS_PRIVACY_API_KEY'].
+   */
+  apiKey?: string | undefined;
+
+  /**
+   * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
+   *
+   * Defaults to process.env['OURS_PRIVACY_PLATFORM_BASE_URL'].
+   */
+  baseURL?: string | null | undefined;
+
+  /**
+   * The maximum amount of time (in milliseconds) that the client should wait for a response
+   * from the server before timing out a single request.
+   *
+   * Note that request timeouts are retried by default, so in a worst-case scenario you may wait
+   * much longer than this timeout before the promise succeeds or fails.
+   *
+   * @unit milliseconds
+   */
+  timeout?: number | undefined;
+  /**
+   * Additional `RequestInit` options to be passed to `fetch` calls.
+   * Properties will be overridden by per-request `fetchOptions`.
+   */
+  fetchOptions?: MergedRequestInit | undefined;
+
+  /**
+   * Specify a custom `fetch` function implementation.
+   *
+   * If not provided, we expect that `fetch` is defined globally.
+   */
+  fetch?: Fetch | undefined;
+
+  /**
+   * The maximum number of times that the client will retry a request in case of a
+   * temporary failure, like a network error or a 5XX error from the server.
+   *
+   * @default 2
+   */
+  maxRetries?: number | undefined;
+
+  /**
+   * Default headers to include with every request to the API.
+   *
+   * These can be removed in individual requests by explicitly setting the
+   * header to `null` in request options.
+   */
+  defaultHeaders?: HeadersLike | undefined;
+
+  /**
+   * Default query parameters to include with every request to the API.
+   *
+   * These can be removed in individual requests by explicitly setting the
+   * param to `undefined` in request options.
+   */
+  defaultQuery?: Record<string, string | undefined> | undefined;
+
+  /**
+   * Set the log level.
+   *
+   * Defaults to process.env['OURS_PRIVACY_PLATFORM_LOG'] or 'warn' if it isn't set.
+   */
+  logLevel?: LogLevel | undefined;
+
+  /**
+   * Set the logger.
+   *
+   * Defaults to globalThis.console.
+   */
+  logger?: Logger | undefined;
+}
+
+/**
+ * API Client for interfacing with the Ours Privacy Platform API.
+ */
+export class OursPrivacyPlatform {
+  apiKey: string;
+
+  baseURL: string;
+  maxRetries: number;
+  timeout: number;
+  logger: Logger;
+  logLevel: LogLevel | undefined;
+  fetchOptions: MergedRequestInit | undefined;
+
+  private fetch: Fetch;
+  #encoder: Opts.RequestEncoder;
+  protected idempotencyHeader?: string;
+  private _options: ClientOptions;
+
+  /**
+   * API Client for interfacing with the Ours Privacy Platform API.
+   *
+   * @param {string | undefined} [opts.apiKey=process.env['OURS_PRIVACY_API_KEY'] ?? undefined]
+   * @param {string} [opts.baseURL=process.env['OURS_PRIVACY_PLATFORM_BASE_URL'] ?? https://app.oursprivacy.com] - Override the default base URL for the API.
+   * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
+   * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
+   * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
+   * @param {number} [opts.maxRetries=2] - The maximum number of times the client will retry a request.
+   * @param {HeadersLike} opts.defaultHeaders - Default headers to include with every request to the API.
+   * @param {Record<string, string | undefined>} opts.defaultQuery - Default query parameters to include with every request to the API.
+   */
+  constructor({
+    baseURL = readEnv('OURS_PRIVACY_PLATFORM_BASE_URL'),
+    apiKey = readEnv('OURS_PRIVACY_API_KEY'),
+    ...opts
+  }: ClientOptions = {}) {
+    if (apiKey === undefined) {
+      throw new Errors.OursPrivacyPlatformError(
+        "The OURS_PRIVACY_API_KEY environment variable is missing or empty; either provide it, or instantiate the OursPrivacyPlatform client with an apiKey option, like new OursPrivacyPlatform({ apiKey: 'My API Key' }).",
+      );
+    }
+
+    const options: ClientOptions = {
+      apiKey,
+      ...opts,
+      baseURL: baseURL || `https://app.oursprivacy.com`,
+    };
+
+    this.baseURL = options.baseURL!;
+    this.timeout = options.timeout ?? OursPrivacyPlatform.DEFAULT_TIMEOUT; /* 1 minute */
+    this.logger = options.logger ?? console;
+    const defaultLogLevel = 'warn';
+    // Set default logLevel early so that we can log a warning in parseLogLevel.
+    this.logLevel = defaultLogLevel;
+    this.logLevel =
+      parseLogLevel(options.logLevel, 'ClientOptions.logLevel', this) ??
+      parseLogLevel(readEnv('OURS_PRIVACY_PLATFORM_LOG'), "process.env['OURS_PRIVACY_PLATFORM_LOG']", this) ??
+      defaultLogLevel;
+    this.fetchOptions = options.fetchOptions;
+    this.maxRetries = options.maxRetries ?? 2;
+    this.fetch = options.fetch ?? Shims.getDefaultFetch();
+    this.#encoder = Opts.FallbackEncoder;
+
+    const customHeadersEnv = readEnv('OURS_PRIVACY_PLATFORM_CUSTOM_HEADERS');
+    if (customHeadersEnv) {
+      const parsed: Record<string, string> = {};
+      for (const line of customHeadersEnv.split('\n')) {
+        const colon = line.indexOf(':');
+        if (colon >= 0) {
+          parsed[line.substring(0, colon).trim()] = line.substring(colon + 1).trim();
+        }
+      }
+      options.defaultHeaders = { ...parsed, ...options.defaultHeaders };
+    }
+
+    this._options = options;
+
+    this.apiKey = apiKey;
+  }
+
+  /**
+   * Create a new client instance re-using the same options given to the current client with optional overriding.
+   */
+  withOptions(options: Partial<ClientOptions>): this {
+    const client = new (this.constructor as any as new (props: ClientOptions) => typeof this)({
+      ...this._options,
+      baseURL: this.baseURL,
+      maxRetries: this.maxRetries,
+      timeout: this.timeout,
+      logger: this.logger,
+      logLevel: this.logLevel,
+      fetch: this.fetch,
+      fetchOptions: this.fetchOptions,
+      apiKey: this.apiKey,
+      ...options,
+    });
+    return client;
+  }
+
+  /**
+   * Check whether the base URL is set to its default.
+   */
+  #baseURLOverridden(): boolean {
+    return this.baseURL !== 'https://app.oursprivacy.com';
+  }
+
+  protected defaultQuery(): Record<string, string | undefined> | undefined {
+    return this._options.defaultQuery;
+  }
+
+  protected validateHeaders({ values, nulls }: NullableHeaders) {
+    return;
+  }
+
+  protected async authHeaders(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
+    return buildHeaders([{ Authorization: `Bearer ${this.apiKey}` }]);
+  }
+
+  /**
+   * Basic re-implementation of `qs.stringify` for primitive types.
+   */
+  protected stringifyQuery(query: object | Record<string, unknown>): string {
+    return stringifyQuery(query);
+  }
+
+  private getUserAgent(): string {
+    return `${this.constructor.name}/JS ${VERSION}`;
+  }
+
+  protected defaultIdempotencyKey(): string {
+    return `stainless-node-retry-${uuid4()}`;
+  }
+
+  protected makeStatusError(
+    status: number,
+    error: Object,
+    message: string | undefined,
+    headers: Headers,
+  ): Errors.APIError {
+    return Errors.APIError.generate(status, error, message, headers);
+  }
+
+  buildURL(
+    path: string,
+    query: Record<string, unknown> | null | undefined,
+    defaultBaseURL?: string | undefined,
+  ): string {
+    const baseURL = (!this.#baseURLOverridden() && defaultBaseURL) || this.baseURL;
+    const url =
+      isAbsoluteURL(path) ?
+        new URL(path)
+      : new URL(baseURL + (baseURL.endsWith('/') && path.startsWith('/') ? path.slice(1) : path));
+
+    const defaultQuery = this.defaultQuery();
+    const pathQuery = Object.fromEntries(url.searchParams);
+    if (!isEmptyObj(defaultQuery) || !isEmptyObj(pathQuery)) {
+      query = { ...pathQuery, ...defaultQuery, ...query };
+    }
+
+    if (typeof query === 'object' && query && !Array.isArray(query)) {
+      url.search = this.stringifyQuery(query);
+    }
+
+    return url.toString();
+  }
+
+  /**
+   * Used as a callback for mutating the given `FinalRequestOptions` object.
+   */
+  protected async prepareOptions(options: FinalRequestOptions): Promise<void> {}
+
+  /**
+   * Used as a callback for mutating the given `RequestInit` object.
+   *
+   * This is useful for cases where you want to add certain headers based off of
+   * the request properties, e.g. `method` or `url`.
+   */
+  protected async prepareRequest(
+    request: RequestInit,
+    { url, options }: { url: string; options: FinalRequestOptions },
+  ): Promise<void> {}
+
+  get<Rsp>(path: string, opts?: PromiseOrValue<RequestOptions>): APIPromise<Rsp> {
+    return this.methodRequest('get', path, opts);
+  }
+
+  post<Rsp>(path: string, opts?: PromiseOrValue<RequestOptions>): APIPromise<Rsp> {
+    return this.methodRequest('post', path, opts);
+  }
+
+  patch<Rsp>(path: string, opts?: PromiseOrValue<RequestOptions>): APIPromise<Rsp> {
+    return this.methodRequest('patch', path, opts);
+  }
+
+  put<Rsp>(path: string, opts?: PromiseOrValue<RequestOptions>): APIPromise<Rsp> {
+    return this.methodRequest('put', path, opts);
+  }
+
+  delete<Rsp>(path: string, opts?: PromiseOrValue<RequestOptions>): APIPromise<Rsp> {
+    return this.methodRequest('delete', path, opts);
+  }
+
+  private methodRequest<Rsp>(
+    method: HTTPMethod,
+    path: string,
+    opts?: PromiseOrValue<RequestOptions>,
+  ): APIPromise<Rsp> {
+    return this.request(
+      Promise.resolve(opts).then((opts) => {
+        return { method, path, ...opts };
+      }),
+    );
+  }
+
+  request<Rsp>(
+    options: PromiseOrValue<FinalRequestOptions>,
+    remainingRetries: number | null = null,
+  ): APIPromise<Rsp> {
+    return new APIPromise(this, this.makeRequest(options, remainingRetries, undefined));
+  }
+
+  private async makeRequest(
+    optionsInput: PromiseOrValue<FinalRequestOptions>,
+    retriesRemaining: number | null,
+    retryOfRequestLogID: string | undefined,
+  ): Promise<APIResponseProps> {
+    const options = await optionsInput;
+    const maxRetries = options.maxRetries ?? this.maxRetries;
+    if (retriesRemaining == null) {
+      retriesRemaining = maxRetries;
+    }
+
+    await this.prepareOptions(options);
+
+    const { req, url, timeout } = await this.buildRequest(options, {
+      retryCount: maxRetries - retriesRemaining,
+    });
+
+    await this.prepareRequest(req, { url, options });
+
+    /** Not an API request ID, just for correlating local log entries. */
+    const requestLogID = 'log_' + ((Math.random() * (1 << 24)) | 0).toString(16).padStart(6, '0');
+    const retryLogStr = retryOfRequestLogID === undefined ? '' : `, retryOf: ${retryOfRequestLogID}`;
+    const startTime = Date.now();
+
+    loggerFor(this).debug(
+      `[${requestLogID}] sending request`,
+      formatRequestDetails({
+        retryOfRequestLogID,
+        method: options.method,
+        url,
+        options,
+        headers: req.headers,
+      }),
+    );
+
+    if (options.signal?.aborted) {
+      throw new Errors.APIUserAbortError();
+    }
+
+    const controller = new AbortController();
+    const response = await this.fetchWithTimeout(url, req, timeout, controller).catch(castToError);
+    const headersTime = Date.now();
+
+    if (response instanceof globalThis.Error) {
+      const retryMessage = `retrying, ${retriesRemaining} attempts remaining`;
+      if (options.signal?.aborted) {
+        throw new Errors.APIUserAbortError();
+      }
+      // detect native connection timeout errors
+      // deno throws "TypeError: error sending request for url (https://example/): client error (Connect): tcp connect error: Operation timed out (os error 60): Operation timed out (os error 60)"
+      // undici throws "TypeError: fetch failed" with cause "ConnectTimeoutError: Connect Timeout Error (attempted address: example:443, timeout: 1ms)"
+      // others do not provide enough information to distinguish timeouts from other connection errors
+      const isTimeout =
+        isAbortError(response) ||
+        /timed? ?out/i.test(String(response) + ('cause' in response ? String(response.cause) : ''));
+      if (retriesRemaining) {
+        loggerFor(this).info(
+          `[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} - ${retryMessage}`,
+        );
+        loggerFor(this).debug(
+          `[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} (${retryMessage})`,
+          formatRequestDetails({
+            retryOfRequestLogID,
+            url,
+            durationMs: headersTime - startTime,
+            message: response.message,
+          }),
+        );
+        return this.retryRequest(options, retriesRemaining, retryOfRequestLogID ?? requestLogID);
+      }
+      loggerFor(this).info(
+        `[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} - error; no more retries left`,
+      );
+      loggerFor(this).debug(
+        `[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} (error; no more retries left)`,
+        formatRequestDetails({
+          retryOfRequestLogID,
+          url,
+          durationMs: headersTime - startTime,
+          message: response.message,
+        }),
+      );
+      if (isTimeout) {
+        throw new Errors.APIConnectionTimeoutError();
+      }
+      throw new Errors.APIConnectionError({ cause: response });
+    }
+
+    const responseInfo = `[${requestLogID}${retryLogStr}] ${req.method} ${url} ${
+      response.ok ? 'succeeded' : 'failed'
+    } with status ${response.status} in ${headersTime - startTime}ms`;
+
+    if (!response.ok) {
+      const shouldRetry = await this.shouldRetry(response);
+      if (retriesRemaining && shouldRetry) {
+        const retryMessage = `retrying, ${retriesRemaining} attempts remaining`;
+
+        // We don't need the body of this response.
+        await Shims.CancelReadableStream(response.body);
+        loggerFor(this).info(`${responseInfo} - ${retryMessage}`);
+        loggerFor(this).debug(
+          `[${requestLogID}] response error (${retryMessage})`,
+          formatRequestDetails({
+            retryOfRequestLogID,
+            url: response.url,
+            status: response.status,
+            headers: response.headers,
+            durationMs: headersTime - startTime,
+          }),
+        );
+        return this.retryRequest(
+          options,
+          retriesRemaining,
+          retryOfRequestLogID ?? requestLogID,
+          response.headers,
+        );
+      }
+
+      const retryMessage = shouldRetry ? `error; no more retries left` : `error; not retryable`;
+
+      loggerFor(this).info(`${responseInfo} - ${retryMessage}`);
+
+      const errText = await response.text().catch((err: any) => castToError(err).message);
+      const errJSON = safeJSON(errText) as any;
+      const errMessage = errJSON ? undefined : errText;
+
+      loggerFor(this).debug(
+        `[${requestLogID}] response error (${retryMessage})`,
+        formatRequestDetails({
+          retryOfRequestLogID,
+          url: response.url,
+          status: response.status,
+          headers: response.headers,
+          message: errMessage,
+          durationMs: Date.now() - startTime,
+        }),
+      );
+
+      const err = this.makeStatusError(response.status, errJSON, errMessage, response.headers);
+      throw err;
+    }
+
+    loggerFor(this).info(responseInfo);
+    loggerFor(this).debug(
+      `[${requestLogID}] response start`,
+      formatRequestDetails({
+        retryOfRequestLogID,
+        url: response.url,
+        status: response.status,
+        headers: response.headers,
+        durationMs: headersTime - startTime,
+      }),
+    );
+
+    return { response, options, controller, requestLogID, retryOfRequestLogID, startTime };
+  }
+
+  getAPIList<Item, PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>>(
+    path: string,
+    Page: new (...args: any[]) => PageClass,
+    opts?: PromiseOrValue<RequestOptions>,
+  ): Pagination.PagePromise<PageClass, Item> {
+    return this.requestAPIList(
+      Page,
+      opts && 'then' in opts ?
+        opts.then((opts) => ({ method: 'get', path, ...opts }))
+      : { method: 'get', path, ...opts },
+    );
+  }
+
+  requestAPIList<
+    Item = unknown,
+    PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>,
+  >(
+    Page: new (...args: ConstructorParameters<typeof Pagination.AbstractPage>) => PageClass,
+    options: PromiseOrValue<FinalRequestOptions>,
+  ): Pagination.PagePromise<PageClass, Item> {
+    const request = this.makeRequest(options, null, undefined);
+    return new Pagination.PagePromise<PageClass, Item>(this as any as OursPrivacyPlatform, request, Page);
+  }
+
+  async fetchWithTimeout(
+    url: RequestInfo,
+    init: RequestInit | undefined,
+    ms: number,
+    controller: AbortController,
+  ): Promise<Response> {
+    const { signal, method, ...options } = init || {};
+    const abort = this._makeAbort(controller);
+    if (signal) signal.addEventListener('abort', abort, { once: true });
+
+    const timeout = setTimeout(abort, ms);
+
+    const isReadableBody =
+      ((globalThis as any).ReadableStream && options.body instanceof (globalThis as any).ReadableStream) ||
+      (typeof options.body === 'object' && options.body !== null && Symbol.asyncIterator in options.body);
+
+    const fetchOptions: RequestInit = {
+      signal: controller.signal as any,
+      ...(isReadableBody ? { duplex: 'half' } : {}),
+      method: 'GET',
+      ...options,
+    };
+    if (method) {
+      // Custom methods like 'patch' need to be uppercased
+      // See https://github.com/nodejs/undici/issues/2294
+      fetchOptions.method = method.toUpperCase();
+    }
+
+    try {
+      // use undefined this binding; fetch errors if bound to something else in browser/cloudflare
+      return await this.fetch.call(undefined, url, fetchOptions);
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+
+  private async shouldRetry(response: Response): Promise<boolean> {
+    // Note this is not a standard header.
+    const shouldRetryHeader = response.headers.get('x-should-retry');
+
+    // If the server explicitly says whether or not to retry, obey.
+    if (shouldRetryHeader === 'true') return true;
+    if (shouldRetryHeader === 'false') return false;
+
+    // Retry on request timeouts.
+    if (response.status === 408) return true;
+
+    // Retry on lock timeouts.
+    if (response.status === 409) return true;
+
+    // Retry on rate limits.
+    if (response.status === 429) return true;
+
+    // Retry internal errors.
+    if (response.status >= 500) return true;
+
+    return false;
+  }
+
+  private async retryRequest(
+    options: FinalRequestOptions,
+    retriesRemaining: number,
+    requestLogID: string,
+    responseHeaders?: Headers | undefined,
+  ): Promise<APIResponseProps> {
+    let timeoutMillis: number | undefined;
+
+    // Note the `retry-after-ms` header may not be standard, but is a good idea and we'd like proactive support for it.
+    const retryAfterMillisHeader = responseHeaders?.get('retry-after-ms');
+    if (retryAfterMillisHeader) {
+      const timeoutMs = parseFloat(retryAfterMillisHeader);
+      if (!Number.isNaN(timeoutMs)) {
+        timeoutMillis = timeoutMs;
+      }
+    }
+
+    // About the Retry-After header: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After
+    const retryAfterHeader = responseHeaders?.get('retry-after');
+    if (retryAfterHeader && !timeoutMillis) {
+      const timeoutSeconds = parseFloat(retryAfterHeader);
+      if (!Number.isNaN(timeoutSeconds)) {
+        timeoutMillis = timeoutSeconds * 1000;
+      } else {
+        timeoutMillis = Date.parse(retryAfterHeader) - Date.now();
+      }
+    }
+
+    // If the API asks us to wait a certain amount of time, just do what it
+    // says, but otherwise calculate a default
+    if (timeoutMillis === undefined) {
+      const maxRetries = options.maxRetries ?? this.maxRetries;
+      timeoutMillis = this.calculateDefaultRetryTimeoutMillis(retriesRemaining, maxRetries);
+    }
+    await sleep(timeoutMillis);
+
+    return this.makeRequest(options, retriesRemaining - 1, requestLogID);
+  }
+
+  private calculateDefaultRetryTimeoutMillis(retriesRemaining: number, maxRetries: number): number {
+    const initialRetryDelay = 0.5;
+    const maxRetryDelay = 8.0;
+
+    const numRetries = maxRetries - retriesRemaining;
+
+    // Apply exponential backoff, but not more than the max.
+    const sleepSeconds = Math.min(initialRetryDelay * Math.pow(2, numRetries), maxRetryDelay);
+
+    // Apply some jitter, take up to at most 25 percent of the retry time.
+    const jitter = 1 - Math.random() * 0.25;
+
+    return sleepSeconds * jitter * 1000;
+  }
+
+  async buildRequest(
+    inputOptions: FinalRequestOptions,
+    { retryCount = 0 }: { retryCount?: number } = {},
+  ): Promise<{ req: FinalizedRequestInit; url: string; timeout: number }> {
+    const options = { ...inputOptions };
+    const { method, path, query, defaultBaseURL } = options;
+
+    const url = this.buildURL(path!, query as Record<string, unknown>, defaultBaseURL);
+    if ('timeout' in options) validatePositiveInteger('timeout', options.timeout);
+    options.timeout = options.timeout ?? this.timeout;
+    const { bodyHeaders, body } = this.buildBody({ options });
+    const reqHeaders = await this.buildHeaders({ options: inputOptions, method, bodyHeaders, retryCount });
+
+    const req: FinalizedRequestInit = {
+      method,
+      headers: reqHeaders,
+      ...(options.signal && { signal: options.signal }),
+      ...((globalThis as any).ReadableStream &&
+        body instanceof (globalThis as any).ReadableStream && { duplex: 'half' }),
+      ...(body && { body }),
+      ...((this.fetchOptions as any) ?? {}),
+      ...((options.fetchOptions as any) ?? {}),
+    };
+
+    return { req, url, timeout: options.timeout };
+  }
+
+  private async buildHeaders({
+    options,
+    method,
+    bodyHeaders,
+    retryCount,
+  }: {
+    options: FinalRequestOptions;
+    method: HTTPMethod;
+    bodyHeaders: HeadersLike;
+    retryCount: number;
+  }): Promise<Headers> {
+    let idempotencyHeaders: HeadersLike = {};
+    if (this.idempotencyHeader && method !== 'get') {
+      if (!options.idempotencyKey) options.idempotencyKey = this.defaultIdempotencyKey();
+      idempotencyHeaders[this.idempotencyHeader] = options.idempotencyKey;
+    }
+
+    const headers = buildHeaders([
+      idempotencyHeaders,
+      {
+        Accept: 'application/json',
+        'User-Agent': this.getUserAgent(),
+        'X-Stainless-Retry-Count': String(retryCount),
+        ...(options.timeout ? { 'X-Stainless-Timeout': String(Math.trunc(options.timeout / 1000)) } : {}),
+        ...getPlatformHeaders(),
+      },
+      await this.authHeaders(options),
+      this._options.defaultHeaders,
+      bodyHeaders,
+      options.headers,
+    ]);
+
+    this.validateHeaders(headers);
+
+    return headers.values;
+  }
+
+  private _makeAbort(controller: AbortController) {
+    // note: we can't just inline this method inside `fetchWithTimeout()` because then the closure
+    //       would capture all request options, and cause a memory leak.
+    return () => controller.abort();
+  }
+
+  private buildBody({ options }: { options: FinalRequestOptions }): {
+    bodyHeaders: HeadersLike;
+    body: BodyInit | undefined;
+  } {
+    const { body, headers: rawHeaders } = options;
+    if (!body) {
+      // A resource method always passes a `body` key when its operation defines a
+      // request body, even if the caller omitted an optional body param. Keep the
+      // content-type for those, and only elide it for operations with no body at
+      // all (e.g. GET/DELETE).
+      if (body == null && 'body' in options) {
+        return this.#encoder({ body, headers: buildHeaders([rawHeaders]) });
+      }
+      return { bodyHeaders: undefined, body: undefined };
+    }
+    const headers = buildHeaders([rawHeaders]);
+    if (
+      // Pass raw type verbatim
+      ArrayBuffer.isView(body) ||
+      body instanceof ArrayBuffer ||
+      body instanceof DataView ||
+      (typeof body === 'string' &&
+        // Preserve legacy string encoding behavior for now
+        headers.values.has('content-type')) ||
+      // `Blob` is superset of `File`
+      ((globalThis as any).Blob && body instanceof (globalThis as any).Blob) ||
+      // `FormData` -> `multipart/form-data`
+      body instanceof FormData ||
+      // `URLSearchParams` -> `application/x-www-form-urlencoded`
+      body instanceof URLSearchParams ||
+      // Send chunked stream (each chunk has own `length`)
+      ((globalThis as any).ReadableStream && body instanceof (globalThis as any).ReadableStream)
+    ) {
+      return { bodyHeaders: undefined, body: body as BodyInit };
+    } else if (
+      typeof body === 'object' &&
+      (Symbol.asyncIterator in body ||
+        (Symbol.iterator in body && 'next' in body && typeof body.next === 'function'))
+    ) {
+      return { bodyHeaders: undefined, body: Shims.ReadableStreamFrom(body as AsyncIterable<Uint8Array>) };
+    } else if (
+      typeof body === 'object' &&
+      headers.values.get('content-type') === 'application/x-www-form-urlencoded'
+    ) {
+      return {
+        bodyHeaders: { 'content-type': 'application/x-www-form-urlencoded' },
+        body: this.stringifyQuery(body),
+      };
+    } else {
+      return this.#encoder({ body, headers });
+    }
+  }
+
+  static OursPrivacyPlatform = this;
+  static DEFAULT_TIMEOUT = 60000; // 1 minute
+
+  static OursPrivacyPlatformError = Errors.OursPrivacyPlatformError;
+  static APIError = Errors.APIError;
+  static APIConnectionError = Errors.APIConnectionError;
+  static APIConnectionTimeoutError = Errors.APIConnectionTimeoutError;
+  static APIUserAbortError = Errors.APIUserAbortError;
+  static NotFoundError = Errors.NotFoundError;
+  static ConflictError = Errors.ConflictError;
+  static RateLimitError = Errors.RateLimitError;
+  static BadRequestError = Errors.BadRequestError;
+  static AuthenticationError = Errors.AuthenticationError;
+  static InternalServerError = Errors.InternalServerError;
+  static PermissionDeniedError = Errors.PermissionDeniedError;
+  static UnprocessableEntityError = Errors.UnprocessableEntityError;
+
+  static toFile = Uploads.toFile;
+
+  allowedEvents: API.AllowedEvents = new API.AllowedEvents(this);
+  attribution: API.Attribution = new API.Attribution(this);
+  audienceConversionReports: API.AudienceConversionReports = new API.AudienceConversionReports(this);
+  consentAnalytics: API.ConsentAnalytics = new API.ConsentAnalytics(this);
+  consentSettings: API.ConsentSettings = new API.ConsentSettings(this);
+  conversionJourneySummaries: API.ConversionJourneySummaries = new API.ConversionJourneySummaries(this);
+  dataGovernance: API.DataGovernance = new API.DataGovernance(this);
+  defaultMappings: API.DefaultMappings = new API.DefaultMappings(this);
+  destinations: API.Destinations = new API.Destinations(this);
+  experimentSettings: API.ExperimentSettings = new API.ExperimentSettings(this);
+  experimentVariants: API.ExperimentVariants = new API.ExperimentVariants(this);
+  experiments: API.Experiments = new API.Experiments(this);
+  funnels: API.Funnels = new API.Funnels(this);
+  heatmapPages: API.HeatmapPages = new API.HeatmapPages(this);
+  locations: API.Locations = new API.Locations(this);
+  mappings: API.Mappings = new API.Mappings(this);
+  replaySettings: API.ReplaySettings = new API.ReplaySettings(this);
+  shortLinks: API.ShortLinks = new API.ShortLinks(this);
+  sources: API.Sources = new API.Sources(this);
+  tagManagers: API.TagManagers = new API.TagManagers(this);
+  tagManagerTags: API.TagManagerTags = new API.TagManagerTags(this);
+  tagManagerTriggers: API.TagManagerTriggers = new API.TagManagerTriggers(this);
+  tagManagerVariables: API.TagManagerVariables = new API.TagManagerVariables(this);
+  tagManagerFolders: API.TagManagerFolders = new API.TagManagerFolders(this);
+  tagManagerAssetFolders: API.TagManagerAssetFolders = new API.TagManagerAssetFolders(this);
+  versions: API.Versions = new API.Versions(this);
+  videoChannels: API.VideoChannels = new API.VideoChannels(this);
+  videos: API.Videos = new API.Videos(this);
+  webScannerRules: API.WebScannerRules = new API.WebScannerRules(this);
+  webScanners: API.WebScanners = new API.WebScanners(this);
+}
+
+OursPrivacyPlatform.AllowedEvents = AllowedEvents;
+OursPrivacyPlatform.Attribution = Attribution;
+OursPrivacyPlatform.AudienceConversionReports = AudienceConversionReports;
+OursPrivacyPlatform.ConsentAnalytics = ConsentAnalytics;
+OursPrivacyPlatform.ConsentSettings = ConsentSettings;
+OursPrivacyPlatform.ConversionJourneySummaries = ConversionJourneySummaries;
+OursPrivacyPlatform.DataGovernance = DataGovernance;
+OursPrivacyPlatform.DefaultMappings = DefaultMappings;
+OursPrivacyPlatform.Destinations = Destinations;
+OursPrivacyPlatform.ExperimentSettings = ExperimentSettings;
+OursPrivacyPlatform.ExperimentVariants = ExperimentVariants;
+OursPrivacyPlatform.Experiments = Experiments;
+OursPrivacyPlatform.Funnels = Funnels;
+OursPrivacyPlatform.HeatmapPages = HeatmapPages;
+OursPrivacyPlatform.Locations = Locations;
+OursPrivacyPlatform.Mappings = Mappings;
+OursPrivacyPlatform.ReplaySettings = ReplaySettings;
+OursPrivacyPlatform.ShortLinks = ShortLinks;
+OursPrivacyPlatform.Sources = Sources;
+OursPrivacyPlatform.TagManagers = TagManagers;
+OursPrivacyPlatform.TagManagerTags = TagManagerTags;
+OursPrivacyPlatform.TagManagerTriggers = TagManagerTriggers;
+OursPrivacyPlatform.TagManagerVariables = TagManagerVariables;
+OursPrivacyPlatform.TagManagerFolders = TagManagerFolders;
+OursPrivacyPlatform.TagManagerAssetFolders = TagManagerAssetFolders;
+OursPrivacyPlatform.Versions = Versions;
+OursPrivacyPlatform.VideoChannels = VideoChannels;
+OursPrivacyPlatform.Videos = Videos;
+OursPrivacyPlatform.WebScannerRules = WebScannerRules;
+OursPrivacyPlatform.WebScanners = WebScanners;
+
+export declare namespace OursPrivacyPlatform {
+  export type RequestOptions = Opts.RequestOptions;
+
+  export import Cursor = Pagination.Cursor;
+  export { type CursorParams as CursorParams, type CursorResponse as CursorResponse };
+
+  export {
+    AllowedEvents as AllowedEvents,
+    type AllowedEventListResponse as AllowedEventListResponse,
+    type AllowedEventCreateResponse as AllowedEventCreateResponse,
+    type AllowedEventRetrieveResponse as AllowedEventRetrieveResponse,
+    type AllowedEventUpdateResponse as AllowedEventUpdateResponse,
+    type AllowedEventDeleteResponse as AllowedEventDeleteResponse,
+    type AllowedEventCreateParams as AllowedEventCreateParams,
+    type AllowedEventUpdateParams as AllowedEventUpdateParams,
+  };
+
+  export {
+    Attribution as Attribution,
+    type AttributionInitialResponse as AttributionInitialResponse,
+    type AttributionLastTouchResponse as AttributionLastTouchResponse,
+    type AttributionConversionResponse as AttributionConversionResponse,
+    type AttributionAudienceConversionResponse as AttributionAudienceConversionResponse,
+    type AttributionUtmComparisonResponse as AttributionUtmComparisonResponse,
+    type AttributionInitialParams as AttributionInitialParams,
+    type AttributionLastTouchParams as AttributionLastTouchParams,
+    type AttributionConversionParams as AttributionConversionParams,
+    type AttributionAudienceConversionParams as AttributionAudienceConversionParams,
+    type AttributionUtmComparisonParams as AttributionUtmComparisonParams,
+  };
+
+  export {
+    AudienceConversionReports as AudienceConversionReports,
+    type AudienceConversionReportListResponse as AudienceConversionReportListResponse,
+    type AudienceConversionReportCreateResponse as AudienceConversionReportCreateResponse,
+    type AudienceConversionReportRetrieveResponse as AudienceConversionReportRetrieveResponse,
+    type AudienceConversionReportUpdateResponse as AudienceConversionReportUpdateResponse,
+    type AudienceConversionReportDeleteResponse as AudienceConversionReportDeleteResponse,
+    type AudienceConversionReportResultsResponse as AudienceConversionReportResultsResponse,
+    type AudienceConversionReportCreateParams as AudienceConversionReportCreateParams,
+    type AudienceConversionReportUpdateParams as AudienceConversionReportUpdateParams,
+    type AudienceConversionReportResultsParams as AudienceConversionReportResultsParams,
+  };
+
+  export {
+    ConsentAnalytics as ConsentAnalytics,
+    type ConsentAnalyticsListResponse as ConsentAnalyticsListResponse,
+    type ConsentAnalyticsListParams as ConsentAnalyticsListParams,
+  };
+
+  export {
+    ConsentSettings as ConsentSettings,
+    type ConsentSettingListResponse as ConsentSettingListResponse,
+    type ConsentSettingCreateResponse as ConsentSettingCreateResponse,
+    type ConsentSettingRetrieveResponse as ConsentSettingRetrieveResponse,
+    type ConsentSettingReplaceResponse as ConsentSettingReplaceResponse,
+    type ConsentSettingUpdateResponse as ConsentSettingUpdateResponse,
+    type ConsentSettingDeleteResponse as ConsentSettingDeleteResponse,
+    type ConsentSettingAnalyticsResponse as ConsentSettingAnalyticsResponse,
+    type ConsentSettingPageAnalysisResponse as ConsentSettingPageAnalysisResponse,
+    type ConsentSettingAnalyticsByRegionResponse as ConsentSettingAnalyticsByRegionResponse,
+    type ConsentSettingReplaceParams as ConsentSettingReplaceParams,
+    type ConsentSettingUpdateParams as ConsentSettingUpdateParams,
+    type ConsentSettingAnalyticsParams as ConsentSettingAnalyticsParams,
+    type ConsentSettingPageAnalysisParams as ConsentSettingPageAnalysisParams,
+    type ConsentSettingAnalyticsByRegionParams as ConsentSettingAnalyticsByRegionParams,
+  };
+
+  export {
+    ConversionJourneySummaries as ConversionJourneySummaries,
+    type ConversionJourneySummaryListResponse as ConversionJourneySummaryListResponse,
+    type ConversionJourneySummaryCreateResponse as ConversionJourneySummaryCreateResponse,
+    type ConversionJourneySummaryRetrieveResponse as ConversionJourneySummaryRetrieveResponse,
+    type ConversionJourneySummaryUpdateResponse as ConversionJourneySummaryUpdateResponse,
+    type ConversionJourneySummaryDeleteResponse as ConversionJourneySummaryDeleteResponse,
+    type ConversionJourneySummaryListResponsesCursor as ConversionJourneySummaryListResponsesCursor,
+    type ConversionJourneySummaryListParams as ConversionJourneySummaryListParams,
+    type ConversionJourneySummaryCreateParams as ConversionJourneySummaryCreateParams,
+    type ConversionJourneySummaryUpdateParams as ConversionJourneySummaryUpdateParams,
+  };
+
+  export {
+    DataGovernance as DataGovernance,
+    type DataGovernanceListResponse as DataGovernanceListResponse,
+    type DataGovernanceCreateResponse as DataGovernanceCreateResponse,
+    type DataGovernanceRetrieveResponse as DataGovernanceRetrieveResponse,
+    type DataGovernanceUpdateResponse as DataGovernanceUpdateResponse,
+    type DataGovernanceDeleteResponse as DataGovernanceDeleteResponse,
+    type DataGovernanceListResponsesCursor as DataGovernanceListResponsesCursor,
+    type DataGovernanceListParams as DataGovernanceListParams,
+    type DataGovernanceCreateParams as DataGovernanceCreateParams,
+    type DataGovernanceUpdateParams as DataGovernanceUpdateParams,
+  };
+
+  export {
+    DefaultMappings as DefaultMappings,
+    type DefaultMappingListResponse as DefaultMappingListResponse,
+    type DefaultMappingRetrieveResponse as DefaultMappingRetrieveResponse,
+    type DefaultMappingReplaceResponse as DefaultMappingReplaceResponse,
+    type DefaultMappingReplaceParams as DefaultMappingReplaceParams,
+  };
+
+  export {
+    Destinations as Destinations,
+    type DestinationListResponse as DestinationListResponse,
+    type DestinationCreateResponse as DestinationCreateResponse,
+    type DestinationRetrieveResponse as DestinationRetrieveResponse,
+    type DestinationUpdateResponse as DestinationUpdateResponse,
+    type DestinationDeleteResponse as DestinationDeleteResponse,
+    type DestinationTypesResponse as DestinationTypesResponse,
+    type DestinationHealthResponse as DestinationHealthResponse,
+    type DestinationListResponsesCursor as DestinationListResponsesCursor,
+    type DestinationListParams as DestinationListParams,
+    type DestinationCreateParams as DestinationCreateParams,
+    type DestinationUpdateParams as DestinationUpdateParams,
+  };
+
+  export {
+    ExperimentSettings as ExperimentSettings,
+    type ExperimentSettingListResponse as ExperimentSettingListResponse,
+    type ExperimentSettingCreateResponse as ExperimentSettingCreateResponse,
+    type ExperimentSettingRetrieveResponse as ExperimentSettingRetrieveResponse,
+    type ExperimentSettingUpdateResponse as ExperimentSettingUpdateResponse,
+    type ExperimentSettingDeleteResponse as ExperimentSettingDeleteResponse,
+    type ExperimentSettingCreateParams as ExperimentSettingCreateParams,
+    type ExperimentSettingUpdateParams as ExperimentSettingUpdateParams,
+  };
+
+  export {
+    ExperimentVariants as ExperimentVariants,
+    type ExperimentVariantListResponse as ExperimentVariantListResponse,
+    type ExperimentVariantCreateResponse as ExperimentVariantCreateResponse,
+    type ExperimentVariantRetrieveResponse as ExperimentVariantRetrieveResponse,
+    type ExperimentVariantUpdateResponse as ExperimentVariantUpdateResponse,
+    type ExperimentVariantDeleteResponse as ExperimentVariantDeleteResponse,
+    type ExperimentVariantListResponsesCursor as ExperimentVariantListResponsesCursor,
+    type ExperimentVariantListParams as ExperimentVariantListParams,
+    type ExperimentVariantCreateParams as ExperimentVariantCreateParams,
+    type ExperimentVariantUpdateParams as ExperimentVariantUpdateParams,
+  };
+
+  export {
+    Experiments as Experiments,
+    type ExperimentListResponse as ExperimentListResponse,
+    type ExperimentCreateResponse as ExperimentCreateResponse,
+    type ExperimentRetrieveResponse as ExperimentRetrieveResponse,
+    type ExperimentUpdateResponse as ExperimentUpdateResponse,
+    type ExperimentDeleteResponse as ExperimentDeleteResponse,
+    type ExperimentStartResponse as ExperimentStartResponse,
+    type ExperimentStopResponse as ExperimentStopResponse,
+    type ExperimentRolloutResponse as ExperimentRolloutResponse,
+    type ExperimentEndRolloutResponse as ExperimentEndRolloutResponse,
+    type ExperimentWinnerResponse as ExperimentWinnerResponse,
+    type ExperimentPauseResponse as ExperimentPauseResponse,
+    type ExperimentResumeResponse as ExperimentResumeResponse,
+    type ExperimentResultsResponse as ExperimentResultsResponse,
+    type ExperimentResultsTimeSeriesResponse as ExperimentResultsTimeSeriesResponse,
+    type ExperimentSessionReplaysResponse as ExperimentSessionReplaysResponse,
+    type ExperimentListResponsesCursor as ExperimentListResponsesCursor,
+    type ExperimentListParams as ExperimentListParams,
+    type ExperimentCreateParams as ExperimentCreateParams,
+    type ExperimentUpdateParams as ExperimentUpdateParams,
+    type ExperimentStartParams as ExperimentStartParams,
+    type ExperimentStopParams as ExperimentStopParams,
+    type ExperimentRolloutParams as ExperimentRolloutParams,
+    type ExperimentWinnerParams as ExperimentWinnerParams,
+    type ExperimentPauseParams as ExperimentPauseParams,
+    type ExperimentResumeParams as ExperimentResumeParams,
+    type ExperimentResultsParams as ExperimentResultsParams,
+    type ExperimentResultsTimeSeriesParams as ExperimentResultsTimeSeriesParams,
+    type ExperimentSessionReplaysParams as ExperimentSessionReplaysParams,
+  };
+
+  export {
+    Funnels as Funnels,
+    type FunnelListResponse as FunnelListResponse,
+    type FunnelCreateResponse as FunnelCreateResponse,
+    type FunnelRetrieveResponse as FunnelRetrieveResponse,
+    type FunnelUpdateResponse as FunnelUpdateResponse,
+    type FunnelDeleteResponse as FunnelDeleteResponse,
+    type FunnelResultsResponse as FunnelResultsResponse,
+    type FunnelCreateParams as FunnelCreateParams,
+    type FunnelUpdateParams as FunnelUpdateParams,
+    type FunnelResultsParams as FunnelResultsParams,
+  };
+
+  export {
+    HeatmapPages as HeatmapPages,
+    type HeatmapPageListResponse as HeatmapPageListResponse,
+    type HeatmapPageSummaryResponse as HeatmapPageSummaryResponse,
+    type HeatmapPageListResponsesCursor as HeatmapPageListResponsesCursor,
+    type HeatmapPageListParams as HeatmapPageListParams,
+    type HeatmapPageSummaryParams as HeatmapPageSummaryParams,
+  };
+
+  export {
+    Locations as Locations,
+    type LocationListResponse as LocationListResponse,
+    type LocationCreateResponse as LocationCreateResponse,
+    type LocationUpdateResponse as LocationUpdateResponse,
+    type LocationEmbedCodeResponse as LocationEmbedCodeResponse,
+    type LocationCreateParams as LocationCreateParams,
+    type LocationUpdateParams as LocationUpdateParams,
+    type LocationEmbedCodeParams as LocationEmbedCodeParams,
+  };
+
+  export {
+    Mappings as Mappings,
+    type MappingListResponse as MappingListResponse,
+    type MappingCreateResponse as MappingCreateResponse,
+    type MappingRetrieveResponse as MappingRetrieveResponse,
+    type MappingUpdateResponse as MappingUpdateResponse,
+    type MappingDeleteResponse as MappingDeleteResponse,
+    type MappingReorderResponse as MappingReorderResponse,
+    type MappingTemplatesResponse as MappingTemplatesResponse,
+    type MappingDefaultVariablesResponse as MappingDefaultVariablesResponse,
+    type MappingCustomVariablesResponse as MappingCustomVariablesResponse,
+    type MappingModificationsResponse as MappingModificationsResponse,
+    type MappingListResponsesCursor as MappingListResponsesCursor,
+    type MappingListParams as MappingListParams,
+    type MappingCreateParams as MappingCreateParams,
+    type MappingUpdateParams as MappingUpdateParams,
+    type MappingReorderParams as MappingReorderParams,
+    type MappingTemplatesParams as MappingTemplatesParams,
+  };
+
+  export {
+    ReplaySettings as ReplaySettings,
+    type ReplaySettingListResponse as ReplaySettingListResponse,
+    type ReplaySettingCreateResponse as ReplaySettingCreateResponse,
+    type ReplaySettingRetrieveResponse as ReplaySettingRetrieveResponse,
+    type ReplaySettingUpdateResponse as ReplaySettingUpdateResponse,
+    type ReplaySettingDeleteResponse as ReplaySettingDeleteResponse,
+    type ReplaySettingListResponsesCursor as ReplaySettingListResponsesCursor,
+    type ReplaySettingListParams as ReplaySettingListParams,
+    type ReplaySettingCreateParams as ReplaySettingCreateParams,
+    type ReplaySettingUpdateParams as ReplaySettingUpdateParams,
+  };
+
+  export {
+    ShortLinks as ShortLinks,
+    type ShortLinkListResponse as ShortLinkListResponse,
+    type ShortLinkCreateResponse as ShortLinkCreateResponse,
+    type ShortLinkRetrieveResponse as ShortLinkRetrieveResponse,
+    type ShortLinkUpdateResponse as ShortLinkUpdateResponse,
+    type ShortLinkDeleteResponse as ShortLinkDeleteResponse,
+    type ShortLinkResultsResponse as ShortLinkResultsResponse,
+    type ShortLinkListResponsesCursor as ShortLinkListResponsesCursor,
+    type ShortLinkListParams as ShortLinkListParams,
+    type ShortLinkCreateParams as ShortLinkCreateParams,
+    type ShortLinkUpdateParams as ShortLinkUpdateParams,
+    type ShortLinkResultsParams as ShortLinkResultsParams,
+  };
+
+  export {
+    Sources as Sources,
+    type SourceListResponse as SourceListResponse,
+    type SourceCreateResponse as SourceCreateResponse,
+    type SourceRetrieveResponse as SourceRetrieveResponse,
+    type SourceUpdateResponse as SourceUpdateResponse,
+    type SourceDeleteResponse as SourceDeleteResponse,
+    type SourceTokensResponse as SourceTokensResponse,
+    type SourceListResponsesCursor as SourceListResponsesCursor,
+    type SourceListParams as SourceListParams,
+    type SourceCreateParams as SourceCreateParams,
+    type SourceUpdateParams as SourceUpdateParams,
+  };
+
+  export {
+    TagManagers as TagManagers,
+    type TagManagerListResponse as TagManagerListResponse,
+    type TagManagerCreateResponse as TagManagerCreateResponse,
+    type TagManagerRetrieveResponse as TagManagerRetrieveResponse,
+    type TagManagerUpdateResponse as TagManagerUpdateResponse,
+    type TagManagerDeleteResponse as TagManagerDeleteResponse,
+    type TagManagerCreateParams as TagManagerCreateParams,
+    type TagManagerUpdateParams as TagManagerUpdateParams,
+  };
+
+  export {
+    TagManagerTags as TagManagerTags,
+    type TagManagerTagListResponse as TagManagerTagListResponse,
+    type TagManagerTagCreateResponse as TagManagerTagCreateResponse,
+    type TagManagerTagRetrieveResponse as TagManagerTagRetrieveResponse,
+    type TagManagerTagUpdateResponse as TagManagerTagUpdateResponse,
+    type TagManagerTagDeleteResponse as TagManagerTagDeleteResponse,
+    type TagManagerTagTypesResponse as TagManagerTagTypesResponse,
+    type TagManagerTagListResponsesCursor as TagManagerTagListResponsesCursor,
+    type TagManagerTagListParams as TagManagerTagListParams,
+    type TagManagerTagCreateParams as TagManagerTagCreateParams,
+    type TagManagerTagUpdateParams as TagManagerTagUpdateParams,
+  };
+
+  export {
+    TagManagerTriggers as TagManagerTriggers,
+    type TagManagerTriggerListResponse as TagManagerTriggerListResponse,
+    type TagManagerTriggerCreateResponse as TagManagerTriggerCreateResponse,
+    type TagManagerTriggerRetrieveResponse as TagManagerTriggerRetrieveResponse,
+    type TagManagerTriggerUpdateResponse as TagManagerTriggerUpdateResponse,
+    type TagManagerTriggerDeleteResponse as TagManagerTriggerDeleteResponse,
+    type TagManagerTriggerTypesResponse as TagManagerTriggerTypesResponse,
+    type TagManagerTriggerListResponsesCursor as TagManagerTriggerListResponsesCursor,
+    type TagManagerTriggerListParams as TagManagerTriggerListParams,
+    type TagManagerTriggerCreateParams as TagManagerTriggerCreateParams,
+    type TagManagerTriggerUpdateParams as TagManagerTriggerUpdateParams,
+  };
+
+  export {
+    TagManagerVariables as TagManagerVariables,
+    type TagManagerVariableListResponse as TagManagerVariableListResponse,
+    type TagManagerVariableCreateResponse as TagManagerVariableCreateResponse,
+    type TagManagerVariableRetrieveResponse as TagManagerVariableRetrieveResponse,
+    type TagManagerVariableUpdateResponse as TagManagerVariableUpdateResponse,
+    type TagManagerVariableDeleteResponse as TagManagerVariableDeleteResponse,
+    type TagManagerVariableTypesResponse as TagManagerVariableTypesResponse,
+    type TagManagerVariableListResponsesCursor as TagManagerVariableListResponsesCursor,
+    type TagManagerVariableListParams as TagManagerVariableListParams,
+    type TagManagerVariableCreateParams as TagManagerVariableCreateParams,
+    type TagManagerVariableUpdateParams as TagManagerVariableUpdateParams,
+  };
+
+  export {
+    TagManagerFolders as TagManagerFolders,
+    type TagManagerFolderListResponse as TagManagerFolderListResponse,
+    type TagManagerFolderCreateResponse as TagManagerFolderCreateResponse,
+    type TagManagerFolderRetrieveResponse as TagManagerFolderRetrieveResponse,
+    type TagManagerFolderUpdateResponse as TagManagerFolderUpdateResponse,
+    type TagManagerFolderDeleteResponse as TagManagerFolderDeleteResponse,
+    type TagManagerFolderListResponsesCursor as TagManagerFolderListResponsesCursor,
+    type TagManagerFolderListParams as TagManagerFolderListParams,
+    type TagManagerFolderCreateParams as TagManagerFolderCreateParams,
+    type TagManagerFolderUpdateParams as TagManagerFolderUpdateParams,
+  };
+
+  export {
+    TagManagerAssetFolders as TagManagerAssetFolders,
+    type TagManagerAssetFolderCreateResponse as TagManagerAssetFolderCreateResponse,
+    type TagManagerAssetFolderCreateParams as TagManagerAssetFolderCreateParams,
+  };
+
+  export {
+    Versions as Versions,
+    type VersionListResponse as VersionListResponse,
+    type VersionCreateResponse as VersionCreateResponse,
+    type VersionRetrieveResponse as VersionRetrieveResponse,
+    type VersionUpdateResponse as VersionUpdateResponse,
+    type VersionPublishResponse as VersionPublishResponse,
+    type VersionSnapshotResponse as VersionSnapshotResponse,
+    type VersionDiffResponse as VersionDiffResponse,
+    type VersionRevertResponse as VersionRevertResponse,
+    type VersionAbandonResponse as VersionAbandonResponse,
+    type VersionListResponsesCursor as VersionListResponsesCursor,
+    type VersionListParams as VersionListParams,
+    type VersionCreateParams as VersionCreateParams,
+    type VersionUpdateParams as VersionUpdateParams,
+    type VersionDiffParams as VersionDiffParams,
+    type VersionRevertParams as VersionRevertParams,
+  };
+
+  export {
+    VideoChannels as VideoChannels,
+    type VideoChannelListResponse as VideoChannelListResponse,
+    type VideoChannelCreateResponse as VideoChannelCreateResponse,
+    type VideoChannelRetrieveResponse as VideoChannelRetrieveResponse,
+    type VideoChannelUpdateResponse as VideoChannelUpdateResponse,
+    type VideoChannelDeleteResponse as VideoChannelDeleteResponse,
+    type VideoChannelMediaResponse as VideoChannelMediaResponse,
+    type VideoChannelAssignMediaResponse as VideoChannelAssignMediaResponse,
+    type VideoChannelRemoveMediaResponse as VideoChannelRemoveMediaResponse,
+    type VideoChannelReorderResponse as VideoChannelReorderResponse,
+    type VideoChannelListResponsesCursor as VideoChannelListResponsesCursor,
+    type VideoChannelListParams as VideoChannelListParams,
+    type VideoChannelCreateParams as VideoChannelCreateParams,
+    type VideoChannelUpdateParams as VideoChannelUpdateParams,
+    type VideoChannelAssignMediaParams as VideoChannelAssignMediaParams,
+    type VideoChannelRemoveMediaParams as VideoChannelRemoveMediaParams,
+    type VideoChannelReorderParams as VideoChannelReorderParams,
+  };
+
+  export {
+    Videos as Videos,
+    type VideoListResponse as VideoListResponse,
+    type VideoCreateResponse as VideoCreateResponse,
+    type VideoRetrieveResponse as VideoRetrieveResponse,
+    type VideoUpdateResponse as VideoUpdateResponse,
+    type VideoDeleteResponse as VideoDeleteResponse,
+    type VideoAnalyticsResponse as VideoAnalyticsResponse,
+    type VideoAnalyticsTimeseriesResponse as VideoAnalyticsTimeseriesResponse,
+    type VideoTranscriptResponse as VideoTranscriptResponse,
+    type VideoUpdateTranscriptResponse as VideoUpdateTranscriptResponse,
+    type VideoListResponsesCursor as VideoListResponsesCursor,
+    type VideoListParams as VideoListParams,
+    type VideoCreateParams as VideoCreateParams,
+    type VideoUpdateParams as VideoUpdateParams,
+    type VideoAnalyticsParams as VideoAnalyticsParams,
+    type VideoAnalyticsTimeseriesParams as VideoAnalyticsTimeseriesParams,
+    type VideoUpdateTranscriptParams as VideoUpdateTranscriptParams,
+  };
+
+  export {
+    WebScannerRules as WebScannerRules,
+    type WebScannerRuleListResponse as WebScannerRuleListResponse,
+    type WebScannerRuleCreateResponse as WebScannerRuleCreateResponse,
+    type WebScannerRuleRetrieveResponse as WebScannerRuleRetrieveResponse,
+    type WebScannerRuleUpdateResponse as WebScannerRuleUpdateResponse,
+    type WebScannerRuleDeleteResponse as WebScannerRuleDeleteResponse,
+    type WebScannerRuleListParams as WebScannerRuleListParams,
+    type WebScannerRuleCreateParams as WebScannerRuleCreateParams,
+    type WebScannerRuleUpdateParams as WebScannerRuleUpdateParams,
+  };
+
+  export {
+    WebScanners as WebScanners,
+    type WebScannerListResponse as WebScannerListResponse,
+    type WebScannerCreateResponse as WebScannerCreateResponse,
+    type WebScannerRetrieveResponse as WebScannerRetrieveResponse,
+    type WebScannerUpdateResponse as WebScannerUpdateResponse,
+    type WebScannerDeleteResponse as WebScannerDeleteResponse,
+    type WebScannerTriggerResponse as WebScannerTriggerResponse,
+    type WebScannerFindingsResponse as WebScannerFindingsResponse,
+    type WebScannerCookiesResponse as WebScannerCookiesResponse,
+    type WebScannerSummaryResponse as WebScannerSummaryResponse,
+    type WebScannerCreateParams as WebScannerCreateParams,
+    type WebScannerUpdateParams as WebScannerUpdateParams,
+    type WebScannerFindingsParams as WebScannerFindingsParams,
+    type WebScannerCookiesParams as WebScannerCookiesParams,
+    type WebScannerSummaryParams as WebScannerSummaryParams,
+  };
+}

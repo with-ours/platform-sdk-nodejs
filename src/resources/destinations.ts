@@ -1,0 +1,1111 @@
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+import { APIResource } from '../core/resource';
+import { APIPromise } from '../core/api-promise';
+import { Cursor, type CursorParams, PagePromise } from '../core/pagination';
+import { RequestOptions } from '../internal/request-options';
+import { path } from '../internal/utils/path';
+
+export class Destinations extends APIResource {
+  /**
+   * List all destinations. Requires scope: destination:list
+   */
+  list(
+    query: DestinationListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<DestinationListResponsesCursor, DestinationListResponse> {
+    return this._client.getAPIList('/rest/v1/destinations', Cursor<DestinationListResponse>, {
+      query,
+      ...options,
+    });
+  }
+
+  /**
+   * Create a new destination. Requires scope: destination:create
+   */
+  create(body: DestinationCreateParams, options?: RequestOptions): APIPromise<DestinationCreateResponse> {
+    return this._client.post('/rest/v1/destinations', { body, ...options });
+  }
+
+  /**
+   * Find a single destination by ID. Requires scope: destination:find
+   */
+  retrieve(id: string, options?: RequestOptions): APIPromise<DestinationRetrieveResponse> {
+    return this._client.get(path`/rest/v1/destinations/${id}`, options);
+  }
+
+  /**
+   * Partially update a destination. Only the fields you send are changed; omitted
+   * fields are unchanged. The `settings` object is patch-only: omitted keys keep
+   * their current value, and send `null` to clear a specific setting. Requires
+   * scope: destination:update
+   */
+  update(
+    id: string,
+    body: DestinationUpdateParams,
+    options?: RequestOptions,
+  ): APIPromise<DestinationUpdateResponse> {
+    return this._client.patch(path`/rest/v1/destinations/${id}`, { body, ...options });
+  }
+
+  /**
+   * Delete a destination. Requires scope: destination:delete
+   */
+  delete(id: string, options?: RequestOptions): APIPromise<DestinationDeleteResponse> {
+    return this._client.delete(path`/rest/v1/destinations/${id}`, options);
+  }
+
+  /**
+   * Lists every destination type the platform supports, with its human-readable
+   * label, capability flags (oauth, listsAccounts, supportsRenamedEvents), and the
+   * settings descriptor used to configure a destination of that type.
+   * Account-agnostic — the response is the same for every API key. Filter
+   * client-side to find a specific type (e.g. `Klaviyo`, `Facebook`). Requires
+   * scope: destination:list
+   */
+  types(options?: RequestOptions): APIPromise<DestinationTypesResponse> {
+    return this._client.get('/rest/v1/destinations/types', options);
+  }
+
+  /**
+   * Snapshot of dispatch health for this destination over the trailing 24 hours:
+   * counts of succeeded, failed, and intentionally stopped/blocked dispatches, plus
+   * a derived `status`. Requires scope: destination:find
+   */
+  health(id: string, options?: RequestOptions): APIPromise<DestinationHealthResponse> {
+    return this._client.get(path`/rest/v1/destinations/${id}/health`, options);
+  }
+}
+
+export type DestinationListResponsesCursor = Cursor<DestinationListResponse>;
+
+export interface DestinationListResponse {
+  id: string;
+
+  createdAt: string;
+
+  status: 'Disabled' | 'Enabled';
+
+  /**
+   * Destination type. Read responses may include warehouse, cloud-storage, and
+   * audience-sync types that are not creatable through POST /rest/v1/destinations.
+   */
+  type:
+    | 'AWSEventBridge'
+    | 'AWSKinesis'
+    | 'AWSLambda'
+    | 'AWSS3'
+    | 'AWSSNS'
+    | 'ActiveCampaignApi'
+    | 'Admitad'
+    | 'AdobeAnalytics'
+    | 'AmazonDSP'
+    | 'Amplitude'
+    | 'AppLovin'
+    | 'ArtsAI'
+    | 'Attentive'
+    | 'Audiohook'
+    | 'AzureBlob'
+    | 'BasisPostback'
+    | 'BeeswaxPostback'
+    | 'BingAds'
+    | 'BingAdsWeb'
+    | 'BingRest'
+    | 'Braze'
+    | 'ConvertABTestingEvent'
+    | 'Customerio'
+    | 'DatabricksWarehouse'
+    | 'DomoWarehouse'
+    | 'Everflow'
+    | 'Facebook'
+    | 'FacebookAudience'
+    | 'FloodlightSGTM'
+    | 'FullContact'
+    | 'G4Analytics'
+    | 'GA4MeasurementProtocol'
+    | 'GA4ServerProxy'
+    | 'Google'
+    | 'GoogleAds360'
+    | 'GoogleAdsServerContainer'
+    | 'GoogleAudience'
+    | 'GoogleBigQuery'
+    | 'GoogleBigQueryWarehouse'
+    | 'GoogleDataManagerEventIngest'
+    | 'GooglePubSub'
+    | 'GoogleStorage'
+    | 'HTTPCustomRequest'
+    | 'HTTPDestination'
+    | 'Hubspot'
+    | 'IHeartMediaMagellan'
+    | 'Impact'
+    | 'Iterable'
+    | 'Klaviyo'
+    | 'LinkedInAdsCAPI'
+    | 'LiveIntent'
+    | 'LiveRampWarehouse'
+    | 'MNTN'
+    | 'MNTNAudience'
+    | 'Mailchimp'
+    | 'Mixpanel'
+    | 'NextdoorAds'
+    | 'OpenAIAds'
+    | 'OursSyntheticData'
+    | 'Outbrain'
+    | 'Partnerize'
+    | 'Pinterest'
+    | 'Plausible'
+    | 'Podscribe'
+    | 'PostHog'
+    | 'QuantcastCAPI'
+    | 'QuoraAds'
+    | 'Reddit'
+    | 'Rokt'
+    | 'RokuCAPI'
+    | 'SnapchatAdsCapi'
+    | 'Spotify'
+    | 'StackAdaptAPI'
+    | 'Taboola'
+    | 'Tatari'
+    | 'TatariCAPI'
+    | 'TheTradeDesk'
+    | 'TikTok'
+    | 'UniversalAds'
+    | 'VWO'
+    | 'Viant'
+    | 'ViantCAPI'
+    | 'Vibe'
+    | 'VibeAudience'
+    | 'Woopra'
+    | 'XAds'
+    | 'YelpCAPI'
+    | 'Zendesk'
+    | 'ZohoCRM'
+    | 'ZoomInfo';
+
+  hashingSalt?: string | null;
+
+  limitedToSourceIds?: Array<string> | null;
+
+  name?: string | null;
+
+  settings?: unknown | null;
+
+  updatedAt?: string | null;
+}
+
+export interface DestinationCreateResponse {
+  id: string;
+
+  createdAt: string;
+
+  status: 'Disabled' | 'Enabled';
+
+  /**
+   * Destination type. Read responses may include warehouse, cloud-storage, and
+   * audience-sync types that are not creatable through POST /rest/v1/destinations.
+   */
+  type:
+    | 'AWSEventBridge'
+    | 'AWSKinesis'
+    | 'AWSLambda'
+    | 'AWSS3'
+    | 'AWSSNS'
+    | 'ActiveCampaignApi'
+    | 'Admitad'
+    | 'AdobeAnalytics'
+    | 'AmazonDSP'
+    | 'Amplitude'
+    | 'AppLovin'
+    | 'ArtsAI'
+    | 'Attentive'
+    | 'Audiohook'
+    | 'AzureBlob'
+    | 'BasisPostback'
+    | 'BeeswaxPostback'
+    | 'BingAds'
+    | 'BingAdsWeb'
+    | 'BingRest'
+    | 'Braze'
+    | 'ConvertABTestingEvent'
+    | 'Customerio'
+    | 'DatabricksWarehouse'
+    | 'DomoWarehouse'
+    | 'Everflow'
+    | 'Facebook'
+    | 'FacebookAudience'
+    | 'FloodlightSGTM'
+    | 'FullContact'
+    | 'G4Analytics'
+    | 'GA4MeasurementProtocol'
+    | 'GA4ServerProxy'
+    | 'Google'
+    | 'GoogleAds360'
+    | 'GoogleAdsServerContainer'
+    | 'GoogleAudience'
+    | 'GoogleBigQuery'
+    | 'GoogleBigQueryWarehouse'
+    | 'GoogleDataManagerEventIngest'
+    | 'GooglePubSub'
+    | 'GoogleStorage'
+    | 'HTTPCustomRequest'
+    | 'HTTPDestination'
+    | 'Hubspot'
+    | 'IHeartMediaMagellan'
+    | 'Impact'
+    | 'Iterable'
+    | 'Klaviyo'
+    | 'LinkedInAdsCAPI'
+    | 'LiveIntent'
+    | 'LiveRampWarehouse'
+    | 'MNTN'
+    | 'MNTNAudience'
+    | 'Mailchimp'
+    | 'Mixpanel'
+    | 'NextdoorAds'
+    | 'OpenAIAds'
+    | 'OursSyntheticData'
+    | 'Outbrain'
+    | 'Partnerize'
+    | 'Pinterest'
+    | 'Plausible'
+    | 'Podscribe'
+    | 'PostHog'
+    | 'QuantcastCAPI'
+    | 'QuoraAds'
+    | 'Reddit'
+    | 'Rokt'
+    | 'RokuCAPI'
+    | 'SnapchatAdsCapi'
+    | 'Spotify'
+    | 'StackAdaptAPI'
+    | 'Taboola'
+    | 'Tatari'
+    | 'TatariCAPI'
+    | 'TheTradeDesk'
+    | 'TikTok'
+    | 'UniversalAds'
+    | 'VWO'
+    | 'Viant'
+    | 'ViantCAPI'
+    | 'Vibe'
+    | 'VibeAudience'
+    | 'Woopra'
+    | 'XAds'
+    | 'YelpCAPI'
+    | 'Zendesk'
+    | 'ZohoCRM'
+    | 'ZoomInfo';
+
+  hashingSalt?: string | null;
+
+  limitedToSourceIds?: Array<string> | null;
+
+  name?: string | null;
+
+  settings?: unknown | null;
+
+  updatedAt?: string | null;
+}
+
+export interface DestinationRetrieveResponse {
+  id: string;
+
+  createdAt: string;
+
+  status: 'Disabled' | 'Enabled';
+
+  /**
+   * Destination type. Read responses may include warehouse, cloud-storage, and
+   * audience-sync types that are not creatable through POST /rest/v1/destinations.
+   */
+  type:
+    | 'AWSEventBridge'
+    | 'AWSKinesis'
+    | 'AWSLambda'
+    | 'AWSS3'
+    | 'AWSSNS'
+    | 'ActiveCampaignApi'
+    | 'Admitad'
+    | 'AdobeAnalytics'
+    | 'AmazonDSP'
+    | 'Amplitude'
+    | 'AppLovin'
+    | 'ArtsAI'
+    | 'Attentive'
+    | 'Audiohook'
+    | 'AzureBlob'
+    | 'BasisPostback'
+    | 'BeeswaxPostback'
+    | 'BingAds'
+    | 'BingAdsWeb'
+    | 'BingRest'
+    | 'Braze'
+    | 'ConvertABTestingEvent'
+    | 'Customerio'
+    | 'DatabricksWarehouse'
+    | 'DomoWarehouse'
+    | 'Everflow'
+    | 'Facebook'
+    | 'FacebookAudience'
+    | 'FloodlightSGTM'
+    | 'FullContact'
+    | 'G4Analytics'
+    | 'GA4MeasurementProtocol'
+    | 'GA4ServerProxy'
+    | 'Google'
+    | 'GoogleAds360'
+    | 'GoogleAdsServerContainer'
+    | 'GoogleAudience'
+    | 'GoogleBigQuery'
+    | 'GoogleBigQueryWarehouse'
+    | 'GoogleDataManagerEventIngest'
+    | 'GooglePubSub'
+    | 'GoogleStorage'
+    | 'HTTPCustomRequest'
+    | 'HTTPDestination'
+    | 'Hubspot'
+    | 'IHeartMediaMagellan'
+    | 'Impact'
+    | 'Iterable'
+    | 'Klaviyo'
+    | 'LinkedInAdsCAPI'
+    | 'LiveIntent'
+    | 'LiveRampWarehouse'
+    | 'MNTN'
+    | 'MNTNAudience'
+    | 'Mailchimp'
+    | 'Mixpanel'
+    | 'NextdoorAds'
+    | 'OpenAIAds'
+    | 'OursSyntheticData'
+    | 'Outbrain'
+    | 'Partnerize'
+    | 'Pinterest'
+    | 'Plausible'
+    | 'Podscribe'
+    | 'PostHog'
+    | 'QuantcastCAPI'
+    | 'QuoraAds'
+    | 'Reddit'
+    | 'Rokt'
+    | 'RokuCAPI'
+    | 'SnapchatAdsCapi'
+    | 'Spotify'
+    | 'StackAdaptAPI'
+    | 'Taboola'
+    | 'Tatari'
+    | 'TatariCAPI'
+    | 'TheTradeDesk'
+    | 'TikTok'
+    | 'UniversalAds'
+    | 'VWO'
+    | 'Viant'
+    | 'ViantCAPI'
+    | 'Vibe'
+    | 'VibeAudience'
+    | 'Woopra'
+    | 'XAds'
+    | 'YelpCAPI'
+    | 'Zendesk'
+    | 'ZohoCRM'
+    | 'ZoomInfo';
+
+  hashingSalt?: string | null;
+
+  limitedToSourceIds?: Array<string> | null;
+
+  name?: string | null;
+
+  settings?: unknown | null;
+
+  updatedAt?: string | null;
+}
+
+export interface DestinationUpdateResponse {
+  id: string;
+
+  createdAt: string;
+
+  status: 'Disabled' | 'Enabled';
+
+  /**
+   * Destination type. Read responses may include warehouse, cloud-storage, and
+   * audience-sync types that are not creatable through POST /rest/v1/destinations.
+   */
+  type:
+    | 'AWSEventBridge'
+    | 'AWSKinesis'
+    | 'AWSLambda'
+    | 'AWSS3'
+    | 'AWSSNS'
+    | 'ActiveCampaignApi'
+    | 'Admitad'
+    | 'AdobeAnalytics'
+    | 'AmazonDSP'
+    | 'Amplitude'
+    | 'AppLovin'
+    | 'ArtsAI'
+    | 'Attentive'
+    | 'Audiohook'
+    | 'AzureBlob'
+    | 'BasisPostback'
+    | 'BeeswaxPostback'
+    | 'BingAds'
+    | 'BingAdsWeb'
+    | 'BingRest'
+    | 'Braze'
+    | 'ConvertABTestingEvent'
+    | 'Customerio'
+    | 'DatabricksWarehouse'
+    | 'DomoWarehouse'
+    | 'Everflow'
+    | 'Facebook'
+    | 'FacebookAudience'
+    | 'FloodlightSGTM'
+    | 'FullContact'
+    | 'G4Analytics'
+    | 'GA4MeasurementProtocol'
+    | 'GA4ServerProxy'
+    | 'Google'
+    | 'GoogleAds360'
+    | 'GoogleAdsServerContainer'
+    | 'GoogleAudience'
+    | 'GoogleBigQuery'
+    | 'GoogleBigQueryWarehouse'
+    | 'GoogleDataManagerEventIngest'
+    | 'GooglePubSub'
+    | 'GoogleStorage'
+    | 'HTTPCustomRequest'
+    | 'HTTPDestination'
+    | 'Hubspot'
+    | 'IHeartMediaMagellan'
+    | 'Impact'
+    | 'Iterable'
+    | 'Klaviyo'
+    | 'LinkedInAdsCAPI'
+    | 'LiveIntent'
+    | 'LiveRampWarehouse'
+    | 'MNTN'
+    | 'MNTNAudience'
+    | 'Mailchimp'
+    | 'Mixpanel'
+    | 'NextdoorAds'
+    | 'OpenAIAds'
+    | 'OursSyntheticData'
+    | 'Outbrain'
+    | 'Partnerize'
+    | 'Pinterest'
+    | 'Plausible'
+    | 'Podscribe'
+    | 'PostHog'
+    | 'QuantcastCAPI'
+    | 'QuoraAds'
+    | 'Reddit'
+    | 'Rokt'
+    | 'RokuCAPI'
+    | 'SnapchatAdsCapi'
+    | 'Spotify'
+    | 'StackAdaptAPI'
+    | 'Taboola'
+    | 'Tatari'
+    | 'TatariCAPI'
+    | 'TheTradeDesk'
+    | 'TikTok'
+    | 'UniversalAds'
+    | 'VWO'
+    | 'Viant'
+    | 'ViantCAPI'
+    | 'Vibe'
+    | 'VibeAudience'
+    | 'Woopra'
+    | 'XAds'
+    | 'YelpCAPI'
+    | 'Zendesk'
+    | 'ZohoCRM'
+    | 'ZoomInfo';
+
+  hashingSalt?: string | null;
+
+  limitedToSourceIds?: Array<string> | null;
+
+  name?: string | null;
+
+  settings?: unknown | null;
+
+  updatedAt?: string | null;
+}
+
+export type DestinationDeleteResponse = boolean;
+
+export interface DestinationTypesResponse {
+  entities: Array<DestinationTypesResponse.Entity>;
+}
+
+export namespace DestinationTypesResponse {
+  export interface Entity {
+    id:
+      | 'Audiohook'
+      | 'BasisPostback'
+      | 'Outbrain'
+      | 'OursSyntheticData'
+      | 'FullContact'
+      | 'ZoomInfo'
+      | 'TheTradeDesk'
+      | 'Braze'
+      | 'LiveIntent'
+      | 'ConvertABTestingEvent'
+      | 'Customerio'
+      | 'BingAds'
+      | 'BingRest'
+      | 'BingAdsWeb'
+      | 'HTTPDestination'
+      | 'Woopra'
+      | 'HTTPCustomRequest'
+      | 'Google'
+      | 'GoogleAdsServerContainer'
+      | 'G4Analytics'
+      | 'GA4ServerProxy'
+      | 'GA4MeasurementProtocol'
+      | 'GoogleAds360'
+      | 'Facebook'
+      | 'Mixpanel'
+      | 'Amplitude'
+      | 'TikTok'
+      | 'Reddit'
+      | 'Podscribe'
+      | 'Pinterest'
+      | 'Mailchimp'
+      | 'AWSKinesis'
+      | 'AWSLambda'
+      | 'AWSSNS'
+      | 'GooglePubSub'
+      | 'LinkedInAdsCAPI'
+      | 'ActiveCampaignApi'
+      | 'StackAdaptAPI'
+      | 'Hubspot'
+      | 'Klaviyo'
+      | 'XAds'
+      | 'QuoraAds'
+      | 'SnapchatAdsCapi'
+      | 'Partnerize'
+      | 'NextdoorAds'
+      | 'Tatari'
+      | 'Viant'
+      | 'ViantCAPI'
+      | 'Impact'
+      | 'Spotify'
+      | 'Taboola'
+      | 'AmazonDSP'
+      | 'AppLovin'
+      | 'IHeartMediaMagellan'
+      | 'Vibe'
+      | 'GoogleDataManagerEventIngest'
+      | 'Zendesk'
+      | 'Iterable'
+      | 'ArtsAI'
+      | 'QuantcastCAPI'
+      | 'FloodlightSGTM'
+      | 'VWO'
+      | 'Attentive'
+      | 'Admitad'
+      | 'Plausible'
+      | 'PostHog'
+      | 'RokuCAPI'
+      | 'Everflow'
+      | 'BeeswaxPostback'
+      | 'AdobeAnalytics'
+      | 'UniversalAds'
+      | 'OpenAIAds'
+      | 'YelpCAPI'
+      | 'MNTN'
+      | 'ZohoCRM';
+
+    capabilities: Entity.Capabilities;
+
+    label: string;
+
+    settings: Array<
+      | Entity.UnionMember0
+      | Entity.UnionMember1
+      | Entity.UnionMember2
+      | Entity.UnionMember3
+      | Entity.UnionMember4
+    >;
+
+    status: 'deprecated' | 'ga';
+  }
+
+  export namespace Entity {
+    export interface Capabilities {
+      listsAccounts: boolean;
+
+      oauth: boolean;
+
+      supportsRenamedEvents: boolean;
+    }
+
+    export interface UnionMember0 {
+      key: string;
+
+      /**
+       * Informational display message only. Do not send this key in POST or PATCH
+       * settings.
+       */
+      label: string;
+
+      type: 'Alert';
+    }
+
+    export interface UnionMember1 {
+      key: string;
+
+      label: string;
+
+      options: Array<UnionMember1.Option>;
+
+      type: 'Select';
+
+      defaultValue?: string | null;
+
+      required?: boolean | null;
+
+      sublabel?: string | null;
+    }
+
+    export namespace UnionMember1 {
+      export interface Option {
+        label: string;
+
+        value: string;
+      }
+    }
+
+    export interface UnionMember2 {
+      key: string;
+
+      label: string;
+
+      type: 'Switch';
+
+      defaultValue?: boolean | null;
+
+      required?: boolean | null;
+
+      sublabel?: string | null;
+    }
+
+    export interface UnionMember3 {
+      key: string;
+
+      label: string;
+
+      type: 'GenericOauth';
+
+      sublabel?: string | null;
+    }
+
+    export interface UnionMember4 {
+      key: string;
+
+      label: string;
+
+      placeholder: string;
+
+      type: 'Text' | 'Secret';
+
+      required?: boolean | null;
+
+      sublabel?: string | null;
+    }
+  }
+}
+
+export interface DestinationHealthResponse {
+  failureCount: number;
+
+  /**
+   * Dispatches blocked by an account-wide dispatch rule (not a failure).
+   */
+  globalStopCount: number;
+
+  /**
+   * HEALTHY (>=95% of decisive dispatches succeeded), DEGRADED (50-95%), UNHEALTHY
+   * (<50%), or NO_DATA (no succeeded/failed dispatches in the window).
+   */
+  status: 'DEGRADED' | 'HEALTHY' | 'NO_DATA' | 'UNHEALTHY';
+
+  /**
+   * Dispatches intentionally stopped before send (not a failure).
+   */
+  stoppedCount: number;
+
+  successCount: number;
+
+  /**
+   * All dispatch attempts in the window, including stopped/blocked ones.
+   */
+  totalDispatches: number;
+
+  /**
+   * End of the snapshot window (ISO 8601).
+   */
+  windowEnd: string;
+
+  /**
+   * Start of the snapshot window (ISO 8601).
+   */
+  windowStart: string;
+
+  /**
+   * Timestamp of the most recent dispatch attempt to this destination, if any.
+   */
+  lastDispatchedAt?: string | null;
+
+  /**
+   * successCount / (successCount + failureCount). Null when there were no
+   * succeeded/failed dispatches in the window.
+   */
+  successRate?: number | null;
+}
+
+export interface DestinationListParams extends CursorParams {
+  /**
+   * Filter destinations by status.
+   */
+  status?: 'Disabled' | 'Enabled';
+
+  /**
+   * Filter destinations by destination type.
+   */
+  type?:
+    | 'AWSEventBridge'
+    | 'AWSKinesis'
+    | 'AWSLambda'
+    | 'AWSS3'
+    | 'AWSSNS'
+    | 'ActiveCampaignApi'
+    | 'Admitad'
+    | 'AdobeAnalytics'
+    | 'AmazonDSP'
+    | 'Amplitude'
+    | 'AppLovin'
+    | 'ArtsAI'
+    | 'Attentive'
+    | 'Audiohook'
+    | 'AzureBlob'
+    | 'BasisPostback'
+    | 'BeeswaxPostback'
+    | 'BingAds'
+    | 'BingAdsWeb'
+    | 'BingRest'
+    | 'Braze'
+    | 'ConvertABTestingEvent'
+    | 'Customerio'
+    | 'DatabricksWarehouse'
+    | 'DomoWarehouse'
+    | 'Everflow'
+    | 'Facebook'
+    | 'FacebookAudience'
+    | 'FloodlightSGTM'
+    | 'FullContact'
+    | 'G4Analytics'
+    | 'GA4MeasurementProtocol'
+    | 'GA4ServerProxy'
+    | 'Google'
+    | 'GoogleAds360'
+    | 'GoogleAdsServerContainer'
+    | 'GoogleAudience'
+    | 'GoogleBigQuery'
+    | 'GoogleBigQueryWarehouse'
+    | 'GoogleDataManagerEventIngest'
+    | 'GooglePubSub'
+    | 'GoogleStorage'
+    | 'HTTPCustomRequest'
+    | 'HTTPDestination'
+    | 'Hubspot'
+    | 'IHeartMediaMagellan'
+    | 'Impact'
+    | 'Iterable'
+    | 'Klaviyo'
+    | 'LinkedInAdsCAPI'
+    | 'LiveIntent'
+    | 'LiveRampWarehouse'
+    | 'MNTN'
+    | 'MNTNAudience'
+    | 'Mailchimp'
+    | 'Mixpanel'
+    | 'NextdoorAds'
+    | 'OpenAIAds'
+    | 'OursSyntheticData'
+    | 'Outbrain'
+    | 'Partnerize'
+    | 'Pinterest'
+    | 'Plausible'
+    | 'Podscribe'
+    | 'PostHog'
+    | 'QuantcastCAPI'
+    | 'QuoraAds'
+    | 'Reddit'
+    | 'Rokt'
+    | 'RokuCAPI'
+    | 'SnapchatAdsCapi'
+    | 'Spotify'
+    | 'StackAdaptAPI'
+    | 'Taboola'
+    | 'Tatari'
+    | 'TatariCAPI'
+    | 'TheTradeDesk'
+    | 'TikTok'
+    | 'UniversalAds'
+    | 'VWO'
+    | 'Viant'
+    | 'ViantCAPI'
+    | 'Vibe'
+    | 'VibeAudience'
+    | 'Woopra'
+    | 'XAds'
+    | 'YelpCAPI'
+    | 'Zendesk'
+    | 'ZohoCRM'
+    | 'ZoomInfo';
+}
+
+export interface DestinationCreateParams {
+  /**
+   * Event-dispatch destination type to create. Warehouse, cloud-storage, and
+   * audience-sync destination types may appear on read responses but are not
+   * creatable through POST. Audience destinations receive audience membership from
+   * Audience Builder on a daily schedule and are configured in the dashboard.
+   */
+  type:
+    | 'Audiohook'
+    | 'BasisPostback'
+    | 'Outbrain'
+    | 'OursSyntheticData'
+    | 'FullContact'
+    | 'ZoomInfo'
+    | 'TheTradeDesk'
+    | 'Braze'
+    | 'LiveIntent'
+    | 'ConvertABTestingEvent'
+    | 'Customerio'
+    | 'BingAds'
+    | 'BingRest'
+    | 'BingAdsWeb'
+    | 'HTTPDestination'
+    | 'Woopra'
+    | 'HTTPCustomRequest'
+    | 'Google'
+    | 'GoogleAdsServerContainer'
+    | 'G4Analytics'
+    | 'GA4ServerProxy'
+    | 'GA4MeasurementProtocol'
+    | 'GoogleAds360'
+    | 'Facebook'
+    | 'Mixpanel'
+    | 'Amplitude'
+    | 'TikTok'
+    | 'Reddit'
+    | 'Podscribe'
+    | 'Pinterest'
+    | 'Mailchimp'
+    | 'AWSKinesis'
+    | 'AWSLambda'
+    | 'AWSSNS'
+    | 'GooglePubSub'
+    | 'LinkedInAdsCAPI'
+    | 'ActiveCampaignApi'
+    | 'StackAdaptAPI'
+    | 'Hubspot'
+    | 'Klaviyo'
+    | 'XAds'
+    | 'QuoraAds'
+    | 'SnapchatAdsCapi'
+    | 'Partnerize'
+    | 'NextdoorAds'
+    | 'Tatari'
+    | 'TatariCAPI'
+    | 'Viant'
+    | 'ViantCAPI'
+    | 'Impact'
+    | 'Spotify'
+    | 'Taboola'
+    | 'AmazonDSP'
+    | 'AppLovin'
+    | 'IHeartMediaMagellan'
+    | 'Vibe'
+    | 'GoogleDataManagerEventIngest'
+    | 'Zendesk'
+    | 'Iterable'
+    | 'ArtsAI'
+    | 'QuantcastCAPI'
+    | 'FloodlightSGTM'
+    | 'VWO'
+    | 'Attentive'
+    | 'Admitad'
+    | 'Plausible'
+    | 'PostHog'
+    | 'RokuCAPI'
+    | 'Everflow'
+    | 'BeeswaxPostback'
+    | 'AdobeAnalytics'
+    | 'UniversalAds'
+    | 'OpenAIAds'
+    | 'YelpCAPI'
+    | 'MNTN'
+    | 'ZohoCRM'
+    | 'Rokt';
+
+  name?: string | null;
+
+  /**
+   * Per-type configuration keys and values. Call GET /rest/v1/destinations/types to
+   * get the valid keys for your destination type.
+   */
+  settings?: unknown | null;
+}
+
+export interface DestinationUpdateParams {
+  /**
+   * Server-assigned read-only field. Accepted on PATCH and ignored to support GET ->
+   * PATCH round-trips.
+   */
+  createdAt?: string;
+
+  hashingSalt?: string | null;
+
+  /**
+   * Server-assigned read-only field. Accepted on PATCH and ignored to support GET ->
+   * PATCH round-trips.
+   */
+  id?: string;
+
+  limitedToSourceIds?: Array<string> | null;
+
+  name?: string | null;
+
+  /**
+   * Per-type configuration keys and values. Call GET /rest/v1/destinations/types to
+   * get the valid keys for your destination type.
+   */
+  settings?: unknown | null;
+
+  status?: 'Disabled' | 'Enabled' | null;
+
+  /**
+   * Server-assigned read-only field. Accepted on PATCH and ignored to support GET ->
+   * PATCH round-trips.
+   */
+  type?:
+    | 'AWSEventBridge'
+    | 'AWSKinesis'
+    | 'AWSLambda'
+    | 'AWSS3'
+    | 'AWSSNS'
+    | 'ActiveCampaignApi'
+    | 'Admitad'
+    | 'AdobeAnalytics'
+    | 'AmazonDSP'
+    | 'Amplitude'
+    | 'AppLovin'
+    | 'ArtsAI'
+    | 'Attentive'
+    | 'Audiohook'
+    | 'AzureBlob'
+    | 'BasisPostback'
+    | 'BeeswaxPostback'
+    | 'BingAds'
+    | 'BingAdsWeb'
+    | 'Braze'
+    | 'ConvertABTestingEvent'
+    | 'Customerio'
+    | 'DatabricksWarehouse'
+    | 'DomoWarehouse'
+    | 'Everflow'
+    | 'Facebook'
+    | 'FacebookAudience'
+    | 'FloodlightSGTM'
+    | 'FullContact'
+    | 'G4Analytics'
+    | 'GA4MeasurementProtocol'
+    | 'GA4ServerProxy'
+    | 'Google'
+    | 'GoogleAds360'
+    | 'GoogleAdsServerContainer'
+    | 'GoogleAudience'
+    | 'GoogleBigQuery'
+    | 'GoogleBigQueryWarehouse'
+    | 'GoogleDataManagerEventIngest'
+    | 'GooglePubSub'
+    | 'GoogleStorage'
+    | 'HTTPCustomRequest'
+    | 'HTTPDestination'
+    | 'Hubspot'
+    | 'IHeartMediaMagellan'
+    | 'Impact'
+    | 'Iterable'
+    | 'Klaviyo'
+    | 'LinkedInAdsCAPI'
+    | 'LiveIntent'
+    | 'LiveRampWarehouse'
+    | 'MNTN'
+    | 'MNTNAudience'
+    | 'Mailchimp'
+    | 'Mixpanel'
+    | 'NextdoorAds'
+    | 'OpenAIAds'
+    | 'OursSyntheticData'
+    | 'Outbrain'
+    | 'Partnerize'
+    | 'Pinterest'
+    | 'Plausible'
+    | 'Podscribe'
+    | 'PostHog'
+    | 'QuantcastCAPI'
+    | 'QuoraAds'
+    | 'Reddit'
+    | 'Rokt'
+    | 'RokuCAPI'
+    | 'SnapchatAdsCapi'
+    | 'Spotify'
+    | 'StackAdaptAPI'
+    | 'Taboola'
+    | 'Tatari'
+    | 'TatariCAPI'
+    | 'TheTradeDesk'
+    | 'TikTok'
+    | 'UniversalAds'
+    | 'VWO'
+    | 'Viant'
+    | 'ViantCAPI'
+    | 'Vibe'
+    | 'VibeAudience'
+    | 'Woopra'
+    | 'XAds'
+    | 'YelpCAPI'
+    | 'Zendesk'
+    | 'ZohoCRM'
+    | 'ZoomInfo';
+
+  /**
+   * Server-assigned read-only field. Accepted on PATCH and ignored to support GET ->
+   * PATCH round-trips.
+   */
+  updatedAt?: string | null;
+}
+
+export declare namespace Destinations {
+  export {
+    type DestinationListResponse as DestinationListResponse,
+    type DestinationCreateResponse as DestinationCreateResponse,
+    type DestinationRetrieveResponse as DestinationRetrieveResponse,
+    type DestinationUpdateResponse as DestinationUpdateResponse,
+    type DestinationDeleteResponse as DestinationDeleteResponse,
+    type DestinationTypesResponse as DestinationTypesResponse,
+    type DestinationHealthResponse as DestinationHealthResponse,
+    type DestinationListResponsesCursor as DestinationListResponsesCursor,
+    type DestinationListParams as DestinationListParams,
+    type DestinationCreateParams as DestinationCreateParams,
+    type DestinationUpdateParams as DestinationUpdateParams,
+  };
+}

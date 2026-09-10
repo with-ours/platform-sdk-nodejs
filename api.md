@@ -1,0 +1,599 @@
+# AllowedEvents
+
+Types:
+
+- <code><a href="./src/resources/allowed-events.ts">AllowedEventListResponse</a></code>
+- <code><a href="./src/resources/allowed-events.ts">AllowedEventCreateResponse</a></code>
+- <code><a href="./src/resources/allowed-events.ts">AllowedEventRetrieveResponse</a></code>
+- <code><a href="./src/resources/allowed-events.ts">AllowedEventUpdateResponse</a></code>
+- <code><a href="./src/resources/allowed-events.ts">AllowedEventDeleteResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/allowed-events">client.allowedEvents.<a href="./src/resources/allowed-events.ts">list</a>() -> AllowedEventListResponse</code>
+- <code title="post /rest/v1/allowed-events">client.allowedEvents.<a href="./src/resources/allowed-events.ts">create</a>({ ...params }) -> AllowedEventCreateResponse</code>
+- <code title="get /rest/v1/allowed-events/{id}">client.allowedEvents.<a href="./src/resources/allowed-events.ts">retrieve</a>(id) -> AllowedEventRetrieveResponse</code>
+- <code title="patch /rest/v1/allowed-events/{id}">client.allowedEvents.<a href="./src/resources/allowed-events.ts">update</a>(id, { ...params }) -> AllowedEventUpdateResponse</code>
+- <code title="delete /rest/v1/allowed-events/{id}">client.allowedEvents.<a href="./src/resources/allowed-events.ts">delete</a>(id) -> AllowedEventDeleteResponse</code>
+
+# Attribution
+
+Types:
+
+- <code><a href="./src/resources/attribution.ts">AttributionInitialResponse</a></code>
+- <code><a href="./src/resources/attribution.ts">AttributionLastTouchResponse</a></code>
+- <code><a href="./src/resources/attribution.ts">AttributionConversionResponse</a></code>
+- <code><a href="./src/resources/attribution.ts">AttributionAudienceConversionResponse</a></code>
+- <code><a href="./src/resources/attribution.ts">AttributionUtmComparisonResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/attribution/initial">client.attribution.<a href="./src/resources/attribution.ts">initial</a>({ ...params }) -> AttributionInitialResponse</code>
+- <code title="get /rest/v1/attribution/last-touch">client.attribution.<a href="./src/resources/attribution.ts">lastTouch</a>({ ...params }) -> AttributionLastTouchResponse</code>
+- <code title="get /rest/v1/attribution/conversion">client.attribution.<a href="./src/resources/attribution.ts">conversion</a>({ ...params }) -> AttributionConversionResponse</code>
+- <code title="get /rest/v1/attribution/audience-conversion">client.attribution.<a href="./src/resources/attribution.ts">audienceConversion</a>({ ...params }) -> AttributionAudienceConversionResponse</code>
+- <code title="get /rest/v1/attribution/utm-comparison">client.attribution.<a href="./src/resources/attribution.ts">utmComparison</a>({ ...params }) -> AttributionUtmComparisonResponse</code>
+
+# AudienceConversionReports
+
+Types:
+
+- <code><a href="./src/resources/audience-conversion-reports.ts">AudienceConversionReportListResponse</a></code>
+- <code><a href="./src/resources/audience-conversion-reports.ts">AudienceConversionReportCreateResponse</a></code>
+- <code><a href="./src/resources/audience-conversion-reports.ts">AudienceConversionReportRetrieveResponse</a></code>
+- <code><a href="./src/resources/audience-conversion-reports.ts">AudienceConversionReportUpdateResponse</a></code>
+- <code><a href="./src/resources/audience-conversion-reports.ts">AudienceConversionReportDeleteResponse</a></code>
+- <code><a href="./src/resources/audience-conversion-reports.ts">AudienceConversionReportResultsResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/audience-conversion-reports">client.audienceConversionReports.<a href="./src/resources/audience-conversion-reports.ts">list</a>() -> AudienceConversionReportListResponse</code>
+- <code title="post /rest/v1/audience-conversion-reports">client.audienceConversionReports.<a href="./src/resources/audience-conversion-reports.ts">create</a>({ ...params }) -> AudienceConversionReportCreateResponse</code>
+- <code title="get /rest/v1/audience-conversion-reports/{id}">client.audienceConversionReports.<a href="./src/resources/audience-conversion-reports.ts">retrieve</a>(id) -> AudienceConversionReportRetrieveResponse</code>
+- <code title="patch /rest/v1/audience-conversion-reports/{id}">client.audienceConversionReports.<a href="./src/resources/audience-conversion-reports.ts">update</a>(id, { ...params }) -> AudienceConversionReportUpdateResponse</code>
+- <code title="delete /rest/v1/audience-conversion-reports/{id}">client.audienceConversionReports.<a href="./src/resources/audience-conversion-reports.ts">delete</a>(id) -> AudienceConversionReportDeleteResponse</code>
+- <code title="get /rest/v1/audience-conversion-reports/{id}/results">client.audienceConversionReports.<a href="./src/resources/audience-conversion-reports.ts">results</a>(id, { ...params }) -> AudienceConversionReportResultsResponse</code>
+
+# ConsentAnalytics
+
+Types:
+
+- <code><a href="./src/resources/consent-analytics.ts">ConsentAnalyticsListResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/consent-analytics">client.consentAnalytics.<a href="./src/resources/consent-analytics.ts">list</a>({ ...params }) -> ConsentAnalyticsListResponse</code>
+
+# ConsentSettings
+
+Types:
+
+- <code><a href="./src/resources/consent-settings.ts">ConsentSettingListResponse</a></code>
+- <code><a href="./src/resources/consent-settings.ts">ConsentSettingCreateResponse</a></code>
+- <code><a href="./src/resources/consent-settings.ts">ConsentSettingRetrieveResponse</a></code>
+- <code><a href="./src/resources/consent-settings.ts">ConsentSettingReplaceResponse</a></code>
+- <code><a href="./src/resources/consent-settings.ts">ConsentSettingUpdateResponse</a></code>
+- <code><a href="./src/resources/consent-settings.ts">ConsentSettingDeleteResponse</a></code>
+- <code><a href="./src/resources/consent-settings.ts">ConsentSettingAnalyticsResponse</a></code>
+- <code><a href="./src/resources/consent-settings.ts">ConsentSettingPageAnalysisResponse</a></code>
+- <code><a href="./src/resources/consent-settings.ts">ConsentSettingAnalyticsByRegionResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/consent-settings">client.consentSettings.<a href="./src/resources/consent-settings.ts">list</a>() -> ConsentSettingListResponse</code>
+- <code title="post /rest/v1/consent-settings">client.consentSettings.<a href="./src/resources/consent-settings.ts">create</a>() -> ConsentSettingCreateResponse</code>
+- <code title="get /rest/v1/consent-settings/{id}">client.consentSettings.<a href="./src/resources/consent-settings.ts">retrieve</a>(id) -> ConsentSettingRetrieveResponse | null</code>
+- <code title="put /rest/v1/consent-settings/{id}">client.consentSettings.<a href="./src/resources/consent-settings.ts">replace</a>(id, { ...params }) -> ConsentSettingReplaceResponse</code>
+- <code title="patch /rest/v1/consent-settings/{id}">client.consentSettings.<a href="./src/resources/consent-settings.ts">update</a>(id, { ...params }) -> ConsentSettingUpdateResponse</code>
+- <code title="delete /rest/v1/consent-settings/{id}">client.consentSettings.<a href="./src/resources/consent-settings.ts">delete</a>(id) -> ConsentSettingDeleteResponse</code>
+- <code title="get /rest/v1/consent-settings/{id}/analytics">client.consentSettings.<a href="./src/resources/consent-settings.ts">analytics</a>(id, { ...params }) -> ConsentSettingAnalyticsResponse</code>
+- <code title="get /rest/v1/consent-settings/{id}/page-analysis">client.consentSettings.<a href="./src/resources/consent-settings.ts">pageAnalysis</a>(id, { ...params }) -> ConsentSettingPageAnalysisResponse</code>
+- <code title="get /rest/v1/consent-settings/{id}/analytics-by-region">client.consentSettings.<a href="./src/resources/consent-settings.ts">analyticsByRegion</a>(id, { ...params }) -> ConsentSettingAnalyticsByRegionResponse</code>
+
+# ConversionJourneySummaries
+
+Types:
+
+- <code><a href="./src/resources/conversion-journey-summaries.ts">ConversionJourneySummaryListResponse</a></code>
+- <code><a href="./src/resources/conversion-journey-summaries.ts">ConversionJourneySummaryCreateResponse</a></code>
+- <code><a href="./src/resources/conversion-journey-summaries.ts">ConversionJourneySummaryRetrieveResponse</a></code>
+- <code><a href="./src/resources/conversion-journey-summaries.ts">ConversionJourneySummaryUpdateResponse</a></code>
+- <code><a href="./src/resources/conversion-journey-summaries.ts">ConversionJourneySummaryDeleteResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/conversion-journey-summaries">client.conversionJourneySummaries.<a href="./src/resources/conversion-journey-summaries.ts">list</a>({ ...params }) -> ConversionJourneySummaryListResponsesCursor</code>
+- <code title="post /rest/v1/conversion-journey-summaries">client.conversionJourneySummaries.<a href="./src/resources/conversion-journey-summaries.ts">create</a>({ ...params }) -> ConversionJourneySummaryCreateResponse</code>
+- <code title="get /rest/v1/conversion-journey-summaries/{id}">client.conversionJourneySummaries.<a href="./src/resources/conversion-journey-summaries.ts">retrieve</a>(id) -> ConversionJourneySummaryRetrieveResponse</code>
+- <code title="patch /rest/v1/conversion-journey-summaries/{id}">client.conversionJourneySummaries.<a href="./src/resources/conversion-journey-summaries.ts">update</a>(id, { ...params }) -> ConversionJourneySummaryUpdateResponse</code>
+- <code title="delete /rest/v1/conversion-journey-summaries/{id}">client.conversionJourneySummaries.<a href="./src/resources/conversion-journey-summaries.ts">delete</a>(id) -> ConversionJourneySummaryDeleteResponse</code>
+
+# DataGovernance
+
+Types:
+
+- <code><a href="./src/resources/data-governance.ts">DataGovernanceListResponse</a></code>
+- <code><a href="./src/resources/data-governance.ts">DataGovernanceCreateResponse</a></code>
+- <code><a href="./src/resources/data-governance.ts">DataGovernanceRetrieveResponse</a></code>
+- <code><a href="./src/resources/data-governance.ts">DataGovernanceUpdateResponse</a></code>
+- <code><a href="./src/resources/data-governance.ts">DataGovernanceDeleteResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/data-governance">client.dataGovernance.<a href="./src/resources/data-governance.ts">list</a>({ ...params }) -> DataGovernanceListResponsesCursor</code>
+- <code title="post /rest/v1/data-governance">client.dataGovernance.<a href="./src/resources/data-governance.ts">create</a>({ ...params }) -> DataGovernanceCreateResponse</code>
+- <code title="get /rest/v1/data-governance/{id}">client.dataGovernance.<a href="./src/resources/data-governance.ts">retrieve</a>(id) -> DataGovernanceRetrieveResponse | null</code>
+- <code title="patch /rest/v1/data-governance/{id}">client.dataGovernance.<a href="./src/resources/data-governance.ts">update</a>(id, { ...params }) -> DataGovernanceUpdateResponse</code>
+- <code title="delete /rest/v1/data-governance/{id}">client.dataGovernance.<a href="./src/resources/data-governance.ts">delete</a>(id) -> DataGovernanceDeleteResponse</code>
+
+# DefaultMappings
+
+Types:
+
+- <code><a href="./src/resources/default-mappings.ts">DefaultMappingListResponse</a></code>
+- <code><a href="./src/resources/default-mappings.ts">DefaultMappingRetrieveResponse</a></code>
+- <code><a href="./src/resources/default-mappings.ts">DefaultMappingReplaceResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/default-mappings">client.defaultMappings.<a href="./src/resources/default-mappings.ts">list</a>() -> DefaultMappingListResponse</code>
+- <code title="get /rest/v1/default-mappings/{id}">client.defaultMappings.<a href="./src/resources/default-mappings.ts">retrieve</a>(id) -> DefaultMappingRetrieveResponse</code>
+- <code title="put /rest/v1/default-mappings/{id}">client.defaultMappings.<a href="./src/resources/default-mappings.ts">replace</a>(id, { ...params }) -> DefaultMappingReplaceResponse</code>
+
+# Destinations
+
+Types:
+
+- <code><a href="./src/resources/destinations.ts">DestinationListResponse</a></code>
+- <code><a href="./src/resources/destinations.ts">DestinationCreateResponse</a></code>
+- <code><a href="./src/resources/destinations.ts">DestinationRetrieveResponse</a></code>
+- <code><a href="./src/resources/destinations.ts">DestinationUpdateResponse</a></code>
+- <code><a href="./src/resources/destinations.ts">DestinationDeleteResponse</a></code>
+- <code><a href="./src/resources/destinations.ts">DestinationTypesResponse</a></code>
+- <code><a href="./src/resources/destinations.ts">DestinationHealthResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/destinations">client.destinations.<a href="./src/resources/destinations.ts">list</a>({ ...params }) -> DestinationListResponsesCursor</code>
+- <code title="post /rest/v1/destinations">client.destinations.<a href="./src/resources/destinations.ts">create</a>({ ...params }) -> DestinationCreateResponse</code>
+- <code title="get /rest/v1/destinations/{id}">client.destinations.<a href="./src/resources/destinations.ts">retrieve</a>(id) -> DestinationRetrieveResponse</code>
+- <code title="patch /rest/v1/destinations/{id}">client.destinations.<a href="./src/resources/destinations.ts">update</a>(id, { ...params }) -> DestinationUpdateResponse</code>
+- <code title="delete /rest/v1/destinations/{id}">client.destinations.<a href="./src/resources/destinations.ts">delete</a>(id) -> DestinationDeleteResponse</code>
+- <code title="get /rest/v1/destinations/types">client.destinations.<a href="./src/resources/destinations.ts">types</a>() -> DestinationTypesResponse</code>
+- <code title="get /rest/v1/destinations/{id}/health">client.destinations.<a href="./src/resources/destinations.ts">health</a>(id) -> DestinationHealthResponse</code>
+
+# ExperimentSettings
+
+Types:
+
+- <code><a href="./src/resources/experiment-settings.ts">ExperimentSettingListResponse</a></code>
+- <code><a href="./src/resources/experiment-settings.ts">ExperimentSettingCreateResponse</a></code>
+- <code><a href="./src/resources/experiment-settings.ts">ExperimentSettingRetrieveResponse</a></code>
+- <code><a href="./src/resources/experiment-settings.ts">ExperimentSettingUpdateResponse</a></code>
+- <code><a href="./src/resources/experiment-settings.ts">ExperimentSettingDeleteResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/experiment-settings">client.experimentSettings.<a href="./src/resources/experiment-settings.ts">list</a>() -> ExperimentSettingListResponse</code>
+- <code title="post /rest/v1/experiment-settings">client.experimentSettings.<a href="./src/resources/experiment-settings.ts">create</a>({ ...params }) -> ExperimentSettingCreateResponse</code>
+- <code title="get /rest/v1/experiment-settings/{id}">client.experimentSettings.<a href="./src/resources/experiment-settings.ts">retrieve</a>(id) -> ExperimentSettingRetrieveResponse</code>
+- <code title="patch /rest/v1/experiment-settings/{id}">client.experimentSettings.<a href="./src/resources/experiment-settings.ts">update</a>(id, { ...params }) -> ExperimentSettingUpdateResponse</code>
+- <code title="delete /rest/v1/experiment-settings/{id}">client.experimentSettings.<a href="./src/resources/experiment-settings.ts">delete</a>(id) -> ExperimentSettingDeleteResponse</code>
+
+# ExperimentVariants
+
+Types:
+
+- <code><a href="./src/resources/experiment-variants.ts">ExperimentVariantListResponse</a></code>
+- <code><a href="./src/resources/experiment-variants.ts">ExperimentVariantCreateResponse</a></code>
+- <code><a href="./src/resources/experiment-variants.ts">ExperimentVariantRetrieveResponse</a></code>
+- <code><a href="./src/resources/experiment-variants.ts">ExperimentVariantUpdateResponse</a></code>
+- <code><a href="./src/resources/experiment-variants.ts">ExperimentVariantDeleteResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/experiment-variants">client.experimentVariants.<a href="./src/resources/experiment-variants.ts">list</a>({ ...params }) -> ExperimentVariantListResponsesCursor</code>
+- <code title="post /rest/v1/experiment-variants">client.experimentVariants.<a href="./src/resources/experiment-variants.ts">create</a>({ ...params }) -> ExperimentVariantCreateResponse</code>
+- <code title="get /rest/v1/experiment-variants/{id}">client.experimentVariants.<a href="./src/resources/experiment-variants.ts">retrieve</a>(id) -> ExperimentVariantRetrieveResponse</code>
+- <code title="patch /rest/v1/experiment-variants/{id}">client.experimentVariants.<a href="./src/resources/experiment-variants.ts">update</a>(id, { ...params }) -> ExperimentVariantUpdateResponse</code>
+- <code title="delete /rest/v1/experiment-variants/{id}">client.experimentVariants.<a href="./src/resources/experiment-variants.ts">delete</a>(id) -> ExperimentVariantDeleteResponse</code>
+
+# Experiments
+
+Types:
+
+- <code><a href="./src/resources/experiments.ts">ExperimentListResponse</a></code>
+- <code><a href="./src/resources/experiments.ts">ExperimentCreateResponse</a></code>
+- <code><a href="./src/resources/experiments.ts">ExperimentRetrieveResponse</a></code>
+- <code><a href="./src/resources/experiments.ts">ExperimentUpdateResponse</a></code>
+- <code><a href="./src/resources/experiments.ts">ExperimentDeleteResponse</a></code>
+- <code><a href="./src/resources/experiments.ts">ExperimentStartResponse</a></code>
+- <code><a href="./src/resources/experiments.ts">ExperimentStopResponse</a></code>
+- <code><a href="./src/resources/experiments.ts">ExperimentRolloutResponse</a></code>
+- <code><a href="./src/resources/experiments.ts">ExperimentEndRolloutResponse</a></code>
+- <code><a href="./src/resources/experiments.ts">ExperimentWinnerResponse</a></code>
+- <code><a href="./src/resources/experiments.ts">ExperimentPauseResponse</a></code>
+- <code><a href="./src/resources/experiments.ts">ExperimentResumeResponse</a></code>
+- <code><a href="./src/resources/experiments.ts">ExperimentResultsResponse</a></code>
+- <code><a href="./src/resources/experiments.ts">ExperimentResultsTimeSeriesResponse</a></code>
+- <code><a href="./src/resources/experiments.ts">ExperimentSessionReplaysResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/experiments">client.experiments.<a href="./src/resources/experiments.ts">list</a>({ ...params }) -> ExperimentListResponsesCursor</code>
+- <code title="post /rest/v1/experiments">client.experiments.<a href="./src/resources/experiments.ts">create</a>({ ...params }) -> ExperimentCreateResponse</code>
+- <code title="get /rest/v1/experiments/{id}">client.experiments.<a href="./src/resources/experiments.ts">retrieve</a>(id) -> ExperimentRetrieveResponse</code>
+- <code title="patch /rest/v1/experiments/{id}">client.experiments.<a href="./src/resources/experiments.ts">update</a>(id, { ...params }) -> ExperimentUpdateResponse</code>
+- <code title="delete /rest/v1/experiments/{id}">client.experiments.<a href="./src/resources/experiments.ts">delete</a>(id) -> ExperimentDeleteResponse</code>
+- <code title="post /rest/v1/experiments/{id}/start">client.experiments.<a href="./src/resources/experiments.ts">start</a>(id, { ...params }) -> ExperimentStartResponse</code>
+- <code title="post /rest/v1/experiments/{id}/stop">client.experiments.<a href="./src/resources/experiments.ts">stop</a>(id, { ...params }) -> ExperimentStopResponse</code>
+- <code title="post /rest/v1/experiments/{id}/rollout">client.experiments.<a href="./src/resources/experiments.ts">rollout</a>(id, { ...params }) -> ExperimentRolloutResponse</code>
+- <code title="post /rest/v1/experiments/{id}/end-rollout">client.experiments.<a href="./src/resources/experiments.ts">endRollout</a>(id) -> ExperimentEndRolloutResponse</code>
+- <code title="post /rest/v1/experiments/{id}/winner">client.experiments.<a href="./src/resources/experiments.ts">winner</a>(id, { ...params }) -> ExperimentWinnerResponse</code>
+- <code title="post /rest/v1/experiments/{id}/pause">client.experiments.<a href="./src/resources/experiments.ts">pause</a>(id, { ...params }) -> ExperimentPauseResponse</code>
+- <code title="post /rest/v1/experiments/{id}/resume">client.experiments.<a href="./src/resources/experiments.ts">resume</a>(id, { ...params }) -> ExperimentResumeResponse</code>
+- <code title="get /rest/v1/experiments/{id}/results">client.experiments.<a href="./src/resources/experiments.ts">results</a>(id, { ...params }) -> ExperimentResultsResponse</code>
+- <code title="get /rest/v1/experiments/{id}/results-time-series">client.experiments.<a href="./src/resources/experiments.ts">resultsTimeSeries</a>(id, { ...params }) -> ExperimentResultsTimeSeriesResponse</code>
+- <code title="get /rest/v1/experiments/{id}/session-replays">client.experiments.<a href="./src/resources/experiments.ts">sessionReplays</a>(id, { ...params }) -> ExperimentSessionReplaysResponse</code>
+
+# Funnels
+
+Types:
+
+- <code><a href="./src/resources/funnels.ts">FunnelListResponse</a></code>
+- <code><a href="./src/resources/funnels.ts">FunnelCreateResponse</a></code>
+- <code><a href="./src/resources/funnels.ts">FunnelRetrieveResponse</a></code>
+- <code><a href="./src/resources/funnels.ts">FunnelUpdateResponse</a></code>
+- <code><a href="./src/resources/funnels.ts">FunnelDeleteResponse</a></code>
+- <code><a href="./src/resources/funnels.ts">FunnelResultsResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/funnels">client.funnels.<a href="./src/resources/funnels.ts">list</a>() -> FunnelListResponse</code>
+- <code title="post /rest/v1/funnels">client.funnels.<a href="./src/resources/funnels.ts">create</a>({ ...params }) -> FunnelCreateResponse</code>
+- <code title="get /rest/v1/funnels/{id}">client.funnels.<a href="./src/resources/funnels.ts">retrieve</a>(id) -> FunnelRetrieveResponse</code>
+- <code title="patch /rest/v1/funnels/{id}">client.funnels.<a href="./src/resources/funnels.ts">update</a>(id, { ...params }) -> FunnelUpdateResponse</code>
+- <code title="delete /rest/v1/funnels/{id}">client.funnels.<a href="./src/resources/funnels.ts">delete</a>(id) -> FunnelDeleteResponse</code>
+- <code title="get /rest/v1/funnels/{id}/results">client.funnels.<a href="./src/resources/funnels.ts">results</a>(id, { ...params }) -> FunnelResultsResponse</code>
+
+# HeatmapPages
+
+Types:
+
+- <code><a href="./src/resources/heatmap-pages.ts">HeatmapPageListResponse</a></code>
+- <code><a href="./src/resources/heatmap-pages.ts">HeatmapPageSummaryResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/heatmap-pages">client.heatmapPages.<a href="./src/resources/heatmap-pages.ts">list</a>({ ...params }) -> HeatmapPageListResponsesCursor</code>
+- <code title="get /rest/v1/heatmap-pages/summary">client.heatmapPages.<a href="./src/resources/heatmap-pages.ts">summary</a>({ ...params }) -> HeatmapPageSummaryResponse</code>
+
+# Locations
+
+Types:
+
+- <code><a href="./src/resources/locations.ts">LocationListResponse</a></code>
+- <code><a href="./src/resources/locations.ts">LocationCreateResponse</a></code>
+- <code><a href="./src/resources/locations.ts">LocationUpdateResponse</a></code>
+- <code><a href="./src/resources/locations.ts">LocationEmbedCodeResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/locations">client.locations.<a href="./src/resources/locations.ts">list</a>() -> LocationListResponse</code>
+- <code title="post /rest/v1/locations">client.locations.<a href="./src/resources/locations.ts">create</a>({ ...params }) -> LocationCreateResponse</code>
+- <code title="patch /rest/v1/locations/{id}">client.locations.<a href="./src/resources/locations.ts">update</a>(id, { ...params }) -> LocationUpdateResponse</code>
+- <code title="get /rest/v1/locations/{id}/embed-code">client.locations.<a href="./src/resources/locations.ts">embedCode</a>(id, { ...params }) -> LocationEmbedCodeResponse</code>
+
+# Mappings
+
+Types:
+
+- <code><a href="./src/resources/mappings.ts">MappingListResponse</a></code>
+- <code><a href="./src/resources/mappings.ts">MappingCreateResponse</a></code>
+- <code><a href="./src/resources/mappings.ts">MappingRetrieveResponse</a></code>
+- <code><a href="./src/resources/mappings.ts">MappingUpdateResponse</a></code>
+- <code><a href="./src/resources/mappings.ts">MappingDeleteResponse</a></code>
+- <code><a href="./src/resources/mappings.ts">MappingReorderResponse</a></code>
+- <code><a href="./src/resources/mappings.ts">MappingTemplatesResponse</a></code>
+- <code><a href="./src/resources/mappings.ts">MappingDefaultVariablesResponse</a></code>
+- <code><a href="./src/resources/mappings.ts">MappingCustomVariablesResponse</a></code>
+- <code><a href="./src/resources/mappings.ts">MappingModificationsResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/mappings">client.mappings.<a href="./src/resources/mappings.ts">list</a>({ ...params }) -> MappingListResponsesCursor</code>
+- <code title="post /rest/v1/mappings">client.mappings.<a href="./src/resources/mappings.ts">create</a>({ ...params }) -> MappingCreateResponse</code>
+- <code title="get /rest/v1/mappings/{id}">client.mappings.<a href="./src/resources/mappings.ts">retrieve</a>(id) -> MappingRetrieveResponse</code>
+- <code title="patch /rest/v1/mappings/{id}">client.mappings.<a href="./src/resources/mappings.ts">update</a>(id, { ...params }) -> MappingUpdateResponse</code>
+- <code title="delete /rest/v1/mappings/{id}">client.mappings.<a href="./src/resources/mappings.ts">delete</a>(id) -> MappingDeleteResponse</code>
+- <code title="post /rest/v1/mappings/reorder">client.mappings.<a href="./src/resources/mappings.ts">reorder</a>({ ...params }) -> MappingReorderResponse</code>
+- <code title="get /rest/v1/mappings/templates">client.mappings.<a href="./src/resources/mappings.ts">templates</a>({ ...params }) -> MappingTemplatesResponse</code>
+- <code title="get /rest/v1/mappings/default-variables">client.mappings.<a href="./src/resources/mappings.ts">defaultVariables</a>() -> MappingDefaultVariablesResponse</code>
+- <code title="get /rest/v1/mappings/custom-variables">client.mappings.<a href="./src/resources/mappings.ts">customVariables</a>() -> MappingCustomVariablesResponse</code>
+- <code title="get /rest/v1/mappings/modifications">client.mappings.<a href="./src/resources/mappings.ts">modifications</a>() -> MappingModificationsResponse</code>
+
+# ReplaySettings
+
+Types:
+
+- <code><a href="./src/resources/replay-settings.ts">ReplaySettingListResponse</a></code>
+- <code><a href="./src/resources/replay-settings.ts">ReplaySettingCreateResponse</a></code>
+- <code><a href="./src/resources/replay-settings.ts">ReplaySettingRetrieveResponse</a></code>
+- <code><a href="./src/resources/replay-settings.ts">ReplaySettingUpdateResponse</a></code>
+- <code><a href="./src/resources/replay-settings.ts">ReplaySettingDeleteResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/replay-settings">client.replaySettings.<a href="./src/resources/replay-settings.ts">list</a>({ ...params }) -> ReplaySettingListResponsesCursor</code>
+- <code title="post /rest/v1/replay-settings">client.replaySettings.<a href="./src/resources/replay-settings.ts">create</a>({ ...params }) -> ReplaySettingCreateResponse</code>
+- <code title="get /rest/v1/replay-settings/{id}">client.replaySettings.<a href="./src/resources/replay-settings.ts">retrieve</a>(id) -> ReplaySettingRetrieveResponse | null</code>
+- <code title="patch /rest/v1/replay-settings/{id}">client.replaySettings.<a href="./src/resources/replay-settings.ts">update</a>(id, { ...params }) -> ReplaySettingUpdateResponse</code>
+- <code title="delete /rest/v1/replay-settings/{id}">client.replaySettings.<a href="./src/resources/replay-settings.ts">delete</a>(id) -> ReplaySettingDeleteResponse</code>
+
+# ShortLinks
+
+Types:
+
+- <code><a href="./src/resources/short-links.ts">ShortLinkListResponse</a></code>
+- <code><a href="./src/resources/short-links.ts">ShortLinkCreateResponse</a></code>
+- <code><a href="./src/resources/short-links.ts">ShortLinkRetrieveResponse</a></code>
+- <code><a href="./src/resources/short-links.ts">ShortLinkUpdateResponse</a></code>
+- <code><a href="./src/resources/short-links.ts">ShortLinkDeleteResponse</a></code>
+- <code><a href="./src/resources/short-links.ts">ShortLinkResultsResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/short-links">client.shortLinks.<a href="./src/resources/short-links.ts">list</a>({ ...params }) -> ShortLinkListResponsesCursor</code>
+- <code title="post /rest/v1/short-links">client.shortLinks.<a href="./src/resources/short-links.ts">create</a>({ ...params }) -> ShortLinkCreateResponse</code>
+- <code title="get /rest/v1/short-links/{id}">client.shortLinks.<a href="./src/resources/short-links.ts">retrieve</a>(id) -> ShortLinkRetrieveResponse</code>
+- <code title="patch /rest/v1/short-links/{id}">client.shortLinks.<a href="./src/resources/short-links.ts">update</a>(id, { ...params }) -> ShortLinkUpdateResponse</code>
+- <code title="delete /rest/v1/short-links/{id}">client.shortLinks.<a href="./src/resources/short-links.ts">delete</a>(id) -> ShortLinkDeleteResponse</code>
+- <code title="get /rest/v1/short-links/{id}/results">client.shortLinks.<a href="./src/resources/short-links.ts">results</a>(id, { ...params }) -> ShortLinkResultsResponse</code>
+
+# Sources
+
+Types:
+
+- <code><a href="./src/resources/sources.ts">SourceListResponse</a></code>
+- <code><a href="./src/resources/sources.ts">SourceCreateResponse</a></code>
+- <code><a href="./src/resources/sources.ts">SourceRetrieveResponse</a></code>
+- <code><a href="./src/resources/sources.ts">SourceUpdateResponse</a></code>
+- <code><a href="./src/resources/sources.ts">SourceDeleteResponse</a></code>
+- <code><a href="./src/resources/sources.ts">SourceTokensResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/sources">client.sources.<a href="./src/resources/sources.ts">list</a>({ ...params }) -> SourceListResponsesCursor</code>
+- <code title="post /rest/v1/sources">client.sources.<a href="./src/resources/sources.ts">create</a>({ ...params }) -> SourceCreateResponse</code>
+- <code title="get /rest/v1/sources/{id}">client.sources.<a href="./src/resources/sources.ts">retrieve</a>(id) -> SourceRetrieveResponse</code>
+- <code title="patch /rest/v1/sources/{id}">client.sources.<a href="./src/resources/sources.ts">update</a>(id, { ...params }) -> SourceUpdateResponse</code>
+- <code title="delete /rest/v1/sources/{id}">client.sources.<a href="./src/resources/sources.ts">delete</a>(id) -> SourceDeleteResponse</code>
+- <code title="get /rest/v1/sources/{id}/tokens">client.sources.<a href="./src/resources/sources.ts">tokens</a>(id) -> SourceTokensResponse</code>
+
+# TagManagers
+
+Types:
+
+- <code><a href="./src/resources/tag-managers.ts">TagManagerListResponse</a></code>
+- <code><a href="./src/resources/tag-managers.ts">TagManagerCreateResponse</a></code>
+- <code><a href="./src/resources/tag-managers.ts">TagManagerRetrieveResponse</a></code>
+- <code><a href="./src/resources/tag-managers.ts">TagManagerUpdateResponse</a></code>
+- <code><a href="./src/resources/tag-managers.ts">TagManagerDeleteResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/tag-managers">client.tagManagers.<a href="./src/resources/tag-managers.ts">list</a>() -> TagManagerListResponse</code>
+- <code title="post /rest/v1/tag-managers">client.tagManagers.<a href="./src/resources/tag-managers.ts">create</a>({ ...params }) -> TagManagerCreateResponse</code>
+- <code title="get /rest/v1/tag-managers/{id}">client.tagManagers.<a href="./src/resources/tag-managers.ts">retrieve</a>(id) -> TagManagerRetrieveResponse</code>
+- <code title="patch /rest/v1/tag-managers/{id}">client.tagManagers.<a href="./src/resources/tag-managers.ts">update</a>(id, { ...params }) -> TagManagerUpdateResponse</code>
+- <code title="delete /rest/v1/tag-managers/{id}">client.tagManagers.<a href="./src/resources/tag-managers.ts">delete</a>(id) -> TagManagerDeleteResponse</code>
+
+# TagManagerTags
+
+Types:
+
+- <code><a href="./src/resources/tag-manager-tags.ts">TagManagerTagListResponse</a></code>
+- <code><a href="./src/resources/tag-manager-tags.ts">TagManagerTagCreateResponse</a></code>
+- <code><a href="./src/resources/tag-manager-tags.ts">TagManagerTagRetrieveResponse</a></code>
+- <code><a href="./src/resources/tag-manager-tags.ts">TagManagerTagUpdateResponse</a></code>
+- <code><a href="./src/resources/tag-manager-tags.ts">TagManagerTagDeleteResponse</a></code>
+- <code><a href="./src/resources/tag-manager-tags.ts">TagManagerTagTypesResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/tag-manager-tags">client.tagManagerTags.<a href="./src/resources/tag-manager-tags.ts">list</a>({ ...params }) -> TagManagerTagListResponsesCursor</code>
+- <code title="post /rest/v1/tag-manager-tags">client.tagManagerTags.<a href="./src/resources/tag-manager-tags.ts">create</a>({ ...params }) -> TagManagerTagCreateResponse</code>
+- <code title="get /rest/v1/tag-manager-tags/{id}">client.tagManagerTags.<a href="./src/resources/tag-manager-tags.ts">retrieve</a>(id) -> TagManagerTagRetrieveResponse</code>
+- <code title="patch /rest/v1/tag-manager-tags/{id}">client.tagManagerTags.<a href="./src/resources/tag-manager-tags.ts">update</a>(id, { ...params }) -> TagManagerTagUpdateResponse</code>
+- <code title="delete /rest/v1/tag-manager-tags/{id}">client.tagManagerTags.<a href="./src/resources/tag-manager-tags.ts">delete</a>(id) -> TagManagerTagDeleteResponse</code>
+- <code title="get /rest/v1/tag-manager-tags/types">client.tagManagerTags.<a href="./src/resources/tag-manager-tags.ts">types</a>() -> TagManagerTagTypesResponse</code>
+
+# TagManagerTriggers
+
+Types:
+
+- <code><a href="./src/resources/tag-manager-triggers.ts">TagManagerTriggerListResponse</a></code>
+- <code><a href="./src/resources/tag-manager-triggers.ts">TagManagerTriggerCreateResponse</a></code>
+- <code><a href="./src/resources/tag-manager-triggers.ts">TagManagerTriggerRetrieveResponse</a></code>
+- <code><a href="./src/resources/tag-manager-triggers.ts">TagManagerTriggerUpdateResponse</a></code>
+- <code><a href="./src/resources/tag-manager-triggers.ts">TagManagerTriggerDeleteResponse</a></code>
+- <code><a href="./src/resources/tag-manager-triggers.ts">TagManagerTriggerTypesResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/tag-manager-triggers">client.tagManagerTriggers.<a href="./src/resources/tag-manager-triggers.ts">list</a>({ ...params }) -> TagManagerTriggerListResponsesCursor</code>
+- <code title="post /rest/v1/tag-manager-triggers">client.tagManagerTriggers.<a href="./src/resources/tag-manager-triggers.ts">create</a>({ ...params }) -> TagManagerTriggerCreateResponse</code>
+- <code title="get /rest/v1/tag-manager-triggers/{id}">client.tagManagerTriggers.<a href="./src/resources/tag-manager-triggers.ts">retrieve</a>(id) -> TagManagerTriggerRetrieveResponse</code>
+- <code title="patch /rest/v1/tag-manager-triggers/{id}">client.tagManagerTriggers.<a href="./src/resources/tag-manager-triggers.ts">update</a>(id, { ...params }) -> TagManagerTriggerUpdateResponse</code>
+- <code title="delete /rest/v1/tag-manager-triggers/{id}">client.tagManagerTriggers.<a href="./src/resources/tag-manager-triggers.ts">delete</a>(id) -> TagManagerTriggerDeleteResponse</code>
+- <code title="get /rest/v1/tag-manager-triggers/types">client.tagManagerTriggers.<a href="./src/resources/tag-manager-triggers.ts">types</a>() -> TagManagerTriggerTypesResponse</code>
+
+# TagManagerVariables
+
+Types:
+
+- <code><a href="./src/resources/tag-manager-variables.ts">TagManagerVariableListResponse</a></code>
+- <code><a href="./src/resources/tag-manager-variables.ts">TagManagerVariableCreateResponse</a></code>
+- <code><a href="./src/resources/tag-manager-variables.ts">TagManagerVariableRetrieveResponse</a></code>
+- <code><a href="./src/resources/tag-manager-variables.ts">TagManagerVariableUpdateResponse</a></code>
+- <code><a href="./src/resources/tag-manager-variables.ts">TagManagerVariableDeleteResponse</a></code>
+- <code><a href="./src/resources/tag-manager-variables.ts">TagManagerVariableTypesResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/tag-manager-variables">client.tagManagerVariables.<a href="./src/resources/tag-manager-variables.ts">list</a>({ ...params }) -> TagManagerVariableListResponsesCursor</code>
+- <code title="post /rest/v1/tag-manager-variables">client.tagManagerVariables.<a href="./src/resources/tag-manager-variables.ts">create</a>({ ...params }) -> TagManagerVariableCreateResponse</code>
+- <code title="get /rest/v1/tag-manager-variables/{id}">client.tagManagerVariables.<a href="./src/resources/tag-manager-variables.ts">retrieve</a>(id) -> TagManagerVariableRetrieveResponse</code>
+- <code title="patch /rest/v1/tag-manager-variables/{id}">client.tagManagerVariables.<a href="./src/resources/tag-manager-variables.ts">update</a>(id, { ...params }) -> TagManagerVariableUpdateResponse</code>
+- <code title="delete /rest/v1/tag-manager-variables/{id}">client.tagManagerVariables.<a href="./src/resources/tag-manager-variables.ts">delete</a>(id) -> TagManagerVariableDeleteResponse</code>
+- <code title="get /rest/v1/tag-manager-variables/types">client.tagManagerVariables.<a href="./src/resources/tag-manager-variables.ts">types</a>() -> TagManagerVariableTypesResponse</code>
+
+# TagManagerFolders
+
+Types:
+
+- <code><a href="./src/resources/tag-manager-folders.ts">TagManagerFolderListResponse</a></code>
+- <code><a href="./src/resources/tag-manager-folders.ts">TagManagerFolderCreateResponse</a></code>
+- <code><a href="./src/resources/tag-manager-folders.ts">TagManagerFolderRetrieveResponse</a></code>
+- <code><a href="./src/resources/tag-manager-folders.ts">TagManagerFolderUpdateResponse</a></code>
+- <code><a href="./src/resources/tag-manager-folders.ts">TagManagerFolderDeleteResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/tag-manager-folders">client.tagManagerFolders.<a href="./src/resources/tag-manager-folders.ts">list</a>({ ...params }) -> TagManagerFolderListResponsesCursor</code>
+- <code title="post /rest/v1/tag-manager-folders">client.tagManagerFolders.<a href="./src/resources/tag-manager-folders.ts">create</a>({ ...params }) -> TagManagerFolderCreateResponse</code>
+- <code title="get /rest/v1/tag-manager-folders/{id}">client.tagManagerFolders.<a href="./src/resources/tag-manager-folders.ts">retrieve</a>(id) -> TagManagerFolderRetrieveResponse</code>
+- <code title="patch /rest/v1/tag-manager-folders/{id}">client.tagManagerFolders.<a href="./src/resources/tag-manager-folders.ts">update</a>(id, { ...params }) -> TagManagerFolderUpdateResponse</code>
+- <code title="delete /rest/v1/tag-manager-folders/{id}">client.tagManagerFolders.<a href="./src/resources/tag-manager-folders.ts">delete</a>(id) -> TagManagerFolderDeleteResponse</code>
+
+# TagManagerAssetFolders
+
+Types:
+
+- <code><a href="./src/resources/tag-manager-asset-folders.ts">TagManagerAssetFolderCreateResponse</a></code>
+
+Methods:
+
+- <code title="post /rest/v1/tag-manager-asset-folders">client.tagManagerAssetFolders.<a href="./src/resources/tag-manager-asset-folders.ts">create</a>({ ...params }) -> TagManagerAssetFolderCreateResponse</code>
+
+# Versions
+
+Types:
+
+- <code><a href="./src/resources/versions.ts">VersionListResponse</a></code>
+- <code><a href="./src/resources/versions.ts">VersionCreateResponse</a></code>
+- <code><a href="./src/resources/versions.ts">VersionRetrieveResponse</a></code>
+- <code><a href="./src/resources/versions.ts">VersionUpdateResponse</a></code>
+- <code><a href="./src/resources/versions.ts">VersionPublishResponse</a></code>
+- <code><a href="./src/resources/versions.ts">VersionSnapshotResponse</a></code>
+- <code><a href="./src/resources/versions.ts">VersionDiffResponse</a></code>
+- <code><a href="./src/resources/versions.ts">VersionRevertResponse</a></code>
+- <code><a href="./src/resources/versions.ts">VersionAbandonResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/versions">client.versions.<a href="./src/resources/versions.ts">list</a>({ ...params }) -> VersionListResponsesCursor</code>
+- <code title="post /rest/v1/versions">client.versions.<a href="./src/resources/versions.ts">create</a>({ ...params }) -> VersionCreateResponse</code>
+- <code title="get /rest/v1/versions/{id}">client.versions.<a href="./src/resources/versions.ts">retrieve</a>(id) -> VersionRetrieveResponse</code>
+- <code title="patch /rest/v1/versions/{id}">client.versions.<a href="./src/resources/versions.ts">update</a>(id, { ...params }) -> VersionUpdateResponse</code>
+- <code title="post /rest/v1/versions/{id}/publish">client.versions.<a href="./src/resources/versions.ts">publish</a>(id) -> VersionPublishResponse</code>
+- <code title="get /rest/v1/versions/{id}/snapshot">client.versions.<a href="./src/resources/versions.ts">snapshot</a>(id) -> VersionSnapshotResponse</code>
+- <code title="get /rest/v1/versions/{id}/diff">client.versions.<a href="./src/resources/versions.ts">diff</a>(id, { ...params }) -> VersionDiffResponse</code>
+- <code title="post /rest/v1/versions/{id}/revert">client.versions.<a href="./src/resources/versions.ts">revert</a>(id, { ...params }) -> VersionRevertResponse</code>
+- <code title="post /rest/v1/versions/{id}/abandon">client.versions.<a href="./src/resources/versions.ts">abandon</a>(id) -> VersionAbandonResponse</code>
+
+# VideoChannels
+
+Types:
+
+- <code><a href="./src/resources/video-channels.ts">VideoChannelListResponse</a></code>
+- <code><a href="./src/resources/video-channels.ts">VideoChannelCreateResponse</a></code>
+- <code><a href="./src/resources/video-channels.ts">VideoChannelRetrieveResponse</a></code>
+- <code><a href="./src/resources/video-channels.ts">VideoChannelUpdateResponse</a></code>
+- <code><a href="./src/resources/video-channels.ts">VideoChannelDeleteResponse</a></code>
+- <code><a href="./src/resources/video-channels.ts">VideoChannelMediaResponse</a></code>
+- <code><a href="./src/resources/video-channels.ts">VideoChannelAssignMediaResponse</a></code>
+- <code><a href="./src/resources/video-channels.ts">VideoChannelRemoveMediaResponse</a></code>
+- <code><a href="./src/resources/video-channels.ts">VideoChannelReorderResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/video-channels">client.videoChannels.<a href="./src/resources/video-channels.ts">list</a>({ ...params }) -> VideoChannelListResponsesCursor</code>
+- <code title="post /rest/v1/video-channels">client.videoChannels.<a href="./src/resources/video-channels.ts">create</a>({ ...params }) -> VideoChannelCreateResponse</code>
+- <code title="get /rest/v1/video-channels/{id}">client.videoChannels.<a href="./src/resources/video-channels.ts">retrieve</a>(id) -> VideoChannelRetrieveResponse</code>
+- <code title="patch /rest/v1/video-channels/{id}">client.videoChannels.<a href="./src/resources/video-channels.ts">update</a>(id, { ...params }) -> VideoChannelUpdateResponse</code>
+- <code title="delete /rest/v1/video-channels/{id}">client.videoChannels.<a href="./src/resources/video-channels.ts">delete</a>(id) -> VideoChannelDeleteResponse</code>
+- <code title="get /rest/v1/video-channels/{id}/media">client.videoChannels.<a href="./src/resources/video-channels.ts">media</a>(id) -> VideoChannelMediaResponse</code>
+- <code title="post /rest/v1/video-channels/{id}/media">client.videoChannels.<a href="./src/resources/video-channels.ts">assignMedia</a>(id, { ...params }) -> VideoChannelAssignMediaResponse</code>
+- <code title="delete /rest/v1/video-channels/{id}/media">client.videoChannels.<a href="./src/resources/video-channels.ts">removeMedia</a>(id, { ...params }) -> VideoChannelRemoveMediaResponse</code>
+- <code title="post /rest/v1/video-channels/{id}/reorder">client.videoChannels.<a href="./src/resources/video-channels.ts">reorder</a>(id, { ...params }) -> VideoChannelReorderResponse</code>
+
+# Videos
+
+Types:
+
+- <code><a href="./src/resources/videos.ts">VideoListResponse</a></code>
+- <code><a href="./src/resources/videos.ts">VideoCreateResponse</a></code>
+- <code><a href="./src/resources/videos.ts">VideoRetrieveResponse</a></code>
+- <code><a href="./src/resources/videos.ts">VideoUpdateResponse</a></code>
+- <code><a href="./src/resources/videos.ts">VideoDeleteResponse</a></code>
+- <code><a href="./src/resources/videos.ts">VideoAnalyticsResponse</a></code>
+- <code><a href="./src/resources/videos.ts">VideoAnalyticsTimeseriesResponse</a></code>
+- <code><a href="./src/resources/videos.ts">VideoTranscriptResponse</a></code>
+- <code><a href="./src/resources/videos.ts">VideoUpdateTranscriptResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/videos">client.videos.<a href="./src/resources/videos.ts">list</a>({ ...params }) -> VideoListResponsesCursor</code>
+- <code title="post /rest/v1/videos">client.videos.<a href="./src/resources/videos.ts">create</a>({ ...params }) -> VideoCreateResponse</code>
+- <code title="get /rest/v1/videos/{id}">client.videos.<a href="./src/resources/videos.ts">retrieve</a>(id) -> VideoRetrieveResponse</code>
+- <code title="patch /rest/v1/videos/{id}">client.videos.<a href="./src/resources/videos.ts">update</a>(id, { ...params }) -> VideoUpdateResponse</code>
+- <code title="delete /rest/v1/videos/{id}">client.videos.<a href="./src/resources/videos.ts">delete</a>(id) -> VideoDeleteResponse</code>
+- <code title="get /rest/v1/videos/analytics">client.videos.<a href="./src/resources/videos.ts">analytics</a>({ ...params }) -> VideoAnalyticsResponse</code>
+- <code title="get /rest/v1/videos/{id}/analytics">client.videos.<a href="./src/resources/videos.ts">analyticsTimeseries</a>(id, { ...params }) -> VideoAnalyticsTimeseriesResponse</code>
+- <code title="get /rest/v1/videos/{id}/transcript">client.videos.<a href="./src/resources/videos.ts">transcript</a>(id) -> VideoTranscriptResponse</code>
+- <code title="put /rest/v1/videos/{id}/transcript">client.videos.<a href="./src/resources/videos.ts">updateTranscript</a>(id, { ...params }) -> VideoUpdateTranscriptResponse</code>
+
+# WebScannerRules
+
+Types:
+
+- <code><a href="./src/resources/web-scanner-rules.ts">WebScannerRuleListResponse</a></code>
+- <code><a href="./src/resources/web-scanner-rules.ts">WebScannerRuleCreateResponse</a></code>
+- <code><a href="./src/resources/web-scanner-rules.ts">WebScannerRuleRetrieveResponse</a></code>
+- <code><a href="./src/resources/web-scanner-rules.ts">WebScannerRuleUpdateResponse</a></code>
+- <code><a href="./src/resources/web-scanner-rules.ts">WebScannerRuleDeleteResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/web-scanner-rules">client.webScannerRules.<a href="./src/resources/web-scanner-rules.ts">list</a>({ ...params }) -> WebScannerRuleListResponse</code>
+- <code title="post /rest/v1/web-scanner-rules">client.webScannerRules.<a href="./src/resources/web-scanner-rules.ts">create</a>({ ...params }) -> WebScannerRuleCreateResponse</code>
+- <code title="get /rest/v1/web-scanner-rules/{id}">client.webScannerRules.<a href="./src/resources/web-scanner-rules.ts">retrieve</a>(id) -> WebScannerRuleRetrieveResponse</code>
+- <code title="patch /rest/v1/web-scanner-rules/{id}">client.webScannerRules.<a href="./src/resources/web-scanner-rules.ts">update</a>(id, { ...params }) -> WebScannerRuleUpdateResponse</code>
+- <code title="delete /rest/v1/web-scanner-rules/{id}">client.webScannerRules.<a href="./src/resources/web-scanner-rules.ts">delete</a>(id) -> WebScannerRuleDeleteResponse</code>
+
+# WebScanners
+
+Types:
+
+- <code><a href="./src/resources/web-scanners.ts">WebScannerListResponse</a></code>
+- <code><a href="./src/resources/web-scanners.ts">WebScannerCreateResponse</a></code>
+- <code><a href="./src/resources/web-scanners.ts">WebScannerRetrieveResponse</a></code>
+- <code><a href="./src/resources/web-scanners.ts">WebScannerUpdateResponse</a></code>
+- <code><a href="./src/resources/web-scanners.ts">WebScannerDeleteResponse</a></code>
+- <code><a href="./src/resources/web-scanners.ts">WebScannerTriggerResponse</a></code>
+- <code><a href="./src/resources/web-scanners.ts">WebScannerFindingsResponse</a></code>
+- <code><a href="./src/resources/web-scanners.ts">WebScannerCookiesResponse</a></code>
+- <code><a href="./src/resources/web-scanners.ts">WebScannerSummaryResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/web-scanners">client.webScanners.<a href="./src/resources/web-scanners.ts">list</a>() -> WebScannerListResponse</code>
+- <code title="post /rest/v1/web-scanners">client.webScanners.<a href="./src/resources/web-scanners.ts">create</a>({ ...params }) -> WebScannerCreateResponse</code>
+- <code title="get /rest/v1/web-scanners/{id}">client.webScanners.<a href="./src/resources/web-scanners.ts">retrieve</a>(id) -> WebScannerRetrieveResponse</code>
+- <code title="patch /rest/v1/web-scanners/{id}">client.webScanners.<a href="./src/resources/web-scanners.ts">update</a>(id, { ...params }) -> WebScannerUpdateResponse</code>
+- <code title="delete /rest/v1/web-scanners/{id}">client.webScanners.<a href="./src/resources/web-scanners.ts">delete</a>(id) -> WebScannerDeleteResponse</code>
+- <code title="post /rest/v1/web-scanners/{id}/trigger">client.webScanners.<a href="./src/resources/web-scanners.ts">trigger</a>(id) -> WebScannerTriggerResponse</code>
+- <code title="get /rest/v1/web-scanners/{id}/findings">client.webScanners.<a href="./src/resources/web-scanners.ts">findings</a>(id, { ...params }) -> WebScannerFindingsResponse</code>
+- <code title="get /rest/v1/web-scanners/{id}/cookies">client.webScanners.<a href="./src/resources/web-scanners.ts">cookies</a>(id, { ...params }) -> WebScannerCookiesResponse</code>
+- <code title="get /rest/v1/web-scanners/{id}/summary">client.webScanners.<a href="./src/resources/web-scanners.ts">summary</a>(id, { ...params }) -> WebScannerSummaryResponse</code>
