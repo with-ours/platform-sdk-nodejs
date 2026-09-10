@@ -136,9 +136,10 @@ export class Videos extends APIResource {
 
   /**
    * Return per-video starts, unique viewers, completion rate, and average watch time
-   * for a date window. This derived report uses `limit` and `offset` pagination;
-   * `total` is the number of rows returned through the current offset, not a total
-   * match count. Requires scope: report:video-analytics
+   * for a date window. Optionally filter to one video with `videoId`; omit it to
+   * include all account videos. This derived report uses `limit` and `offset`
+   * pagination; `total` is the number of rows returned through the current offset,
+   * not a total match count. Requires scope: report:video-analytics
    *
    * @example
    * ```ts
@@ -265,43 +266,11 @@ export interface VideoRetrieveResponse {
 
   name?: string | null;
 
-  resolvedValues?: VideoRetrieveResponse.ResolvedValues | null;
+  resolvedValues?: unknown | null;
 
   updatedAt?: string | null;
 
   width?: number | null;
-}
-
-export namespace VideoRetrieveResponse {
-  export interface ResolvedValues {
-    posterUrl: string;
-
-    videoUrl: string;
-
-    mediaConvertJob?: ResolvedValues.MediaConvertJob | null;
-
-    videoStatus?: ResolvedValues.VideoStatus | null;
-
-    vttUrl?: string | null;
-  }
-
-  export namespace ResolvedValues {
-    export interface MediaConvertJob {
-      percentComplete?: number | null;
-
-      status?: string | null;
-    }
-
-    export interface VideoStatus {
-      outputExists?: boolean | null;
-
-      outputIsCurrent?: boolean | null;
-
-      posterExists?: boolean | null;
-
-      transcriptionExists?: boolean | null;
-    }
-  }
 }
 
 export interface VideoUpdateResponse {
@@ -498,6 +467,11 @@ export interface VideoAnalyticsParams {
    * exception.
    */
   offset?: number | null;
+
+  /**
+   * Filter analytics to one video by its ID. Omit to include all account videos.
+   */
+  videoId?: string;
 }
 
 export interface VideoAnalyticsTimeseriesParams {
