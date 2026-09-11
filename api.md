@@ -487,6 +487,7 @@ Types:
 - <code><a href="./src/resources/versions.ts">VersionPublishResponse</a></code>
 - <code><a href="./src/resources/versions.ts">VersionSnapshotResponse</a></code>
 - <code><a href="./src/resources/versions.ts">VersionDiffResponse</a></code>
+- <code><a href="./src/resources/versions.ts">VersionStatusResponse</a></code>
 - <code><a href="./src/resources/versions.ts">VersionRevertResponse</a></code>
 - <code><a href="./src/resources/versions.ts">VersionAbandonResponse</a></code>
 
@@ -499,6 +500,7 @@ Methods:
 - <code title="post /rest/v1/versions/{id}/publish">client.versions.<a href="./src/resources/versions.ts">publish</a>(id) -> VersionPublishResponse</code>
 - <code title="get /rest/v1/versions/{id}/snapshot">client.versions.<a href="./src/resources/versions.ts">snapshot</a>(id) -> VersionSnapshotResponse</code>
 - <code title="get /rest/v1/versions/{id}/diff">client.versions.<a href="./src/resources/versions.ts">diff</a>(id, { ...params }) -> VersionDiffResponse</code>
+- <code title="get /rest/v1/versions/{id}/status">client.versions.<a href="./src/resources/versions.ts">status</a>(id, { ...params }) -> VersionStatusResponse</code>
 - <code title="post /rest/v1/versions/{id}/revert">client.versions.<a href="./src/resources/versions.ts">revert</a>(id, { ...params }) -> VersionRevertResponse</code>
 - <code title="post /rest/v1/versions/{id}/abandon">client.versions.<a href="./src/resources/versions.ts">abandon</a>(id) -> VersionAbandonResponse</code>
 
@@ -597,3 +599,21 @@ Methods:
 - <code title="get /rest/v1/web-scanners/{id}/findings">client.webScanners.<a href="./src/resources/web-scanners.ts">findings</a>(id, { ...params }) -> WebScannerFindingsResponse</code>
 - <code title="get /rest/v1/web-scanners/{id}/cookies">client.webScanners.<a href="./src/resources/web-scanners.ts">cookies</a>(id, { ...params }) -> WebScannerCookiesResponse</code>
 - <code title="get /rest/v1/web-scanners/{id}/summary">client.webScanners.<a href="./src/resources/web-scanners.ts">summary</a>(id, { ...params }) -> WebScannerSummaryResponse</code>
+
+# PersonalizationProperties
+
+Types:
+
+- <code><a href="./src/resources/personalization-properties.ts">PersonalizationPropertyListResponse</a></code>
+- <code><a href="./src/resources/personalization-properties.ts">PersonalizationPropertyCreateResponse</a></code>
+- <code><a href="./src/resources/personalization-properties.ts">PersonalizationPropertyRetrieveResponse</a></code>
+- <code><a href="./src/resources/personalization-properties.ts">PersonalizationPropertyUpdateResponse</a></code>
+- <code><a href="./src/resources/personalization-properties.ts">PersonalizationPropertyDeleteResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/personalization-properties">client.personalizationProperties.<a href="./src/resources/personalization-properties.ts">list</a>({ ...params }) -> PersonalizationPropertyListResponsesCursor</code>
+- <code title="post /rest/v1/personalization-properties">client.personalizationProperties.<a href="./src/resources/personalization-properties.ts">create</a>({ ...params }) -> PersonalizationPropertyCreateResponse</code>
+- <code title="get /rest/v1/personalization-properties/{id}">client.personalizationProperties.<a href="./src/resources/personalization-properties.ts">retrieve</a>(id) -> PersonalizationPropertyRetrieveResponse</code>
+- <code title="patch /rest/v1/personalization-properties/{id}">client.personalizationProperties.<a href="./src/resources/personalization-properties.ts">update</a>(id, { ...params }) -> PersonalizationPropertyUpdateResponse</code>
+- <code title="delete /rest/v1/personalization-properties/{id}">client.personalizationProperties.<a href="./src/resources/personalization-properties.ts">delete</a>(id) -> PersonalizationPropertyDeleteResponse</code>

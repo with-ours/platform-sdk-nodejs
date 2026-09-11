@@ -205,6 +205,18 @@ export {
   type MappingListResponsesCursor,
 } from './mappings';
 export {
+  PersonalizationProperties,
+  type PersonalizationPropertyListResponse,
+  type PersonalizationPropertyCreateResponse,
+  type PersonalizationPropertyRetrieveResponse,
+  type PersonalizationPropertyUpdateResponse,
+  type PersonalizationPropertyDeleteResponse,
+  type PersonalizationPropertyListParams,
+  type PersonalizationPropertyCreateParams,
+  type PersonalizationPropertyUpdateParams,
+  type PersonalizationPropertyListResponsesCursor,
+} from './personalization-properties';
+export {
   ReplaySettings,
   type ReplaySettingListResponse,
   type ReplaySettingCreateResponse,
@@ -318,12 +330,14 @@ export {
   type VersionPublishResponse,
   type VersionSnapshotResponse,
   type VersionDiffResponse,
+  type VersionStatusResponse,
   type VersionRevertResponse,
   type VersionAbandonResponse,
   type VersionListParams,
   type VersionCreateParams,
   type VersionUpdateParams,
   type VersionDiffParams,
+  type VersionStatusParams,
   type VersionRevertParams,
   type VersionListResponsesCursor,
 } from './versions';
