@@ -108,6 +108,31 @@ export class Versions extends APIResource {
   }
 
   /**
+   * Check whether one entity has unpublished changes, without fetching the org-wide
+   * draft diff.
+   * `GET /rest/v1/versions/draft/status?collection={collection}&entityId={id}`
+   * returns `status: "added" | "modified" | "removed" | null` for that entity, with
+   * the same semantics as `GET /rest/v1/versions/draft/diff` — it shares the diff's
+   * field blacklist, so passive fields (timestamps, sync bookkeeping) do not count
+   * as a change.
+   *
+   * `status` is `null` for every outcome other than a real pending change: the
+   * entity already matches the published version, the id is unknown, the id belongs
+   * to another account, or the account has never published anything. Use
+   * `GET /rest/v1/versions/draft/diff` when you need the full change set instead of
+   * one entity. (`draft` is a literal path segment identifying the live draft as the
+   * target, which is why the entity is passed as `entityId` rather than `id`.)
+   * Requires scope: version:find
+   */
+  status(
+    id: 'draft',
+    query: VersionStatusParams,
+    options?: RequestOptions,
+  ): APIPromise<VersionStatusResponse> {
+    return this._client.get(path`/rest/v1/versions/${id}/status`, { query, ...options });
+  }
+
+  /**
    * Revert one or more pending draft changes back to the latest published version
    * (the "abandon a change" action). Send a body listing the entities to revert;
    * each is handled independently — a modified entity is restored to its published
@@ -3077,6 +3102,43 @@ export namespace VersionDiffResponse {
   }
 }
 
+export interface VersionStatusResponse {
+  /**
+   * Echo of the requested entity id.
+   */
+  id: string;
+
+  /**
+   * Echo of the requested collection.
+   */
+  collection:
+    | 'allowedEvents'
+    | 'consentSettings'
+    | 'dataGovernanceEvents'
+    | 'dataGovernanceRules'
+    | 'destinations'
+    | 'experimentSettings'
+    | 'externalAllowedEventData'
+    | 'globalDispatchCenters'
+    | 'mappings'
+    | 'replaySettings'
+    | 'sources'
+    | 'tagManagerTags'
+    | 'tagManagerTriggers'
+    | 'tagManagerVariables'
+    | 'tagManagers';
+
+  /**
+   * How the entity differs from the latest published version: `added` exists only in
+   * the draft, `modified` exists in both with unpublished edits, `removed` exists
+   * only in the published version. `null` covers every other outcome — the entity
+   * matches the published version, is unknown, belongs to another account, or the
+   * account has never published — so callers cannot use it to probe for entities
+   * outside their account.
+   */
+  status: 'added' | 'modified' | 'removed' | null;
+}
+
 export interface VersionRevertResponse {
   /**
    * Newly-added draft entities that were deleted.
@@ -3266,6 +3328,37 @@ export interface VersionDiffParams {
   against?: string;
 }
 
+export interface VersionStatusParams {
+  /**
+   * Entity collection the id belongs to. `experiments` and `experimentVariants` are
+   * not supported — draft experiments never snapshot into a version — but
+   * `experimentSettings` is.
+   */
+  collection:
+    | 'allowedEvents'
+    | 'consentSettings'
+    | 'dataGovernanceEvents'
+    | 'dataGovernanceRules'
+    | 'destinations'
+    | 'experimentSettings'
+    | 'externalAllowedEventData'
+    | 'globalDispatchCenters'
+    | 'mappings'
+    | 'replaySettings'
+    | 'sources'
+    | 'tagManagerTags'
+    | 'tagManagerTriggers'
+    | 'tagManagerVariables'
+    | 'tagManagers';
+
+  /**
+   * Id of the entity to check. Most collections use UUIDs; `allowedEvents`,
+   * `externalAllowedEventData`, `mappings`, `consentSettings`,
+   * `globalDispatchCenters`, and `replaySettings` use slug-like strings.
+   */
+  entityId: string;
+}
+
 export interface VersionRevertParams {
   /**
    * Draft entities to revert back to the latest published version. Each entry is
@@ -3316,6 +3409,7 @@ export declare namespace Versions {
     type VersionPublishResponse as VersionPublishResponse,
     type VersionSnapshotResponse as VersionSnapshotResponse,
     type VersionDiffResponse as VersionDiffResponse,
+    type VersionStatusResponse as VersionStatusResponse,
     type VersionRevertResponse as VersionRevertResponse,
     type VersionAbandonResponse as VersionAbandonResponse,
     type VersionListResponsesCursor as VersionListResponsesCursor,
@@ -3323,6 +3417,7 @@ export declare namespace Versions {
     type VersionCreateParams as VersionCreateParams,
     type VersionUpdateParams as VersionUpdateParams,
     type VersionDiffParams as VersionDiffParams,
+    type VersionStatusParams as VersionStatusParams,
     type VersionRevertParams as VersionRevertParams,
   };
 }
