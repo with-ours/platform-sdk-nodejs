@@ -228,6 +228,18 @@ import {
   Mappings,
 } from './resources/mappings';
 import {
+  PersonalizationProperties,
+  PersonalizationPropertyCreateParams,
+  PersonalizationPropertyCreateResponse,
+  PersonalizationPropertyDeleteResponse,
+  PersonalizationPropertyListParams,
+  PersonalizationPropertyListResponse,
+  PersonalizationPropertyListResponsesCursor,
+  PersonalizationPropertyRetrieveResponse,
+  PersonalizationPropertyUpdateParams,
+  PersonalizationPropertyUpdateResponse,
+} from './resources/personalization-properties';
+import {
   ReplaySettingCreateParams,
   ReplaySettingCreateResponse,
   ReplaySettingDeleteResponse,
@@ -358,6 +370,8 @@ import {
   VersionRevertParams,
   VersionRevertResponse,
   VersionSnapshotResponse,
+  VersionStatusParams,
+  VersionStatusResponse,
   VersionUpdateParams,
   VersionUpdateResponse,
   Versions,
@@ -1232,6 +1246,7 @@ export class OursPrivacyPlatform {
   webAnalytics: API.WebAnalytics = new API.WebAnalytics(this);
   webScannerRules: API.WebScannerRules = new API.WebScannerRules(this);
   webScanners: API.WebScanners = new API.WebScanners(this);
+  personalizationProperties: API.PersonalizationProperties = new API.PersonalizationProperties(this);
 }
 
 OursPrivacyPlatform.AllowedEvents = AllowedEvents;
@@ -1267,6 +1282,7 @@ OursPrivacyPlatform.VideoChannels = VideoChannels;
 OursPrivacyPlatform.WebAnalytics = WebAnalytics;
 OursPrivacyPlatform.WebScannerRules = WebScannerRules;
 OursPrivacyPlatform.WebScanners = WebScanners;
+OursPrivacyPlatform.PersonalizationProperties = PersonalizationProperties;
 
 export declare namespace OursPrivacyPlatform {
   export type RequestOptions = Opts.RequestOptions;
@@ -1635,6 +1651,7 @@ export declare namespace OursPrivacyPlatform {
     type VersionPublishResponse as VersionPublishResponse,
     type VersionSnapshotResponse as VersionSnapshotResponse,
     type VersionDiffResponse as VersionDiffResponse,
+    type VersionStatusResponse as VersionStatusResponse,
     type VersionRevertResponse as VersionRevertResponse,
     type VersionAbandonResponse as VersionAbandonResponse,
     type VersionListResponsesCursor as VersionListResponsesCursor,
@@ -1642,6 +1659,7 @@ export declare namespace OursPrivacyPlatform {
     type VersionCreateParams as VersionCreateParams,
     type VersionUpdateParams as VersionUpdateParams,
     type VersionDiffParams as VersionDiffParams,
+    type VersionStatusParams as VersionStatusParams,
     type VersionRevertParams as VersionRevertParams,
   };
 
@@ -1741,5 +1759,18 @@ export declare namespace OursPrivacyPlatform {
     type WebScannerFindingsParams as WebScannerFindingsParams,
     type WebScannerCookiesParams as WebScannerCookiesParams,
     type WebScannerSummaryParams as WebScannerSummaryParams,
+  };
+
+  export {
+    PersonalizationProperties as PersonalizationProperties,
+    type PersonalizationPropertyListResponse as PersonalizationPropertyListResponse,
+    type PersonalizationPropertyCreateResponse as PersonalizationPropertyCreateResponse,
+    type PersonalizationPropertyRetrieveResponse as PersonalizationPropertyRetrieveResponse,
+    type PersonalizationPropertyUpdateResponse as PersonalizationPropertyUpdateResponse,
+    type PersonalizationPropertyDeleteResponse as PersonalizationPropertyDeleteResponse,
+    type PersonalizationPropertyListResponsesCursor as PersonalizationPropertyListResponsesCursor,
+    type PersonalizationPropertyListParams as PersonalizationPropertyListParams,
+    type PersonalizationPropertyCreateParams as PersonalizationPropertyCreateParams,
+    type PersonalizationPropertyUpdateParams as PersonalizationPropertyUpdateParams,
   };
 }

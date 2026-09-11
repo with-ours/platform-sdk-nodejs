@@ -112,6 +112,21 @@ describe('resource versions', () => {
     ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
   });
 
+  test('status: only required params', async () => {
+    const responsePromise = client.versions.status('draft', { collection: 'allowedEvents', entityId: 'x' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('status: required and optional params', async () => {
+    const response = await client.versions.status('draft', { collection: 'allowedEvents', entityId: 'x' });
+  });
+
   test('revert: only required params', async () => {
     const responsePromise = client.versions.revert('draft', {
       entities: [{ id: 'id', collection: 'allowedEvents' }],
