@@ -21,7 +21,7 @@ describe('resource audienceConversionReports', () => {
 
   test('create: only required params', async () => {
     const responsePromise = client.audienceConversionReports.create({
-      attributionWindow: 'attributionWindow',
+      attributionWindow: '30',
       eventName: 'x',
       name: 'x',
       valueProperty: 'x',
@@ -37,14 +37,21 @@ describe('resource audienceConversionReports', () => {
 
   test('create: required and optional params', async () => {
     const response = await client.audienceConversionReports.create({
-      attributionWindow: 'attributionWindow',
+      attributionWindow: '30',
       eventName: 'x',
       name: 'x',
       valueProperty: 'x',
-      dateFrom: 'dateFrom',
-      dateTo: 'dateTo',
+      dateFrom: '7321-69-10',
+      dateTo: '7321-69-10',
       excludeBots: true,
-      filters: [{ dimension: 'browser', operator: 'CONTAINS', value: 'x', values: ['string'] }],
+      filters: [
+        {
+          dimension: 'browser',
+          operator: 'CONTAINS',
+          value: 'x',
+          values: ['x'],
+        },
+      ],
       webSourceId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
     });
   });
@@ -91,5 +98,16 @@ describe('resource audienceConversionReports', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('results: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.audienceConversionReports.results(
+        'id',
+        { from: '7321-69-10', to: '7321-69-10' },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
   });
 });

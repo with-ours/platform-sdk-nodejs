@@ -27,6 +27,7 @@ describe('resource shortLinks', () => {
           cursor: 'cursor',
           limit: 25,
           nameContains: 'nameContains',
+          search: 'search',
           status: 'Disabled',
         },
         { path: '/_stainless_unknown_path' },
@@ -84,6 +85,17 @@ describe('resource shortLinks', () => {
 
   test('delete', async () => {
     const responsePromise = client.shortLinks.delete('id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('clone', async () => {
+    const responsePromise = client.shortLinks.clone('id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

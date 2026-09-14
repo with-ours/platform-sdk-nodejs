@@ -117,7 +117,9 @@ describe('resource attribution', () => {
       from: '2026-05-01',
       to: '2026-06-30',
       attributionWindow: 'IN_RANGE',
+      excludeBots: 'true',
       valueProperty: 'revenue',
+      webSourceId: '550e8400-e29b-41d4-a716-446655440000',
     });
   });
 

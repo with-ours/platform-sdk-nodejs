@@ -25,6 +25,7 @@ describe('resource sources', () => {
       client.sources.list(
         {
           cursor: 'cursor',
+          excludeShortLinks: 'true',
           limit: 25,
           nameContains: 'nameContains',
           status: 'Disabled',

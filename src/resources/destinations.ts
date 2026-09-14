@@ -121,6 +121,7 @@ export interface DestinationListResponse {
     | 'FacebookAudience'
     | 'FloodlightSGTM'
     | 'FullContact'
+    | 'Fullstory'
     | 'G4Analytics'
     | 'GA4MeasurementProtocol'
     | 'GA4ServerProxy'
@@ -146,6 +147,7 @@ export interface DestinationListResponse {
     | 'MNTN'
     | 'MNTNAudience'
     | 'Mailchimp'
+    | 'MicrosoftCAPI'
     | 'Mixpanel'
     | 'NextdoorAds'
     | 'OpenAIAds'
@@ -235,6 +237,7 @@ export interface DestinationCreateResponse {
     | 'FacebookAudience'
     | 'FloodlightSGTM'
     | 'FullContact'
+    | 'Fullstory'
     | 'G4Analytics'
     | 'GA4MeasurementProtocol'
     | 'GA4ServerProxy'
@@ -260,6 +263,7 @@ export interface DestinationCreateResponse {
     | 'MNTN'
     | 'MNTNAudience'
     | 'Mailchimp'
+    | 'MicrosoftCAPI'
     | 'Mixpanel'
     | 'NextdoorAds'
     | 'OpenAIAds'
@@ -349,6 +353,7 @@ export interface DestinationRetrieveResponse {
     | 'FacebookAudience'
     | 'FloodlightSGTM'
     | 'FullContact'
+    | 'Fullstory'
     | 'G4Analytics'
     | 'GA4MeasurementProtocol'
     | 'GA4ServerProxy'
@@ -374,6 +379,7 @@ export interface DestinationRetrieveResponse {
     | 'MNTN'
     | 'MNTNAudience'
     | 'Mailchimp'
+    | 'MicrosoftCAPI'
     | 'Mixpanel'
     | 'NextdoorAds'
     | 'OpenAIAds'
@@ -463,6 +469,7 @@ export interface DestinationUpdateResponse {
     | 'FacebookAudience'
     | 'FloodlightSGTM'
     | 'FullContact'
+    | 'Fullstory'
     | 'G4Analytics'
     | 'GA4MeasurementProtocol'
     | 'GA4ServerProxy'
@@ -488,6 +495,7 @@ export interface DestinationUpdateResponse {
     | 'MNTN'
     | 'MNTNAudience'
     | 'Mailchimp'
+    | 'MicrosoftCAPI'
     | 'Mixpanel'
     | 'NextdoorAds'
     | 'OpenAIAds'
@@ -558,6 +566,7 @@ export namespace DestinationTypesResponse {
       | 'BingAds'
       | 'BingRest'
       | 'BingAdsWeb'
+      | 'MicrosoftCAPI'
       | 'HTTPDestination'
       | 'Woopra'
       | 'HTTPCustomRequest'
@@ -590,6 +599,7 @@ export namespace DestinationTypesResponse {
       | 'Partnerize'
       | 'NextdoorAds'
       | 'Tatari'
+      | 'TatariCAPI'
       | 'Viant'
       | 'ViantCAPI'
       | 'Impact'
@@ -618,7 +628,9 @@ export namespace DestinationTypesResponse {
       | 'OpenAIAds'
       | 'YelpCAPI'
       | 'MNTN'
-      | 'ZohoCRM';
+      | 'ZohoCRM'
+      | 'Rokt'
+      | 'Fullstory';
 
     capabilities: Entity.Capabilities;
 
@@ -808,6 +820,7 @@ export interface DestinationListParams extends CursorParams {
     | 'FacebookAudience'
     | 'FloodlightSGTM'
     | 'FullContact'
+    | 'Fullstory'
     | 'G4Analytics'
     | 'GA4MeasurementProtocol'
     | 'GA4ServerProxy'
@@ -833,6 +846,7 @@ export interface DestinationListParams extends CursorParams {
     | 'MNTN'
     | 'MNTNAudience'
     | 'Mailchimp'
+    | 'MicrosoftCAPI'
     | 'Mixpanel'
     | 'NextdoorAds'
     | 'OpenAIAds'
@@ -892,6 +906,7 @@ export interface DestinationCreateParams {
     | 'BingAds'
     | 'BingRest'
     | 'BingAdsWeb'
+    | 'MicrosoftCAPI'
     | 'HTTPDestination'
     | 'Woopra'
     | 'HTTPCustomRequest'
@@ -954,7 +969,8 @@ export interface DestinationCreateParams {
     | 'YelpCAPI'
     | 'MNTN'
     | 'ZohoCRM'
-    | 'Rokt';
+    | 'Rokt'
+    | 'Fullstory';
 
   name?: string | null;
 
@@ -966,19 +982,7 @@ export interface DestinationCreateParams {
 }
 
 export interface DestinationUpdateParams {
-  /**
-   * Server-assigned read-only field. Accepted on PATCH and ignored to support GET ->
-   * PATCH round-trips.
-   */
-  createdAt?: string;
-
   hashingSalt?: string | null;
-
-  /**
-   * Server-assigned read-only field. Accepted on PATCH and ignored to support GET ->
-   * PATCH round-trips.
-   */
-  id?: string;
 
   limitedToSourceIds?: Array<string> | null;
 
@@ -991,107 +995,6 @@ export interface DestinationUpdateParams {
   settings?: unknown | null;
 
   status?: 'Disabled' | 'Enabled' | null;
-
-  /**
-   * Server-assigned read-only field. Accepted on PATCH and ignored to support GET ->
-   * PATCH round-trips.
-   */
-  type?:
-    | 'AWSEventBridge'
-    | 'AWSKinesis'
-    | 'AWSLambda'
-    | 'AWSS3'
-    | 'AWSSNS'
-    | 'ActiveCampaignApi'
-    | 'Admitad'
-    | 'AdobeAnalytics'
-    | 'AmazonDSP'
-    | 'Amplitude'
-    | 'AppLovin'
-    | 'ArtsAI'
-    | 'Attentive'
-    | 'Audiohook'
-    | 'AzureBlob'
-    | 'BasisPostback'
-    | 'BeeswaxPostback'
-    | 'BingAds'
-    | 'BingAdsWeb'
-    | 'Braze'
-    | 'ConvertABTestingEvent'
-    | 'Customerio'
-    | 'DatabricksWarehouse'
-    | 'DomoWarehouse'
-    | 'Everflow'
-    | 'Facebook'
-    | 'FacebookAudience'
-    | 'FloodlightSGTM'
-    | 'FullContact'
-    | 'G4Analytics'
-    | 'GA4MeasurementProtocol'
-    | 'GA4ServerProxy'
-    | 'Google'
-    | 'GoogleAds360'
-    | 'GoogleAdsServerContainer'
-    | 'GoogleAudience'
-    | 'GoogleBigQuery'
-    | 'GoogleBigQueryWarehouse'
-    | 'GoogleDataManagerEventIngest'
-    | 'GooglePubSub'
-    | 'GoogleStorage'
-    | 'HTTPCustomRequest'
-    | 'HTTPDestination'
-    | 'Hubspot'
-    | 'IHeartMediaMagellan'
-    | 'Impact'
-    | 'Iterable'
-    | 'Klaviyo'
-    | 'LinkedInAdsCAPI'
-    | 'LiveIntent'
-    | 'LiveRampWarehouse'
-    | 'MNTN'
-    | 'MNTNAudience'
-    | 'Mailchimp'
-    | 'Mixpanel'
-    | 'NextdoorAds'
-    | 'OpenAIAds'
-    | 'OursSyntheticData'
-    | 'Outbrain'
-    | 'Partnerize'
-    | 'Pinterest'
-    | 'Plausible'
-    | 'Podscribe'
-    | 'PostHog'
-    | 'QuantcastCAPI'
-    | 'QuoraAds'
-    | 'Reddit'
-    | 'Rokt'
-    | 'RokuCAPI'
-    | 'SnapchatAdsCapi'
-    | 'Spotify'
-    | 'StackAdaptAPI'
-    | 'Taboola'
-    | 'Tatari'
-    | 'TatariCAPI'
-    | 'TheTradeDesk'
-    | 'TikTok'
-    | 'UniversalAds'
-    | 'VWO'
-    | 'Viant'
-    | 'ViantCAPI'
-    | 'Vibe'
-    | 'VibeAudience'
-    | 'Woopra'
-    | 'XAds'
-    | 'YelpCAPI'
-    | 'Zendesk'
-    | 'ZohoCRM'
-    | 'ZoomInfo';
-
-  /**
-   * Server-assigned read-only field. Accepted on PATCH and ignored to support GET ->
-   * PATCH round-trips.
-   */
-  updatedAt?: string | null;
 }
 
 export declare namespace Destinations {
