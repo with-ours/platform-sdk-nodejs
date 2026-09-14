@@ -8,10 +8,12 @@ import { path } from '../internal/utils/path';
 
 export class ShortLinks extends APIResource {
   /**
-   * List all short links (QR codes / redirects) for this account, newest first.
-   * Supports cursor pagination and optional `status` and `nameContains` filters.
-   * Each entity bundles the destination URL, immutable code, path format, and
-   * QR/campaign design. Requires scope: source:list
+   * List links managed through Short Links for this account, newest first. Ordinary
+   * Redirect Tracking sources and legacy links without a saved short-link design are
+   * excluded. Supports cursor pagination and optional `status`, `nameContains`, and
+   * `search` filters. Search matches names, destinations, and codes. Each entity
+   * bundles the destination URL, immutable code, path format, and QR/campaign
+   * design. Requires scope: source:list
    *
    * @example
    * ```ts
@@ -98,6 +100,20 @@ export class ShortLinks extends APIResource {
   }
 
   /**
+   * Duplicate a short link with its campaign tags and QR styling. The copy starts
+   * disabled with a new code. Requires permission to view the original and create a
+   * source. Requires scope: source:create
+   *
+   * @example
+   * ```ts
+   * const response = await client.shortLinks.clone('id');
+   * ```
+   */
+  clone(id: string, options?: RequestOptions): APIPromise<ShortLinkCloneResponse> {
+    return this._client.post(path`/rest/v1/short-links/${id}/clone`, options);
+  }
+
+  /**
    * Aggregate click analytics for a short link over a date window: total and unique
    * clicks, a time series (daily or hourly), and breakdowns by country, city, and
    * device. QR scans are counted as clicks. Pass `from`/`to` as UTC calendar days
@@ -167,7 +183,8 @@ export interface ShortLinkListResponse {
   shortLinkCode?: string | null;
 
   /**
-   * QR styling + campaign tags. Null until the link is styled.
+   * QR styling + campaign tags. New links include an empty design; legacy redirects
+   * may return null.
    */
   shortLinkDesign?: unknown | null;
 
@@ -221,7 +238,8 @@ export interface ShortLinkCreateResponse {
   shortLinkCode?: string | null;
 
   /**
-   * QR styling + campaign tags. Null until the link is styled.
+   * QR styling + campaign tags. New links include an empty design; legacy redirects
+   * may return null.
    */
   shortLinkDesign?: unknown | null;
 
@@ -275,7 +293,8 @@ export interface ShortLinkRetrieveResponse {
   shortLinkCode?: string | null;
 
   /**
-   * QR styling + campaign tags. Null until the link is styled.
+   * QR styling + campaign tags. New links include an empty design; legacy redirects
+   * may return null.
    */
   shortLinkDesign?: unknown | null;
 
@@ -329,7 +348,8 @@ export interface ShortLinkUpdateResponse {
   shortLinkCode?: string | null;
 
   /**
-   * QR styling + campaign tags. Null until the link is styled.
+   * QR styling + campaign tags. New links include an empty design; legacy redirects
+   * may return null.
    */
   shortLinkDesign?: unknown | null;
 
@@ -343,6 +363,61 @@ export interface ShortLinkUpdateResponse {
 
 export interface ShortLinkDeleteResponse {
   deleted: true;
+}
+
+export interface ShortLinkCloneResponse {
+  id: string;
+
+  /**
+   * Organization id that owns this short link.
+   */
+  accountId: string;
+
+  createdAt: string;
+
+  status: 'Disabled' | 'Enabled';
+
+  /**
+   * Whether a user selected this code instead of using a generated code.
+   */
+  hasCustomShortLinkCode?: boolean | null;
+
+  /**
+   * Whether this short link exists in the currently published version. An
+   * unpublished short link does not resolve at the edge.
+   */
+  isPublished?: boolean | null;
+
+  name?: string | null;
+
+  /**
+   * The immutable short code embedded in the public URL (`/r/{pixel}` for new
+   * links). Server-assigned.
+   */
+  pixel?: string | null;
+
+  /**
+   * The destination URL this short link redirects to.
+   */
+  redirectUrl?: string | null;
+
+  /**
+   * The public code embedded in the short-link URL.
+   */
+  shortLinkCode?: string | null;
+
+  /**
+   * QR styling + campaign tags. New links include an empty design; legacy redirects
+   * may return null.
+   */
+  shortLinkDesign?: unknown | null;
+
+  /**
+   * The public short-link URL that the QR encodes and callers share. New links use
+   * `/r/{pixel}`; tracked event and campaign defaults are stored server-side. Also
+   * resolves on branded custom domains configured for the account.
+   */
+  shortUrl?: string | null;
 }
 
 export interface ShortLinkResultsResponse {
@@ -398,6 +473,11 @@ export interface ShortLinkListParams extends CursorParams {
    * Case-insensitive substring filter on the short link name.
    */
   nameContains?: string;
+
+  /**
+   * Case-insensitive search across name, destination URL, and public code.
+   */
+  search?: string;
 
   /**
    * Filter by short link status.
@@ -483,6 +563,7 @@ export declare namespace ShortLinks {
     type ShortLinkRetrieveResponse as ShortLinkRetrieveResponse,
     type ShortLinkUpdateResponse as ShortLinkUpdateResponse,
     type ShortLinkDeleteResponse as ShortLinkDeleteResponse,
+    type ShortLinkCloneResponse as ShortLinkCloneResponse,
     type ShortLinkResultsResponse as ShortLinkResultsResponse,
     type ShortLinkListResponsesCursor as ShortLinkListResponsesCursor,
     type ShortLinkListParams as ShortLinkListParams,

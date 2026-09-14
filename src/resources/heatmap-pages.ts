@@ -37,7 +37,9 @@ export class HeatmapPages extends APIResource {
    * is a documented derived-read exception. `breakpoint` scopes the bin/scroll
    * aggregations; replays are returned across all breakpoints regardless of
    * `breakpoint` (weighted to cover multiple viewports) so callers can compare
-   * devices. Requires scope: web-analytics:view
+   * devices. `clickGrid` always supplies fine click positions for rendering.
+   * `clickBins` derives compatible 64×64 counts from the same grid; its totals must
+   * not be added to them. Requires scope: web-analytics:view
    */
   summary(query: HeatmapPageSummaryParams, options?: RequestOptions): APIPromise<HeatmapPageSummaryResponse> {
     return this._client.get('/rest/v1/heatmap-pages/summary', { query, ...options });
@@ -80,10 +82,16 @@ export namespace HeatmapPageListResponse {
 
 export interface HeatmapPageSummaryResponse {
   /**
-   * Aggregated click positions for the requested breakpoint, bucketed into a 64×64
-   * grid normalized to the page viewport.
+   * Compatibility click counts for the requested breakpoint in a 64×64
+   * document-normalized grid. Use clickGrid for painting.
    */
   clickBins: Array<HeatmapPageSummaryResponse.ClickBin>;
+
+  /**
+   * Document-normalized click positions at 64×512 resolution. These are the same
+   * clicks as clickBins; do not add their totals together.
+   */
+  clickGrid: HeatmapPageSummaryResponse.ClickGrid;
 
   /**
    * Click positions where no interactive element was hit. `topElement` is the
@@ -118,6 +126,28 @@ export namespace HeatmapPageSummaryResponse {
     binY: number;
 
     clicks: number;
+  }
+
+  /**
+   * Document-normalized click positions at 64×512 resolution. These are the same
+   * clicks as clickBins; do not add their totals together.
+   */
+  export interface ClickGrid {
+    bins: Array<ClickGrid.Bin>;
+
+    columns: 64;
+
+    rows: 512;
+  }
+
+  export namespace ClickGrid {
+    export interface Bin {
+      binX: number;
+
+      binY: number;
+
+      clicks: number;
+    }
   }
 
   export interface DeadClick {

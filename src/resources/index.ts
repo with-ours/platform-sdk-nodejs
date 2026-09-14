@@ -246,6 +246,7 @@ export {
   type ShortLinkRetrieveResponse,
   type ShortLinkUpdateResponse,
   type ShortLinkDeleteResponse,
+  type ShortLinkCloneResponse,
   type ShortLinkResultsResponse,
   type ShortLinkListParams,
   type ShortLinkCreateParams,

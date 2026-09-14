@@ -432,8 +432,8 @@ export interface ExperimentListResponse {
   stoppedAt?: string | null;
 
   /**
-   * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-   * visitor status, and (server-side) visitor properties. Same shape as the
+   * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+   * and runtime visitor-context or accumulated-property rules. Same shape as the
    * create/patch input.
    */
   targetingRules?: ExperimentListResponse.TargetingRules | null;
@@ -598,8 +598,8 @@ export namespace ExperimentListResponse {
   }
 
   /**
-   * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-   * visitor status, and (server-side) visitor properties. Same shape as the
+   * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+   * and runtime visitor-context or accumulated-property rules. Same shape as the
    * create/patch input.
    */
   export interface TargetingRules {
@@ -620,7 +620,10 @@ export namespace ExperimentListResponse {
     urlPatterns: Array<string>;
 
     /**
-     * Optional audience identifier used for server-side eligibility filtering.
+     * Reserved audience identifier. It is stored with the experiment but is not
+     * evaluated by the browser or server-side experiment runtime. Use
+     * `visitorProperties`, URL patterns, query parameters, or visitor status for
+     * runtime eligibility.
      */
     audienceId?: string | null;
 
@@ -631,8 +634,10 @@ export namespace ExperimentListResponse {
     queryParams?: Array<TargetingRules.QueryParam> | null;
 
     /**
-     * Optional visitor-property matching rules. These are passed through as JSON for
-     * experimentation targeting.
+     * Optional runtime targeting rules. Recognized namespaced keys read visitor
+     * context (`geo.*`, `utm.*`, `initial_utm.*`, `device.*`, `time.*`,
+     * `query_params.*`, `visitor_status`, and `referrer`); any other bare key reads an
+     * accumulated personalization property.
      */
     visitorProperties?: unknown | null;
 
@@ -764,8 +769,8 @@ export interface ExperimentCreateResponse {
   stoppedAt?: string | null;
 
   /**
-   * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-   * visitor status, and (server-side) visitor properties. Same shape as the
+   * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+   * and runtime visitor-context or accumulated-property rules. Same shape as the
    * create/patch input.
    */
   targetingRules?: ExperimentCreateResponse.TargetingRules | null;
@@ -930,8 +935,8 @@ export namespace ExperimentCreateResponse {
   }
 
   /**
-   * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-   * visitor status, and (server-side) visitor properties. Same shape as the
+   * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+   * and runtime visitor-context or accumulated-property rules. Same shape as the
    * create/patch input.
    */
   export interface TargetingRules {
@@ -952,7 +957,10 @@ export namespace ExperimentCreateResponse {
     urlPatterns: Array<string>;
 
     /**
-     * Optional audience identifier used for server-side eligibility filtering.
+     * Reserved audience identifier. It is stored with the experiment but is not
+     * evaluated by the browser or server-side experiment runtime. Use
+     * `visitorProperties`, URL patterns, query parameters, or visitor status for
+     * runtime eligibility.
      */
     audienceId?: string | null;
 
@@ -963,8 +971,10 @@ export namespace ExperimentCreateResponse {
     queryParams?: Array<TargetingRules.QueryParam> | null;
 
     /**
-     * Optional visitor-property matching rules. These are passed through as JSON for
-     * experimentation targeting.
+     * Optional runtime targeting rules. Recognized namespaced keys read visitor
+     * context (`geo.*`, `utm.*`, `initial_utm.*`, `device.*`, `time.*`,
+     * `query_params.*`, `visitor_status`, and `referrer`); any other bare key reads an
+     * accumulated personalization property.
      */
     visitorProperties?: unknown | null;
 
@@ -1096,8 +1106,8 @@ export interface ExperimentRetrieveResponse {
   stoppedAt?: string | null;
 
   /**
-   * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-   * visitor status, and (server-side) visitor properties. Same shape as the
+   * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+   * and runtime visitor-context or accumulated-property rules. Same shape as the
    * create/patch input.
    */
   targetingRules?: ExperimentRetrieveResponse.TargetingRules | null;
@@ -1262,8 +1272,8 @@ export namespace ExperimentRetrieveResponse {
   }
 
   /**
-   * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-   * visitor status, and (server-side) visitor properties. Same shape as the
+   * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+   * and runtime visitor-context or accumulated-property rules. Same shape as the
    * create/patch input.
    */
   export interface TargetingRules {
@@ -1284,7 +1294,10 @@ export namespace ExperimentRetrieveResponse {
     urlPatterns: Array<string>;
 
     /**
-     * Optional audience identifier used for server-side eligibility filtering.
+     * Reserved audience identifier. It is stored with the experiment but is not
+     * evaluated by the browser or server-side experiment runtime. Use
+     * `visitorProperties`, URL patterns, query parameters, or visitor status for
+     * runtime eligibility.
      */
     audienceId?: string | null;
 
@@ -1295,8 +1308,10 @@ export namespace ExperimentRetrieveResponse {
     queryParams?: Array<TargetingRules.QueryParam> | null;
 
     /**
-     * Optional visitor-property matching rules. These are passed through as JSON for
-     * experimentation targeting.
+     * Optional runtime targeting rules. Recognized namespaced keys read visitor
+     * context (`geo.*`, `utm.*`, `initial_utm.*`, `device.*`, `time.*`,
+     * `query_params.*`, `visitor_status`, and `referrer`); any other bare key reads an
+     * accumulated personalization property.
      */
     visitorProperties?: unknown | null;
 
@@ -1428,8 +1443,8 @@ export interface ExperimentUpdateResponse {
   stoppedAt?: string | null;
 
   /**
-   * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-   * visitor status, and (server-side) visitor properties. Same shape as the
+   * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+   * and runtime visitor-context or accumulated-property rules. Same shape as the
    * create/patch input.
    */
   targetingRules?: ExperimentUpdateResponse.TargetingRules | null;
@@ -1594,8 +1609,8 @@ export namespace ExperimentUpdateResponse {
   }
 
   /**
-   * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-   * visitor status, and (server-side) visitor properties. Same shape as the
+   * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+   * and runtime visitor-context or accumulated-property rules. Same shape as the
    * create/patch input.
    */
   export interface TargetingRules {
@@ -1616,7 +1631,10 @@ export namespace ExperimentUpdateResponse {
     urlPatterns: Array<string>;
 
     /**
-     * Optional audience identifier used for server-side eligibility filtering.
+     * Reserved audience identifier. It is stored with the experiment but is not
+     * evaluated by the browser or server-side experiment runtime. Use
+     * `visitorProperties`, URL patterns, query parameters, or visitor status for
+     * runtime eligibility.
      */
     audienceId?: string | null;
 
@@ -1627,8 +1645,10 @@ export namespace ExperimentUpdateResponse {
     queryParams?: Array<TargetingRules.QueryParam> | null;
 
     /**
-     * Optional visitor-property matching rules. These are passed through as JSON for
-     * experimentation targeting.
+     * Optional runtime targeting rules. Recognized namespaced keys read visitor
+     * context (`geo.*`, `utm.*`, `initial_utm.*`, `device.*`, `time.*`,
+     * `query_params.*`, `visitor_status`, and `referrer`); any other bare key reads an
+     * accumulated personalization property.
      */
     visitorProperties?: unknown | null;
 
@@ -1765,8 +1785,8 @@ export interface ExperimentDuplicateResponse {
   stoppedAt?: string | null;
 
   /**
-   * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-   * visitor status, and (server-side) visitor properties. Same shape as the
+   * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+   * and runtime visitor-context or accumulated-property rules. Same shape as the
    * create/patch input.
    */
   targetingRules?: ExperimentDuplicateResponse.TargetingRules | null;
@@ -1931,8 +1951,8 @@ export namespace ExperimentDuplicateResponse {
   }
 
   /**
-   * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-   * visitor status, and (server-side) visitor properties. Same shape as the
+   * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+   * and runtime visitor-context or accumulated-property rules. Same shape as the
    * create/patch input.
    */
   export interface TargetingRules {
@@ -1953,7 +1973,10 @@ export namespace ExperimentDuplicateResponse {
     urlPatterns: Array<string>;
 
     /**
-     * Optional audience identifier used for server-side eligibility filtering.
+     * Reserved audience identifier. It is stored with the experiment but is not
+     * evaluated by the browser or server-side experiment runtime. Use
+     * `visitorProperties`, URL patterns, query parameters, or visitor status for
+     * runtime eligibility.
      */
     audienceId?: string | null;
 
@@ -1964,8 +1987,10 @@ export namespace ExperimentDuplicateResponse {
     queryParams?: Array<TargetingRules.QueryParam> | null;
 
     /**
-     * Optional visitor-property matching rules. These are passed through as JSON for
-     * experimentation targeting.
+     * Optional runtime targeting rules. Recognized namespaced keys read visitor
+     * context (`geo.*`, `utm.*`, `initial_utm.*`, `device.*`, `time.*`,
+     * `query_params.*`, `visitor_status`, and `referrer`); any other bare key reads an
+     * accumulated personalization property.
      */
     visitorProperties?: unknown | null;
 
@@ -2104,8 +2129,8 @@ export namespace ExperimentStartResponse {
     stoppedAt?: string | null;
 
     /**
-     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-     * visitor status, and (server-side) visitor properties. Same shape as the
+     * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+     * and runtime visitor-context or accumulated-property rules. Same shape as the
      * create/patch input.
      */
     targetingRules?: Experiment.TargetingRules | null;
@@ -2162,8 +2187,8 @@ export namespace ExperimentStartResponse {
     }
 
     /**
-     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-     * visitor status, and (server-side) visitor properties. Same shape as the
+     * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+     * and runtime visitor-context or accumulated-property rules. Same shape as the
      * create/patch input.
      */
     export interface TargetingRules {
@@ -2184,7 +2209,10 @@ export namespace ExperimentStartResponse {
       urlPatterns: Array<string>;
 
       /**
-       * Optional audience identifier used for server-side eligibility filtering.
+       * Reserved audience identifier. It is stored with the experiment but is not
+       * evaluated by the browser or server-side experiment runtime. Use
+       * `visitorProperties`, URL patterns, query parameters, or visitor status for
+       * runtime eligibility.
        */
       audienceId?: string | null;
 
@@ -2195,8 +2223,10 @@ export namespace ExperimentStartResponse {
       queryParams?: Array<TargetingRules.QueryParam> | null;
 
       /**
-       * Optional visitor-property matching rules. These are passed through as JSON for
-       * experimentation targeting.
+       * Optional runtime targeting rules. Recognized namespaced keys read visitor
+       * context (`geo.*`, `utm.*`, `initial_utm.*`, `device.*`, `time.*`,
+       * `query_params.*`, `visitor_status`, and `referrer`); any other bare key reads an
+       * accumulated personalization property.
        */
       visitorProperties?: unknown | null;
 
@@ -2336,8 +2366,8 @@ export namespace ExperimentStopResponse {
     stoppedAt?: string | null;
 
     /**
-     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-     * visitor status, and (server-side) visitor properties. Same shape as the
+     * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+     * and runtime visitor-context or accumulated-property rules. Same shape as the
      * create/patch input.
      */
     targetingRules?: Experiment.TargetingRules | null;
@@ -2394,8 +2424,8 @@ export namespace ExperimentStopResponse {
     }
 
     /**
-     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-     * visitor status, and (server-side) visitor properties. Same shape as the
+     * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+     * and runtime visitor-context or accumulated-property rules. Same shape as the
      * create/patch input.
      */
     export interface TargetingRules {
@@ -2416,7 +2446,10 @@ export namespace ExperimentStopResponse {
       urlPatterns: Array<string>;
 
       /**
-       * Optional audience identifier used for server-side eligibility filtering.
+       * Reserved audience identifier. It is stored with the experiment but is not
+       * evaluated by the browser or server-side experiment runtime. Use
+       * `visitorProperties`, URL patterns, query parameters, or visitor status for
+       * runtime eligibility.
        */
       audienceId?: string | null;
 
@@ -2427,8 +2460,10 @@ export namespace ExperimentStopResponse {
       queryParams?: Array<TargetingRules.QueryParam> | null;
 
       /**
-       * Optional visitor-property matching rules. These are passed through as JSON for
-       * experimentation targeting.
+       * Optional runtime targeting rules. Recognized namespaced keys read visitor
+       * context (`geo.*`, `utm.*`, `initial_utm.*`, `device.*`, `time.*`,
+       * `query_params.*`, `visitor_status`, and `referrer`); any other bare key reads an
+       * accumulated personalization property.
        */
       visitorProperties?: unknown | null;
 
@@ -2568,8 +2603,8 @@ export namespace ExperimentRolloutResponse {
     stoppedAt?: string | null;
 
     /**
-     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-     * visitor status, and (server-side) visitor properties. Same shape as the
+     * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+     * and runtime visitor-context or accumulated-property rules. Same shape as the
      * create/patch input.
      */
     targetingRules?: Experiment.TargetingRules | null;
@@ -2626,8 +2661,8 @@ export namespace ExperimentRolloutResponse {
     }
 
     /**
-     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-     * visitor status, and (server-side) visitor properties. Same shape as the
+     * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+     * and runtime visitor-context or accumulated-property rules. Same shape as the
      * create/patch input.
      */
     export interface TargetingRules {
@@ -2648,7 +2683,10 @@ export namespace ExperimentRolloutResponse {
       urlPatterns: Array<string>;
 
       /**
-       * Optional audience identifier used for server-side eligibility filtering.
+       * Reserved audience identifier. It is stored with the experiment but is not
+       * evaluated by the browser or server-side experiment runtime. Use
+       * `visitorProperties`, URL patterns, query parameters, or visitor status for
+       * runtime eligibility.
        */
       audienceId?: string | null;
 
@@ -2659,8 +2697,10 @@ export namespace ExperimentRolloutResponse {
       queryParams?: Array<TargetingRules.QueryParam> | null;
 
       /**
-       * Optional visitor-property matching rules. These are passed through as JSON for
-       * experimentation targeting.
+       * Optional runtime targeting rules. Recognized namespaced keys read visitor
+       * context (`geo.*`, `utm.*`, `initial_utm.*`, `device.*`, `time.*`,
+       * `query_params.*`, `visitor_status`, and `referrer`); any other bare key reads an
+       * accumulated personalization property.
        */
       visitorProperties?: unknown | null;
 
@@ -2800,8 +2840,8 @@ export namespace ExperimentEndRolloutResponse {
     stoppedAt?: string | null;
 
     /**
-     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-     * visitor status, and (server-side) visitor properties. Same shape as the
+     * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+     * and runtime visitor-context or accumulated-property rules. Same shape as the
      * create/patch input.
      */
     targetingRules?: Experiment.TargetingRules | null;
@@ -2858,8 +2898,8 @@ export namespace ExperimentEndRolloutResponse {
     }
 
     /**
-     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-     * visitor status, and (server-side) visitor properties. Same shape as the
+     * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+     * and runtime visitor-context or accumulated-property rules. Same shape as the
      * create/patch input.
      */
     export interface TargetingRules {
@@ -2880,7 +2920,10 @@ export namespace ExperimentEndRolloutResponse {
       urlPatterns: Array<string>;
 
       /**
-       * Optional audience identifier used for server-side eligibility filtering.
+       * Reserved audience identifier. It is stored with the experiment but is not
+       * evaluated by the browser or server-side experiment runtime. Use
+       * `visitorProperties`, URL patterns, query parameters, or visitor status for
+       * runtime eligibility.
        */
       audienceId?: string | null;
 
@@ -2891,8 +2934,10 @@ export namespace ExperimentEndRolloutResponse {
       queryParams?: Array<TargetingRules.QueryParam> | null;
 
       /**
-       * Optional visitor-property matching rules. These are passed through as JSON for
-       * experimentation targeting.
+       * Optional runtime targeting rules. Recognized namespaced keys read visitor
+       * context (`geo.*`, `utm.*`, `initial_utm.*`, `device.*`, `time.*`,
+       * `query_params.*`, `visitor_status`, and `referrer`); any other bare key reads an
+       * accumulated personalization property.
        */
       visitorProperties?: unknown | null;
 
@@ -3014,8 +3059,8 @@ export interface ExperimentWinnerResponse {
   stoppedAt?: string | null;
 
   /**
-   * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-   * visitor status, and (server-side) visitor properties. Same shape as the
+   * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+   * and runtime visitor-context or accumulated-property rules. Same shape as the
    * create/patch input.
    */
   targetingRules?: ExperimentWinnerResponse.TargetingRules | null;
@@ -3072,8 +3117,8 @@ export namespace ExperimentWinnerResponse {
   }
 
   /**
-   * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-   * visitor status, and (server-side) visitor properties. Same shape as the
+   * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+   * and runtime visitor-context or accumulated-property rules. Same shape as the
    * create/patch input.
    */
   export interface TargetingRules {
@@ -3094,7 +3139,10 @@ export namespace ExperimentWinnerResponse {
     urlPatterns: Array<string>;
 
     /**
-     * Optional audience identifier used for server-side eligibility filtering.
+     * Reserved audience identifier. It is stored with the experiment but is not
+     * evaluated by the browser or server-side experiment runtime. Use
+     * `visitorProperties`, URL patterns, query parameters, or visitor status for
+     * runtime eligibility.
      */
     audienceId?: string | null;
 
@@ -3105,8 +3153,10 @@ export namespace ExperimentWinnerResponse {
     queryParams?: Array<TargetingRules.QueryParam> | null;
 
     /**
-     * Optional visitor-property matching rules. These are passed through as JSON for
-     * experimentation targeting.
+     * Optional runtime targeting rules. Recognized namespaced keys read visitor
+     * context (`geo.*`, `utm.*`, `initial_utm.*`, `device.*`, `time.*`,
+     * `query_params.*`, `visitor_status`, and `referrer`); any other bare key reads an
+     * accumulated personalization property.
      */
     visitorProperties?: unknown | null;
 
@@ -3245,8 +3295,8 @@ export namespace ExperimentPauseResponse {
     stoppedAt?: string | null;
 
     /**
-     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-     * visitor status, and (server-side) visitor properties. Same shape as the
+     * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+     * and runtime visitor-context or accumulated-property rules. Same shape as the
      * create/patch input.
      */
     targetingRules?: Experiment.TargetingRules | null;
@@ -3303,8 +3353,8 @@ export namespace ExperimentPauseResponse {
     }
 
     /**
-     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-     * visitor status, and (server-side) visitor properties. Same shape as the
+     * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+     * and runtime visitor-context or accumulated-property rules. Same shape as the
      * create/patch input.
      */
     export interface TargetingRules {
@@ -3325,7 +3375,10 @@ export namespace ExperimentPauseResponse {
       urlPatterns: Array<string>;
 
       /**
-       * Optional audience identifier used for server-side eligibility filtering.
+       * Reserved audience identifier. It is stored with the experiment but is not
+       * evaluated by the browser or server-side experiment runtime. Use
+       * `visitorProperties`, URL patterns, query parameters, or visitor status for
+       * runtime eligibility.
        */
       audienceId?: string | null;
 
@@ -3336,8 +3389,10 @@ export namespace ExperimentPauseResponse {
       queryParams?: Array<TargetingRules.QueryParam> | null;
 
       /**
-       * Optional visitor-property matching rules. These are passed through as JSON for
-       * experimentation targeting.
+       * Optional runtime targeting rules. Recognized namespaced keys read visitor
+       * context (`geo.*`, `utm.*`, `initial_utm.*`, `device.*`, `time.*`,
+       * `query_params.*`, `visitor_status`, and `referrer`); any other bare key reads an
+       * accumulated personalization property.
        */
       visitorProperties?: unknown | null;
 
@@ -3477,8 +3532,8 @@ export namespace ExperimentResumeResponse {
     stoppedAt?: string | null;
 
     /**
-     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-     * visitor status, and (server-side) visitor properties. Same shape as the
+     * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+     * and runtime visitor-context or accumulated-property rules. Same shape as the
      * create/patch input.
      */
     targetingRules?: Experiment.TargetingRules | null;
@@ -3535,8 +3590,8 @@ export namespace ExperimentResumeResponse {
     }
 
     /**
-     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-     * visitor status, and (server-side) visitor properties. Same shape as the
+     * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+     * and runtime visitor-context or accumulated-property rules. Same shape as the
      * create/patch input.
      */
     export interface TargetingRules {
@@ -3557,7 +3612,10 @@ export namespace ExperimentResumeResponse {
       urlPatterns: Array<string>;
 
       /**
-       * Optional audience identifier used for server-side eligibility filtering.
+       * Reserved audience identifier. It is stored with the experiment but is not
+       * evaluated by the browser or server-side experiment runtime. Use
+       * `visitorProperties`, URL patterns, query parameters, or visitor status for
+       * runtime eligibility.
        */
       audienceId?: string | null;
 
@@ -3568,8 +3626,10 @@ export namespace ExperimentResumeResponse {
       queryParams?: Array<TargetingRules.QueryParam> | null;
 
       /**
-       * Optional visitor-property matching rules. These are passed through as JSON for
-       * experimentation targeting.
+       * Optional runtime targeting rules. Recognized namespaced keys read visitor
+       * context (`geo.*`, `utm.*`, `initial_utm.*`, `device.*`, `time.*`,
+       * `query_params.*`, `visitor_status`, and `referrer`); any other bare key reads an
+       * accumulated personalization property.
        */
       visitorProperties?: unknown | null;
 
@@ -3875,14 +3935,14 @@ export interface ExperimentCreateParams {
 
   /**
    * Goal events. If you send `metrics.primary`, `metrics.primary.eventName` must be
-   * a non-blank string. A primary event name is required before the experiment can
-   * be started.
+   * a non-blank string. A primary event is required to start `ab` and `multivariate`
+   * experiments, but not always-on `personalization`.
    */
   metrics?: ExperimentCreateParams.Metrics | null;
 
   /**
-   * Eligibility rules — URL patterns, audience, visitor status, query-param
-   * conditions. Omit to inherit defaults.
+   * Eligibility rules — URL patterns, query-param conditions, visitor status, and
+   * visitor-context or accumulated-property rules. Omit to inherit defaults.
    */
   targetingRules?: ExperimentCreateParams.TargetingRules | null;
 
@@ -3902,8 +3962,8 @@ export interface ExperimentCreateParams {
 export namespace ExperimentCreateParams {
   /**
    * Goal events. If you send `metrics.primary`, `metrics.primary.eventName` must be
-   * a non-blank string. A primary event name is required before the experiment can
-   * be started.
+   * a non-blank string. A primary event is required to start `ab` and `multivariate`
+   * experiments, but not always-on `personalization`.
    */
   export interface Metrics {
     /**
@@ -3949,8 +4009,8 @@ export namespace ExperimentCreateParams {
   }
 
   /**
-   * Eligibility rules — URL patterns, audience, visitor status, query-param
-   * conditions. Omit to inherit defaults.
+   * Eligibility rules — URL patterns, query-param conditions, visitor status, and
+   * visitor-context or accumulated-property rules. Omit to inherit defaults.
    */
   export interface TargetingRules {
     /**
@@ -3970,7 +4030,10 @@ export namespace ExperimentCreateParams {
     urlPatterns: Array<string>;
 
     /**
-     * Optional audience identifier used for server-side eligibility filtering.
+     * Reserved audience identifier. It is stored with the experiment but is not
+     * evaluated by the browser or server-side experiment runtime. Use
+     * `visitorProperties`, URL patterns, query parameters, or visitor status for
+     * runtime eligibility.
      */
     audienceId?: string | null;
 
@@ -3981,8 +4044,10 @@ export namespace ExperimentCreateParams {
     queryParams?: Array<TargetingRules.QueryParam> | null;
 
     /**
-     * Optional visitor-property matching rules. These are passed through as JSON for
-     * experimentation targeting.
+     * Optional runtime targeting rules. Recognized namespaced keys read visitor
+     * context (`geo.*`, `utm.*`, `initial_utm.*`, `device.*`, `time.*`,
+     * `query_params.*`, `visitor_status`, and `referrer`); any other bare key reads an
+     * accumulated personalization property.
      */
     visitorProperties?: unknown | null;
 
@@ -4132,7 +4197,10 @@ export namespace ExperimentUpdateParams {
     urlPatterns: Array<string>;
 
     /**
-     * Optional audience identifier used for server-side eligibility filtering.
+     * Reserved audience identifier. It is stored with the experiment but is not
+     * evaluated by the browser or server-side experiment runtime. Use
+     * `visitorProperties`, URL patterns, query parameters, or visitor status for
+     * runtime eligibility.
      */
     audienceId?: string | null;
 
@@ -4143,8 +4211,10 @@ export namespace ExperimentUpdateParams {
     queryParams?: Array<TargetingRules.QueryParam> | null;
 
     /**
-     * Optional visitor-property matching rules. These are passed through as JSON for
-     * experimentation targeting.
+     * Optional runtime targeting rules. Recognized namespaced keys read visitor
+     * context (`geo.*`, `utm.*`, `initial_utm.*`, `device.*`, `time.*`,
+     * `query_params.*`, `visitor_status`, and `referrer`); any other bare key reads an
+     * accumulated personalization property.
      */
     visitorProperties?: unknown | null;
 
