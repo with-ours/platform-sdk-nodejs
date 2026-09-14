@@ -259,6 +259,7 @@ import {
   SessionReplays,
 } from './resources/session-replays';
 import {
+  ShortLinkCloneResponse,
   ShortLinkCreateParams,
   ShortLinkCreateResponse,
   ShortLinkDeleteResponse,
@@ -1542,6 +1543,7 @@ export declare namespace OursPrivacyPlatform {
     type ShortLinkRetrieveResponse as ShortLinkRetrieveResponse,
     type ShortLinkUpdateResponse as ShortLinkUpdateResponse,
     type ShortLinkDeleteResponse as ShortLinkDeleteResponse,
+    type ShortLinkCloneResponse as ShortLinkCloneResponse,
     type ShortLinkResultsResponse as ShortLinkResultsResponse,
     type ShortLinkListResponsesCursor as ShortLinkListResponsesCursor,
     type ShortLinkListParams as ShortLinkListParams,

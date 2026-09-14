@@ -510,6 +510,11 @@ export namespace SourceTokensResponse {
 
 export interface SourceListParams extends CursorParams {
   /**
+   * Exclude redirects with a short-link design. Defaults to false.
+   */
+  excludeShortLinks?: boolean | 'true' | 'false';
+
+  /**
    * Case-insensitive substring filter on the source name.
    */
   nameContains?: string;
