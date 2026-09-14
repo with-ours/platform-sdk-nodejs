@@ -200,7 +200,7 @@ export namespace DataGovernanceListResponse {
        */
       AND?: Array<unknown> | null;
 
-      condition?: Logic.Condition;
+      condition?: Logic.Condition | null;
 
       /**
        * Negates a single child logic node.
@@ -395,7 +395,7 @@ export namespace DataGovernanceCreateResponse {
        */
       AND?: Array<unknown> | null;
 
-      condition?: Logic.Condition;
+      condition?: Logic.Condition | null;
 
       /**
        * Negates a single child logic node.
@@ -590,7 +590,7 @@ export namespace DataGovernanceRetrieveResponse {
        */
       AND?: Array<unknown> | null;
 
-      condition?: Logic.Condition;
+      condition?: Logic.Condition | null;
 
       /**
        * Negates a single child logic node.
@@ -785,7 +785,7 @@ export namespace DataGovernanceUpdateResponse {
        */
       AND?: Array<unknown> | null;
 
-      condition?: Logic.Condition;
+      condition?: Logic.Condition | null;
 
       /**
        * Negates a single child logic node.
@@ -997,7 +997,7 @@ export namespace DataGovernanceUpdateParams {
        */
       AND?: Array<unknown> | null;
 
-      condition?: Logic.Condition;
+      condition?: Logic.Condition | null;
 
       /**
        * Negates a single child logic node.

@@ -64,8 +64,8 @@ export class Experiments extends APIResource {
   /**
    * Partially update an experiment. Only the fields you send are changed, except
    * renaming a non-draft legacy experiment with no stored key preserves its current
-   * name-derived key. Edits are allowed on draft, running, and paused experiments and
-   * are recorded in the change log. Only completed experiments return 409 with
+   * name-derived key. Edits are allowed on draft, running, and paused experiments
+   * and are recorded in the change log. Only completed experiments return 409 with
    * `A completed experiment can no longer be edited`. Use the lifecycle endpoints
    * (`/start`, `/pause`, `/resume`, `/stop`) to change status. Requires scope:
    * experiment:update
@@ -93,6 +93,20 @@ export class Experiments extends APIResource {
    */
   delete(id: string, options?: RequestOptions): APIPromise<ExperimentDeleteResponse> {
     return this._client.delete(path`/rest/v1/experiments/${id}`, options);
+  }
+
+  /**
+   * Create a draft copy of an experiment. The copy keeps its configuration and
+   * variants, receives a new key, and does not retain lifecycle, rollout, or result
+   * state. Requires scope: experiment:create
+   *
+   * @example
+   * ```ts
+   * const response = await client.experiments.duplicate('id');
+   * ```
+   */
+  duplicate(id: string, options?: RequestOptions): APIPromise<ExperimentDuplicateResponse> {
+    return this._client.post(path`/rest/v1/experiments/${id}/duplicate`, options);
   }
 
   /**
@@ -246,6 +260,28 @@ export class Experiments extends APIResource {
   }
 
   /**
+   * Return the configured Bayesian, fixed-horizon Frequentist, or Sequential
+   * analysis for conversion metrics; Bayesian and Frequentist also support value
+   * metrics. The response includes common visitor, impression, readiness, evidence,
+   * and data-quality fields plus the applicable method-specific result block.
+   * Visitors are the inferential unit; impressions remain a delivery diagnostic.
+   * Secondary event overrides are labeled exploratory, and unsupported legacy plans
+   * suppress official evidence. Requires scope: experiment:find
+   *
+   * @example
+   * ```ts
+   * const response = await client.experiments.analysis('id');
+   * ```
+   */
+  analysis(
+    id: string,
+    query: ExperimentAnalysisParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ExperimentAnalysisResponse> {
+    return this._client.get(path`/rest/v1/experiments/${id}/analysis`, { query, ...options });
+  }
+
+  /**
    * Per-day per-variant impressions, conversions, and conversion rate, sliced to a
    * date range. Use this to chart trends, compare windows, or zoom in on a specific
    * period. Pass `startDate` / `endDate` (`YYYY-MM-DD`, UTC, both inclusive) to set
@@ -334,10 +370,29 @@ export interface ExperimentListResponse {
   /**
    * All persisted variants for this experiment, including the control variant. A
    * non-personalization experiment needs at least two variants before it can be
-   * started. Reading variants requires the `experiment:find` scope in addition to
-   * `experiment:list`; an API key without it receives an empty array here.
+   * started. Reading variants is gated by the `experiment:find` permission: a key
+   * holding the `experiment:find` scope always receives them, and a key created by
+   * an org admin/member receives them too (that role satisfies the check). A key
+   * that holds neither the scope nor a qualifying creator role receives an empty
+   * array here.
    */
   variants: Array<ExperimentListResponse.Variant>;
+
+  /**
+   * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
+   * analysis in GraphQL.
+   */
+  analysisConfig?: unknown | null;
+
+  /**
+   * Primary metric definition frozen with the analysis plan at start time.
+   */
+  analysisMetricSnapshot?: unknown | null;
+
+  /**
+   * ISO-8601 timestamp when the analysis plan was locked at experiment start.
+   */
+  analysisStartedAt?: string | null;
 
   /**
    * Optional human-readable hypothesis or summary. In GraphQL this is backed by the
@@ -377,8 +432,8 @@ export interface ExperimentListResponse {
   stoppedAt?: string | null;
 
   /**
-   * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-   * visitor status, and (server-side) visitor properties. Same shape as the
+   * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+   * and runtime visitor-context or accumulated-property rules. Same shape as the
    * create/patch input.
    */
   targetingRules?: ExperimentListResponse.TargetingRules | null;
@@ -543,8 +598,8 @@ export namespace ExperimentListResponse {
   }
 
   /**
-   * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-   * visitor status, and (server-side) visitor properties. Same shape as the
+   * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+   * and runtime visitor-context or accumulated-property rules. Same shape as the
    * create/patch input.
    */
   export interface TargetingRules {
@@ -565,7 +620,10 @@ export namespace ExperimentListResponse {
     urlPatterns: Array<string>;
 
     /**
-     * Optional audience identifier used for server-side eligibility filtering.
+     * Reserved audience identifier. It is stored with the experiment but is not
+     * evaluated by the browser or server-side experiment runtime. Use
+     * `visitorProperties`, URL patterns, query parameters, or visitor status for
+     * runtime eligibility.
      */
     audienceId?: string | null;
 
@@ -576,8 +634,10 @@ export namespace ExperimentListResponse {
     queryParams?: Array<TargetingRules.QueryParam> | null;
 
     /**
-     * Optional visitor-property matching rules. These are passed through as JSON for
-     * experimentation targeting.
+     * Optional runtime targeting rules. Recognized namespaced keys read visitor
+     * context (`geo.*`, `utm.*`, `initial_utm.*`, `device.*`, `time.*`,
+     * `query_params.*`, `visitor_status`, and `referrer`); any other bare key reads an
+     * accumulated personalization property.
      */
     visitorProperties?: unknown | null;
 
@@ -647,10 +707,29 @@ export interface ExperimentCreateResponse {
   /**
    * All persisted variants for this experiment, including the control variant. A
    * non-personalization experiment needs at least two variants before it can be
-   * started. Reading variants requires the `experiment:find` scope in addition to
-   * `experiment:list`; an API key without it receives an empty array here.
+   * started. Reading variants is gated by the `experiment:find` permission: a key
+   * holding the `experiment:find` scope always receives them, and a key created by
+   * an org admin/member receives them too (that role satisfies the check). A key
+   * that holds neither the scope nor a qualifying creator role receives an empty
+   * array here.
    */
   variants: Array<ExperimentCreateResponse.Variant>;
+
+  /**
+   * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
+   * analysis in GraphQL.
+   */
+  analysisConfig?: unknown | null;
+
+  /**
+   * Primary metric definition frozen with the analysis plan at start time.
+   */
+  analysisMetricSnapshot?: unknown | null;
+
+  /**
+   * ISO-8601 timestamp when the analysis plan was locked at experiment start.
+   */
+  analysisStartedAt?: string | null;
 
   /**
    * Optional human-readable hypothesis or summary. In GraphQL this is backed by the
@@ -690,8 +769,8 @@ export interface ExperimentCreateResponse {
   stoppedAt?: string | null;
 
   /**
-   * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-   * visitor status, and (server-side) visitor properties. Same shape as the
+   * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+   * and runtime visitor-context or accumulated-property rules. Same shape as the
    * create/patch input.
    */
   targetingRules?: ExperimentCreateResponse.TargetingRules | null;
@@ -856,8 +935,8 @@ export namespace ExperimentCreateResponse {
   }
 
   /**
-   * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-   * visitor status, and (server-side) visitor properties. Same shape as the
+   * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+   * and runtime visitor-context or accumulated-property rules. Same shape as the
    * create/patch input.
    */
   export interface TargetingRules {
@@ -878,7 +957,10 @@ export namespace ExperimentCreateResponse {
     urlPatterns: Array<string>;
 
     /**
-     * Optional audience identifier used for server-side eligibility filtering.
+     * Reserved audience identifier. It is stored with the experiment but is not
+     * evaluated by the browser or server-side experiment runtime. Use
+     * `visitorProperties`, URL patterns, query parameters, or visitor status for
+     * runtime eligibility.
      */
     audienceId?: string | null;
 
@@ -889,8 +971,10 @@ export namespace ExperimentCreateResponse {
     queryParams?: Array<TargetingRules.QueryParam> | null;
 
     /**
-     * Optional visitor-property matching rules. These are passed through as JSON for
-     * experimentation targeting.
+     * Optional runtime targeting rules. Recognized namespaced keys read visitor
+     * context (`geo.*`, `utm.*`, `initial_utm.*`, `device.*`, `time.*`,
+     * `query_params.*`, `visitor_status`, and `referrer`); any other bare key reads an
+     * accumulated personalization property.
      */
     visitorProperties?: unknown | null;
 
@@ -960,10 +1044,29 @@ export interface ExperimentRetrieveResponse {
   /**
    * All persisted variants for this experiment, including the control variant. A
    * non-personalization experiment needs at least two variants before it can be
-   * started. Reading variants requires the `experiment:find` scope in addition to
-   * `experiment:list`; an API key without it receives an empty array here.
+   * started. Reading variants is gated by the `experiment:find` permission: a key
+   * holding the `experiment:find` scope always receives them, and a key created by
+   * an org admin/member receives them too (that role satisfies the check). A key
+   * that holds neither the scope nor a qualifying creator role receives an empty
+   * array here.
    */
   variants: Array<ExperimentRetrieveResponse.Variant>;
+
+  /**
+   * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
+   * analysis in GraphQL.
+   */
+  analysisConfig?: unknown | null;
+
+  /**
+   * Primary metric definition frozen with the analysis plan at start time.
+   */
+  analysisMetricSnapshot?: unknown | null;
+
+  /**
+   * ISO-8601 timestamp when the analysis plan was locked at experiment start.
+   */
+  analysisStartedAt?: string | null;
 
   /**
    * Optional human-readable hypothesis or summary. In GraphQL this is backed by the
@@ -1003,8 +1106,8 @@ export interface ExperimentRetrieveResponse {
   stoppedAt?: string | null;
 
   /**
-   * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-   * visitor status, and (server-side) visitor properties. Same shape as the
+   * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+   * and runtime visitor-context or accumulated-property rules. Same shape as the
    * create/patch input.
    */
   targetingRules?: ExperimentRetrieveResponse.TargetingRules | null;
@@ -1169,8 +1272,8 @@ export namespace ExperimentRetrieveResponse {
   }
 
   /**
-   * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-   * visitor status, and (server-side) visitor properties. Same shape as the
+   * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+   * and runtime visitor-context or accumulated-property rules. Same shape as the
    * create/patch input.
    */
   export interface TargetingRules {
@@ -1191,7 +1294,10 @@ export namespace ExperimentRetrieveResponse {
     urlPatterns: Array<string>;
 
     /**
-     * Optional audience identifier used for server-side eligibility filtering.
+     * Reserved audience identifier. It is stored with the experiment but is not
+     * evaluated by the browser or server-side experiment runtime. Use
+     * `visitorProperties`, URL patterns, query parameters, or visitor status for
+     * runtime eligibility.
      */
     audienceId?: string | null;
 
@@ -1202,8 +1308,10 @@ export namespace ExperimentRetrieveResponse {
     queryParams?: Array<TargetingRules.QueryParam> | null;
 
     /**
-     * Optional visitor-property matching rules. These are passed through as JSON for
-     * experimentation targeting.
+     * Optional runtime targeting rules. Recognized namespaced keys read visitor
+     * context (`geo.*`, `utm.*`, `initial_utm.*`, `device.*`, `time.*`,
+     * `query_params.*`, `visitor_status`, and `referrer`); any other bare key reads an
+     * accumulated personalization property.
      */
     visitorProperties?: unknown | null;
 
@@ -1273,10 +1381,29 @@ export interface ExperimentUpdateResponse {
   /**
    * All persisted variants for this experiment, including the control variant. A
    * non-personalization experiment needs at least two variants before it can be
-   * started. Reading variants requires the `experiment:find` scope in addition to
-   * `experiment:list`; an API key without it receives an empty array here.
+   * started. Reading variants is gated by the `experiment:find` permission: a key
+   * holding the `experiment:find` scope always receives them, and a key created by
+   * an org admin/member receives them too (that role satisfies the check). A key
+   * that holds neither the scope nor a qualifying creator role receives an empty
+   * array here.
    */
   variants: Array<ExperimentUpdateResponse.Variant>;
+
+  /**
+   * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
+   * analysis in GraphQL.
+   */
+  analysisConfig?: unknown | null;
+
+  /**
+   * Primary metric definition frozen with the analysis plan at start time.
+   */
+  analysisMetricSnapshot?: unknown | null;
+
+  /**
+   * ISO-8601 timestamp when the analysis plan was locked at experiment start.
+   */
+  analysisStartedAt?: string | null;
 
   /**
    * Optional human-readable hypothesis or summary. In GraphQL this is backed by the
@@ -1316,8 +1443,8 @@ export interface ExperimentUpdateResponse {
   stoppedAt?: string | null;
 
   /**
-   * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-   * visitor status, and (server-side) visitor properties. Same shape as the
+   * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+   * and runtime visitor-context or accumulated-property rules. Same shape as the
    * create/patch input.
    */
   targetingRules?: ExperimentUpdateResponse.TargetingRules | null;
@@ -1482,8 +1609,8 @@ export namespace ExperimentUpdateResponse {
   }
 
   /**
-   * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-   * visitor status, and (server-side) visitor properties. Same shape as the
+   * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+   * and runtime visitor-context or accumulated-property rules. Same shape as the
    * create/patch input.
    */
   export interface TargetingRules {
@@ -1504,7 +1631,10 @@ export namespace ExperimentUpdateResponse {
     urlPatterns: Array<string>;
 
     /**
-     * Optional audience identifier used for server-side eligibility filtering.
+     * Reserved audience identifier. It is stored with the experiment but is not
+     * evaluated by the browser or server-side experiment runtime. Use
+     * `visitorProperties`, URL patterns, query parameters, or visitor status for
+     * runtime eligibility.
      */
     audienceId?: string | null;
 
@@ -1515,8 +1645,10 @@ export namespace ExperimentUpdateResponse {
     queryParams?: Array<TargetingRules.QueryParam> | null;
 
     /**
-     * Optional visitor-property matching rules. These are passed through as JSON for
-     * experimentation targeting.
+     * Optional runtime targeting rules. Recognized namespaced keys read visitor
+     * context (`geo.*`, `utm.*`, `initial_utm.*`, `device.*`, `time.*`,
+     * `query_params.*`, `visitor_status`, and `referrer`); any other bare key reads an
+     * accumulated personalization property.
      */
     visitorProperties?: unknown | null;
 
@@ -1552,6 +1684,343 @@ export namespace ExperimentUpdateResponse {
  * Whether the experiment was deleted successfully.
  */
 export type ExperimentDeleteResponse = boolean;
+
+export interface ExperimentDuplicateResponse {
+  /**
+   * Unique identifier for the experiment.
+   */
+  id: string;
+
+  /**
+   * ISO-8601 timestamp when the experiment was created.
+   */
+  createdAt: string;
+
+  /**
+   * Stable code-facing key for the experiment. Use this with the headless SDK
+   * `getExperimentByKey()` API instead of hard-coding opaque experiment IDs into
+   * application code.
+   */
+  key: string;
+
+  /**
+   * Short, human-readable experiment name.
+   */
+  name: string;
+
+  /**
+   * Lifecycle state. `draft` is editable, `running` is active, `paused` is
+   * temporarily inactive, and `completed` is permanently stopped.
+   */
+  status: 'completed' | 'draft' | 'paused' | 'running';
+
+  /**
+   * Percent of eligible traffic assigned into the experiment. Use 0 to fully disable
+   * enrollment without deleting the experiment.
+   */
+  trafficAllocation: number;
+
+  /**
+   * All persisted variants for this experiment, including the control variant. A
+   * non-personalization experiment needs at least two variants before it can be
+   * started. Reading variants is gated by the `experiment:find` permission: a key
+   * holding the `experiment:find` scope always receives them, and a key created by
+   * an org admin/member receives them too (that role satisfies the check). A key
+   * that holds neither the scope nor a qualifying creator role receives an empty
+   * array here.
+   */
+  variants: Array<ExperimentDuplicateResponse.Variant>;
+
+  /**
+   * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
+   * analysis in GraphQL.
+   */
+  analysisConfig?: unknown | null;
+
+  /**
+   * Primary metric definition frozen with the analysis plan at start time.
+   */
+  analysisMetricSnapshot?: unknown | null;
+
+  /**
+   * ISO-8601 timestamp when the analysis plan was locked at experiment start.
+   */
+  analysisStartedAt?: string | null;
+
+  /**
+   * Optional human-readable hypothesis or summary. In GraphQL this is backed by the
+   * experiment hypothesis field.
+   */
+  description?: string | null;
+
+  /**
+   * For redirect variants, whether the original page query string should be
+   * forwarded onto the redirect URL.
+   */
+  includeQueryString?: boolean | null;
+
+  /**
+   * Configured success metrics. The read shape mirrors the write shape — `metrics`
+   * from a GET response can be PATCHed back without modification.
+   */
+  metrics?: ExperimentDuplicateResponse.Metrics | null;
+
+  /**
+   * Variant currently rolled out to 100% of targeted traffic on a completed
+   * experiment. When set (and not the control), the runtime keeps serving it to
+   * every matching visitor — a winning redirect becomes an ongoing redirect.
+   * Independent of `winnerVariantId`. Set via `POST /experiments/{id}/rollout`;
+   * cleared via `POST /experiments/{id}/end-rollout`.
+   */
+  rolloutVariantId?: string | null;
+
+  /**
+   * ISO-8601 timestamp when the experiment most recently entered a running state.
+   */
+  startedAt?: string | null;
+
+  /**
+   * ISO-8601 timestamp when the experiment was completed, if it has been stopped.
+   */
+  stoppedAt?: string | null;
+
+  /**
+   * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+   * and runtime visitor-context or accumulated-property rules. Same shape as the
+   * create/patch input.
+   */
+  targetingRules?: ExperimentDuplicateResponse.TargetingRules | null;
+
+  /**
+   * Experiment mode. `ab` and `multivariate` use traffic allocation and results;
+   * `personalization` is always-on targeting.
+   */
+  type?: 'ab' | 'multivariate' | 'personalization' | null;
+
+  /**
+   * ISO-8601 timestamp for the last persisted update, if any.
+   */
+  updatedAt?: string | null;
+
+  /**
+   * Declared winning variant — reporting metadata only. Records which variant won;
+   * does NOT change what visitors are served. Set at stop time or later via
+   * `POST /experiments/{id}/winner`.
+   */
+  winnerVariantId?: string | null;
+}
+
+export namespace ExperimentDuplicateResponse {
+  export interface Variant {
+    /**
+     * Unique identifier for this experiment variant.
+     */
+    id: string;
+
+    /**
+     * Parent experiment ID this variant belongs to.
+     */
+    experimentId: string;
+
+    /**
+     * Whether this is the baseline control variant.
+     */
+    isControl: boolean;
+
+    /**
+     * Human-readable variant name shown in the dashboard and results.
+     */
+    name: string;
+
+    /**
+     * Relative traffic weight used when assigning visitors among variants in an active
+     * experiment.
+     */
+    weight: number;
+
+    /**
+     * Ordered list of declarative DOM mutations applied when this variant is assigned.
+     */
+    domModifications?: Array<Variant.DomModification> | null;
+
+    /**
+     * Target URL for redirect variants. Use either a site-relative path such as
+     * `/pricing-v2` or an absolute `https://` URL. Cross-origin `http://` URLs are
+     * rejected. Omit for DOM modification variants.
+     */
+    redirectUrl?: string | null;
+
+    /**
+     * How this variant changes the user experience. `dom_modifications` for on-page
+     * changes or `redirect` for redirect tests.
+     */
+    variantType?: string | null;
+  }
+
+  export namespace Variant {
+    export interface DomModification {
+      /**
+       * Mutation to apply when the selector matches. Use `redirectUrl` instead of DOM
+       * modifications for redirect variants.
+       */
+      action:
+        | 'customCss'
+        | 'customJs'
+        | 'insertAfter'
+        | 'insertBefore'
+        | 'remove'
+        | 'setAttribute'
+        | 'setHtml'
+        | 'setImage'
+        | 'setStyle'
+        | 'setText';
+
+      /**
+       * CSS selector used to find the element to modify on the page at runtime.
+       */
+      selector: string;
+
+      /**
+       * Canonical action payload. For `setText` / `setHtml` / `customCss` / `customJs` /
+       * `setImage` / `insertBefore` / `insertAfter` this is the literal
+       * text/HTML/CSS/JS/URL. For `setStyle` and `setAttribute` it is a JSON-stringified
+       * `{key: value}` object — prefer the structured `styles` / `attribute` fields
+       * below to avoid manual JSON encoding.
+       */
+      value: string;
+
+      /**
+       * Populated on read for `setAttribute` modifications, parsed from `value`.
+       * Customers may also send this field instead of a JSON-stringified `value` on
+       * write — see `domModificationInputSchema`.
+       */
+      attribute?: unknown | null;
+
+      /**
+       * Populated on read for `setStyle` modifications, parsed from `value`. Customers
+       * may also send this field instead of a JSON-stringified `value` on write — see
+       * `domModificationInputSchema`.
+       */
+      styles?: Array<DomModification.Style> | null;
+    }
+
+    export namespace DomModification {
+      export interface Style {
+        /**
+         * CSS property name in camelCase or kebab-case.
+         */
+        property: string;
+
+        /**
+         * CSS value to assign to the property.
+         */
+        value: string;
+      }
+    }
+  }
+
+  /**
+   * Configured success metrics. The read shape mirrors the write shape — `metrics`
+   * from a GET response can be PATCHed back without modification.
+   */
+  export interface Metrics {
+    /**
+     * Primary success metric used in the results report.
+     */
+    primary?: unknown | null;
+
+    /**
+     * Optional secondary metrics tracked alongside the primary goal.
+     */
+    secondary?: Array<Metrics.Secondary> | null;
+  }
+
+  export namespace Metrics {
+    export interface Secondary {
+      /**
+       * Name of the event used to measure success for this metric.
+       */
+      eventName?: string | null;
+
+      /**
+       * Optional funnel identifier when the metric is derived from an existing funnel
+       * definition.
+       */
+      funnelId?: string | null;
+    }
+  }
+
+  /**
+   * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+   * and runtime visitor-context or accumulated-property rules. Same shape as the
+   * create/patch input.
+   */
+  export interface TargetingRules {
+    /**
+     * Glob-style URL patterns that must match for the experiment to be eligible. Each
+     * pattern is either a path (`/pricing`, matched on any domain) or a host-qualified
+     * pattern (`get.example.com/pricing` or `https://get.example.com/pricing`, matched
+     * against the full URL so a single domain or subdomain can be targeted). Use `*`
+     * to match within a path segment and `**` to match across segments. Up to 200
+     * patterns; each pattern up to 2000 characters. An empty array (or omitting the
+     * field) matches all URLs — equivalent to `['**']`. The host(s) targeted here must
+     * also appear in the parent experiment settings' `whitelistDomains` — that
+     * allowlist is what limits which domains can load your experiments (see
+     * `GET /experiment-settings`). If the host is missing, the SDK refuses to load
+     * there and the experiment never runs, even after `POST /experiments/{id}/start`
+     * succeeds.
+     */
+    urlPatterns: Array<string>;
+
+    /**
+     * Reserved audience identifier. It is stored with the experiment but is not
+     * evaluated by the browser or server-side experiment runtime. Use
+     * `visitorProperties`, URL patterns, query parameters, or visitor status for
+     * runtime eligibility.
+     */
+    audienceId?: string | null;
+
+    /**
+     * Additional query-string conditions that must all match for the visitor to
+     * qualify.
+     */
+    queryParams?: Array<TargetingRules.QueryParam> | null;
+
+    /**
+     * Optional runtime targeting rules. Recognized namespaced keys read visitor
+     * context (`geo.*`, `utm.*`, `initial_utm.*`, `device.*`, `time.*`,
+     * `query_params.*`, `visitor_status`, and `referrer`); any other bare key reads an
+     * accumulated personalization property.
+     */
+    visitorProperties?: unknown | null;
+
+    /**
+     * Whether the experiment should target new visitors, returning visitors, or any
+     * visitor.
+     */
+    visitorStatus?: string | null;
+  }
+
+  export namespace TargetingRules {
+    export interface QueryParam {
+      /**
+       * Query string key to inspect on the current page URL.
+       */
+      key: string;
+
+      /**
+       * Comparison operator applied to the query string value.
+       */
+      operator: 'contains' | 'equals' | 'exists' | 'not_equals' | 'not_exists' | 'regex';
+
+      /**
+       * Comparison value used by operators that require one. Omit for `exists` and
+       * `not_exists`.
+       */
+      value?: string | null;
+    }
+  }
+}
 
 export interface ExperimentStartResponse {
   /**
@@ -1607,6 +2076,22 @@ export namespace ExperimentStartResponse {
     trafficAllocation: number;
 
     /**
+     * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
+     * analysis in GraphQL.
+     */
+    analysisConfig?: unknown | null;
+
+    /**
+     * Primary metric definition frozen with the analysis plan at start time.
+     */
+    analysisMetricSnapshot?: unknown | null;
+
+    /**
+     * ISO-8601 timestamp when the analysis plan was locked at experiment start.
+     */
+    analysisStartedAt?: string | null;
+
+    /**
      * Optional human-readable hypothesis or summary. In GraphQL this is backed by the
      * experiment hypothesis field.
      */
@@ -1644,8 +2129,8 @@ export namespace ExperimentStartResponse {
     stoppedAt?: string | null;
 
     /**
-     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-     * visitor status, and (server-side) visitor properties. Same shape as the
+     * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+     * and runtime visitor-context or accumulated-property rules. Same shape as the
      * create/patch input.
      */
     targetingRules?: Experiment.TargetingRules | null;
@@ -1702,8 +2187,8 @@ export namespace ExperimentStartResponse {
     }
 
     /**
-     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-     * visitor status, and (server-side) visitor properties. Same shape as the
+     * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+     * and runtime visitor-context or accumulated-property rules. Same shape as the
      * create/patch input.
      */
     export interface TargetingRules {
@@ -1724,7 +2209,10 @@ export namespace ExperimentStartResponse {
       urlPatterns: Array<string>;
 
       /**
-       * Optional audience identifier used for server-side eligibility filtering.
+       * Reserved audience identifier. It is stored with the experiment but is not
+       * evaluated by the browser or server-side experiment runtime. Use
+       * `visitorProperties`, URL patterns, query parameters, or visitor status for
+       * runtime eligibility.
        */
       audienceId?: string | null;
 
@@ -1735,8 +2223,10 @@ export namespace ExperimentStartResponse {
       queryParams?: Array<TargetingRules.QueryParam> | null;
 
       /**
-       * Optional visitor-property matching rules. These are passed through as JSON for
-       * experimentation targeting.
+       * Optional runtime targeting rules. Recognized namespaced keys read visitor
+       * context (`geo.*`, `utm.*`, `initial_utm.*`, `device.*`, `time.*`,
+       * `query_params.*`, `visitor_status`, and `referrer`); any other bare key reads an
+       * accumulated personalization property.
        */
       visitorProperties?: unknown | null;
 
@@ -1823,6 +2313,22 @@ export namespace ExperimentStopResponse {
     trafficAllocation: number;
 
     /**
+     * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
+     * analysis in GraphQL.
+     */
+    analysisConfig?: unknown | null;
+
+    /**
+     * Primary metric definition frozen with the analysis plan at start time.
+     */
+    analysisMetricSnapshot?: unknown | null;
+
+    /**
+     * ISO-8601 timestamp when the analysis plan was locked at experiment start.
+     */
+    analysisStartedAt?: string | null;
+
+    /**
      * Optional human-readable hypothesis or summary. In GraphQL this is backed by the
      * experiment hypothesis field.
      */
@@ -1860,8 +2366,8 @@ export namespace ExperimentStopResponse {
     stoppedAt?: string | null;
 
     /**
-     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-     * visitor status, and (server-side) visitor properties. Same shape as the
+     * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+     * and runtime visitor-context or accumulated-property rules. Same shape as the
      * create/patch input.
      */
     targetingRules?: Experiment.TargetingRules | null;
@@ -1918,8 +2424,8 @@ export namespace ExperimentStopResponse {
     }
 
     /**
-     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-     * visitor status, and (server-side) visitor properties. Same shape as the
+     * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+     * and runtime visitor-context or accumulated-property rules. Same shape as the
      * create/patch input.
      */
     export interface TargetingRules {
@@ -1940,7 +2446,10 @@ export namespace ExperimentStopResponse {
       urlPatterns: Array<string>;
 
       /**
-       * Optional audience identifier used for server-side eligibility filtering.
+       * Reserved audience identifier. It is stored with the experiment but is not
+       * evaluated by the browser or server-side experiment runtime. Use
+       * `visitorProperties`, URL patterns, query parameters, or visitor status for
+       * runtime eligibility.
        */
       audienceId?: string | null;
 
@@ -1951,8 +2460,10 @@ export namespace ExperimentStopResponse {
       queryParams?: Array<TargetingRules.QueryParam> | null;
 
       /**
-       * Optional visitor-property matching rules. These are passed through as JSON for
-       * experimentation targeting.
+       * Optional runtime targeting rules. Recognized namespaced keys read visitor
+       * context (`geo.*`, `utm.*`, `initial_utm.*`, `device.*`, `time.*`,
+       * `query_params.*`, `visitor_status`, and `referrer`); any other bare key reads an
+       * accumulated personalization property.
        */
       visitorProperties?: unknown | null;
 
@@ -2039,6 +2550,22 @@ export namespace ExperimentRolloutResponse {
     trafficAllocation: number;
 
     /**
+     * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
+     * analysis in GraphQL.
+     */
+    analysisConfig?: unknown | null;
+
+    /**
+     * Primary metric definition frozen with the analysis plan at start time.
+     */
+    analysisMetricSnapshot?: unknown | null;
+
+    /**
+     * ISO-8601 timestamp when the analysis plan was locked at experiment start.
+     */
+    analysisStartedAt?: string | null;
+
+    /**
      * Optional human-readable hypothesis or summary. In GraphQL this is backed by the
      * experiment hypothesis field.
      */
@@ -2076,8 +2603,8 @@ export namespace ExperimentRolloutResponse {
     stoppedAt?: string | null;
 
     /**
-     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-     * visitor status, and (server-side) visitor properties. Same shape as the
+     * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+     * and runtime visitor-context or accumulated-property rules. Same shape as the
      * create/patch input.
      */
     targetingRules?: Experiment.TargetingRules | null;
@@ -2134,8 +2661,8 @@ export namespace ExperimentRolloutResponse {
     }
 
     /**
-     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-     * visitor status, and (server-side) visitor properties. Same shape as the
+     * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+     * and runtime visitor-context or accumulated-property rules. Same shape as the
      * create/patch input.
      */
     export interface TargetingRules {
@@ -2156,7 +2683,10 @@ export namespace ExperimentRolloutResponse {
       urlPatterns: Array<string>;
 
       /**
-       * Optional audience identifier used for server-side eligibility filtering.
+       * Reserved audience identifier. It is stored with the experiment but is not
+       * evaluated by the browser or server-side experiment runtime. Use
+       * `visitorProperties`, URL patterns, query parameters, or visitor status for
+       * runtime eligibility.
        */
       audienceId?: string | null;
 
@@ -2167,8 +2697,10 @@ export namespace ExperimentRolloutResponse {
       queryParams?: Array<TargetingRules.QueryParam> | null;
 
       /**
-       * Optional visitor-property matching rules. These are passed through as JSON for
-       * experimentation targeting.
+       * Optional runtime targeting rules. Recognized namespaced keys read visitor
+       * context (`geo.*`, `utm.*`, `initial_utm.*`, `device.*`, `time.*`,
+       * `query_params.*`, `visitor_status`, and `referrer`); any other bare key reads an
+       * accumulated personalization property.
        */
       visitorProperties?: unknown | null;
 
@@ -2255,6 +2787,22 @@ export namespace ExperimentEndRolloutResponse {
     trafficAllocation: number;
 
     /**
+     * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
+     * analysis in GraphQL.
+     */
+    analysisConfig?: unknown | null;
+
+    /**
+     * Primary metric definition frozen with the analysis plan at start time.
+     */
+    analysisMetricSnapshot?: unknown | null;
+
+    /**
+     * ISO-8601 timestamp when the analysis plan was locked at experiment start.
+     */
+    analysisStartedAt?: string | null;
+
+    /**
      * Optional human-readable hypothesis or summary. In GraphQL this is backed by the
      * experiment hypothesis field.
      */
@@ -2292,8 +2840,8 @@ export namespace ExperimentEndRolloutResponse {
     stoppedAt?: string | null;
 
     /**
-     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-     * visitor status, and (server-side) visitor properties. Same shape as the
+     * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+     * and runtime visitor-context or accumulated-property rules. Same shape as the
      * create/patch input.
      */
     targetingRules?: Experiment.TargetingRules | null;
@@ -2350,8 +2898,8 @@ export namespace ExperimentEndRolloutResponse {
     }
 
     /**
-     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-     * visitor status, and (server-side) visitor properties. Same shape as the
+     * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+     * and runtime visitor-context or accumulated-property rules. Same shape as the
      * create/patch input.
      */
     export interface TargetingRules {
@@ -2372,7 +2920,10 @@ export namespace ExperimentEndRolloutResponse {
       urlPatterns: Array<string>;
 
       /**
-       * Optional audience identifier used for server-side eligibility filtering.
+       * Reserved audience identifier. It is stored with the experiment but is not
+       * evaluated by the browser or server-side experiment runtime. Use
+       * `visitorProperties`, URL patterns, query parameters, or visitor status for
+       * runtime eligibility.
        */
       audienceId?: string | null;
 
@@ -2383,8 +2934,10 @@ export namespace ExperimentEndRolloutResponse {
       queryParams?: Array<TargetingRules.QueryParam> | null;
 
       /**
-       * Optional visitor-property matching rules. These are passed through as JSON for
-       * experimentation targeting.
+       * Optional runtime targeting rules. Recognized namespaced keys read visitor
+       * context (`geo.*`, `utm.*`, `initial_utm.*`, `device.*`, `time.*`,
+       * `query_params.*`, `visitor_status`, and `referrer`); any other bare key reads an
+       * accumulated personalization property.
        */
       visitorProperties?: unknown | null;
 
@@ -2453,6 +3006,22 @@ export interface ExperimentWinnerResponse {
   trafficAllocation: number;
 
   /**
+   * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
+   * analysis in GraphQL.
+   */
+  analysisConfig?: unknown | null;
+
+  /**
+   * Primary metric definition frozen with the analysis plan at start time.
+   */
+  analysisMetricSnapshot?: unknown | null;
+
+  /**
+   * ISO-8601 timestamp when the analysis plan was locked at experiment start.
+   */
+  analysisStartedAt?: string | null;
+
+  /**
    * Optional human-readable hypothesis or summary. In GraphQL this is backed by the
    * experiment hypothesis field.
    */
@@ -2490,8 +3059,8 @@ export interface ExperimentWinnerResponse {
   stoppedAt?: string | null;
 
   /**
-   * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-   * visitor status, and (server-side) visitor properties. Same shape as the
+   * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+   * and runtime visitor-context or accumulated-property rules. Same shape as the
    * create/patch input.
    */
   targetingRules?: ExperimentWinnerResponse.TargetingRules | null;
@@ -2548,8 +3117,8 @@ export namespace ExperimentWinnerResponse {
   }
 
   /**
-   * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-   * visitor status, and (server-side) visitor properties. Same shape as the
+   * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+   * and runtime visitor-context or accumulated-property rules. Same shape as the
    * create/patch input.
    */
   export interface TargetingRules {
@@ -2570,7 +3139,10 @@ export namespace ExperimentWinnerResponse {
     urlPatterns: Array<string>;
 
     /**
-     * Optional audience identifier used for server-side eligibility filtering.
+     * Reserved audience identifier. It is stored with the experiment but is not
+     * evaluated by the browser or server-side experiment runtime. Use
+     * `visitorProperties`, URL patterns, query parameters, or visitor status for
+     * runtime eligibility.
      */
     audienceId?: string | null;
 
@@ -2581,8 +3153,10 @@ export namespace ExperimentWinnerResponse {
     queryParams?: Array<TargetingRules.QueryParam> | null;
 
     /**
-     * Optional visitor-property matching rules. These are passed through as JSON for
-     * experimentation targeting.
+     * Optional runtime targeting rules. Recognized namespaced keys read visitor
+     * context (`geo.*`, `utm.*`, `initial_utm.*`, `device.*`, `time.*`,
+     * `query_params.*`, `visitor_status`, and `referrer`); any other bare key reads an
+     * accumulated personalization property.
      */
     visitorProperties?: unknown | null;
 
@@ -2668,6 +3242,22 @@ export namespace ExperimentPauseResponse {
     trafficAllocation: number;
 
     /**
+     * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
+     * analysis in GraphQL.
+     */
+    analysisConfig?: unknown | null;
+
+    /**
+     * Primary metric definition frozen with the analysis plan at start time.
+     */
+    analysisMetricSnapshot?: unknown | null;
+
+    /**
+     * ISO-8601 timestamp when the analysis plan was locked at experiment start.
+     */
+    analysisStartedAt?: string | null;
+
+    /**
      * Optional human-readable hypothesis or summary. In GraphQL this is backed by the
      * experiment hypothesis field.
      */
@@ -2705,8 +3295,8 @@ export namespace ExperimentPauseResponse {
     stoppedAt?: string | null;
 
     /**
-     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-     * visitor status, and (server-side) visitor properties. Same shape as the
+     * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+     * and runtime visitor-context or accumulated-property rules. Same shape as the
      * create/patch input.
      */
     targetingRules?: Experiment.TargetingRules | null;
@@ -2763,8 +3353,8 @@ export namespace ExperimentPauseResponse {
     }
 
     /**
-     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-     * visitor status, and (server-side) visitor properties. Same shape as the
+     * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+     * and runtime visitor-context or accumulated-property rules. Same shape as the
      * create/patch input.
      */
     export interface TargetingRules {
@@ -2785,7 +3375,10 @@ export namespace ExperimentPauseResponse {
       urlPatterns: Array<string>;
 
       /**
-       * Optional audience identifier used for server-side eligibility filtering.
+       * Reserved audience identifier. It is stored with the experiment but is not
+       * evaluated by the browser or server-side experiment runtime. Use
+       * `visitorProperties`, URL patterns, query parameters, or visitor status for
+       * runtime eligibility.
        */
       audienceId?: string | null;
 
@@ -2796,8 +3389,10 @@ export namespace ExperimentPauseResponse {
       queryParams?: Array<TargetingRules.QueryParam> | null;
 
       /**
-       * Optional visitor-property matching rules. These are passed through as JSON for
-       * experimentation targeting.
+       * Optional runtime targeting rules. Recognized namespaced keys read visitor
+       * context (`geo.*`, `utm.*`, `initial_utm.*`, `device.*`, `time.*`,
+       * `query_params.*`, `visitor_status`, and `referrer`); any other bare key reads an
+       * accumulated personalization property.
        */
       visitorProperties?: unknown | null;
 
@@ -2884,6 +3479,22 @@ export namespace ExperimentResumeResponse {
     trafficAllocation: number;
 
     /**
+     * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
+     * analysis in GraphQL.
+     */
+    analysisConfig?: unknown | null;
+
+    /**
+     * Primary metric definition frozen with the analysis plan at start time.
+     */
+    analysisMetricSnapshot?: unknown | null;
+
+    /**
+     * ISO-8601 timestamp when the analysis plan was locked at experiment start.
+     */
+    analysisStartedAt?: string | null;
+
+    /**
      * Optional human-readable hypothesis or summary. In GraphQL this is backed by the
      * experiment hypothesis field.
      */
@@ -2921,8 +3532,8 @@ export namespace ExperimentResumeResponse {
     stoppedAt?: string | null;
 
     /**
-     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-     * visitor status, and (server-side) visitor properties. Same shape as the
+     * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+     * and runtime visitor-context or accumulated-property rules. Same shape as the
      * create/patch input.
      */
     targetingRules?: Experiment.TargetingRules | null;
@@ -2979,8 +3590,8 @@ export namespace ExperimentResumeResponse {
     }
 
     /**
-     * Eligibility rules: URL-pattern globs, optional audience, query-param conditions,
-     * visitor status, and (server-side) visitor properties. Same shape as the
+     * Eligibility rules: URL-pattern globs, query-param conditions, visitor status,
+     * and runtime visitor-context or accumulated-property rules. Same shape as the
      * create/patch input.
      */
     export interface TargetingRules {
@@ -3001,7 +3612,10 @@ export namespace ExperimentResumeResponse {
       urlPatterns: Array<string>;
 
       /**
-       * Optional audience identifier used for server-side eligibility filtering.
+       * Reserved audience identifier. It is stored with the experiment but is not
+       * evaluated by the browser or server-side experiment runtime. Use
+       * `visitorProperties`, URL patterns, query parameters, or visitor status for
+       * runtime eligibility.
        */
       audienceId?: string | null;
 
@@ -3012,8 +3626,10 @@ export namespace ExperimentResumeResponse {
       queryParams?: Array<TargetingRules.QueryParam> | null;
 
       /**
-       * Optional visitor-property matching rules. These are passed through as JSON for
-       * experimentation targeting.
+       * Optional runtime targeting rules. Recognized namespaced keys read visitor
+       * context (`geo.*`, `utm.*`, `initial_utm.*`, `device.*`, `time.*`,
+       * `query_params.*`, `visitor_status`, and `referrer`); any other bare key reads an
+       * accumulated personalization property.
        */
       visitorProperties?: unknown | null;
 
@@ -3094,6 +3710,69 @@ export namespace ExperimentResultsResponse {
      * variants in the experiment.
      */
     probabilityToBeBest: number;
+  }
+}
+
+export interface ExperimentAnalysisResponse {
+  analysisCutoffAt: string;
+
+  analysisState:
+    | 'ANALYSIS_UNAVAILABLE'
+    | 'COLLECTING_DATA'
+    | 'FINALIZING_OUTCOMES'
+    | 'INCONCLUSIVE_STOPPED_EARLY'
+    | 'READY';
+
+  dataQuality: ExperimentAnalysisResponse.DataQuality;
+
+  exploratory: boolean;
+
+  exposureCutoffAt: string;
+
+  method: 'BAYESIAN' | 'FREQUENTIST' | 'SEQUENTIAL';
+
+  metricType: 'conversion' | 'value';
+
+  variants: Array<ExperimentAnalysisResponse.Variant>;
+
+  bayesian?: unknown | null;
+
+  evidenceState?: 'EVIDENCE_OF_HARM' | 'EVIDENCE_OF_IMPROVEMENT' | 'NO_CONCLUSION' | null;
+
+  frequentist?: unknown | null;
+
+  sequential?: unknown | null;
+}
+
+export namespace ExperimentAnalysisResponse {
+  export interface DataQuality {
+    crossoverVisitors: number;
+
+    missingVisitorIdImpressions: number;
+
+    sampleRatioMismatch: 'FAIL' | 'NOT_EVALUATED' | 'PASS';
+
+    sampleRatioMismatchPValue?: number | null;
+  }
+
+  export interface Variant {
+    id: string;
+
+    conversionRate: number;
+
+    conversions: number;
+
+    impressions: number;
+
+    isControl: boolean;
+
+    name: string;
+
+    observedVisitors: number;
+
+    visitors: number;
+
+    meanValue?: number | null;
   }
 }
 
@@ -3223,6 +3902,12 @@ export interface ExperimentCreateParams {
   name: string;
 
   /**
+   * Optional draft analysis method. Server-owned statistical constants are
+   * normalized before storage.
+   */
+  analysisConfig?: unknown | null;
+
+  /**
    * Weight of the auto-created control variant, as a percentage (1–100). Defaults to
    * 100 (a new experiment is all control until treatments are added). The control
    * must keep at least 1% — a 0% control leaves visitors with no bucket to assign at
@@ -3250,14 +3935,14 @@ export interface ExperimentCreateParams {
 
   /**
    * Goal events. If you send `metrics.primary`, `metrics.primary.eventName` must be
-   * a non-blank string. A primary event name is required before the experiment can
-   * be started.
+   * a non-blank string. A primary event is required to start `ab` and `multivariate`
+   * experiments, but not always-on `personalization`.
    */
   metrics?: ExperimentCreateParams.Metrics | null;
 
   /**
-   * Eligibility rules — URL patterns, audience, visitor status, query-param
-   * conditions. Omit to inherit defaults.
+   * Eligibility rules — URL patterns, query-param conditions, visitor status, and
+   * visitor-context or accumulated-property rules. Omit to inherit defaults.
    */
   targetingRules?: ExperimentCreateParams.TargetingRules | null;
 
@@ -3277,8 +3962,8 @@ export interface ExperimentCreateParams {
 export namespace ExperimentCreateParams {
   /**
    * Goal events. If you send `metrics.primary`, `metrics.primary.eventName` must be
-   * a non-blank string. A primary event name is required before the experiment can
-   * be started.
+   * a non-blank string. A primary event is required to start `ab` and `multivariate`
+   * experiments, but not always-on `personalization`.
    */
   export interface Metrics {
     /**
@@ -3324,8 +4009,8 @@ export namespace ExperimentCreateParams {
   }
 
   /**
-   * Eligibility rules — URL patterns, audience, visitor status, query-param
-   * conditions. Omit to inherit defaults.
+   * Eligibility rules — URL patterns, query-param conditions, visitor status, and
+   * visitor-context or accumulated-property rules. Omit to inherit defaults.
    */
   export interface TargetingRules {
     /**
@@ -3345,7 +4030,10 @@ export namespace ExperimentCreateParams {
     urlPatterns: Array<string>;
 
     /**
-     * Optional audience identifier used for server-side eligibility filtering.
+     * Reserved audience identifier. It is stored with the experiment but is not
+     * evaluated by the browser or server-side experiment runtime. Use
+     * `visitorProperties`, URL patterns, query parameters, or visitor status for
+     * runtime eligibility.
      */
     audienceId?: string | null;
 
@@ -3356,8 +4044,10 @@ export namespace ExperimentCreateParams {
     queryParams?: Array<TargetingRules.QueryParam> | null;
 
     /**
-     * Optional visitor-property matching rules. These are passed through as JSON for
-     * experimentation targeting.
+     * Optional runtime targeting rules. Recognized namespaced keys read visitor
+     * context (`geo.*`, `utm.*`, `initial_utm.*`, `device.*`, `time.*`,
+     * `query_params.*`, `visitor_status`, and `referrer`); any other bare key reads an
+     * accumulated personalization property.
      */
     visitorProperties?: unknown | null;
 
@@ -3390,6 +4080,11 @@ export namespace ExperimentCreateParams {
 }
 
 export interface ExperimentUpdateParams {
+  /**
+   * Updated draft analysis method. This field is locked once an experiment starts.
+   */
+  analysisConfig?: unknown | null;
+
   /**
    * Updated experiment hypothesis or operator note.
    */
@@ -3502,7 +4197,10 @@ export namespace ExperimentUpdateParams {
     urlPatterns: Array<string>;
 
     /**
-     * Optional audience identifier used for server-side eligibility filtering.
+     * Reserved audience identifier. It is stored with the experiment but is not
+     * evaluated by the browser or server-side experiment runtime. Use
+     * `visitorProperties`, URL patterns, query parameters, or visitor status for
+     * runtime eligibility.
      */
     audienceId?: string | null;
 
@@ -3513,8 +4211,10 @@ export namespace ExperimentUpdateParams {
     queryParams?: Array<TargetingRules.QueryParam> | null;
 
     /**
-     * Optional visitor-property matching rules. These are passed through as JSON for
-     * experimentation targeting.
+     * Optional runtime targeting rules. Recognized namespaced keys read visitor
+     * context (`geo.*`, `utm.*`, `initial_utm.*`, `device.*`, `time.*`,
+     * `query_params.*`, `visitor_status`, and `referrer`); any other bare key reads an
+     * accumulated personalization property.
      */
     visitorProperties?: unknown | null;
 
@@ -3622,6 +4322,14 @@ export interface ExperimentResultsParams {
   eventName?: string;
 }
 
+export interface ExperimentAnalysisParams {
+  /**
+   * Optional override for the conversion event name. When omitted, the experiment
+   * primary metric event is used.
+   */
+  eventName?: string;
+}
+
 export interface ExperimentResultsTimeSeriesParams {
   /**
    * Inclusive upper bound of the response window, as a UTC calendar day in
@@ -3672,6 +4380,7 @@ export declare namespace Experiments {
     type ExperimentRetrieveResponse as ExperimentRetrieveResponse,
     type ExperimentUpdateResponse as ExperimentUpdateResponse,
     type ExperimentDeleteResponse as ExperimentDeleteResponse,
+    type ExperimentDuplicateResponse as ExperimentDuplicateResponse,
     type ExperimentStartResponse as ExperimentStartResponse,
     type ExperimentStopResponse as ExperimentStopResponse,
     type ExperimentRolloutResponse as ExperimentRolloutResponse,
@@ -3680,6 +4389,7 @@ export declare namespace Experiments {
     type ExperimentPauseResponse as ExperimentPauseResponse,
     type ExperimentResumeResponse as ExperimentResumeResponse,
     type ExperimentResultsResponse as ExperimentResultsResponse,
+    type ExperimentAnalysisResponse as ExperimentAnalysisResponse,
     type ExperimentResultsTimeSeriesResponse as ExperimentResultsTimeSeriesResponse,
     type ExperimentSessionReplaysResponse as ExperimentSessionReplaysResponse,
     type ExperimentListResponsesCursor as ExperimentListResponsesCursor,
@@ -3693,6 +4403,7 @@ export declare namespace Experiments {
     type ExperimentPauseParams as ExperimentPauseParams,
     type ExperimentResumeParams as ExperimentResumeParams,
     type ExperimentResultsParams as ExperimentResultsParams,
+    type ExperimentAnalysisParams as ExperimentAnalysisParams,
     type ExperimentResultsTimeSeriesParams as ExperimentResultsTimeSeriesParams,
     type ExperimentSessionReplaysParams as ExperimentSessionReplaysParams,
   };

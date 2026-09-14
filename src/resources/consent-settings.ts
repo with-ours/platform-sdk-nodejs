@@ -396,6 +396,13 @@ export namespace ConsentSettingListResponse {
        * overlap with another rule's regions.
        */
       additionalRegions?: Array<string> | null;
+
+      /**
+       * Optional label for this override group, e.g. "CCPA States". Shown in the
+       * dashboard instead of the region codes. Pass null to clear it and fall back to
+       * the codes.
+       */
+      name?: string | null;
     }
 
     export namespace Region {
@@ -829,6 +836,13 @@ export namespace ConsentSettingCreateResponse {
      * overlap with another rule's regions.
      */
     additionalRegions?: Array<string> | null;
+
+    /**
+     * Optional label for this override group, e.g. "CCPA States". Shown in the
+     * dashboard instead of the region codes. Pass null to clear it and fall back to
+     * the codes.
+     */
+    name?: string | null;
   }
 
   export namespace Region {
@@ -1261,6 +1275,13 @@ export namespace ConsentSettingRetrieveResponse {
      * overlap with another rule's regions.
      */
     additionalRegions?: Array<string> | null;
+
+    /**
+     * Optional label for this override group, e.g. "CCPA States". Shown in the
+     * dashboard instead of the region codes. Pass null to clear it and fall back to
+     * the codes.
+     */
+    name?: string | null;
   }
 
   export namespace Region {
@@ -1693,6 +1714,13 @@ export namespace ConsentSettingReplaceResponse {
      * overlap with another rule's regions.
      */
     additionalRegions?: Array<string> | null;
+
+    /**
+     * Optional label for this override group, e.g. "CCPA States". Shown in the
+     * dashboard instead of the region codes. Pass null to clear it and fall back to
+     * the codes.
+     */
+    name?: string | null;
   }
 
   export namespace Region {
@@ -2125,6 +2153,13 @@ export namespace ConsentSettingUpdateResponse {
      * overlap with another rule's regions.
      */
     additionalRegions?: Array<string> | null;
+
+    /**
+     * Optional label for this override group, e.g. "CCPA States". Shown in the
+     * dashboard instead of the region codes. Pass null to clear it and fall back to
+     * the codes.
+     */
+    name?: string | null;
   }
 
   export namespace Region {
@@ -2557,6 +2592,13 @@ export namespace ConsentSettingDeleteResponse {
      * overlap with another rule's regions.
      */
     additionalRegions?: Array<string> | null;
+
+    /**
+     * Optional label for this override group, e.g. "CCPA States". Shown in the
+     * dashboard instead of the region codes. Pass null to clear it and fall back to
+     * the codes.
+     */
+    name?: string | null;
   }
 
   export namespace Region {
@@ -3072,6 +3114,13 @@ export namespace ConsentSettingReplaceParams {
      * overlap with another rule's regions.
      */
     additionalRegions?: Array<string> | null;
+
+    /**
+     * Optional label for this override group, e.g. "CCPA States". Shown in the
+     * dashboard instead of the region codes. Pass null to clear it and fall back to
+     * the codes.
+     */
+    name?: string | null;
   }
 
   export namespace Region {
@@ -3476,6 +3525,13 @@ export namespace ConsentSettingUpdateParams {
      * overlap with another rule's regions.
      */
     additionalRegions?: Array<string> | null;
+
+    /**
+     * Optional label for this override group, e.g. "CCPA States". Shown in the
+     * dashboard instead of the region codes. Pass null to clear it and fall back to
+     * the codes.
+     */
+    name?: string | null;
   }
 
   export namespace Region {

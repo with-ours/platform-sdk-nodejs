@@ -95,6 +95,7 @@ export interface SourceListResponse {
     | 'GoLangApi'
     | 'HTTPApiSource'
     | 'Healthie'
+    | 'Heyflow'
     | 'HubspotAppActions'
     | 'HubspotFormWebhook'
     | 'JotFormWebhooks'
@@ -185,6 +186,7 @@ export interface SourceCreateResponse {
     | 'GoLangApi'
     | 'HTTPApiSource'
     | 'Healthie'
+    | 'Heyflow'
     | 'HubspotAppActions'
     | 'HubspotFormWebhook'
     | 'JotFormWebhooks'
@@ -275,6 +277,7 @@ export interface SourceRetrieveResponse {
     | 'GoLangApi'
     | 'HTTPApiSource'
     | 'Healthie'
+    | 'Heyflow'
     | 'HubspotAppActions'
     | 'HubspotFormWebhook'
     | 'JotFormWebhooks'
@@ -365,6 +368,7 @@ export interface SourceUpdateResponse {
     | 'GoLangApi'
     | 'HTTPApiSource'
     | 'Healthie'
+    | 'Heyflow'
     | 'HubspotAppActions'
     | 'HubspotFormWebhook'
     | 'JotFormWebhooks'
@@ -506,6 +510,11 @@ export namespace SourceTokensResponse {
 
 export interface SourceListParams extends CursorParams {
   /**
+   * Exclude redirects with a short-link design. Defaults to false.
+   */
+  excludeShortLinks?: boolean | 'true' | 'false';
+
+  /**
    * Case-insensitive substring filter on the source name.
    */
   nameContains?: string;
@@ -534,6 +543,7 @@ export interface SourceListParams extends CursorParams {
     | 'GoLangApi'
     | 'HTTPApiSource'
     | 'Healthie'
+    | 'Heyflow'
     | 'HubspotAppActions'
     | 'HubspotFormWebhook'
     | 'JotFormWebhooks'
@@ -570,6 +580,7 @@ export interface SourceCreateParams {
     | 'GoLangApi'
     | 'HTTPApiSource'
     | 'Healthie'
+    | 'Heyflow'
     | 'HubspotAppActions'
     | 'HubspotFormWebhook'
     | 'JotFormWebhooks'

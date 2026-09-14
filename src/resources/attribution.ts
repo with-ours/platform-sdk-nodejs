@@ -474,7 +474,7 @@ export interface AttributionConversionParams {
   /**
    * Attribution model to apply to multi-touch conversion paths.
    */
-  attributionModel: 'FIRST_TOUCH' | 'LAST_TOUCH' | 'LINEAR' | 'POSITION_BASED';
+  attributionModel: 'FIRST_TOUCH' | 'LAST_TOUCH' | 'LINEAR' | 'U_SHAPED' | 'J_SHAPED' | 'TIME_DECAY';
 
   /**
    * Conversion event to attribute. Must be a selectable conversion event.
@@ -546,9 +546,19 @@ export interface AttributionAudienceConversionParams {
   attributionWindow?: string;
 
   /**
+   * Exclude bot sessions. Defaults to `true`.
+   */
+  excludeBots?: 'true' | 'false';
+
+  /**
    * Event property to sum as conversion value.
    */
   valueProperty?: string;
+
+  /**
+   * Filter results to a specific web source by its UUID.
+   */
+  webSourceId?: string;
 }
 
 export interface AttributionUtmComparisonParams {

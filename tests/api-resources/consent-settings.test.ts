@@ -178,6 +178,7 @@ describe('resource consentSettings', () => {
             showVendorsInPreferences: true,
           },
           additionalRegions: ['string'],
+          name: 'name',
         },
       ],
       services: [
