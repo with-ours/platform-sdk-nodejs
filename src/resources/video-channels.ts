@@ -10,8 +10,8 @@ export class VideoChannels extends APIResource {
   /**
    * List video channels for the account, sorted by name. Supports cursor pagination
    * via `limit` and `cursor`; the limit clamp is 1000 so a single request can return
-   * the full set. Entries omit `resolvedValues` — fetch a channel by id for its video
-   * count and embed output. Requires scope: videoChannel:list
+   * the full set. Entries omit `resolvedValues` — fetch a channel by id for its
+   * video count and embed output. Requires scope: videoChannel:list
    */
   list(
     query: VideoChannelListParams | null | undefined = {},
@@ -24,9 +24,9 @@ export class VideoChannels extends APIResource {
   }
 
   /**
-   * Create a video channel. Only `name` is accepted here; set branding and publish it
-   * with PATCH, and add videos with `POST /rest/v1/video-channels/{id}/media`. New
-   * channels start unpublished, so the page is not reachable until you send
+   * Create a video channel. Only `name` is accepted here; set branding and publish
+   * it with PATCH, and add videos with `POST /rest/v1/video-channels/{id}/media`.
+   * New channels start unpublished, so the page is not reachable until you send
    * `isPublished: true`. Requires scope: videoChannel:create
    */
   create(body: VideoChannelCreateParams, options?: RequestOptions): APIPromise<VideoChannelCreateResponse> {
@@ -91,25 +91,26 @@ export class VideoChannels extends APIResource {
   }
 
   /**
-   * Remove one video from a channel, identified by the `mediaId` query parameter. The
-   * video itself is not deleted and stays in any other channel it belongs to.
-   * Idempotent — removing a video that is not in the channel succeeds and returns the
-   * channel unchanged. Requires scope: videoChannel:update
+   * Remove one video from a channel, identified by the `mediaId` query parameter.
+   * The video itself is not deleted and stays in any other channel it belongs to.
+   * Idempotent — removing a video that is not in the channel succeeds and returns
+   * the channel unchanged. Requires scope: videoChannel:update
    */
   removeMedia(
     id: string,
-    query: VideoChannelRemoveMediaParams,
+    params: VideoChannelRemoveMediaParams,
     options?: RequestOptions,
   ): APIPromise<VideoChannelRemoveMediaResponse> {
-    return this._client.delete(path`/rest/v1/video-channels/${id}/media`, { query, ...options });
+    const { mediaId } = params;
+    return this._client.delete(path`/rest/v1/video-channels/${id}/media`, { query: { mediaId }, ...options });
   }
 
   /**
-   * Set the display order of a channel’s videos. Send every video id currently in the
-   * channel in the order you want them shown — index 0 appears first. A partial list,
-   * or an id that is not in the channel, returns 400 so a caller working from a stale
-   * view learns it is out of date instead of getting a partial write. Requires scope:
-   * videoChannel:update
+   * Set the display order of a channel’s videos. Send every video id currently in
+   * the channel in the order you want them shown — index 0 appears first. A partial
+   * list, or an id that is not in the channel, returns 400 so a caller working from
+   * a stale view learns it is out of date instead of getting a partial write.
+   * Requires scope: videoChannel:update
    */
   reorder(
     id: string,
@@ -362,8 +363,8 @@ export interface VideoChannelAssignMediaParams {
   mediaId: string;
 
   /**
-   * Zero-based slot in the channel order. Omit to append to the end; omitting it on a
-   * video that is already in the channel keeps its current slot.
+   * Zero-based slot in the channel order. Omit to append to the end; omitting it on
+   * a video that is already in the channel keeps its current slot.
    */
   position?: number;
 }

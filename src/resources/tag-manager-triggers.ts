@@ -108,6 +108,9 @@ export interface TagManagerTriggerListResponse {
 
   createdAt?: string | null;
 
+  /**
+   * Defaults to `true` on create.
+   */
   enabled?: boolean | null;
 
   /**
@@ -150,6 +153,9 @@ export interface TagManagerTriggerCreateResponse {
 
   createdAt?: string | null;
 
+  /**
+   * Defaults to `true` on create.
+   */
   enabled?: boolean | null;
 
   /**
@@ -192,6 +198,9 @@ export interface TagManagerTriggerRetrieveResponse {
 
   createdAt?: string | null;
 
+  /**
+   * Defaults to `true` on create.
+   */
   enabled?: boolean | null;
 
   /**
@@ -234,6 +243,9 @@ export interface TagManagerTriggerUpdateResponse {
 
   createdAt?: string | null;
 
+  /**
+   * Defaults to `true` on create.
+   */
   enabled?: boolean | null;
 
   /**
@@ -351,7 +363,9 @@ export interface TagManagerTriggerListParams extends CursorParams {
 
 export interface TagManagerTriggerCreateParams {
   /**
-   * Match conditions; use `[]` for an unconditional trigger.
+   * Match conditions; use `[]` for an unconditional trigger. Conditions are
+   * evaluated by the Tag Manager runtime. For a CSS selector click condition, send
+   * `{ "actual": "{{Click Element}}", "expected": ".cta", "comparison": "match_css_selector" }`.
    */
   conditions: Array<{ [key: string]: unknown }>;
 
@@ -373,6 +387,9 @@ export interface TagManagerTriggerCreateParams {
    */
   type: string;
 
+  /**
+   * Defaults to `true`.
+   */
   enabled?: boolean | null;
 }
 
