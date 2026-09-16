@@ -355,6 +355,10 @@ import {
 import {
   TranslationWidgetAnalyticsParams,
   TranslationWidgetAnalyticsResponse,
+  TranslationWidgetCreateParams,
+  TranslationWidgetCreateResponse,
+  TranslationWidgetListResponse,
+  TranslationWidgetRetrieveResponse,
   TranslationWidgets,
 } from './resources/translation-widgets';
 import {
@@ -1640,7 +1644,11 @@ export declare namespace OursPrivacyPlatform {
 
   export {
     TranslationWidgets as TranslationWidgets,
+    type TranslationWidgetListResponse as TranslationWidgetListResponse,
+    type TranslationWidgetCreateResponse as TranslationWidgetCreateResponse,
+    type TranslationWidgetRetrieveResponse as TranslationWidgetRetrieveResponse,
     type TranslationWidgetAnalyticsResponse as TranslationWidgetAnalyticsResponse,
+    type TranslationWidgetCreateParams as TranslationWidgetCreateParams,
     type TranslationWidgetAnalyticsParams as TranslationWidgetAnalyticsParams,
   };
 

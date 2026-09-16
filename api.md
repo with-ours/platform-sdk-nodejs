@@ -500,10 +500,16 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/translation-widgets.ts">TranslationWidgetListResponse</a></code>
+- <code><a href="./src/resources/translation-widgets.ts">TranslationWidgetCreateResponse</a></code>
+- <code><a href="./src/resources/translation-widgets.ts">TranslationWidgetRetrieveResponse</a></code>
 - <code><a href="./src/resources/translation-widgets.ts">TranslationWidgetAnalyticsResponse</a></code>
 
 Methods:
 
+- <code title="get /rest/v1/translation-widgets">client.translationWidgets.<a href="./src/resources/translation-widgets.ts">list</a>() -> TranslationWidgetListResponse</code>
+- <code title="post /rest/v1/translation-widgets">client.translationWidgets.<a href="./src/resources/translation-widgets.ts">create</a>({ ...params }) -> TranslationWidgetCreateResponse</code>
+- <code title="get /rest/v1/translation-widgets/{id}">client.translationWidgets.<a href="./src/resources/translation-widgets.ts">retrieve</a>(id) -> TranslationWidgetRetrieveResponse</code>
 - <code title="get /rest/v1/translation-widgets/{id}/analytics">client.translationWidgets.<a href="./src/resources/translation-widgets.ts">analytics</a>(id, { ...params }) -> TranslationWidgetAnalyticsResponse</code>
 
 # Versions
