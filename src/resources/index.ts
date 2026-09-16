@@ -335,7 +335,11 @@ export {
 } from './tag-managers';
 export {
   TranslationWidgets,
+  type TranslationWidgetListResponse,
+  type TranslationWidgetCreateResponse,
+  type TranslationWidgetRetrieveResponse,
   type TranslationWidgetAnalyticsResponse,
+  type TranslationWidgetCreateParams,
   type TranslationWidgetAnalyticsParams,
 } from './translation-widgets';
 export {
