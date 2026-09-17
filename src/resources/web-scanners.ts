@@ -182,10 +182,9 @@ export class WebScanners extends APIResource {
 
   /**
    * List the one-page verification runs recorded for this scanner, newest first,
-   * each with its own capture counts. This is how a fix is compared against the
-   * attempts before it without reading each run individually. Verification runs are
-   * isolated from monitor history and never affect inventory counts or the
-   * monitor-wide last-scanned timestamp. Requires scope: webScanner:find
+   * each with its own capture counts. Verification runs are isolated from monitor
+   * history and never affect inventory counts or the monitor-wide last-scanned
+   * timestamp. Requires scope: webScanner:find
    *
    * @example
    * ```ts
@@ -204,16 +203,18 @@ export class WebScanners extends APIResource {
 
   /**
    * List the third-party trackers (requests) found on a scan run, with their risk,
-   * category, the pages they were seen on, and whether each host is already covered
-   * by a CMP consent service. Defaults to the latest run; pass `date` (an ISO-8601
-   * timestamp; only the calendar day is used to select the run) to read an earlier
-   * run. Documented exception to the cursor-pagination standard: paginates with
-   * `limit` and `offset` because each run is an immutable snapshot. A host that is
-   * neither covered (`coveredByCmp: false`) nor matched by a suppression rule still
-   * needs a triage decision — resolve it by adding the host to a CMP consent service
-   * or by creating a suppression rule with `POST /rest/v1/web-scanner-rules`. Use
-   * `GET /rest/v1/web-scanners/{id}/summary` for the rolled-up counts. Requires
-   * scope: webScanner:find
+   * category, the pages they were seen on, redacted deterministic PII/PHI data-flow
+   * metadata, and whether each host is already covered by a CMP consent service.
+   * Data-flow findings include only recipient metadata, categories, safe field
+   * names, and counts; query and body values are never returned. Defaults to the
+   * latest run; pass `date` (an ISO-8601 timestamp; only the calendar day is used to
+   * select the run) to read an earlier run. Documented exception to the
+   * cursor-pagination standard: paginates with `limit` and `offset` because each run
+   * is an immutable snapshot. A host that is neither covered (`coveredByCmp: false`)
+   * nor matched by a suppression rule still needs a triage decision — resolve it by
+   * adding the host to a CMP consent service or by creating a suppression rule with
+   * `POST /rest/v1/web-scanner-rules`. Use `GET /rest/v1/web-scanners/{id}/summary`
+   * for the rolled-up counts. Requires scope: webScanner:find
    *
    * @example
    * ```ts
@@ -776,6 +777,8 @@ export namespace WebScannerFindingsResponse {
 
     coveredByVendorLabel?: string | null;
 
+    dataFlow?: Item.DataFlow | null;
+
     displayName?: string | null;
 
     privacyKeywords?: Array<string> | null;
@@ -792,6 +795,61 @@ export namespace WebScannerFindingsResponse {
       path?: string | null;
 
       value?: string | null;
+    }
+
+    export interface DataFlow {
+      categories: Array<
+        | 'credit_card'
+        | 'date_of_birth'
+        | 'diagnosis'
+        | 'email'
+        | 'health_condition'
+        | 'health_plan_id'
+        | 'ip_address'
+        | 'medical_record_number'
+        | 'medication'
+        | 'phone'
+        | 'ssn'
+      >;
+
+      recipient: DataFlow.Recipient;
+
+      requestCount: number;
+
+      signals: Array<DataFlow.Signal>;
+    }
+
+    export namespace DataFlow {
+      export interface Recipient {
+        hostname: string;
+
+        category?: string | null;
+
+        displayName?: string | null;
+
+        risk?: string | null;
+      }
+
+      export interface Signal {
+        category:
+          | 'credit_card'
+          | 'date_of_birth'
+          | 'diagnosis'
+          | 'email'
+          | 'health_condition'
+          | 'health_plan_id'
+          | 'ip_address'
+          | 'medical_record_number'
+          | 'medication'
+          | 'phone'
+          | 'ssn';
+
+        source: 'query_parameter' | 'request_body';
+
+        encoding?: string | null;
+
+        field?: string | null;
+      }
     }
   }
 }
@@ -973,6 +1031,8 @@ export namespace WebScannerSummaryResponse {
 
     coveredByVendorLabel?: string | null;
 
+    dataFlow?: TopUncoveredHost.DataFlow | null;
+
     displayName?: string | null;
 
     privacyKeywords?: Array<string> | null;
@@ -989,6 +1049,61 @@ export namespace WebScannerSummaryResponse {
       path?: string | null;
 
       value?: string | null;
+    }
+
+    export interface DataFlow {
+      categories: Array<
+        | 'credit_card'
+        | 'date_of_birth'
+        | 'diagnosis'
+        | 'email'
+        | 'health_condition'
+        | 'health_plan_id'
+        | 'ip_address'
+        | 'medical_record_number'
+        | 'medication'
+        | 'phone'
+        | 'ssn'
+      >;
+
+      recipient: DataFlow.Recipient;
+
+      requestCount: number;
+
+      signals: Array<DataFlow.Signal>;
+    }
+
+    export namespace DataFlow {
+      export interface Recipient {
+        hostname: string;
+
+        category?: string | null;
+
+        displayName?: string | null;
+
+        risk?: string | null;
+      }
+
+      export interface Signal {
+        category:
+          | 'credit_card'
+          | 'date_of_birth'
+          | 'diagnosis'
+          | 'email'
+          | 'health_condition'
+          | 'health_plan_id'
+          | 'ip_address'
+          | 'medical_record_number'
+          | 'medication'
+          | 'phone'
+          | 'ssn';
+
+        source: 'query_parameter' | 'request_body';
+
+        encoding?: string | null;
+
+        field?: string | null;
+      }
     }
   }
 
