@@ -30,6 +30,12 @@ import {
   AllowedEvents,
 } from './resources/allowed-events';
 import {
+  Analytics,
+  AnalyticsPropertySuggestionsParams,
+  AnalyticsPropertySuggestionsResponse,
+  AnalyticsQueryCatalogResponse,
+} from './resources/analytics';
+import {
   Attribution,
   AttributionAudienceConversionParams,
   AttributionAudienceConversionResponse,
@@ -456,10 +462,14 @@ import {
   WebScannerCookiesResponse,
   WebScannerCreateParams,
   WebScannerCreateResponse,
+  WebScannerDecisionQueueParams,
+  WebScannerDecisionQueueResponse,
   WebScannerDeleteResponse,
   WebScannerFindingsParams,
   WebScannerFindingsResponse,
   WebScannerListResponse,
+  WebScannerResolveCoverageGapParams,
+  WebScannerResolveCoverageGapResponse,
   WebScannerRetrieveResponse,
   WebScannerSummaryParams,
   WebScannerSummaryResponse,
@@ -1252,6 +1262,7 @@ export class OursPrivacyPlatform {
   webScannerRules: API.WebScannerRules = new API.WebScannerRules(this);
   webScanners: API.WebScanners = new API.WebScanners(this);
   personalizationProperties: API.PersonalizationProperties = new API.PersonalizationProperties(this);
+  analytics: API.Analytics = new API.Analytics(this);
 }
 
 OursPrivacyPlatform.AllowedEvents = AllowedEvents;
@@ -1288,6 +1299,7 @@ OursPrivacyPlatform.WebAnalytics = WebAnalytics;
 OursPrivacyPlatform.WebScannerRules = WebScannerRules;
 OursPrivacyPlatform.WebScanners = WebScanners;
 OursPrivacyPlatform.PersonalizationProperties = PersonalizationProperties;
+OursPrivacyPlatform.Analytics = Analytics;
 
 export declare namespace OursPrivacyPlatform {
   export type RequestOptions = Opts.RequestOptions;
@@ -1760,6 +1772,8 @@ export declare namespace OursPrivacyPlatform {
     type WebScannerFindingsResponse as WebScannerFindingsResponse,
     type WebScannerCookiesResponse as WebScannerCookiesResponse,
     type WebScannerSummaryResponse as WebScannerSummaryResponse,
+    type WebScannerDecisionQueueResponse as WebScannerDecisionQueueResponse,
+    type WebScannerResolveCoverageGapResponse as WebScannerResolveCoverageGapResponse,
     type WebScannerCreateParams as WebScannerCreateParams,
     type WebScannerUpdateParams as WebScannerUpdateParams,
     type WebScannerAuthenticatedScanParams as WebScannerAuthenticatedScanParams,
@@ -1769,6 +1783,8 @@ export declare namespace OursPrivacyPlatform {
     type WebScannerFindingsParams as WebScannerFindingsParams,
     type WebScannerCookiesParams as WebScannerCookiesParams,
     type WebScannerSummaryParams as WebScannerSummaryParams,
+    type WebScannerDecisionQueueParams as WebScannerDecisionQueueParams,
+    type WebScannerResolveCoverageGapParams as WebScannerResolveCoverageGapParams,
   };
 
   export {
@@ -1782,5 +1798,12 @@ export declare namespace OursPrivacyPlatform {
     type PersonalizationPropertyListParams as PersonalizationPropertyListParams,
     type PersonalizationPropertyCreateParams as PersonalizationPropertyCreateParams,
     type PersonalizationPropertyUpdateParams as PersonalizationPropertyUpdateParams,
+  };
+
+  export {
+    Analytics as Analytics,
+    type AnalyticsQueryCatalogResponse as AnalyticsQueryCatalogResponse,
+    type AnalyticsPropertySuggestionsResponse as AnalyticsPropertySuggestionsResponse,
+    type AnalyticsPropertySuggestionsParams as AnalyticsPropertySuggestionsParams,
   };
 }

@@ -2772,6 +2772,8 @@ export interface ConsentSettingAnalyticsResponse {
    * time series without gap-handling logic.
    */
   items: Array<ConsentSettingAnalyticsResponse.Item>;
+
+  totals: ConsentSettingAnalyticsResponse.Totals;
 }
 
 export namespace ConsentSettingAnalyticsResponse {
@@ -2809,6 +2811,20 @@ export namespace ConsentSettingAnalyticsResponse {
     previousOptInRate?: number | null;
 
     previousOptOutRate?: number | null;
+  }
+
+  export interface Totals {
+    bannerViews: number;
+
+    closeIconClicks: number;
+
+    explicitOptIns: number;
+
+    explicitOptOuts: number;
+
+    optInRate: number;
+
+    optOutRate: number;
   }
 }
 
