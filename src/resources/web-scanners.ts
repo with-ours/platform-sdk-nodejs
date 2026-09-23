@@ -278,6 +278,56 @@ export class WebScanners extends APIResource {
   ): APIPromise<WebScannerSummaryResponse> {
     return this._client.get(path`/rest/v1/web-scanners/${id}/summary`, { query, ...options });
   }
+
+  /**
+   * List every normalized host in the selected scan run that is neither covered by a
+   * current CMP consent service nor matched by an active suppression rule. Results
+   * are sorted by risk and hostname. Continue with pagination.nextCursor while
+   * preserving runRevision and coverageRevision; changed evidence returns HTTP 400
+   * and requires restarting from the first page. Historical runs are evaluated
+   * against current coverage configuration. Requires scope: webScanner:find
+   *
+   * @example
+   * ```ts
+   * const response = await client.webScanners.decisionQueue(
+   *   'id',
+   * );
+   * ```
+   */
+  decisionQueue(
+    id: string,
+    query: WebScannerDecisionQueueParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<WebScannerDecisionQueueResponse> {
+    return this._client.get(path`/rest/v1/web-scanners/${id}/decision-queue`, { query, ...options });
+  }
+
+  /**
+   * Resolve one hostname from a revision-bound Web Scanner decision queue by
+   * creating an exact-host suppression rule. The request is bound to the reviewed
+   * run, and retrying the same idempotency key returns the recorded outcome without
+   * repeating the write. Requires scope: webScanner:update
+   *
+   * @example
+   * ```ts
+   * const response =
+   *   await client.webScanners.resolveCoverageGap('id', {
+   *     coverageRevision: 'x',
+   *     hostname: 'x',
+   *     idempotencyKey: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   *     runDate: '2019-12-27T18:11:19.117Z',
+   *     runRevision: 'x',
+   *     suppression: { reason: 'ignore' },
+   *   });
+   * ```
+   */
+  resolveCoverageGap(
+    id: string,
+    body: WebScannerResolveCoverageGapParams,
+    options?: RequestOptions,
+  ): APIPromise<WebScannerResolveCoverageGapResponse> {
+    return this._client.post(path`/rest/v1/web-scanners/${id}/resolve-coverage-gap`, { body, ...options });
+  }
 }
 
 export interface WebScannerListResponse {
@@ -948,9 +998,13 @@ export interface WebScannerSummaryResponse {
    */
   accessibility?: WebScannerSummaryResponse.Accessibility | null;
 
+  coverageRevision?: string | null;
+
   delta?: WebScannerSummaryResponse.Delta | null;
 
   runDate?: string | null;
+
+  runRevision?: string | null;
 }
 
 export namespace WebScannerSummaryResponse {
@@ -1181,6 +1235,117 @@ export namespace WebScannerSummaryResponse {
   }
 }
 
+export interface WebScannerDecisionQueueResponse {
+  entities: Array<WebScannerDecisionQueueResponse.Entity>;
+
+  pagination: WebScannerDecisionQueueResponse.Pagination;
+
+  scannerId: string;
+
+  total: number;
+
+  coverageRevision?: string | null;
+
+  runDate?: string | null;
+
+  runRevision?: string | null;
+}
+
+export namespace WebScannerDecisionQueueResponse {
+  export interface Entity {
+    hostname: string;
+
+    seenOn: Array<string>;
+
+    category?: string | null;
+
+    dataFlow?: Entity.DataFlow | null;
+
+    displayName?: string | null;
+
+    risk?: string | null;
+  }
+
+  export namespace Entity {
+    export interface DataFlow {
+      categories: Array<
+        | 'credit_card'
+        | 'date_of_birth'
+        | 'diagnosis'
+        | 'email'
+        | 'health_condition'
+        | 'health_plan_id'
+        | 'ip_address'
+        | 'medical_record_number'
+        | 'medication'
+        | 'phone'
+        | 'ssn'
+      >;
+
+      recipient: DataFlow.Recipient;
+
+      requestCount: number;
+
+      signals: Array<DataFlow.Signal>;
+    }
+
+    export namespace DataFlow {
+      export interface Recipient {
+        hostname: string;
+
+        category?: string | null;
+
+        displayName?: string | null;
+
+        risk?: string | null;
+      }
+
+      export interface Signal {
+        category:
+          | 'credit_card'
+          | 'date_of_birth'
+          | 'diagnosis'
+          | 'email'
+          | 'health_condition'
+          | 'health_plan_id'
+          | 'ip_address'
+          | 'medical_record_number'
+          | 'medication'
+          | 'phone'
+          | 'ssn';
+
+        source: 'query_parameter' | 'request_body';
+
+        encoding?: string | null;
+
+        field?: string | null;
+      }
+    }
+  }
+
+  export interface Pagination {
+    hasMore: boolean;
+
+    nextCursor?: string | null;
+  }
+}
+
+export interface WebScannerResolveCoverageGapResponse {
+  committedCoverageRevision: string;
+
+  coverageSource: 'cmp' | 'suppression';
+
+  effectState: 'preexisting_coverage' | 'suppression_active';
+
+  hostname: string;
+
+  status: 'already_resolved' | 'applied' | 'replayed';
+
+  coveredByVendorLabel?: string | null;
+
+  suppressionRuleId?: string | null;
+}
+
 export interface WebScannerCreateParams {
   /**
    * Root domain to crawl (e.g. `example.com`). Required on create. Missing or empty
@@ -1339,12 +1504,63 @@ export interface WebScannerCookiesParams {
 }
 
 export interface WebScannerSummaryParams {
+  coverageRevision?: string;
+
   /**
    * Which scan run to read, as an ISO-8601 timestamp. Only the UTC calendar day is
    * used to select the run; the time component is ignored. Defaults to the most
    * recent run when omitted.
    */
   date?: string;
+
+  runRevision?: string;
+}
+
+export interface WebScannerDecisionQueueParams {
+  coverageRevision?: string;
+
+  /**
+   * Opaque pagination cursor from pagination.nextCursor in the previous response. Do
+   * not decode or modify it. Malformed cursors return 400 Bad Request.
+   */
+  cursor?: string;
+
+  /**
+   * Which scan run to read, as an ISO-8601 timestamp. Only the UTC calendar day is
+   * used to select the run; the time component is ignored. Defaults to the most
+   * recent run when omitted.
+   */
+  date?: string;
+
+  /**
+   * Maximum number of items to return. Defaults to 25; values below 1 are clamped to
+   * 1 and values above 100 are clamped to 100.
+   */
+  limit?: number | null;
+
+  runRevision?: string;
+}
+
+export interface WebScannerResolveCoverageGapParams {
+  coverageRevision: string;
+
+  hostname: string;
+
+  idempotencyKey: string;
+
+  runDate: string;
+
+  runRevision: string;
+
+  suppression: WebScannerResolveCoverageGapParams.Suppression;
+}
+
+export namespace WebScannerResolveCoverageGapParams {
+  export interface Suppression {
+    reason: 'ignore' | 'baa' | 'internal' | 'approved' | 'compliant' | 'firstParty' | 'other';
+
+    notes?: string | null;
+  }
 }
 
 export declare namespace WebScanners {
@@ -1362,6 +1578,8 @@ export declare namespace WebScanners {
     type WebScannerFindingsResponse as WebScannerFindingsResponse,
     type WebScannerCookiesResponse as WebScannerCookiesResponse,
     type WebScannerSummaryResponse as WebScannerSummaryResponse,
+    type WebScannerDecisionQueueResponse as WebScannerDecisionQueueResponse,
+    type WebScannerResolveCoverageGapResponse as WebScannerResolveCoverageGapResponse,
     type WebScannerCreateParams as WebScannerCreateParams,
     type WebScannerUpdateParams as WebScannerUpdateParams,
     type WebScannerAuthenticatedScanParams as WebScannerAuthenticatedScanParams,
@@ -1371,5 +1589,7 @@ export declare namespace WebScanners {
     type WebScannerFindingsParams as WebScannerFindingsParams,
     type WebScannerCookiesParams as WebScannerCookiesParams,
     type WebScannerSummaryParams as WebScannerSummaryParams,
+    type WebScannerDecisionQueueParams as WebScannerDecisionQueueParams,
+    type WebScannerResolveCoverageGapParams as WebScannerResolveCoverageGapParams,
   };
 }

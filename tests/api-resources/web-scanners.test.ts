@@ -243,9 +243,70 @@ describe('resource webScanners', () => {
     await expect(
       client.webScanners.summary(
         'id',
-        { date: '2026-05-15T00:00:00Z' },
+        {
+          coverageRevision: 'coverageRevision',
+          date: '2026-05-15T00:00:00Z',
+          runRevision: 'runRevision',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
+  });
+
+  test('decisionQueue', async () => {
+    const responsePromise = client.webScanners.decisionQueue('id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('decisionQueue: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.webScanners.decisionQueue(
+        'id',
+        {
+          coverageRevision: 'coverageRevision',
+          cursor: 'cursor',
+          date: '2026-05-15T00:00:00Z',
+          limit: 25,
+          runRevision: 'runRevision',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
+  });
+
+  test('resolveCoverageGap: only required params', async () => {
+    const responsePromise = client.webScanners.resolveCoverageGap('id', {
+      coverageRevision: 'x',
+      hostname: 'x',
+      idempotencyKey: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      runDate: '2019-12-27T18:11:19.117Z',
+      runRevision: 'x',
+      suppression: { reason: 'ignore' },
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('resolveCoverageGap: required and optional params', async () => {
+    const response = await client.webScanners.resolveCoverageGap('id', {
+      coverageRevision: 'x',
+      hostname: 'x',
+      idempotencyKey: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      runDate: '2019-12-27T18:11:19.117Z',
+      runRevision: 'x',
+      suppression: { reason: 'ignore', notes: 'notes' },
+    });
   });
 });

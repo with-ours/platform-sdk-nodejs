@@ -651,6 +651,8 @@ Types:
 - <code><a href="./src/resources/web-scanners.ts">WebScannerFindingsResponse</a></code>
 - <code><a href="./src/resources/web-scanners.ts">WebScannerCookiesResponse</a></code>
 - <code><a href="./src/resources/web-scanners.ts">WebScannerSummaryResponse</a></code>
+- <code><a href="./src/resources/web-scanners.ts">WebScannerDecisionQueueResponse</a></code>
+- <code><a href="./src/resources/web-scanners.ts">WebScannerResolveCoverageGapResponse</a></code>
 
 Methods:
 
@@ -667,6 +669,8 @@ Methods:
 - <code title="get /rest/v1/web-scanners/{id}/findings">client.webScanners.<a href="./src/resources/web-scanners.ts">findings</a>(id, { ...params }) -> WebScannerFindingsResponse</code>
 - <code title="get /rest/v1/web-scanners/{id}/cookies">client.webScanners.<a href="./src/resources/web-scanners.ts">cookies</a>(id, { ...params }) -> WebScannerCookiesResponse</code>
 - <code title="get /rest/v1/web-scanners/{id}/summary">client.webScanners.<a href="./src/resources/web-scanners.ts">summary</a>(id, { ...params }) -> WebScannerSummaryResponse</code>
+- <code title="get /rest/v1/web-scanners/{id}/decision-queue">client.webScanners.<a href="./src/resources/web-scanners.ts">decisionQueue</a>(id, { ...params }) -> WebScannerDecisionQueueResponse</code>
+- <code title="post /rest/v1/web-scanners/{id}/resolve-coverage-gap">client.webScanners.<a href="./src/resources/web-scanners.ts">resolveCoverageGap</a>(id, { ...params }) -> WebScannerResolveCoverageGapResponse</code>
 
 # PersonalizationProperties
 
@@ -685,3 +689,15 @@ Methods:
 - <code title="get /rest/v1/personalization-properties/{id}">client.personalizationProperties.<a href="./src/resources/personalization-properties.ts">retrieve</a>(id) -> PersonalizationPropertyRetrieveResponse</code>
 - <code title="patch /rest/v1/personalization-properties/{id}">client.personalizationProperties.<a href="./src/resources/personalization-properties.ts">update</a>(id, { ...params }) -> PersonalizationPropertyUpdateResponse</code>
 - <code title="delete /rest/v1/personalization-properties/{id}">client.personalizationProperties.<a href="./src/resources/personalization-properties.ts">delete</a>(id) -> PersonalizationPropertyDeleteResponse</code>
+
+# Analytics
+
+Types:
+
+- <code><a href="./src/resources/analytics.ts">AnalyticsQueryCatalogResponse</a></code>
+- <code><a href="./src/resources/analytics.ts">AnalyticsPropertySuggestionsResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/analytics/query-catalog">client.analytics.<a href="./src/resources/analytics.ts">queryCatalog</a>() -> AnalyticsQueryCatalogResponse</code>
+- <code title="get /rest/v1/analytics/property-suggestions">client.analytics.<a href="./src/resources/analytics.ts">propertySuggestions</a>({ ...params }) -> AnalyticsPropertySuggestionsResponse</code>

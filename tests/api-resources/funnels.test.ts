@@ -22,18 +22,7 @@ describe('resource funnels', () => {
   test('create: only required params', async () => {
     const responsePromise = client.funnels.create({
       name: 'x',
-      steps: [
-        {
-          eventName: 'x',
-          name: 'x',
-          order: 0,
-        },
-        {
-          eventName: 'x',
-          name: 'x',
-          order: 0,
-        },
-      ],
+      queryDefinition: {},
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -47,56 +36,8 @@ describe('resource funnels', () => {
   test('create: required and optional params', async () => {
     const response = await client.funnels.create({
       name: 'x',
-      steps: [
-        {
-          eventName: 'x',
-          name: 'x',
-          order: 0,
-          filters: {},
-          logic: {
-            AND: [{}],
-            condition: {
-              operator: 'Is',
-              property: 'property',
-              value: 'value',
-            },
-            NOT: {},
-            OR: [{}],
-          },
-        },
-        {
-          eventName: 'x',
-          name: 'x',
-          order: 0,
-          filters: {},
-          logic: {
-            AND: [{}],
-            condition: {
-              operator: 'Is',
-              property: 'property',
-              value: 'value',
-            },
-            NOT: {},
-            OR: [{}],
-          },
-        },
-      ],
-      conversionWindow: {},
-      countingMethod: 'countingMethod',
+      queryDefinition: {},
       description: 'description',
-      funnelType: 'SESSION_BASED',
-      globalLogic: {
-        AND: [{}],
-        condition: {
-          operator: 'Is',
-          property: 'property',
-          value: 'value',
-        },
-        NOT: {},
-        OR: [{}],
-      },
-      stepOrder: 'stepOrder',
-      utmFilters: {},
       watched: true,
     });
   });
@@ -160,14 +101,7 @@ describe('resource funnels', () => {
     const response = await client.funnels.results('id', {
       from: '2026-06-01',
       to: '2026-06-30',
-      attributionType: 'INITIAL',
-      deviceType: 'DESKTOP',
-      utmCampaign: 'spring-promo',
-      utmContent: 'x',
-      utmMedium: 'cpc',
-      utmName: 'x',
-      utmSource: 'google',
-      utmTerm: 'x',
+      expectedDefinitionUpdatedAt: '2019-12-27T18:11:19.117Z',
     });
   });
 });
