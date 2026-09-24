@@ -11,6 +11,12 @@ export {
   type AllowedEventUpdateParams,
 } from './allowed-events';
 export {
+  Analytics,
+  type AnalyticsQueryCatalogResponse,
+  type AnalyticsPropertySuggestionsResponse,
+  type AnalyticsPropertySuggestionsParams,
+} from './analytics';
+export {
   Attribution,
   type AttributionInitialResponse,
   type AttributionLastTouchResponse,
@@ -445,6 +451,8 @@ export {
   type WebScannerFindingsResponse,
   type WebScannerCookiesResponse,
   type WebScannerSummaryResponse,
+  type WebScannerDecisionQueueResponse,
+  type WebScannerResolveCoverageGapResponse,
   type WebScannerCreateParams,
   type WebScannerUpdateParams,
   type WebScannerAuthenticatedScanParams,
@@ -454,4 +462,6 @@ export {
   type WebScannerFindingsParams,
   type WebScannerCookiesParams,
   type WebScannerSummaryParams,
+  type WebScannerDecisionQueueParams,
+  type WebScannerResolveCoverageGapParams,
 } from './web-scanners';
