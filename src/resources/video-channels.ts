@@ -231,6 +231,8 @@ export namespace VideoChannelMediaResponse {
 
     accountId: string;
 
+    captionTracks: Array<Entity.CaptionTrack>;
+
     createdAt: string;
 
     type: 'Video';
@@ -249,9 +251,29 @@ export namespace VideoChannelMediaResponse {
 
     name?: string | null;
 
+    sourceLanguageCode?: string | null;
+
     updatedAt?: string | null;
 
     width?: number | null;
+  }
+
+  export namespace Entity {
+    export interface CaptionTrack {
+      isMachineTranslated: boolean;
+
+      label: string;
+
+      languageCode: string;
+
+      origin: string;
+
+      status: string;
+
+      url: string;
+
+      humanEditedAt?: string | null;
+    }
   }
 }
 

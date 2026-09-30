@@ -49,6 +49,7 @@ describe('resource videos', () => {
       mimeType: 'MP4',
       description: 'description',
       name: 'name',
+      sourceLanguageCode: 'sourceLanguageCode',
     });
   });
 
@@ -97,7 +98,10 @@ describe('resource videos', () => {
   });
 
   test('upload: required and optional params', async () => {
-    const response = await client.videos.upload('id', { mimeType: 'MP4' });
+    const response = await client.videos.upload('id', {
+      mimeType: 'MP4',
+      sourceLanguageCode: 'sourceLanguageCode',
+    });
   });
 
   test('transcript', async () => {
@@ -109,6 +113,13 @@ describe('resource videos', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('transcript: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.videos.transcript('id', { languageCode: 'languageCode' }, { path: '/_stainless_unknown_path' }),
+    ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
   });
 
   test('updateTranscript: only required params', async () => {
@@ -123,7 +134,44 @@ describe('resource videos', () => {
   });
 
   test('updateTranscript: required and optional params', async () => {
-    const response = await client.videos.updateTranscript('id', { content: 'x', format: 'SRT' });
+    const response = await client.videos.updateTranscript('id', {
+      content: 'x',
+      format: 'SRT',
+      languageCode: 'languageCode',
+    });
+  });
+
+  test('requestCaptionTranslation: only required params', async () => {
+    const responsePromise = client.videos.requestCaptionTranslation('id', { languageCode: 'languageCode' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('requestCaptionTranslation: required and optional params', async () => {
+    const response = await client.videos.requestCaptionTranslation('id', {
+      languageCode: 'languageCode',
+      replace: true,
+    });
+  });
+
+  test('cancelCaptionTranslation: only required params', async () => {
+    const responsePromise = client.videos.cancelCaptionTranslation('id', { languageCode: 'languageCode' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('cancelCaptionTranslation: required and optional params', async () => {
+    const response = await client.videos.cancelCaptionTranslation('id', { languageCode: 'languageCode' });
   });
 
   test('analytics: only required params', async () => {

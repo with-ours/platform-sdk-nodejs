@@ -162,8 +162,8 @@ describe('resource webAnalytics', () => {
     ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
   });
 
-  test('journey: only required params', async () => {
-    const responsePromise = client.webAnalytics.journey({
+  test('pathExplorer: only required params', async () => {
+    const responsePromise = client.webAnalytics.pathExplorer({
       from: '2026-07-01',
       path: 'path',
       to: '2026-07-31',
@@ -177,8 +177,8 @@ describe('resource webAnalytics', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('journey: required and optional params', async () => {
-    const response = await client.webAnalytics.journey({
+  test('pathExplorer: required and optional params', async () => {
+    const response = await client.webAnalytics.pathExplorer({
       from: '2026-07-01',
       path: 'path',
       to: '2026-07-31',

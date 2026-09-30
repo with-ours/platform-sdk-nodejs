@@ -52,6 +52,7 @@ describe('resource shortLinks', () => {
       client.shortLinks.create(
         {
           code: 'code',
+          forwardUtmToDestination: true,
           name: 'Spring Sale QR',
           qr: {},
           redirectUrl: 'https://example.com/spring',

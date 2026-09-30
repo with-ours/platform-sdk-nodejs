@@ -9,11 +9,11 @@ import { path } from '../internal/utils/path';
 export class Experiments extends APIResource {
   /**
    * List experiments for this account. Each experiment includes its full `variants`
-   * array (redirect URLs and DOM modifications), so a single paginated call returns
-   * a complete client-side experiment config. Supports cursor pagination and
-   * filtering by `status`, `type`, and free-text `search` matched against experiment
-   * id, name, and description. Combine filters with AND semantics. Requires scope:
-   * experiment:list
+   * array and complete primary and secondary metric definitions with any filtered
+   * event matchers, so a single paginated call returns a complete client-side
+   * experiment config. Supports cursor pagination and filtering by `status`, `type`,
+   * and free-text `search` matched against experiment id, name, and description.
+   * Combine filters with AND semantics. Requires scope: experiment:list
    *
    * @example
    * ```ts
@@ -50,7 +50,9 @@ export class Experiments extends APIResource {
   }
 
   /**
-   * Find a single experiment by ID. Requires scope: experiment:find
+   * Retrieve one experiment with its variants, lifecycle state, and complete primary
+   * and secondary metric definitions, including any filtered event matchers.
+   * Requires scope: experiment:find
    *
    * @example
    * ```ts
@@ -63,9 +65,12 @@ export class Experiments extends APIResource {
 
   /**
    * Partially update an experiment. Only the fields you send are changed, except
-   * renaming a non-draft legacy experiment with no stored key preserves its current
-   * name-derived key. Edits are allowed on draft, running, and paused experiments
-   * and are recorded in the change log. Only completed experiments return 409 with
+   * `targetingRules` and `metrics`, which are full nested replacements. Preserve
+   * every filtered matcher and condition returned by GET or the request returns
+   * `FILTERED_EXPERIMENT_METRIC_REQUIRES_FULL_REPLACEMENT`. Renaming a non-draft
+   * legacy experiment with no stored key preserves its current name-derived key.
+   * Edits are allowed on draft, running, and paused experiments and are recorded in
+   * the change log. Only completed experiments return 409 with
    * `A completed experiment can no longer be edited`. Use the lifecycle endpoints
    * (`/start`, `/pause`, `/resume`, `/stop`) to change status. Requires scope:
    * experiment:update
@@ -243,8 +248,9 @@ export class Experiments extends APIResource {
 
   /**
    * Aggregate per-variant impressions, conversions, conversion rate, and Bayesian
-   * probability-to-be-best across the experiment runtime window. Requires scope:
-   * experiment:find
+   * probability-to-be-best across the experiment runtime window. Select a saved goal
+   * with `goalId`; `eventName` remains available as a legacy selector. Requires
+   * scope: experiment:find
    *
    * @example
    * ```ts
@@ -265,8 +271,9 @@ export class Experiments extends APIResource {
    * metrics. The response includes common visitor, impression, readiness, evidence,
    * and data-quality fields plus the applicable method-specific result block.
    * Visitors are the inferential unit; impressions remain a delivery diagnostic.
-   * Secondary event overrides are labeled exploratory, and unsupported legacy plans
-   * suppress official evidence. Requires scope: experiment:find
+   * Select a saved goal with `goalId`; `eventName` remains available as a legacy
+   * selector. Secondary event overrides are labeled exploratory, and unsupported
+   * legacy plans suppress official evidence. Requires scope: experiment:find
    *
    * @example
    * ```ts
@@ -284,12 +291,13 @@ export class Experiments extends APIResource {
   /**
    * Per-day per-variant impressions, conversions, and conversion rate, sliced to a
    * date range. Use this to chart trends, compare windows, or zoom in on a specific
-   * period. Pass `startDate` / `endDate` (`YYYY-MM-DD`, UTC, both inclusive) to set
-   * the window; both default to the full experiment runtime when omitted, so the
-   * no-arg call returns every day from start to today (or to `stoppedAt` for
-   * completed experiments). The response orders days oldest-first and omits days
-   * with no impressions, so an empty `days` array means there was no measured
-   * traffic in the window. Requires scope: experiment:find
+   * period. Pass `goalId` to select a saved goal; `eventName` remains available as a
+   * legacy selector. Pass `startDate` / `endDate` (`YYYY-MM-DD`, UTC, both
+   * inclusive) to set the window; both default to the full experiment runtime when
+   * omitted, so the no-arg call returns every day from start to today (or to
+   * `stoppedAt` for completed experiments). The response orders days oldest-first
+   * and omits days with no impressions, so an empty `days` array means there was no
+   * measured traffic in the window. Requires scope: experiment:find
    *
    * @example
    * ```ts
@@ -585,6 +593,17 @@ export namespace ExperimentListResponse {
   export namespace Metrics {
     export interface Secondary {
       /**
+       * Stable identifier for selecting this saved goal in experiment results queries.
+       */
+      goalId: string;
+
+      /**
+       * Complete OR-list of event matchers. Each matcher is an event name plus an
+       * optional analytics filter.
+       */
+      eventMatchers?: Array<Secondary.EventMatcher> | null;
+
+      /**
        * Name of the event used to measure success for this metric.
        */
       eventName?: string | null;
@@ -594,6 +613,41 @@ export namespace ExperimentListResponse {
        * definition.
        */
       funnelId?: string | null;
+
+      valueMode?: boolean | null;
+
+      winsorize?: boolean | null;
+
+      winsorizePercentile?: number | null;
+    }
+
+    export namespace Secondary {
+      export interface EventMatcher {
+        /**
+         * Event name required by this OR branch.
+         */
+        eventName: string;
+
+        /**
+         * Optional analytics filter evaluated against the same event row as `eventName`.
+         */
+        filter?: EventMatcher.Filter;
+      }
+
+      export namespace EventMatcher {
+        /**
+         * Optional analytics filter evaluated against the same event row as `eventName`.
+         */
+        export interface Filter {
+          /**
+           * Analytics predicate or and/or/not tree. Use the analytics query catalog for
+           * supported properties and operators.
+           */
+          filter: unknown;
+
+          version: 1;
+        }
+      }
     }
   }
 
@@ -922,6 +976,17 @@ export namespace ExperimentCreateResponse {
   export namespace Metrics {
     export interface Secondary {
       /**
+       * Stable identifier for selecting this saved goal in experiment results queries.
+       */
+      goalId: string;
+
+      /**
+       * Complete OR-list of event matchers. Each matcher is an event name plus an
+       * optional analytics filter.
+       */
+      eventMatchers?: Array<Secondary.EventMatcher> | null;
+
+      /**
        * Name of the event used to measure success for this metric.
        */
       eventName?: string | null;
@@ -931,6 +996,41 @@ export namespace ExperimentCreateResponse {
        * definition.
        */
       funnelId?: string | null;
+
+      valueMode?: boolean | null;
+
+      winsorize?: boolean | null;
+
+      winsorizePercentile?: number | null;
+    }
+
+    export namespace Secondary {
+      export interface EventMatcher {
+        /**
+         * Event name required by this OR branch.
+         */
+        eventName: string;
+
+        /**
+         * Optional analytics filter evaluated against the same event row as `eventName`.
+         */
+        filter?: EventMatcher.Filter;
+      }
+
+      export namespace EventMatcher {
+        /**
+         * Optional analytics filter evaluated against the same event row as `eventName`.
+         */
+        export interface Filter {
+          /**
+           * Analytics predicate or and/or/not tree. Use the analytics query catalog for
+           * supported properties and operators.
+           */
+          filter: unknown;
+
+          version: 1;
+        }
+      }
     }
   }
 
@@ -1259,6 +1359,17 @@ export namespace ExperimentRetrieveResponse {
   export namespace Metrics {
     export interface Secondary {
       /**
+       * Stable identifier for selecting this saved goal in experiment results queries.
+       */
+      goalId: string;
+
+      /**
+       * Complete OR-list of event matchers. Each matcher is an event name plus an
+       * optional analytics filter.
+       */
+      eventMatchers?: Array<Secondary.EventMatcher> | null;
+
+      /**
        * Name of the event used to measure success for this metric.
        */
       eventName?: string | null;
@@ -1268,6 +1379,41 @@ export namespace ExperimentRetrieveResponse {
        * definition.
        */
       funnelId?: string | null;
+
+      valueMode?: boolean | null;
+
+      winsorize?: boolean | null;
+
+      winsorizePercentile?: number | null;
+    }
+
+    export namespace Secondary {
+      export interface EventMatcher {
+        /**
+         * Event name required by this OR branch.
+         */
+        eventName: string;
+
+        /**
+         * Optional analytics filter evaluated against the same event row as `eventName`.
+         */
+        filter?: EventMatcher.Filter;
+      }
+
+      export namespace EventMatcher {
+        /**
+         * Optional analytics filter evaluated against the same event row as `eventName`.
+         */
+        export interface Filter {
+          /**
+           * Analytics predicate or and/or/not tree. Use the analytics query catalog for
+           * supported properties and operators.
+           */
+          filter: unknown;
+
+          version: 1;
+        }
+      }
     }
   }
 
@@ -1596,6 +1742,17 @@ export namespace ExperimentUpdateResponse {
   export namespace Metrics {
     export interface Secondary {
       /**
+       * Stable identifier for selecting this saved goal in experiment results queries.
+       */
+      goalId: string;
+
+      /**
+       * Complete OR-list of event matchers. Each matcher is an event name plus an
+       * optional analytics filter.
+       */
+      eventMatchers?: Array<Secondary.EventMatcher> | null;
+
+      /**
        * Name of the event used to measure success for this metric.
        */
       eventName?: string | null;
@@ -1605,6 +1762,41 @@ export namespace ExperimentUpdateResponse {
        * definition.
        */
       funnelId?: string | null;
+
+      valueMode?: boolean | null;
+
+      winsorize?: boolean | null;
+
+      winsorizePercentile?: number | null;
+    }
+
+    export namespace Secondary {
+      export interface EventMatcher {
+        /**
+         * Event name required by this OR branch.
+         */
+        eventName: string;
+
+        /**
+         * Optional analytics filter evaluated against the same event row as `eventName`.
+         */
+        filter?: EventMatcher.Filter;
+      }
+
+      export namespace EventMatcher {
+        /**
+         * Optional analytics filter evaluated against the same event row as `eventName`.
+         */
+        export interface Filter {
+          /**
+           * Analytics predicate or and/or/not tree. Use the analytics query catalog for
+           * supported properties and operators.
+           */
+          filter: unknown;
+
+          version: 1;
+        }
+      }
     }
   }
 
@@ -1938,6 +2130,17 @@ export namespace ExperimentDuplicateResponse {
   export namespace Metrics {
     export interface Secondary {
       /**
+       * Stable identifier for selecting this saved goal in experiment results queries.
+       */
+      goalId: string;
+
+      /**
+       * Complete OR-list of event matchers. Each matcher is an event name plus an
+       * optional analytics filter.
+       */
+      eventMatchers?: Array<Secondary.EventMatcher> | null;
+
+      /**
        * Name of the event used to measure success for this metric.
        */
       eventName?: string | null;
@@ -1947,6 +2150,41 @@ export namespace ExperimentDuplicateResponse {
        * definition.
        */
       funnelId?: string | null;
+
+      valueMode?: boolean | null;
+
+      winsorize?: boolean | null;
+
+      winsorizePercentile?: number | null;
+    }
+
+    export namespace Secondary {
+      export interface EventMatcher {
+        /**
+         * Event name required by this OR branch.
+         */
+        eventName: string;
+
+        /**
+         * Optional analytics filter evaluated against the same event row as `eventName`.
+         */
+        filter?: EventMatcher.Filter;
+      }
+
+      export namespace EventMatcher {
+        /**
+         * Optional analytics filter evaluated against the same event row as `eventName`.
+         */
+        export interface Filter {
+          /**
+           * Analytics predicate or and/or/not tree. Use the analytics query catalog for
+           * supported properties and operators.
+           */
+          filter: unknown;
+
+          version: 1;
+        }
+      }
     }
   }
 
@@ -2174,6 +2412,17 @@ export namespace ExperimentStartResponse {
     export namespace Metrics {
       export interface Secondary {
         /**
+         * Stable identifier for selecting this saved goal in experiment results queries.
+         */
+        goalId: string;
+
+        /**
+         * Complete OR-list of event matchers. Each matcher is an event name plus an
+         * optional analytics filter.
+         */
+        eventMatchers?: Array<Secondary.EventMatcher> | null;
+
+        /**
          * Name of the event used to measure success for this metric.
          */
         eventName?: string | null;
@@ -2183,6 +2432,41 @@ export namespace ExperimentStartResponse {
          * definition.
          */
         funnelId?: string | null;
+
+        valueMode?: boolean | null;
+
+        winsorize?: boolean | null;
+
+        winsorizePercentile?: number | null;
+      }
+
+      export namespace Secondary {
+        export interface EventMatcher {
+          /**
+           * Event name required by this OR branch.
+           */
+          eventName: string;
+
+          /**
+           * Optional analytics filter evaluated against the same event row as `eventName`.
+           */
+          filter?: EventMatcher.Filter;
+        }
+
+        export namespace EventMatcher {
+          /**
+           * Optional analytics filter evaluated against the same event row as `eventName`.
+           */
+          export interface Filter {
+            /**
+             * Analytics predicate or and/or/not tree. Use the analytics query catalog for
+             * supported properties and operators.
+             */
+            filter: unknown;
+
+            version: 1;
+          }
+        }
       }
     }
 
@@ -2411,6 +2695,17 @@ export namespace ExperimentStopResponse {
     export namespace Metrics {
       export interface Secondary {
         /**
+         * Stable identifier for selecting this saved goal in experiment results queries.
+         */
+        goalId: string;
+
+        /**
+         * Complete OR-list of event matchers. Each matcher is an event name plus an
+         * optional analytics filter.
+         */
+        eventMatchers?: Array<Secondary.EventMatcher> | null;
+
+        /**
          * Name of the event used to measure success for this metric.
          */
         eventName?: string | null;
@@ -2420,6 +2715,41 @@ export namespace ExperimentStopResponse {
          * definition.
          */
         funnelId?: string | null;
+
+        valueMode?: boolean | null;
+
+        winsorize?: boolean | null;
+
+        winsorizePercentile?: number | null;
+      }
+
+      export namespace Secondary {
+        export interface EventMatcher {
+          /**
+           * Event name required by this OR branch.
+           */
+          eventName: string;
+
+          /**
+           * Optional analytics filter evaluated against the same event row as `eventName`.
+           */
+          filter?: EventMatcher.Filter;
+        }
+
+        export namespace EventMatcher {
+          /**
+           * Optional analytics filter evaluated against the same event row as `eventName`.
+           */
+          export interface Filter {
+            /**
+             * Analytics predicate or and/or/not tree. Use the analytics query catalog for
+             * supported properties and operators.
+             */
+            filter: unknown;
+
+            version: 1;
+          }
+        }
       }
     }
 
@@ -2648,6 +2978,17 @@ export namespace ExperimentRolloutResponse {
     export namespace Metrics {
       export interface Secondary {
         /**
+         * Stable identifier for selecting this saved goal in experiment results queries.
+         */
+        goalId: string;
+
+        /**
+         * Complete OR-list of event matchers. Each matcher is an event name plus an
+         * optional analytics filter.
+         */
+        eventMatchers?: Array<Secondary.EventMatcher> | null;
+
+        /**
          * Name of the event used to measure success for this metric.
          */
         eventName?: string | null;
@@ -2657,6 +2998,41 @@ export namespace ExperimentRolloutResponse {
          * definition.
          */
         funnelId?: string | null;
+
+        valueMode?: boolean | null;
+
+        winsorize?: boolean | null;
+
+        winsorizePercentile?: number | null;
+      }
+
+      export namespace Secondary {
+        export interface EventMatcher {
+          /**
+           * Event name required by this OR branch.
+           */
+          eventName: string;
+
+          /**
+           * Optional analytics filter evaluated against the same event row as `eventName`.
+           */
+          filter?: EventMatcher.Filter;
+        }
+
+        export namespace EventMatcher {
+          /**
+           * Optional analytics filter evaluated against the same event row as `eventName`.
+           */
+          export interface Filter {
+            /**
+             * Analytics predicate or and/or/not tree. Use the analytics query catalog for
+             * supported properties and operators.
+             */
+            filter: unknown;
+
+            version: 1;
+          }
+        }
       }
     }
 
@@ -2885,6 +3261,17 @@ export namespace ExperimentEndRolloutResponse {
     export namespace Metrics {
       export interface Secondary {
         /**
+         * Stable identifier for selecting this saved goal in experiment results queries.
+         */
+        goalId: string;
+
+        /**
+         * Complete OR-list of event matchers. Each matcher is an event name plus an
+         * optional analytics filter.
+         */
+        eventMatchers?: Array<Secondary.EventMatcher> | null;
+
+        /**
          * Name of the event used to measure success for this metric.
          */
         eventName?: string | null;
@@ -2894,6 +3281,41 @@ export namespace ExperimentEndRolloutResponse {
          * definition.
          */
         funnelId?: string | null;
+
+        valueMode?: boolean | null;
+
+        winsorize?: boolean | null;
+
+        winsorizePercentile?: number | null;
+      }
+
+      export namespace Secondary {
+        export interface EventMatcher {
+          /**
+           * Event name required by this OR branch.
+           */
+          eventName: string;
+
+          /**
+           * Optional analytics filter evaluated against the same event row as `eventName`.
+           */
+          filter?: EventMatcher.Filter;
+        }
+
+        export namespace EventMatcher {
+          /**
+           * Optional analytics filter evaluated against the same event row as `eventName`.
+           */
+          export interface Filter {
+            /**
+             * Analytics predicate or and/or/not tree. Use the analytics query catalog for
+             * supported properties and operators.
+             */
+            filter: unknown;
+
+            version: 1;
+          }
+        }
       }
     }
 
@@ -3104,6 +3526,17 @@ export namespace ExperimentWinnerResponse {
   export namespace Metrics {
     export interface Secondary {
       /**
+       * Stable identifier for selecting this saved goal in experiment results queries.
+       */
+      goalId: string;
+
+      /**
+       * Complete OR-list of event matchers. Each matcher is an event name plus an
+       * optional analytics filter.
+       */
+      eventMatchers?: Array<Secondary.EventMatcher> | null;
+
+      /**
        * Name of the event used to measure success for this metric.
        */
       eventName?: string | null;
@@ -3113,6 +3546,41 @@ export namespace ExperimentWinnerResponse {
        * definition.
        */
       funnelId?: string | null;
+
+      valueMode?: boolean | null;
+
+      winsorize?: boolean | null;
+
+      winsorizePercentile?: number | null;
+    }
+
+    export namespace Secondary {
+      export interface EventMatcher {
+        /**
+         * Event name required by this OR branch.
+         */
+        eventName: string;
+
+        /**
+         * Optional analytics filter evaluated against the same event row as `eventName`.
+         */
+        filter?: EventMatcher.Filter;
+      }
+
+      export namespace EventMatcher {
+        /**
+         * Optional analytics filter evaluated against the same event row as `eventName`.
+         */
+        export interface Filter {
+          /**
+           * Analytics predicate or and/or/not tree. Use the analytics query catalog for
+           * supported properties and operators.
+           */
+          filter: unknown;
+
+          version: 1;
+        }
+      }
     }
   }
 
@@ -3340,6 +3808,17 @@ export namespace ExperimentPauseResponse {
     export namespace Metrics {
       export interface Secondary {
         /**
+         * Stable identifier for selecting this saved goal in experiment results queries.
+         */
+        goalId: string;
+
+        /**
+         * Complete OR-list of event matchers. Each matcher is an event name plus an
+         * optional analytics filter.
+         */
+        eventMatchers?: Array<Secondary.EventMatcher> | null;
+
+        /**
          * Name of the event used to measure success for this metric.
          */
         eventName?: string | null;
@@ -3349,6 +3828,41 @@ export namespace ExperimentPauseResponse {
          * definition.
          */
         funnelId?: string | null;
+
+        valueMode?: boolean | null;
+
+        winsorize?: boolean | null;
+
+        winsorizePercentile?: number | null;
+      }
+
+      export namespace Secondary {
+        export interface EventMatcher {
+          /**
+           * Event name required by this OR branch.
+           */
+          eventName: string;
+
+          /**
+           * Optional analytics filter evaluated against the same event row as `eventName`.
+           */
+          filter?: EventMatcher.Filter;
+        }
+
+        export namespace EventMatcher {
+          /**
+           * Optional analytics filter evaluated against the same event row as `eventName`.
+           */
+          export interface Filter {
+            /**
+             * Analytics predicate or and/or/not tree. Use the analytics query catalog for
+             * supported properties and operators.
+             */
+            filter: unknown;
+
+            version: 1;
+          }
+        }
       }
     }
 
@@ -3577,6 +4091,17 @@ export namespace ExperimentResumeResponse {
     export namespace Metrics {
       export interface Secondary {
         /**
+         * Stable identifier for selecting this saved goal in experiment results queries.
+         */
+        goalId: string;
+
+        /**
+         * Complete OR-list of event matchers. Each matcher is an event name plus an
+         * optional analytics filter.
+         */
+        eventMatchers?: Array<Secondary.EventMatcher> | null;
+
+        /**
          * Name of the event used to measure success for this metric.
          */
         eventName?: string | null;
@@ -3586,6 +4111,41 @@ export namespace ExperimentResumeResponse {
          * definition.
          */
         funnelId?: string | null;
+
+        valueMode?: boolean | null;
+
+        winsorize?: boolean | null;
+
+        winsorizePercentile?: number | null;
+      }
+
+      export namespace Secondary {
+        export interface EventMatcher {
+          /**
+           * Event name required by this OR branch.
+           */
+          eventName: string;
+
+          /**
+           * Optional analytics filter evaluated against the same event row as `eventName`.
+           */
+          filter?: EventMatcher.Filter;
+        }
+
+        export namespace EventMatcher {
+          /**
+           * Optional analytics filter evaluated against the same event row as `eventName`.
+           */
+          export interface Filter {
+            /**
+             * Analytics predicate or and/or/not tree. Use the analytics query catalog for
+             * supported properties and operators.
+             */
+            filter: unknown;
+
+            version: 1;
+          }
+        }
       }
     }
 
@@ -3967,7 +4527,8 @@ export namespace ExperimentCreateParams {
    */
   export interface Metrics {
     /**
-     * Primary success metric. When provided, `eventName` must be a non-blank string.
+     * Primary success metric. Filtered goals require an explicit stable `eventName`
+     * anchor plus the complete `eventMatchers` array.
      */
     primary?: Metrics.Primary | null;
 
@@ -3979,9 +4540,16 @@ export namespace ExperimentCreateParams {
 
   export namespace Metrics {
     /**
-     * Primary success metric. When provided, `eventName` must be a non-blank string.
+     * Primary success metric. Filtered goals require an explicit stable `eventName`
+     * anchor plus the complete `eventMatchers` array.
      */
     export interface Primary {
+      /**
+       * Complete OR-list of event matchers. Filtered goals require the explicit stable
+       * `eventName` anchor and every matcher on replacement.
+       */
+      eventMatchers?: Array<Primary.EventMatcher> | null;
+
       /**
        * Event name to use as the goal for this metric.
        */
@@ -3992,10 +4560,57 @@ export namespace ExperimentCreateParams {
        * funnel definition.
        */
       funnelId?: string | null;
+
+      /**
+       * Optional stable identifier for this goal. Use the returned identifier to select
+       * this saved goal in results queries.
+       */
+      goalId?: string | null;
+
+      valueMode?: boolean | null;
+
+      winsorize?: boolean | null;
+
+      winsorizePercentile?: number | null;
+    }
+
+    export namespace Primary {
+      export interface EventMatcher {
+        /**
+         * Event name required by this OR branch.
+         */
+        eventName: string;
+
+        /**
+         * Optional analytics filter evaluated against the same event row as `eventName`.
+         */
+        filter?: EventMatcher.Filter;
+      }
+
+      export namespace EventMatcher {
+        /**
+         * Optional analytics filter evaluated against the same event row as `eventName`.
+         */
+        export interface Filter {
+          /**
+           * Analytics predicate or and/or/not tree. Use the analytics query catalog for
+           * supported properties and operators.
+           */
+          filter: unknown;
+
+          version: 1;
+        }
+      }
     }
 
     export interface Secondary {
       /**
+       * Complete OR-list of event matchers. Filtered goals require the explicit stable
+       * `eventName` anchor and every matcher on replacement.
+       */
+      eventMatchers?: Array<Secondary.EventMatcher> | null;
+
+      /**
        * Event name to use as the goal for this metric.
        */
       eventName?: string | null;
@@ -4005,6 +4620,47 @@ export namespace ExperimentCreateParams {
        * funnel definition.
        */
       funnelId?: string | null;
+
+      /**
+       * Optional stable identifier for this goal. Use the returned identifier to select
+       * this saved goal in results queries.
+       */
+      goalId?: string | null;
+
+      valueMode?: boolean | null;
+
+      winsorize?: boolean | null;
+
+      winsorizePercentile?: number | null;
+    }
+
+    export namespace Secondary {
+      export interface EventMatcher {
+        /**
+         * Event name required by this OR branch.
+         */
+        eventName: string;
+
+        /**
+         * Optional analytics filter evaluated against the same event row as `eventName`.
+         */
+        filter?: EventMatcher.Filter;
+      }
+
+      export namespace EventMatcher {
+        /**
+         * Optional analytics filter evaluated against the same event row as `eventName`.
+         */
+        export interface Filter {
+          /**
+           * Analytics predicate or and/or/not tree. Use the analytics query catalog for
+           * supported properties and operators.
+           */
+          filter: unknown;
+
+          version: 1;
+        }
+      }
     }
   }
 
@@ -4103,9 +4759,9 @@ export interface ExperimentUpdateParams {
   key?: string | null;
 
   /**
-   * Updated goal events. Send the full nested object — replaces the previous value,
-   * not merged. If you send `metrics.primary`, `metrics.primary.eventName` must be a
-   * non-blank string.
+   * Updated goal metrics. Send the full nested object — replaces the previous value,
+   * not merged. Preserve every filtered matcher and filter returned by GET or the
+   * request returns `FILTERED_EXPERIMENT_METRIC_REQUIRES_FULL_REPLACEMENT`.
    */
   metrics?: ExperimentUpdateParams.Metrics | null;
 
@@ -4128,13 +4784,14 @@ export interface ExperimentUpdateParams {
 
 export namespace ExperimentUpdateParams {
   /**
-   * Updated goal events. Send the full nested object — replaces the previous value,
-   * not merged. If you send `metrics.primary`, `metrics.primary.eventName` must be a
-   * non-blank string.
+   * Updated goal metrics. Send the full nested object — replaces the previous value,
+   * not merged. Preserve every filtered matcher and filter returned by GET or the
+   * request returns `FILTERED_EXPERIMENT_METRIC_REQUIRES_FULL_REPLACEMENT`.
    */
   export interface Metrics {
     /**
-     * Primary success metric. When provided, `eventName` must be a non-blank string.
+     * Primary success metric. Filtered goals require an explicit stable `eventName`
+     * anchor plus the complete `eventMatchers` array.
      */
     primary?: Metrics.Primary | null;
 
@@ -4146,9 +4803,16 @@ export namespace ExperimentUpdateParams {
 
   export namespace Metrics {
     /**
-     * Primary success metric. When provided, `eventName` must be a non-blank string.
+     * Primary success metric. Filtered goals require an explicit stable `eventName`
+     * anchor plus the complete `eventMatchers` array.
      */
     export interface Primary {
+      /**
+       * Complete OR-list of event matchers. Filtered goals require the explicit stable
+       * `eventName` anchor and every matcher on replacement.
+       */
+      eventMatchers?: Array<Primary.EventMatcher> | null;
+
       /**
        * Event name to use as the goal for this metric.
        */
@@ -4159,10 +4823,57 @@ export namespace ExperimentUpdateParams {
        * funnel definition.
        */
       funnelId?: string | null;
+
+      /**
+       * Optional stable identifier for this goal. Use the returned identifier to select
+       * this saved goal in results queries.
+       */
+      goalId?: string | null;
+
+      valueMode?: boolean | null;
+
+      winsorize?: boolean | null;
+
+      winsorizePercentile?: number | null;
+    }
+
+    export namespace Primary {
+      export interface EventMatcher {
+        /**
+         * Event name required by this OR branch.
+         */
+        eventName: string;
+
+        /**
+         * Optional analytics filter evaluated against the same event row as `eventName`.
+         */
+        filter?: EventMatcher.Filter;
+      }
+
+      export namespace EventMatcher {
+        /**
+         * Optional analytics filter evaluated against the same event row as `eventName`.
+         */
+        export interface Filter {
+          /**
+           * Analytics predicate or and/or/not tree. Use the analytics query catalog for
+           * supported properties and operators.
+           */
+          filter: unknown;
+
+          version: 1;
+        }
+      }
     }
 
     export interface Secondary {
       /**
+       * Complete OR-list of event matchers. Filtered goals require the explicit stable
+       * `eventName` anchor and every matcher on replacement.
+       */
+      eventMatchers?: Array<Secondary.EventMatcher> | null;
+
+      /**
        * Event name to use as the goal for this metric.
        */
       eventName?: string | null;
@@ -4172,6 +4883,47 @@ export namespace ExperimentUpdateParams {
        * funnel definition.
        */
       funnelId?: string | null;
+
+      /**
+       * Optional stable identifier for this goal. Use the returned identifier to select
+       * this saved goal in results queries.
+       */
+      goalId?: string | null;
+
+      valueMode?: boolean | null;
+
+      winsorize?: boolean | null;
+
+      winsorizePercentile?: number | null;
+    }
+
+    export namespace Secondary {
+      export interface EventMatcher {
+        /**
+         * Event name required by this OR branch.
+         */
+        eventName: string;
+
+        /**
+         * Optional analytics filter evaluated against the same event row as `eventName`.
+         */
+        filter?: EventMatcher.Filter;
+      }
+
+      export namespace EventMatcher {
+        /**
+         * Optional analytics filter evaluated against the same event row as `eventName`.
+         */
+        export interface Filter {
+          /**
+           * Analytics predicate or and/or/not tree. Use the analytics query catalog for
+           * supported properties and operators.
+           */
+          filter: unknown;
+
+          version: 1;
+        }
+      }
     }
   }
 
@@ -4316,18 +5068,32 @@ export interface ExperimentResumeParams {
 
 export interface ExperimentResultsParams {
   /**
-   * Optional override for the conversion event name. When omitted, the experiment
-   * primary metric event is used.
+   * Legacy selector or override for the conversion event name. Use `goalId` to
+   * select a specific saved goal when multiple goals share an event name. When both
+   * are omitted, the experiment primary metric is used.
    */
   eventName?: string;
+
+  /**
+   * Optional identifier of a saved goal to report. Use this to distinguish goals
+   * that share an event name.
+   */
+  goalId?: string;
 }
 
 export interface ExperimentAnalysisParams {
   /**
-   * Optional override for the conversion event name. When omitted, the experiment
-   * primary metric event is used.
+   * Legacy selector or override for the conversion event name. Use `goalId` to
+   * select a specific saved goal when multiple goals share an event name. When both
+   * are omitted, the experiment primary metric is used.
    */
   eventName?: string;
+
+  /**
+   * Optional identifier of a saved goal to report. Use this to distinguish goals
+   * that share an event name.
+   */
+  goalId?: string;
 }
 
 export interface ExperimentResultsTimeSeriesParams {
@@ -4340,10 +5106,17 @@ export interface ExperimentResultsTimeSeriesParams {
   endDate?: string;
 
   /**
-   * Optional override for the conversion event name. When omitted, the experiment
-   * primary metric event is used.
+   * Legacy selector or override for the conversion event name. Use `goalId` to
+   * select a specific saved goal when multiple goals share an event name. When both
+   * are omitted, the experiment primary metric is used.
    */
   eventName?: string;
+
+  /**
+   * Optional identifier of a saved goal to report. Use this to distinguish goals
+   * that share an event name.
+   */
+  goalId?: string;
 
   /**
    * Inclusive lower bound of the response window, as a UTC calendar day in

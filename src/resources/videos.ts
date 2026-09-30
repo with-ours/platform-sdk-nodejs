@@ -109,8 +109,12 @@ export class Videos extends APIResource {
    * const response = await client.videos.transcript('id');
    * ```
    */
-  transcript(id: string, options?: RequestOptions): APIPromise<VideoTranscriptResponse> {
-    return this._client.get(path`/rest/v1/videos/${id}/transcript`, options);
+  transcript(
+    id: string,
+    query: VideoTranscriptParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<VideoTranscriptResponse> {
+    return this._client.get(path`/rest/v1/videos/${id}/transcript`, { query, ...options });
   }
 
   /**
@@ -132,6 +136,46 @@ export class Videos extends APIResource {
     options?: RequestOptions,
   ): APIPromise<VideoUpdateTranscriptResponse> {
     return this._client.put(path`/rest/v1/videos/${id}/transcript`, { body, ...options });
+  }
+
+  /**
+   * Queue a target-language caption translation. Specify replace to explicitly
+   * overwrite a track. Requires scope: media:update
+   *
+   * @example
+   * ```ts
+   * const response =
+   *   await client.videos.requestCaptionTranslation('id', {
+   *     languageCode: 'languageCode',
+   *   });
+   * ```
+   */
+  requestCaptionTranslation(
+    id: string,
+    body: VideoRequestCaptionTranslationParams,
+    options?: RequestOptions,
+  ): APIPromise<VideoRequestCaptionTranslationResponse> {
+    return this._client.post(path`/rest/v1/videos/${id}/translate`, { body, ...options });
+  }
+
+  /**
+   * Cancel a queued or in-progress language translation without modifying other
+   * tracks. Requires scope: media:update
+   *
+   * @example
+   * ```ts
+   * const response =
+   *   await client.videos.cancelCaptionTranslation('id', {
+   *     languageCode: 'languageCode',
+   *   });
+   * ```
+   */
+  cancelCaptionTranslation(
+    id: string,
+    body: VideoCancelCaptionTranslationParams,
+    options?: RequestOptions,
+  ): APIPromise<VideoCancelCaptionTranslationResponse> {
+    return this._client.post(path`/rest/v1/videos/${id}/cancel-translation`, { body, ...options });
   }
 
   /**
@@ -182,6 +226,8 @@ export interface VideoListResponse {
 
   accountId: string;
 
+  captionTracks: Array<VideoListResponse.CaptionTrack>;
+
   createdAt: string;
 
   type: 'Video';
@@ -200,15 +246,37 @@ export interface VideoListResponse {
 
   name?: string | null;
 
+  sourceLanguageCode?: string | null;
+
   updatedAt?: string | null;
 
   width?: number | null;
+}
+
+export namespace VideoListResponse {
+  export interface CaptionTrack {
+    isMachineTranslated: boolean;
+
+    label: string;
+
+    languageCode: string;
+
+    origin: string;
+
+    status: string;
+
+    url: string;
+
+    humanEditedAt?: string | null;
+  }
 }
 
 export interface VideoCreateResponse {
   id: string;
 
   accountId: string;
+
+  captionTracks: Array<VideoCreateResponse.CaptionTrack>;
 
   createdAt: string;
 
@@ -230,12 +298,30 @@ export interface VideoCreateResponse {
 
   name?: string | null;
 
+  sourceLanguageCode?: string | null;
+
   updatedAt?: string | null;
 
   width?: number | null;
 }
 
 export namespace VideoCreateResponse {
+  export interface CaptionTrack {
+    isMachineTranslated: boolean;
+
+    label: string;
+
+    languageCode: string;
+
+    origin: string;
+
+    status: string;
+
+    url: string;
+
+    humanEditedAt?: string | null;
+  }
+
   export interface Upload {
     mimeType: 'MP4' | 'WEBM';
 
@@ -247,6 +333,8 @@ export interface VideoRetrieveResponse {
   id: string;
 
   accountId: string;
+
+  captionTracks: Array<VideoRetrieveResponse.CaptionTrack>;
 
   createdAt: string;
 
@@ -268,15 +356,37 @@ export interface VideoRetrieveResponse {
 
   resolvedValues?: unknown | null;
 
+  sourceLanguageCode?: string | null;
+
   updatedAt?: string | null;
 
   width?: number | null;
+}
+
+export namespace VideoRetrieveResponse {
+  export interface CaptionTrack {
+    isMachineTranslated: boolean;
+
+    label: string;
+
+    languageCode: string;
+
+    origin: string;
+
+    status: string;
+
+    url: string;
+
+    humanEditedAt?: string | null;
+  }
 }
 
 export interface VideoUpdateResponse {
   id: string;
 
   accountId: string;
+
+  captionTracks: Array<VideoUpdateResponse.CaptionTrack>;
 
   createdAt: string;
 
@@ -296,9 +406,29 @@ export interface VideoUpdateResponse {
 
   name?: string | null;
 
+  sourceLanguageCode?: string | null;
+
   updatedAt?: string | null;
 
   width?: number | null;
+}
+
+export namespace VideoUpdateResponse {
+  export interface CaptionTrack {
+    isMachineTranslated: boolean;
+
+    label: string;
+
+    languageCode: string;
+
+    origin: string;
+
+    status: string;
+
+    url: string;
+
+    humanEditedAt?: string | null;
+  }
 }
 
 export interface VideoDeleteResponse {
@@ -322,6 +452,8 @@ export interface VideoUpdateTranscriptResponse {
 
   accountId: string;
 
+  captionTracks: Array<VideoUpdateTranscriptResponse.CaptionTrack>;
+
   createdAt: string;
 
   type: 'Video';
@@ -340,9 +472,129 @@ export interface VideoUpdateTranscriptResponse {
 
   name?: string | null;
 
+  sourceLanguageCode?: string | null;
+
   updatedAt?: string | null;
 
   width?: number | null;
+}
+
+export namespace VideoUpdateTranscriptResponse {
+  export interface CaptionTrack {
+    isMachineTranslated: boolean;
+
+    label: string;
+
+    languageCode: string;
+
+    origin: string;
+
+    status: string;
+
+    url: string;
+
+    humanEditedAt?: string | null;
+  }
+}
+
+export interface VideoRequestCaptionTranslationResponse {
+  id: string;
+
+  accountId: string;
+
+  captionTracks: Array<VideoRequestCaptionTranslationResponse.CaptionTrack>;
+
+  createdAt: string;
+
+  type: 'Video';
+
+  captionsUpdatedAt?: string | null;
+
+  captionsUpdatedByName?: string | null;
+
+  description?: string | null;
+
+  duration?: number | null;
+
+  hasVideoUpload?: boolean | null;
+
+  height?: number | null;
+
+  name?: string | null;
+
+  sourceLanguageCode?: string | null;
+
+  updatedAt?: string | null;
+
+  width?: number | null;
+}
+
+export namespace VideoRequestCaptionTranslationResponse {
+  export interface CaptionTrack {
+    isMachineTranslated: boolean;
+
+    label: string;
+
+    languageCode: string;
+
+    origin: string;
+
+    status: string;
+
+    url: string;
+
+    humanEditedAt?: string | null;
+  }
+}
+
+export interface VideoCancelCaptionTranslationResponse {
+  id: string;
+
+  accountId: string;
+
+  captionTracks: Array<VideoCancelCaptionTranslationResponse.CaptionTrack>;
+
+  createdAt: string;
+
+  type: 'Video';
+
+  captionsUpdatedAt?: string | null;
+
+  captionsUpdatedByName?: string | null;
+
+  description?: string | null;
+
+  duration?: number | null;
+
+  hasVideoUpload?: boolean | null;
+
+  height?: number | null;
+
+  name?: string | null;
+
+  sourceLanguageCode?: string | null;
+
+  updatedAt?: string | null;
+
+  width?: number | null;
+}
+
+export namespace VideoCancelCaptionTranslationResponse {
+  export interface CaptionTrack {
+    isMachineTranslated: boolean;
+
+    label: string;
+
+    languageCode: string;
+
+    origin: string;
+
+    status: string;
+
+    url: string;
+
+    humanEditedAt?: string | null;
+  }
 }
 
 export interface VideoAnalyticsResponse {
@@ -410,6 +662,8 @@ export interface VideoCreateParams {
    * Video title. Defaults to `New Video` when omitted.
    */
   name?: string | null;
+
+  sourceLanguageCode?: string | null;
 }
 
 export interface VideoUpdateParams {
@@ -431,6 +685,12 @@ export interface VideoUploadParams {
    * Content type for the replacement original video: `MP4` or `WEBM`.
    */
   mimeType: 'MP4' | 'WEBM';
+
+  sourceLanguageCode?: string;
+}
+
+export interface VideoTranscriptParams {
+  languageCode?: string;
 }
 
 export interface VideoUpdateTranscriptParams {
@@ -444,6 +704,18 @@ export interface VideoUpdateTranscriptParams {
    * saved.
    */
   format: 'SRT' | 'VTT';
+
+  languageCode?: string | null;
+}
+
+export interface VideoRequestCaptionTranslationParams {
+  languageCode: string;
+
+  replace?: boolean | null;
+}
+
+export interface VideoCancelCaptionTranslationParams {
+  languageCode: string;
 }
 
 export interface VideoAnalyticsParams {
@@ -501,6 +773,8 @@ export declare namespace Videos {
     type VideoUploadResponse as VideoUploadResponse,
     type VideoTranscriptResponse as VideoTranscriptResponse,
     type VideoUpdateTranscriptResponse as VideoUpdateTranscriptResponse,
+    type VideoRequestCaptionTranslationResponse as VideoRequestCaptionTranslationResponse,
+    type VideoCancelCaptionTranslationResponse as VideoCancelCaptionTranslationResponse,
     type VideoAnalyticsResponse as VideoAnalyticsResponse,
     type VideoAnalyticsTimeseriesResponse as VideoAnalyticsTimeseriesResponse,
     type VideoListResponsesCursor as VideoListResponsesCursor,
@@ -508,7 +782,10 @@ export declare namespace Videos {
     type VideoCreateParams as VideoCreateParams,
     type VideoUpdateParams as VideoUpdateParams,
     type VideoUploadParams as VideoUploadParams,
+    type VideoTranscriptParams as VideoTranscriptParams,
     type VideoUpdateTranscriptParams as VideoUpdateTranscriptParams,
+    type VideoRequestCaptionTranslationParams as VideoRequestCaptionTranslationParams,
+    type VideoCancelCaptionTranslationParams as VideoCancelCaptionTranslationParams,
     type VideoAnalyticsParams as VideoAnalyticsParams,
     type VideoAnalyticsTimeseriesParams as VideoAnalyticsTimeseriesParams,
   };
