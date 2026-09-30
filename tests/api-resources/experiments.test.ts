@@ -59,8 +59,42 @@ describe('resource experiments', () => {
       includeQueryString: true,
       key: 'homepage-hero-headline-test',
       metrics: {
-        primary: { eventName: 'demo_requested', funnelId: 'funnelId' },
-        secondary: [{ eventName: 'demo_requested', funnelId: 'funnelId' }],
+        primary: {
+          eventMatchers: [
+            {
+              eventName: 'x',
+              filter: {
+                filter: {},
+                version: 1,
+              },
+            },
+          ],
+          eventName: 'demo_requested',
+          funnelId: 'funnelId',
+          goalId: 'goalId',
+          valueMode: true,
+          winsorize: true,
+          winsorizePercentile: 0,
+        },
+        secondary: [
+          {
+            eventMatchers: [
+              {
+                eventName: 'x',
+                filter: {
+                  filter: {},
+                  version: 1,
+                },
+              },
+            ],
+            eventName: 'demo_requested',
+            funnelId: 'funnelId',
+            goalId: 'goalId',
+            valueMode: true,
+            winsorize: true,
+            winsorizePercentile: 0,
+          },
+        ],
       },
       targetingRules: {
         urlPatterns: ['/pricing*', 'get.example.com/learn-more'],
@@ -265,7 +299,11 @@ describe('resource experiments', () => {
   test('results: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.experiments.results('id', { eventName: 'demo_requested' }, { path: '/_stainless_unknown_path' }),
+      client.experiments.results(
+        'id',
+        { eventName: 'demo_requested', goalId: 'goal_checkout_complete' },
+        { path: '/_stainless_unknown_path' },
+      ),
     ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
   });
 
@@ -285,7 +323,7 @@ describe('resource experiments', () => {
     await expect(
       client.experiments.analysis(
         'id',
-        { eventName: 'demo_requested' },
+        { eventName: 'demo_requested', goalId: 'goal_checkout_complete' },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
@@ -310,6 +348,7 @@ describe('resource experiments', () => {
         {
           endDate: '2026-04-30',
           eventName: 'demo_requested',
+          goalId: 'goal_checkout_complete',
           startDate: '2026-04-01',
         },
         { path: '/_stainless_unknown_path' },

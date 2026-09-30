@@ -21,12 +21,16 @@ export class WebScanners extends APIResource {
   }
 
   /**
-   * Create a new web scanner for a root domain. A first scan is enqueued
-   * automatically after creation on a best-effort basis. `rootDomain` is required;
-   * missing, empty, or malformed values are rejected as HTTP 400. Everything else
-   * falls back to defaults (`status: Enabled`, `urlLimit: 100`, no excluded
-   * patterns, no extra seed URLs). The returned entity is the created scanner row
-   * and may not yet reflect async scan-state changes. Requires scope:
+   * Create a new web scanner for a root domain. Call GET /rest/v1/web-scanners first
+   * to check for an existing scanner: each successful request creates a new scanner,
+   * even when the root domain is already used. If the response is ambiguous, check
+   * the list before retrying to avoid creating a duplicate. A first scan is enqueued
+   * automatically after creation on a best-effort basis; the returned entity may not
+   * yet reflect asynchronous scan-state changes. `rootDomain` is required; missing,
+   * empty, or malformed values are rejected as HTTP 400. Everything else falls back
+   * to defaults (`status: Enabled`, `urlLimit: 100`, `scanSchedule: weekly`, no
+   * excluded patterns, no extra seed URLs). Invalid configuration or account limits
+   * return HTTP 409. Requires scope: `webScanner:create`. Requires scope:
    * webScanner:create
    *
    * @example
@@ -205,14 +209,15 @@ export class WebScanners extends APIResource {
    * List the third-party trackers (requests) found on a scan run, with their risk,
    * category, the pages they were seen on, redacted deterministic PII/PHI data-flow
    * metadata, and whether each host is already covered by a CMP consent service.
-   * Data-flow findings include only recipient metadata, categories, safe field
-   * names, and counts; query and body values are never returned. Defaults to the
-   * latest run; pass `date` (an ISO-8601 timestamp; only the calendar day is used to
-   * select the run) to read an earlier run. Documented exception to the
-   * cursor-pagination standard: paginates with `limit` and `offset` because each run
-   * is an immutable snapshot. A host that is neither covered (`coveredByCmp: false`)
-   * nor matched by a suppression rule still needs a triage decision — resolve it by
-   * adding the host to a CMP consent service or by creating a suppression rule with
+   * Data-flow findings include only recipient metadata, categories, source
+   * locations, safe query/body field names when available, and counts; matched
+   * query, body, and pathname values are never returned. Defaults to the latest run;
+   * pass `date` (an ISO-8601 timestamp; only the calendar day is used to select the
+   * run) to read an earlier run. Documented exception to the cursor-pagination
+   * standard: paginates with `limit` and `offset` because each run is an immutable
+   * snapshot. A host that is neither covered (`coveredByCmp: false`) nor matched by
+   * a suppression rule still needs a triage decision — resolve it by adding the host
+   * to a CMP consent service or by creating a suppression rule with
    * `POST /rest/v1/web-scanner-rules`. Use `GET /rest/v1/web-scanners/{id}/summary`
    * for the rolled-up counts. Requires scope: webScanner:find
    *
@@ -894,7 +899,7 @@ export namespace WebScannerFindingsResponse {
           | 'phone'
           | 'ssn';
 
-        source: 'query_parameter' | 'request_body';
+        source: 'query_parameter' | 'request_body' | 'url_path';
 
         encoding?: string | null;
 
@@ -1152,7 +1157,7 @@ export namespace WebScannerSummaryResponse {
           | 'phone'
           | 'ssn';
 
-        source: 'query_parameter' | 'request_body';
+        source: 'query_parameter' | 'request_body' | 'url_path';
 
         encoding?: string | null;
 
@@ -1314,7 +1319,7 @@ export namespace WebScannerDecisionQueueResponse {
           | 'phone'
           | 'ssn';
 
-        source: 'query_parameter' | 'request_body';
+        source: 'query_parameter' | 'request_body' | 'url_path';
 
         encoding?: string | null;
 
@@ -1365,6 +1370,9 @@ export interface WebScannerCreateParams {
    */
   includedUrls?: Array<string> | null;
 
+  /**
+   * Optional display name for this web scanner.
+   */
   name?: string | null;
 
   /**
@@ -1375,6 +1383,9 @@ export interface WebScannerCreateParams {
    */
   scanSchedule?: 'daily' | 'manual' | 'monthly' | 'weekly';
 
+  /**
+   * Whether this web scanner is enabled. Defaults to `Enabled`.
+   */
   status?: 'Disabled' | 'Enabled';
 
   /**

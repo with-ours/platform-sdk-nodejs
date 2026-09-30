@@ -552,6 +552,8 @@ Types:
 - <code><a href="./src/resources/videos.ts">VideoUploadResponse</a></code>
 - <code><a href="./src/resources/videos.ts">VideoTranscriptResponse</a></code>
 - <code><a href="./src/resources/videos.ts">VideoUpdateTranscriptResponse</a></code>
+- <code><a href="./src/resources/videos.ts">VideoRequestCaptionTranslationResponse</a></code>
+- <code><a href="./src/resources/videos.ts">VideoCancelCaptionTranslationResponse</a></code>
 - <code><a href="./src/resources/videos.ts">VideoAnalyticsResponse</a></code>
 - <code><a href="./src/resources/videos.ts">VideoAnalyticsTimeseriesResponse</a></code>
 
@@ -563,8 +565,10 @@ Methods:
 - <code title="patch /rest/v1/videos/{id}">client.videos.<a href="./src/resources/videos.ts">update</a>(id, { ...params }) -> VideoUpdateResponse</code>
 - <code title="delete /rest/v1/videos/{id}">client.videos.<a href="./src/resources/videos.ts">delete</a>(id) -> VideoDeleteResponse</code>
 - <code title="post /rest/v1/videos/{id}/upload">client.videos.<a href="./src/resources/videos.ts">upload</a>(id, { ...params }) -> VideoUploadResponse</code>
-- <code title="get /rest/v1/videos/{id}/transcript">client.videos.<a href="./src/resources/videos.ts">transcript</a>(id) -> VideoTranscriptResponse</code>
+- <code title="get /rest/v1/videos/{id}/transcript">client.videos.<a href="./src/resources/videos.ts">transcript</a>(id, { ...params }) -> VideoTranscriptResponse</code>
 - <code title="put /rest/v1/videos/{id}/transcript">client.videos.<a href="./src/resources/videos.ts">updateTranscript</a>(id, { ...params }) -> VideoUpdateTranscriptResponse</code>
+- <code title="post /rest/v1/videos/{id}/translate">client.videos.<a href="./src/resources/videos.ts">requestCaptionTranslation</a>(id, { ...params }) -> VideoRequestCaptionTranslationResponse</code>
+- <code title="post /rest/v1/videos/{id}/cancel-translation">client.videos.<a href="./src/resources/videos.ts">cancelCaptionTranslation</a>(id, { ...params }) -> VideoCancelCaptionTranslationResponse</code>
 - <code title="get /rest/v1/videos/analytics">client.videos.<a href="./src/resources/videos.ts">analytics</a>({ ...params }) -> VideoAnalyticsResponse</code>
 - <code title="get /rest/v1/videos/{id}/analytics">client.videos.<a href="./src/resources/videos.ts">analyticsTimeseries</a>(id, { ...params }) -> VideoAnalyticsTimeseriesResponse</code>
 
@@ -604,7 +608,7 @@ Types:
 - <code><a href="./src/resources/web-analytics.ts">WebAnalyticsLocationsResponse</a></code>
 - <code><a href="./src/resources/web-analytics.ts">WebAnalyticsDevicesResponse</a></code>
 - <code><a href="./src/resources/web-analytics.ts">WebAnalyticsCurrentVisitorsResponse</a></code>
-- <code><a href="./src/resources/web-analytics.ts">WebAnalyticsJourneyResponse</a></code>
+- <code><a href="./src/resources/web-analytics.ts">WebAnalyticsPathExplorerResponse</a></code>
 
 Methods:
 
@@ -614,7 +618,7 @@ Methods:
 - <code title="get /rest/v1/web-analytics/locations">client.webAnalytics.<a href="./src/resources/web-analytics.ts">locations</a>({ ...params }) -> WebAnalyticsLocationsResponse</code>
 - <code title="get /rest/v1/web-analytics/devices">client.webAnalytics.<a href="./src/resources/web-analytics.ts">devices</a>({ ...params }) -> WebAnalyticsDevicesResponse</code>
 - <code title="get /rest/v1/web-analytics/current-visitors">client.webAnalytics.<a href="./src/resources/web-analytics.ts">currentVisitors</a>({ ...params }) -> WebAnalyticsCurrentVisitorsResponse</code>
-- <code title="get /rest/v1/web-analytics/journey">client.webAnalytics.<a href="./src/resources/web-analytics.ts">journey</a>({ ...params }) -> WebAnalyticsJourneyResponse</code>
+- <code title="get /rest/v1/web-analytics/path-explorer">client.webAnalytics.<a href="./src/resources/web-analytics.ts">pathExplorer</a>({ ...params }) -> WebAnalyticsPathExplorerResponse</code>
 
 # WebScannerRules
 
@@ -701,3 +705,45 @@ Methods:
 
 - <code title="get /rest/v1/analytics/query-catalog">client.analytics.<a href="./src/resources/analytics.ts">queryCatalog</a>() -> AnalyticsQueryCatalogResponse</code>
 - <code title="get /rest/v1/analytics/property-suggestions">client.analytics.<a href="./src/resources/analytics.ts">propertySuggestions</a>({ ...params }) -> AnalyticsPropertySuggestionsResponse</code>
+
+# JourneyFlows
+
+Types:
+
+- <code><a href="./src/resources/journey-flows.ts">JourneyFlowListResponse</a></code>
+- <code><a href="./src/resources/journey-flows.ts">JourneyFlowCreateResponse</a></code>
+- <code><a href="./src/resources/journey-flows.ts">JourneyFlowRetrieveResponse</a></code>
+- <code><a href="./src/resources/journey-flows.ts">JourneyFlowUpdateResponse</a></code>
+- <code><a href="./src/resources/journey-flows.ts">JourneyFlowDeleteResponse</a></code>
+- <code><a href="./src/resources/journey-flows.ts">JourneyFlowCapabilitiesResponse</a></code>
+- <code><a href="./src/resources/journey-flows.ts">JourneyFlowResultsResponse</a></code>
+- <code><a href="./src/resources/journey-flows.ts">JourneyFlowExportResponse</a></code>
+- <code><a href="./src/resources/journey-flows.ts">JourneyFlowPreviewResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/journey-flows">client.journeyFlows.<a href="./src/resources/journey-flows.ts">list</a>({ ...params }) -> JourneyFlowListResponsesCursor</code>
+- <code title="post /rest/v1/journey-flows">client.journeyFlows.<a href="./src/resources/journey-flows.ts">create</a>({ ...params }) -> JourneyFlowCreateResponse</code>
+- <code title="get /rest/v1/journey-flows/{id}">client.journeyFlows.<a href="./src/resources/journey-flows.ts">retrieve</a>(id) -> JourneyFlowRetrieveResponse</code>
+- <code title="patch /rest/v1/journey-flows/{id}">client.journeyFlows.<a href="./src/resources/journey-flows.ts">update</a>(id, { ...params }) -> JourneyFlowUpdateResponse</code>
+- <code title="delete /rest/v1/journey-flows/{id}">client.journeyFlows.<a href="./src/resources/journey-flows.ts">delete</a>(id, { ...params }) -> JourneyFlowDeleteResponse</code>
+- <code title="get /rest/v1/journey-flows/capabilities">client.journeyFlows.<a href="./src/resources/journey-flows.ts">capabilities</a>() -> JourneyFlowCapabilitiesResponse</code>
+- <code title="get /rest/v1/journey-flows/{id}/result">client.journeyFlows.<a href="./src/resources/journey-flows.ts">results</a>(id, { ...params }) -> JourneyFlowResultsResponse</code>
+- <code title="get /rest/v1/journey-flows/{id}/export">client.journeyFlows.<a href="./src/resources/journey-flows.ts">export</a>(id, { ...params }) -> JourneyFlowExportResponse</code>
+- <code title="get /rest/v1/journey-flows/preview">client.journeyFlows.<a href="./src/resources/journey-flows.ts">preview</a>({ ...params }) -> JourneyFlowPreviewResponse</code>
+
+# TestEvents
+
+Types:
+
+- <code><a href="./src/resources/test-events.ts">TestEventListResponse</a></code>
+- <code><a href="./src/resources/test-events.ts">TestEventCreateResponse</a></code>
+- <code><a href="./src/resources/test-events.ts">TestEventRetrieveResponse</a></code>
+- <code><a href="./src/resources/test-events.ts">TestEventDispatchesResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/test-events">client.testEvents.<a href="./src/resources/test-events.ts">list</a>({ ...params }) -> TestEventListResponsesCursor</code>
+- <code title="post /rest/v1/test-events">client.testEvents.<a href="./src/resources/test-events.ts">create</a>({ ...params }) -> TestEventCreateResponse</code>
+- <code title="get /rest/v1/test-events/{id}">client.testEvents.<a href="./src/resources/test-events.ts">retrieve</a>(id) -> TestEventRetrieveResponse</code>
+- <code title="get /rest/v1/test-events/{id}/dispatches">client.testEvents.<a href="./src/resources/test-events.ts">dispatches</a>(id) -> TestEventDispatchesResponse</code>
