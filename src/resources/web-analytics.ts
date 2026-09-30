@@ -75,11 +75,11 @@ export class WebAnalytics extends APIResource {
    * `filters` query parameters are JSON-encoded arrays. Requires scope:
    * web-analytics:view
    */
-  journey(
-    query: WebAnalyticsJourneyParams,
+  pathExplorer(
+    query: WebAnalyticsPathExplorerParams,
     options?: RequestOptions,
-  ): APIPromise<WebAnalyticsJourneyResponse> {
-    return this._client.get('/rest/v1/web-analytics/journey', { query, ...options });
+  ): APIPromise<WebAnalyticsPathExplorerResponse> {
+    return this._client.get('/rest/v1/web-analytics/path-explorer', { query, ...options });
   }
 }
 
@@ -215,15 +215,15 @@ export interface WebAnalyticsCurrentVisitorsResponse {
   count: number;
 }
 
-export interface WebAnalyticsJourneyResponse {
+export interface WebAnalyticsPathExplorerResponse {
   anchorSessions: number;
 
   hasMore: boolean;
 
-  steps: Array<WebAnalyticsJourneyResponse.Step>;
+  steps: Array<WebAnalyticsPathExplorerResponse.Step>;
 }
 
-export namespace WebAnalyticsJourneyResponse {
+export namespace WebAnalyticsPathExplorerResponse {
   export interface Step {
     isOther: boolean;
 
@@ -433,15 +433,15 @@ export interface WebAnalyticsCurrentVisitorsParams {
   webSourceId?: string;
 }
 
-export interface WebAnalyticsJourneyParams {
+export interface WebAnalyticsPathExplorerParams {
   /**
    * Inclusive lower bound of the analysis window as `YYYY-MM-DD`.
    */
   from: string;
 
   /**
-   * JSON-encoded ordered path of opaque journey step keys. Use an empty array to
-   * request first-column candidates.
+   * JSON-encoded ordered path of opaque path explorer step keys. Use an empty array
+   * to request first-column candidates.
    */
   path: string;
 
@@ -458,7 +458,7 @@ export interface WebAnalyticsJourneyParams {
   excludeBots?: boolean;
 
   /**
-   * Optional JSON-encoded array of up to 20 journey filters. Supports web analytics
+   * Optional JSON-encoded array of up to 20 cohort filters. Supports web analytics
    * dimensions plus `event_name`, `ep_currency`, `ep_appointment_id`,
    * `ep_appointment_status`, `ep_service_line`, `ep_provider_id`, `ep_location_id`,
    * `ep_booking_channel`, `ep_revenue_type`, `ep_call_outcome`, and `ep_staff_id`.
@@ -487,13 +487,13 @@ export declare namespace WebAnalytics {
     type WebAnalyticsLocationsResponse as WebAnalyticsLocationsResponse,
     type WebAnalyticsDevicesResponse as WebAnalyticsDevicesResponse,
     type WebAnalyticsCurrentVisitorsResponse as WebAnalyticsCurrentVisitorsResponse,
-    type WebAnalyticsJourneyResponse as WebAnalyticsJourneyResponse,
+    type WebAnalyticsPathExplorerResponse as WebAnalyticsPathExplorerResponse,
     type WebAnalyticsOverviewParams as WebAnalyticsOverviewParams,
     type WebAnalyticsSourcesParams as WebAnalyticsSourcesParams,
     type WebAnalyticsPagesParams as WebAnalyticsPagesParams,
     type WebAnalyticsLocationsParams as WebAnalyticsLocationsParams,
     type WebAnalyticsDevicesParams as WebAnalyticsDevicesParams,
     type WebAnalyticsCurrentVisitorsParams as WebAnalyticsCurrentVisitorsParams,
-    type WebAnalyticsJourneyParams as WebAnalyticsJourneyParams,
+    type WebAnalyticsPathExplorerParams as WebAnalyticsPathExplorerParams,
   };
 }

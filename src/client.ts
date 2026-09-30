@@ -205,6 +205,26 @@ import {
   HeatmapPages,
 } from './resources/heatmap-pages';
 import {
+  JourneyFlowCapabilitiesResponse,
+  JourneyFlowCreateParams,
+  JourneyFlowCreateResponse,
+  JourneyFlowDeleteParams,
+  JourneyFlowDeleteResponse,
+  JourneyFlowExportParams,
+  JourneyFlowExportResponse,
+  JourneyFlowListParams,
+  JourneyFlowListResponse,
+  JourneyFlowListResponsesCursor,
+  JourneyFlowPreviewParams,
+  JourneyFlowPreviewResponse,
+  JourneyFlowResultsParams,
+  JourneyFlowResultsResponse,
+  JourneyFlowRetrieveResponse,
+  JourneyFlowUpdateParams,
+  JourneyFlowUpdateResponse,
+  JourneyFlows,
+} from './resources/journey-flows';
+import {
   LocationCreateParams,
   LocationCreateResponse,
   LocationEmbedCodeParams,
@@ -359,6 +379,16 @@ import {
   TagManagers,
 } from './resources/tag-managers';
 import {
+  TestEventCreateParams,
+  TestEventCreateResponse,
+  TestEventDispatchesResponse,
+  TestEventListParams,
+  TestEventListResponse,
+  TestEventListResponsesCursor,
+  TestEventRetrieveResponse,
+  TestEvents,
+} from './resources/test-events';
+import {
   TranslationWidgetAnalyticsParams,
   TranslationWidgetAnalyticsResponse,
   TranslationWidgetCreateParams,
@@ -411,13 +441,18 @@ import {
   VideoAnalyticsResponse,
   VideoAnalyticsTimeseriesParams,
   VideoAnalyticsTimeseriesResponse,
+  VideoCancelCaptionTranslationParams,
+  VideoCancelCaptionTranslationResponse,
   VideoCreateParams,
   VideoCreateResponse,
   VideoDeleteResponse,
   VideoListParams,
   VideoListResponse,
   VideoListResponsesCursor,
+  VideoRequestCaptionTranslationParams,
+  VideoRequestCaptionTranslationResponse,
   VideoRetrieveResponse,
+  VideoTranscriptParams,
   VideoTranscriptResponse,
   VideoUpdateParams,
   VideoUpdateResponse,
@@ -433,14 +468,14 @@ import {
   WebAnalyticsCurrentVisitorsResponse,
   WebAnalyticsDevicesParams,
   WebAnalyticsDevicesResponse,
-  WebAnalyticsJourneyParams,
-  WebAnalyticsJourneyResponse,
   WebAnalyticsLocationsParams,
   WebAnalyticsLocationsResponse,
   WebAnalyticsOverviewParams,
   WebAnalyticsOverviewResponse,
   WebAnalyticsPagesParams,
   WebAnalyticsPagesResponse,
+  WebAnalyticsPathExplorerParams,
+  WebAnalyticsPathExplorerResponse,
   WebAnalyticsSourcesParams,
   WebAnalyticsSourcesResponse,
 } from './resources/web-analytics';
@@ -1263,6 +1298,8 @@ export class OursPrivacyPlatform {
   webScanners: API.WebScanners = new API.WebScanners(this);
   personalizationProperties: API.PersonalizationProperties = new API.PersonalizationProperties(this);
   analytics: API.Analytics = new API.Analytics(this);
+  journeyFlows: API.JourneyFlows = new API.JourneyFlows(this);
+  testEvents: API.TestEvents = new API.TestEvents(this);
 }
 
 OursPrivacyPlatform.AllowedEvents = AllowedEvents;
@@ -1300,6 +1337,8 @@ OursPrivacyPlatform.WebScannerRules = WebScannerRules;
 OursPrivacyPlatform.WebScanners = WebScanners;
 OursPrivacyPlatform.PersonalizationProperties = PersonalizationProperties;
 OursPrivacyPlatform.Analytics = Analytics;
+OursPrivacyPlatform.JourneyFlows = JourneyFlows;
+OursPrivacyPlatform.TestEvents = TestEvents;
 
 export declare namespace OursPrivacyPlatform {
   export type RequestOptions = Opts.RequestOptions;
@@ -1695,6 +1734,8 @@ export declare namespace OursPrivacyPlatform {
     type VideoUploadResponse as VideoUploadResponse,
     type VideoTranscriptResponse as VideoTranscriptResponse,
     type VideoUpdateTranscriptResponse as VideoUpdateTranscriptResponse,
+    type VideoRequestCaptionTranslationResponse as VideoRequestCaptionTranslationResponse,
+    type VideoCancelCaptionTranslationResponse as VideoCancelCaptionTranslationResponse,
     type VideoAnalyticsResponse as VideoAnalyticsResponse,
     type VideoAnalyticsTimeseriesResponse as VideoAnalyticsTimeseriesResponse,
     type VideoListResponsesCursor as VideoListResponsesCursor,
@@ -1702,7 +1743,10 @@ export declare namespace OursPrivacyPlatform {
     type VideoCreateParams as VideoCreateParams,
     type VideoUpdateParams as VideoUpdateParams,
     type VideoUploadParams as VideoUploadParams,
+    type VideoTranscriptParams as VideoTranscriptParams,
     type VideoUpdateTranscriptParams as VideoUpdateTranscriptParams,
+    type VideoRequestCaptionTranslationParams as VideoRequestCaptionTranslationParams,
+    type VideoCancelCaptionTranslationParams as VideoCancelCaptionTranslationParams,
     type VideoAnalyticsParams as VideoAnalyticsParams,
     type VideoAnalyticsTimeseriesParams as VideoAnalyticsTimeseriesParams,
   };
@@ -1735,14 +1779,14 @@ export declare namespace OursPrivacyPlatform {
     type WebAnalyticsLocationsResponse as WebAnalyticsLocationsResponse,
     type WebAnalyticsDevicesResponse as WebAnalyticsDevicesResponse,
     type WebAnalyticsCurrentVisitorsResponse as WebAnalyticsCurrentVisitorsResponse,
-    type WebAnalyticsJourneyResponse as WebAnalyticsJourneyResponse,
+    type WebAnalyticsPathExplorerResponse as WebAnalyticsPathExplorerResponse,
     type WebAnalyticsOverviewParams as WebAnalyticsOverviewParams,
     type WebAnalyticsSourcesParams as WebAnalyticsSourcesParams,
     type WebAnalyticsPagesParams as WebAnalyticsPagesParams,
     type WebAnalyticsLocationsParams as WebAnalyticsLocationsParams,
     type WebAnalyticsDevicesParams as WebAnalyticsDevicesParams,
     type WebAnalyticsCurrentVisitorsParams as WebAnalyticsCurrentVisitorsParams,
-    type WebAnalyticsJourneyParams as WebAnalyticsJourneyParams,
+    type WebAnalyticsPathExplorerParams as WebAnalyticsPathExplorerParams,
   };
 
   export {
@@ -1805,5 +1849,37 @@ export declare namespace OursPrivacyPlatform {
     type AnalyticsQueryCatalogResponse as AnalyticsQueryCatalogResponse,
     type AnalyticsPropertySuggestionsResponse as AnalyticsPropertySuggestionsResponse,
     type AnalyticsPropertySuggestionsParams as AnalyticsPropertySuggestionsParams,
+  };
+
+  export {
+    JourneyFlows as JourneyFlows,
+    type JourneyFlowListResponse as JourneyFlowListResponse,
+    type JourneyFlowCreateResponse as JourneyFlowCreateResponse,
+    type JourneyFlowRetrieveResponse as JourneyFlowRetrieveResponse,
+    type JourneyFlowUpdateResponse as JourneyFlowUpdateResponse,
+    type JourneyFlowDeleteResponse as JourneyFlowDeleteResponse,
+    type JourneyFlowCapabilitiesResponse as JourneyFlowCapabilitiesResponse,
+    type JourneyFlowResultsResponse as JourneyFlowResultsResponse,
+    type JourneyFlowExportResponse as JourneyFlowExportResponse,
+    type JourneyFlowPreviewResponse as JourneyFlowPreviewResponse,
+    type JourneyFlowListResponsesCursor as JourneyFlowListResponsesCursor,
+    type JourneyFlowListParams as JourneyFlowListParams,
+    type JourneyFlowCreateParams as JourneyFlowCreateParams,
+    type JourneyFlowUpdateParams as JourneyFlowUpdateParams,
+    type JourneyFlowDeleteParams as JourneyFlowDeleteParams,
+    type JourneyFlowResultsParams as JourneyFlowResultsParams,
+    type JourneyFlowExportParams as JourneyFlowExportParams,
+    type JourneyFlowPreviewParams as JourneyFlowPreviewParams,
+  };
+
+  export {
+    TestEvents as TestEvents,
+    type TestEventListResponse as TestEventListResponse,
+    type TestEventCreateResponse as TestEventCreateResponse,
+    type TestEventRetrieveResponse as TestEventRetrieveResponse,
+    type TestEventDispatchesResponse as TestEventDispatchesResponse,
+    type TestEventListResponsesCursor as TestEventListResponsesCursor,
+    type TestEventListParams as TestEventListParams,
+    type TestEventCreateParams as TestEventCreateParams,
   };
 }

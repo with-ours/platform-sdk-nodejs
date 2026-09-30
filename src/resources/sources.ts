@@ -77,6 +77,12 @@ export interface SourceListResponse {
 
   createdAt: string;
 
+  /**
+   * Whether published short-link campaign tags are forwarded to missing destination
+   * UTM keys. Existing sources default to false.
+   */
+  forwardUtmToDestination: boolean;
+
   status: 'Disabled' | 'Enabled';
 
   type:
@@ -167,6 +173,12 @@ export interface SourceCreateResponse {
   accountId: string;
 
   createdAt: string;
+
+  /**
+   * Whether published short-link campaign tags are forwarded to missing destination
+   * UTM keys. Existing sources default to false.
+   */
+  forwardUtmToDestination: boolean;
 
   status: 'Disabled' | 'Enabled';
 
@@ -259,6 +271,12 @@ export interface SourceRetrieveResponse {
 
   createdAt: string;
 
+  /**
+   * Whether published short-link campaign tags are forwarded to missing destination
+   * UTM keys. Existing sources default to false.
+   */
+  forwardUtmToDestination: boolean;
+
   status: 'Disabled' | 'Enabled';
 
   type:
@@ -349,6 +367,12 @@ export interface SourceUpdateResponse {
   accountId: string;
 
   createdAt: string;
+
+  /**
+   * Whether published short-link campaign tags are forwarded to missing destination
+   * UTM keys. Existing sources default to false.
+   */
+  forwardUtmToDestination: boolean;
 
   status: 'Disabled' | 'Enabled';
 

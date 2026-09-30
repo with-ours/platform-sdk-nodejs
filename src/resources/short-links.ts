@@ -151,6 +151,13 @@ export interface ShortLinkListResponse {
 
   createdAt: string;
 
+  /**
+   * Whether saved published design campaign tags are added to the destination when
+   * enabled. Existing destination UTMs stay unchanged. Defaults to true for new
+   * short links and false for existing links without a stored setting.
+   */
+  forwardUtmToDestination: boolean;
+
   status: 'Disabled' | 'Enabled';
 
   /**
@@ -205,6 +212,13 @@ export interface ShortLinkCreateResponse {
   accountId: string;
 
   createdAt: string;
+
+  /**
+   * Whether saved published design campaign tags are added to the destination when
+   * enabled. Existing destination UTMs stay unchanged. Defaults to true for new
+   * short links and false for existing links without a stored setting.
+   */
+  forwardUtmToDestination: boolean;
 
   status: 'Disabled' | 'Enabled';
 
@@ -261,6 +275,13 @@ export interface ShortLinkRetrieveResponse {
 
   createdAt: string;
 
+  /**
+   * Whether saved published design campaign tags are added to the destination when
+   * enabled. Existing destination UTMs stay unchanged. Defaults to true for new
+   * short links and false for existing links without a stored setting.
+   */
+  forwardUtmToDestination: boolean;
+
   status: 'Disabled' | 'Enabled';
 
   /**
@@ -315,6 +336,13 @@ export interface ShortLinkUpdateResponse {
   accountId: string;
 
   createdAt: string;
+
+  /**
+   * Whether saved published design campaign tags are added to the destination when
+   * enabled. Existing destination UTMs stay unchanged. Defaults to true for new
+   * short links and false for existing links without a stored setting.
+   */
+  forwardUtmToDestination: boolean;
 
   status: 'Disabled' | 'Enabled';
 
@@ -374,6 +402,13 @@ export interface ShortLinkCloneResponse {
   accountId: string;
 
   createdAt: string;
+
+  /**
+   * Whether saved published design campaign tags are added to the destination when
+   * enabled. Existing destination UTMs stay unchanged. Defaults to true for new
+   * short links and false for existing links without a stored setting.
+   */
+  forwardUtmToDestination: boolean;
 
   status: 'Disabled' | 'Enabled';
 
@@ -492,6 +527,12 @@ export interface ShortLinkCreateParams {
   code?: string | null;
 
   /**
+   * When enabled, add saved published design campaign tags to the destination after
+   * publishing. Defaults to true when omitted; null is rejected.
+   */
+  forwardUtmToDestination?: boolean;
+
+  /**
    * Human-readable name. Also sent as the tracked event name on every click/scan.
    */
   name?: string | null;
@@ -514,6 +555,12 @@ export interface ShortLinkCreateParams {
 
 export interface ShortLinkUpdateParams {
   code?: string | null;
+
+  /**
+   * When enabled, add saved published design campaign tags to the destination after
+   * publishing. Omit to leave unchanged; null is rejected.
+   */
+  forwardUtmToDestination?: boolean;
 
   name?: string | null;
 
