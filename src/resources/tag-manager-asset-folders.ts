@@ -9,7 +9,8 @@ export class TagManagerAssetFolders extends APIResource {
    * Assign a tag, trigger, or variable to a folder within its tag manager, or send
    * `folderId: null` to remove the asset from its current folder. The assignment is
    * a full replace — calling it again with a different `folderId` silently moves the
-   * asset. Requires scope: tagManagers:update
+   * asset. Requires API-key scope or current OAuth user permission:
+   * tagManagers:update
    */
   create(
     body: TagManagerAssetFolderCreateParams,

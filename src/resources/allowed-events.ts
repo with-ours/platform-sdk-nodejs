@@ -13,8 +13,8 @@ export class AllowedEvents extends APIResource {
    * event's `destinationIds`. Events without a matching allowed event are dropped.
    * The list is not paginated; the per-account count is bounded. System events
    * (names beginning with `$`, e.g. `$heatmap_click`) are hidden from the response —
-   * only `$identify` is creatable as an allowed event. Requires scope:
-   * allowedEvent:list
+   * only `$identify` is creatable as an allowed event. Requires API-key scope or
+   * current OAuth user permission: allowedEvent:list
    */
   list(options?: RequestOptions): APIPromise<AllowedEventListResponse> {
     return this._client.get('/rest/v1/allowed-events', options);
@@ -35,7 +35,7 @@ export class AllowedEvents extends APIResource {
    * `createdAt`, and the filtered `destinationIds` without a follow-up GET. Known
    * input failures (duplicate name, name length, `$`-prefix reservation, empty name)
    * are returned as HTTP 409 with the reason in the response `error` field. Requires
-   * scope: allowedEvent:create
+   * API-key scope or current OAuth user permission: allowedEvent:create
    */
   create(body: AllowedEventCreateParams, options?: RequestOptions): APIPromise<AllowedEventCreateResponse> {
     return this._client.post('/rest/v1/allowed-events', { body, ...options });
@@ -43,8 +43,8 @@ export class AllowedEvents extends APIResource {
 
   /**
    * Fetch a single allowed event by id. Returns 404 when no record matches the
-   * supplied id or it belongs to a different account. Requires scope:
-   * allowedEvent:find
+   * supplied id or it belongs to a different account. Requires API-key scope or
+   * current OAuth user permission: allowedEvent:find
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<AllowedEventRetrieveResponse> {
     return this._client.get(path`/rest/v1/allowed-events/${id}`, options);
@@ -64,7 +64,8 @@ export class AllowedEvents extends APIResource {
    *
    * Returns the full entity. Known input failures (duplicate name, length,
    * `$`-prefix, empty name) are returned as HTTP 409 with the reason in the response
-   * `error` field. Requires scope: allowedEvent:update
+   * `error` field. Requires API-key scope or current OAuth user permission:
+   * allowedEvent:update
    */
   update(
     id: string,
@@ -77,7 +78,8 @@ export class AllowedEvents extends APIResource {
   /**
    * Delete an allowed event. After deletion, inbound events whose `event` field
    * matches the deleted name are no longer routed and are dropped at the allow-list
-   * stage of the dispatch flow. Requires scope: allowedEvent:delete
+   * stage of the dispatch flow. Requires API-key scope or current OAuth user
+   * permission: allowedEvent:delete
    */
   delete(id: string, options?: RequestOptions): APIPromise<AllowedEventDeleteResponse> {
     return this._client.delete(path`/rest/v1/allowed-events/${id}`, options);

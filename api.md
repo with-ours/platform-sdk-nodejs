@@ -75,6 +75,8 @@ Types:
 - <code><a href="./src/resources/consent-settings.ts">ConsentSettingUpdateResponse</a></code>
 - <code><a href="./src/resources/consent-settings.ts">ConsentSettingDeleteResponse</a></code>
 - <code><a href="./src/resources/consent-settings.ts">ConsentSettingAnalyticsResponse</a></code>
+- <code><a href="./src/resources/consent-settings.ts">ConsentSettingAnalyticsMonthlyResponse</a></code>
+- <code><a href="./src/resources/consent-settings.ts">ConsentSettingAnalyticsCapabilitiesResponse</a></code>
 - <code><a href="./src/resources/consent-settings.ts">ConsentSettingPageAnalysisResponse</a></code>
 - <code><a href="./src/resources/consent-settings.ts">ConsentSettingAnalyticsByRegionResponse</a></code>
 
@@ -87,6 +89,8 @@ Methods:
 - <code title="patch /rest/v1/consent-settings/{id}">client.consentSettings.<a href="./src/resources/consent-settings.ts">update</a>(id, { ...params }) -> ConsentSettingUpdateResponse</code>
 - <code title="delete /rest/v1/consent-settings/{id}">client.consentSettings.<a href="./src/resources/consent-settings.ts">delete</a>(id) -> ConsentSettingDeleteResponse</code>
 - <code title="get /rest/v1/consent-settings/{id}/analytics">client.consentSettings.<a href="./src/resources/consent-settings.ts">analytics</a>(id, { ...params }) -> ConsentSettingAnalyticsResponse</code>
+- <code title="get /rest/v1/consent-settings/{id}/analytics-monthly">client.consentSettings.<a href="./src/resources/consent-settings.ts">analyticsMonthly</a>(id, { ...params }) -> ConsentSettingAnalyticsMonthlyResponse</code>
+- <code title="get /rest/v1/consent-settings/analytics-capabilities">client.consentSettings.<a href="./src/resources/consent-settings.ts">analyticsCapabilities</a>({ ...params }) -> ConsentSettingAnalyticsCapabilitiesResponse</code>
 - <code title="get /rest/v1/consent-settings/{id}/page-analysis">client.consentSettings.<a href="./src/resources/consent-settings.ts">pageAnalysis</a>(id, { ...params }) -> ConsentSettingPageAnalysisResponse</code>
 - <code title="get /rest/v1/consent-settings/{id}/analytics-by-region">client.consentSettings.<a href="./src/resources/consent-settings.ts">analyticsByRegion</a>(id, { ...params }) -> ConsentSettingAnalyticsByRegionResponse</code>
 

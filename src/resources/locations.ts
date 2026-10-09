@@ -9,7 +9,7 @@ export class Locations extends APIResource {
   /**
    * List every location for this account. Not paginated — each account has a small
    * map-count limit (single digits in practice) so the response always fits in a
-   * single page. Requires scope: maps:list
+   * single page. Requires API-key scope or current OAuth user permission: maps:list
    */
   list(options?: RequestOptions): APIPromise<LocationListResponse> {
     return this._client.get('/rest/v1/locations', options);
@@ -19,7 +19,7 @@ export class Locations extends APIResource {
    * Create a new location (map embed). All address fields are optional and can be
    * filled in later via PATCH. Returns the slim entity with the server-assigned `id`
    * so callers can immediately request `GET /rest/v1/locations/{id}/embed-code`.
-   * Requires scope: maps:create
+   * Requires API-key scope or current OAuth user permission: maps:create
    */
   create(body: LocationCreateParams, options?: RequestOptions): APIPromise<LocationCreateResponse> {
     return this._client.post('/rest/v1/locations', { body, ...options });
@@ -29,7 +29,8 @@ export class Locations extends APIResource {
    * Partially update a location. Only the fields you send are changed.
    * `additionalAddresses` is replaced wholesale when sent — partial item updates are
    * not merged. The map's computed center is recalculated on every PATCH from the
-   * latest coordinates. Requires scope: maps:update
+   * latest coordinates. Requires API-key scope or current OAuth user permission:
+   * maps:update
    */
   update(
     id: string,
@@ -45,8 +46,8 @@ export class Locations extends APIResource {
    * `<iframe>` pointed at the Ours Privacy maps CDN, plus an optional JSON-LD
    * `<script>`). Customize the render with the optional query params (`color`,
    * `theme`, `colorScheme`, `mapStyle`, `includeAddressBox`, `zoom`,
-   * `includeControls`, `includeSEOSchema`); all have sane defaults. Requires scope:
-   * maps:find
+   * `includeControls`, `includeSEOSchema`); all have sane defaults. Requires API-key
+   * scope or current OAuth user permission: maps:find
    */
   embedCode(
     id: string,

@@ -7,7 +7,8 @@ import { RequestOptions } from '../internal/request-options';
 export class Analytics extends APIResource {
   /**
    * Discover the filter properties, operators, and providers available to analytics
-   * query definitions. Requires scope: variables:find-default
+   * query definitions. Requires API-key scope or current OAuth user permission:
+   * variables:find-default
    */
   queryCatalog(options?: RequestOptions): APIPromise<AnalyticsQueryCatalogResponse> {
     return this._client.get('/rest/v1/analytics/query-catalog', options);
@@ -17,7 +18,8 @@ export class Analytics extends APIResource {
    * Discover property paths recently observed in event data. Results are suggestions
    * from a fixed recent 30-day sample and may be incomplete; callers can still use
    * manually entered paths. Use `eventName` and `sourceId` to narrow the
-   * suggestions. Requires scope: variables:find-custom, web-analytics:view
+   * suggestions. Requires API-key scope or current OAuth user permission:
+   * variables:find-custom, web-analytics:view
    */
   propertySuggestions(
     query: AnalyticsPropertySuggestionsParams | null | undefined = {},

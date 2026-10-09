@@ -13,7 +13,8 @@ export class Experiments extends APIResource {
    * event matchers, so a single paginated call returns a complete client-side
    * experiment config. Supports cursor pagination and filtering by `status`, `type`,
    * and free-text `search` matched against experiment id, name, and description.
-   * Combine filters with AND semantics. Requires scope: experiment:list
+   * Combine filters with AND semantics. Requires API-key scope or current OAuth user
+   * permission: experiment:list
    *
    * @example
    * ```ts
@@ -34,7 +35,8 @@ export class Experiments extends APIResource {
   }
 
   /**
-   * Create a new experiment. Requires scope: experiment:create
+   * Create a new experiment. Requires API-key scope or current OAuth user
+   * permission: experiment:create
    *
    * @example
    * ```ts
@@ -52,7 +54,7 @@ export class Experiments extends APIResource {
   /**
    * Retrieve one experiment with its variants, lifecycle state, and complete primary
    * and secondary metric definitions, including any filtered event matchers.
-   * Requires scope: experiment:find
+   * Requires API-key scope or current OAuth user permission: experiment:find
    *
    * @example
    * ```ts
@@ -72,8 +74,8 @@ export class Experiments extends APIResource {
    * Edits are allowed on draft, running, and paused experiments and are recorded in
    * the change log. Only completed experiments return 409 with
    * `A completed experiment can no longer be edited`. Use the lifecycle endpoints
-   * (`/start`, `/pause`, `/resume`, `/stop`) to change status. Requires scope:
-   * experiment:update
+   * (`/start`, `/pause`, `/resume`, `/stop`) to change status. Requires API-key
+   * scope or current OAuth user permission: experiment:update
    *
    * @example
    * ```ts
@@ -89,7 +91,8 @@ export class Experiments extends APIResource {
   }
 
   /**
-   * Delete an experiment. Requires scope: experiment:delete
+   * Delete an experiment. Requires API-key scope or current OAuth user permission:
+   * experiment:delete
    *
    * @example
    * ```ts
@@ -103,7 +106,8 @@ export class Experiments extends APIResource {
   /**
    * Create a draft copy of an experiment. The copy keeps its configuration and
    * variants, receives a new key, and does not retain lifecycle, rollout, or result
-   * state. Requires scope: experiment:create
+   * state. Requires API-key scope or current OAuth user permission:
+   * experiment:create
    *
    * @example
    * ```ts
@@ -121,7 +125,8 @@ export class Experiments extends APIResource {
    * `POST /rest/v1/versions`. Pass `{ "publishAfterStart": false }` only if a
    * separate publish is desired (e.g. bundling with non-experiment edits via a
    * manual `POST /rest/v1/versions` afterwards). The request body is optional — send
-   * `{}` to use defaults. Requires scope: experiment:start
+   * `{}` to use defaults. Requires API-key scope or current OAuth user permission:
+   * experiment:start
    *
    * @example
    * ```ts
@@ -140,7 +145,8 @@ export class Experiments extends APIResource {
    * Stop an experiment. The request body is optional — send `{}` to stop without
    * recording a winner. Optionally pass `winnerVariantId` to record the winner
    * (reporting only) and/or `rolloutVariantId` to keep that variant serving to all
-   * traffic. Requires scope: experiment:stop
+   * traffic. Requires API-key scope or current OAuth user permission:
+   * experiment:stop
    *
    * @example
    * ```ts
@@ -160,7 +166,7 @@ export class Experiments extends APIResource {
    * experiment — the explicit, reversible serving decision that makes a winning
    * experience the ongoing default. Publishes. Reverse with `/end-rollout`. Returns
    * 409 if the experiment is not completed or the variant is the control. Requires
-   * scope: experiment:stop
+   * API-key scope or current OAuth user permission: experiment:stop
    *
    * @example
    * ```ts
@@ -181,7 +187,7 @@ export class Experiments extends APIResource {
    * End an active rollout: stop serving the rolled-out variant so every matching
    * visitor reverts to the original experience. The declared winner is left intact.
    * Publishes. Returns 409 if the experiment is not currently rolled out. Requires
-   * scope: experiment:stop
+   * API-key scope or current OAuth user permission: experiment:stop
    *
    * @example
    * ```ts
@@ -196,7 +202,8 @@ export class Experiments extends APIResource {
    * Declare, change, or clear the winning variant on a completed experiment.
    * Reporting metadata only — it does not change what visitors see and does not
    * republish. Omit `winnerVariantId` to clear. To make the winner live, use
-   * `/rollout`. Requires scope: experiment:stop
+   * `/rollout`. Requires API-key scope or current OAuth user permission:
+   * experiment:stop
    *
    * @example
    * ```ts
@@ -214,7 +221,8 @@ export class Experiments extends APIResource {
   /**
    * Pause a running experiment. Stops new variant assignments while preserving
    * existing ones; the experiment can later be resumed. The request body is
-   * optional. Requires scope: experiment:stop
+   * optional. Requires API-key scope or current OAuth user permission:
+   * experiment:stop
    *
    * @example
    * ```ts
@@ -231,7 +239,8 @@ export class Experiments extends APIResource {
 
   /**
    * Resume a previously-paused experiment so new visitors can be assigned again. The
-   * request body is optional. Requires scope: experiment:start
+   * request body is optional. Requires API-key scope or current OAuth user
+   * permission: experiment:start
    *
    * @example
    * ```ts
@@ -250,7 +259,7 @@ export class Experiments extends APIResource {
    * Aggregate per-variant impressions, conversions, conversion rate, and Bayesian
    * probability-to-be-best across the experiment runtime window. Select a saved goal
    * with `goalId`; `eventName` remains available as a legacy selector. Requires
-   * scope: experiment:find
+   * API-key scope or current OAuth user permission: experiment:find
    *
    * @example
    * ```ts
@@ -273,7 +282,8 @@ export class Experiments extends APIResource {
    * Visitors are the inferential unit; impressions remain a delivery diagnostic.
    * Select a saved goal with `goalId`; `eventName` remains available as a legacy
    * selector. Secondary event overrides are labeled exploratory, and unsupported
-   * legacy plans suppress official evidence. Requires scope: experiment:find
+   * legacy plans suppress official evidence. Requires API-key scope or current OAuth
+   * user permission: experiment:find
    *
    * @example
    * ```ts
@@ -297,7 +307,8 @@ export class Experiments extends APIResource {
    * omitted, so the no-arg call returns every day from start to today (or to
    * `stoppedAt` for completed experiments). The response orders days oldest-first
    * and omits days with no impressions, so an empty `days` array means there was no
-   * measured traffic in the window. Requires scope: experiment:find
+   * measured traffic in the window. Requires API-key scope or current OAuth user
+   * permission: experiment:find
    *
    * @example
    * ```ts
@@ -319,8 +330,8 @@ export class Experiments extends APIResource {
    * fired for this experiment. Each row is one session with the variant the visitor
    * was assigned for that impression. Sessions are ordered newest first by session
    * start. Filter to one variant with `variant_id`. Cursor pagination via `limit`
-   * (1–100, default 25) and `cursor`; malformed cursors return 400. Requires scope:
-   * experiment:find
+   * (1–100, default 25) and `cursor`; malformed cursors return 400. Requires API-key
+   * scope or current OAuth user permission: experiment:find
    *
    * @example
    * ```ts

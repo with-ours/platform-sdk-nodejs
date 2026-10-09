@@ -9,7 +9,7 @@ export class WebScanners extends APIResource {
   /**
    * List every web scanner for this account. Not paginated — accounts have a small
    * number of scanners in practice, so the response always fits in a single page.
-   * Requires scope: webScanner:list
+   * Requires API-key scope or current OAuth user permission: webScanner:list
    *
    * @example
    * ```ts
@@ -28,10 +28,10 @@ export class WebScanners extends APIResource {
    * automatically after creation on a best-effort basis; the returned entity may not
    * yet reflect asynchronous scan-state changes. `rootDomain` is required; missing,
    * empty, or malformed values are rejected as HTTP 400. Everything else falls back
-   * to defaults (`status: Enabled`, `urlLimit: 100`, `scanSchedule: weekly`, no
+   * to defaults (`status: Enabled`, `urlLimit: 1000`, `scanSchedule: weekly`, no
    * excluded patterns, no extra seed URLs). Invalid configuration or account limits
-   * return HTTP 409. Requires scope: `webScanner:create`. Requires scope:
-   * webScanner:create
+   * return HTTP 409. Requires scope: `webScanner:create`. Requires API-key scope or
+   * current OAuth user permission: webScanner:create
    *
    * @example
    * ```ts
@@ -45,7 +45,8 @@ export class WebScanners extends APIResource {
   }
 
   /**
-   * Find a single web scanner by ID. Requires scope: webScanner:find
+   * Find a single web scanner by ID. Requires API-key scope or current OAuth user
+   * permission: webScanner:find
    *
    * @example
    * ```ts
@@ -62,7 +63,7 @@ export class WebScanners extends APIResource {
    * `includedUrls`) are replaced wholesale when sent. If `rootDomain` is provided
    * and malformed, the request is rejected as HTTP 400. Use
    * `POST /rest/v1/web-scanners/{id}/trigger` to start a new scan after edits.
-   * Requires scope: webScanner:update
+   * Requires API-key scope or current OAuth user permission: webScanner:update
    *
    * @example
    * ```ts
@@ -79,7 +80,8 @@ export class WebScanners extends APIResource {
 
   /**
    * Delete a web scanner. Associated suppression rules are deleted in the same
-   * operation. Requires scope: webScanner:delete
+   * operation. Requires API-key scope or current OAuth user permission:
+   * webScanner:delete
    *
    * @example
    * ```ts
@@ -98,7 +100,7 @@ export class WebScanners extends APIResource {
    * rate-limited: a 409 is returned if another scan is already in flight, or if this
    * production monitor has `urlLimit >= 5000` and its previous scan completed within
    * the last 10 minutes; the reason is in the response `error` field. Requires
-   * scope: webScanner:trigger
+   * API-key scope or current OAuth user permission: webScanner:trigger
    *
    * @example
    * ```ts
@@ -114,7 +116,7 @@ export class WebScanners extends APIResource {
    * scheduler. Every in-scope page in this scan uses the credentials. Set
    * `scanSchedule` to `manual` when your scheduler should be the only source of
    * scans. Credential values are not returned or included in scan results. Requires
-   * scope: webScanner:trigger
+   * API-key scope or current OAuth user permission: webScanner:trigger
    *
    * @example
    * ```ts
@@ -145,7 +147,8 @@ export class WebScanners extends APIResource {
    * Queue an isolated verification capture for one exact in-scope page. This does
    * not update monitor history, inventory counts, or the monitor-wide last-scanned
    * timestamp. Poll the verification-run endpoint with the returned id for terminal
-   * evidence. Requires scope: webScanner:trigger
+   * evidence. Requires API-key scope or current OAuth user permission:
+   * webScanner:trigger
    *
    * @example
    * ```ts
@@ -166,7 +169,7 @@ export class WebScanners extends APIResource {
   /**
    * Read a UUID-addressed one-page verification run. The run is isolated from normal
    * monitor history and is returned only when it belongs to the requested scanner.
-   * Requires scope: webScanner:find
+   * Requires API-key scope or current OAuth user permission: webScanner:find
    *
    * @example
    * ```ts
@@ -188,7 +191,8 @@ export class WebScanners extends APIResource {
    * List the one-page verification runs recorded for this scanner, newest first,
    * each with its own capture counts. Verification runs are isolated from monitor
    * history and never affect inventory counts or the monitor-wide last-scanned
-   * timestamp. Requires scope: webScanner:find
+   * timestamp. Requires API-key scope or current OAuth user permission:
+   * webScanner:find
    *
    * @example
    * ```ts
@@ -219,7 +223,8 @@ export class WebScanners extends APIResource {
    * a suppression rule still needs a triage decision — resolve it by adding the host
    * to a CMP consent service or by creating a suppression rule with
    * `POST /rest/v1/web-scanner-rules`. Use `GET /rest/v1/web-scanners/{id}/summary`
-   * for the rolled-up counts. Requires scope: webScanner:find
+   * for the rolled-up counts. Requires API-key scope or current OAuth user
+   * permission: webScanner:find
    *
    * @example
    * ```ts
@@ -240,7 +245,7 @@ export class WebScanners extends APIResource {
    * used to select the run) to read an earlier run. Cookies paginate with `limit`
    * and `offset` (a documented exception to the cursor-pagination standard, since
    * each run is an immutable snapshot); local-storage entries are returned in full.
-   * Requires scope: webScanner:find
+   * Requires API-key scope or current OAuth user permission: webScanner:find
    *
    * @example
    * ```ts
@@ -268,8 +273,8 @@ export class WebScanners extends APIResource {
    * the calendar day is used to select the run) to read an earlier run. Clear a host
    * that needs a decision by adding it to a CMP consent service or creating a
    * suppression rule with `POST /rest/v1/web-scanner-rules`. When the scanner has no
-   * completed runs, every count is 0 and `runDate` is null. Requires scope:
-   * webScanner:find
+   * completed runs, every count is 0 and `runDate` is null. Requires API-key scope
+   * or current OAuth user permission: webScanner:find
    *
    * @example
    * ```ts
@@ -290,7 +295,8 @@ export class WebScanners extends APIResource {
    * are sorted by risk and hostname. Continue with pagination.nextCursor while
    * preserving runRevision and coverageRevision; changed evidence returns HTTP 400
    * and requires restarting from the first page. Historical runs are evaluated
-   * against current coverage configuration. Requires scope: webScanner:find
+   * against current coverage configuration. Requires API-key scope or current OAuth
+   * user permission: webScanner:find
    *
    * @example
    * ```ts
@@ -311,7 +317,8 @@ export class WebScanners extends APIResource {
    * Resolve one hostname from a revision-bound Web Scanner decision queue by
    * creating an exact-host suppression rule. The request is bound to the reviewed
    * run, and retrying the same idempotency key returns the recorded outcome without
-   * repeating the write. Requires scope: webScanner:update
+   * repeating the write. Requires API-key scope or current OAuth user permission:
+   * webScanner:update
    *
    * @example
    * ```ts
@@ -1389,7 +1396,7 @@ export interface WebScannerCreateParams {
   status?: 'Disabled' | 'Enabled';
 
   /**
-   * Maximum URLs to crawl per scan (1–20,000). Defaults to 100 when omitted.
+   * Maximum URLs to crawl per scan (1–20,000). Defaults to 1,000 when omitted.
    */
   urlLimit?: number | null;
 }

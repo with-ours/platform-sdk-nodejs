@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.53.0 (2026-10-09)
+
+Full Changelog: [v1.52.0...v1.53.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.52.0...v1.53.0)
+
+### Features
+
+* **api:** API update.
 ## 1.52.0 (2026-09-30)
 
 Full Changelog: [v1.51.0...v1.52.0](https://github.com/with-ours/platform-sdk-nodejs/compare/v1.51.0...v1.52.0)

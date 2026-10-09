@@ -15,7 +15,8 @@ export class ConsentAnalytics extends APIResource {
    * derived-read exception. Requires the API-key scope
    * `report:global-consent-center-analytics` (this is the account-wide consent
    * analytics report and is gated separately from consent-settings list). Requires
-   * scope: report:global-consent-center-analytics
+   * API-key scope or current OAuth user permission:
+   * report:global-consent-center-analytics
    */
   list(
     query: ConsentAnalyticsListParams,

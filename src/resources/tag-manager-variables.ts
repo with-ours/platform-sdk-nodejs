@@ -12,7 +12,7 @@ export class TagManagerVariables extends APIResource {
    * parameter — variables are always scoped to one parent container. Supports cursor
    * pagination via `limit` and `cursor`; the limit clamp is 1000 so a single request
    * can return the full set (the web-app workspace renders all variables in one
-   * shot). Requires scope: tagManagers:find
+   * shot). Requires API-key scope or current OAuth user permission: tagManagers:find
    */
   list(
     query: TagManagerVariableListParams,
@@ -28,7 +28,7 @@ export class TagManagerVariables extends APIResource {
    * Create a new variable inside a tag manager. `tagManagerId` is required in the
    * body. Known input failures (e.g. duplicate variable name within the tag manager)
    * are returned as HTTP 409 with the reason in the response `error` field. Requires
-   * scope: tagManagers:update
+   * API-key scope or current OAuth user permission: tagManagers:update
    */
   create(
     body: TagManagerVariableCreateParams,
@@ -38,7 +38,8 @@ export class TagManagerVariables extends APIResource {
   }
 
   /**
-   * Find a single tag manager variable by ID. Requires scope: tagManagers:find
+   * Find a single tag manager variable by ID. Requires API-key scope or current
+   * OAuth user permission: tagManagers:find
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<TagManagerVariableRetrieveResponse> {
     return this._client.get(path`/rest/v1/tag-manager-variables/${id}`, options);
@@ -48,7 +49,8 @@ export class TagManagerVariables extends APIResource {
    * Partially update a variable. Only the fields you send are changed. Name
    * collisions with other variables in the same tag manager return 409 with the
    * reason in the response `error` field. To assign a variable to a folder, use
-   * `POST /rest/v1/tag-manager-asset-folders`. Requires scope: tagManagers:update
+   * `POST /rest/v1/tag-manager-asset-folders`. Requires API-key scope or current
+   * OAuth user permission: tagManagers:update
    */
   update(
     id: string,
@@ -59,7 +61,8 @@ export class TagManagerVariables extends APIResource {
   }
 
   /**
-   * Delete a tag manager variable. Requires scope: tagManagers:update
+   * Delete a tag manager variable. Requires API-key scope or current OAuth user
+   * permission: tagManagers:update
    */
   delete(id: string, options?: RequestOptions): APIPromise<TagManagerVariableDeleteResponse> {
     return this._client.delete(path`/rest/v1/tag-manager-variables/${id}`, options);
@@ -70,7 +73,8 @@ export class TagManagerVariables extends APIResource {
    * to send on create/patch, the shape of the type-specific `parameters` payload,
    * and `supportsVariables` (whether the variable's own parameter fields may
    * reference `{{OtherVariable}}` at runtime). Account-agnostic: the response is the
-   * same for every API key. Requires scope: tagManagers:find
+   * same for every API key. Requires API-key scope or current OAuth user permission:
+   * tagManagers:find
    */
   types(options?: RequestOptions): APIPromise<TagManagerVariableTypesResponse> {
     return this._client.get('/rest/v1/tag-manager-variables/types', options);
@@ -106,7 +110,7 @@ export interface TagManagerVariableListResponse {
    * Default value returned when no rule matches. JSON value — type depends on
    * `type`.
    */
-  defaultValue?: { [key: string]: unknown };
+  defaultValue?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
 
   enabled?: boolean | null;
 
@@ -119,7 +123,7 @@ export interface TagManagerVariableListResponse {
   /**
    * Optional lookup table for `LookUpTable`-style variables. JSON value.
    */
-  lookUpTable?: { [key: string]: unknown };
+  lookUpTable?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
 
   updatedAt?: string | null;
 }
@@ -151,7 +155,7 @@ export interface TagManagerVariableCreateResponse {
    * Default value returned when no rule matches. JSON value — type depends on
    * `type`.
    */
-  defaultValue?: { [key: string]: unknown };
+  defaultValue?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
 
   enabled?: boolean | null;
 
@@ -164,7 +168,7 @@ export interface TagManagerVariableCreateResponse {
   /**
    * Optional lookup table for `LookUpTable`-style variables. JSON value.
    */
-  lookUpTable?: { [key: string]: unknown };
+  lookUpTable?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
 
   updatedAt?: string | null;
 }
@@ -196,7 +200,7 @@ export interface TagManagerVariableRetrieveResponse {
    * Default value returned when no rule matches. JSON value — type depends on
    * `type`.
    */
-  defaultValue?: { [key: string]: unknown };
+  defaultValue?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
 
   enabled?: boolean | null;
 
@@ -209,7 +213,7 @@ export interface TagManagerVariableRetrieveResponse {
   /**
    * Optional lookup table for `LookUpTable`-style variables. JSON value.
    */
-  lookUpTable?: { [key: string]: unknown };
+  lookUpTable?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
 
   updatedAt?: string | null;
 }
@@ -241,7 +245,7 @@ export interface TagManagerVariableUpdateResponse {
    * Default value returned when no rule matches. JSON value — type depends on
    * `type`.
    */
-  defaultValue?: { [key: string]: unknown };
+  defaultValue?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
 
   enabled?: boolean | null;
 
@@ -254,7 +258,7 @@ export interface TagManagerVariableUpdateResponse {
   /**
    * Optional lookup table for `LookUpTable`-style variables. JSON value.
    */
-  lookUpTable?: { [key: string]: unknown };
+  lookUpTable?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
 
   updatedAt?: string | null;
 }
@@ -328,7 +332,7 @@ export namespace TagManagerVariableTypesResponse {
       /**
        * Default value when the caller omits the parameter on create.
        */
-      default?: { [key: string]: unknown };
+      default?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
 
       description?: string | null;
 
@@ -391,21 +395,21 @@ export interface TagManagerVariableCreateParams {
   /**
    * Optional default value. JSON value of any type.
    */
-  defaultValue?: { [key: string]: unknown } | null;
+  defaultValue?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
 
   enabled?: boolean | null;
 
   /**
    * Optional lookup table for `LookUpTable` variables.
    */
-  lookUpTable?: { [key: string]: unknown } | null;
+  lookUpTable?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
 }
 
 export interface TagManagerVariableUpdateParams {
   /**
    * Updated default value. JSON value of any type.
    */
-  defaultValue?: { [key: string]: unknown } | null;
+  defaultValue?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
 
   /**
    * Pause/resume the variable without changing other fields.
@@ -415,7 +419,7 @@ export interface TagManagerVariableUpdateParams {
   /**
    * Updated lookup table payload.
    */
-  lookUpTable?: { [key: string]: unknown } | null;
+  lookUpTable?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
 
   /**
    * Updated variable name.

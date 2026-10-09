@@ -11,7 +11,8 @@ export class VideoChannels extends APIResource {
    * List video channels for the account, sorted by name. Supports cursor pagination
    * via `limit` and `cursor`; the limit clamp is 1000 so a single request can return
    * the full set. Entries omit `resolvedValues` — fetch a channel by id for its
-   * video count and embed output. Requires scope: videoChannel:list
+   * video count and embed output. Requires API-key scope or current OAuth user
+   * permission: videoChannel:list
    */
   list(
     query: VideoChannelListParams | null | undefined = {},
@@ -27,7 +28,8 @@ export class VideoChannels extends APIResource {
    * Create a video channel. Only `name` is accepted here; set branding and publish
    * it with PATCH, and add videos with `POST /rest/v1/video-channels/{id}/media`.
    * New channels start unpublished, so the page is not reachable until you send
-   * `isPublished: true`. Requires scope: videoChannel:create
+   * `isPublished: true`. Requires API-key scope or current OAuth user permission:
+   * videoChannel:create
    */
   create(body: VideoChannelCreateParams, options?: RequestOptions): APIPromise<VideoChannelCreateResponse> {
     return this._client.post('/rest/v1/video-channels', { body, ...options });
@@ -35,7 +37,8 @@ export class VideoChannels extends APIResource {
 
   /**
    * Fetch a channel with its branding, publish state, video count, shareable page
-   * URL, and paste-ready embed code. Requires scope: videoChannel:find
+   * URL, and paste-ready embed code. Requires API-key scope or current OAuth user
+   * permission: videoChannel:find
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<VideoChannelRetrieveResponse> {
     return this._client.get(path`/rest/v1/video-channels/${id}`, options);
@@ -46,7 +49,7 @@ export class VideoChannels extends APIResource {
    * to clear a nullable field. Sending `isPublished: true` makes the channel page
    * reachable and renders it from the current videos and branding; `false` takes it
    * offline. `logoMediaId` must reference an image in your media library. Requires
-   * scope: videoChannel:update
+   * API-key scope or current OAuth user permission: videoChannel:update
    */
   update(
     id: string,
@@ -58,7 +61,8 @@ export class VideoChannels extends APIResource {
 
   /**
    * Delete a channel and take its page offline. The videos it listed are not deleted
-   * — only their membership in this channel. Requires scope: videoChannel:delete
+   * — only their membership in this channel. Requires API-key scope or current OAuth
+   * user permission: videoChannel:delete
    */
   delete(id: string, options?: RequestOptions): APIPromise<VideoChannelDeleteResponse> {
     return this._client.delete(path`/rest/v1/video-channels/${id}`, options);
@@ -68,7 +72,8 @@ export class VideoChannels extends APIResource {
    * List the videos in a channel, ordered by their position on the page. Not
    * paginated: a channel holds a bounded set of videos, so the full ordered list is
    * always returned. Videos whose media no longer resolves are omitted rather than
-   * returned as broken entries. Requires scope: videoChannel:find
+   * returned as broken entries. Requires API-key scope or current OAuth user
+   * permission: videoChannel:find
    */
   media(id: string, options?: RequestOptions): APIPromise<VideoChannelMediaResponse> {
     return this._client.get(path`/rest/v1/video-channels/${id}/media`, options);
@@ -80,7 +85,7 @@ export class VideoChannels extends APIResource {
    * Calling this again for a video already in the channel updates its position
    * instead of adding a duplicate, and keeps its current slot when `position` is
    * omitted. The returned `id` is a composite membership key, not a UUID. Requires
-   * scope: videoChannel:update
+   * API-key scope or current OAuth user permission: videoChannel:update
    */
   assignMedia(
     id: string,
@@ -94,7 +99,8 @@ export class VideoChannels extends APIResource {
    * Remove one video from a channel, identified by the `mediaId` query parameter.
    * The video itself is not deleted and stays in any other channel it belongs to.
    * Idempotent — removing a video that is not in the channel succeeds and returns
-   * the channel unchanged. Requires scope: videoChannel:update
+   * the channel unchanged. Requires API-key scope or current OAuth user permission:
+   * videoChannel:update
    */
   removeMedia(
     id: string,
@@ -110,7 +116,7 @@ export class VideoChannels extends APIResource {
    * the channel in the order you want them shown — index 0 appears first. A partial
    * list, or an id that is not in the channel, returns 400 so a caller working from
    * a stale view learns it is out of date instead of getting a partial write.
-   * Requires scope: videoChannel:update
+   * Requires API-key scope or current OAuth user permission: videoChannel:update
    */
   reorder(
     id: string,

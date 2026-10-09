@@ -13,7 +13,7 @@ export class ShortLinks extends APIResource {
    * excluded. Supports cursor pagination and optional `status`, `nameContains`, and
    * `search` filters. Search matches names, destinations, and codes. Each entity
    * bundles the destination URL, immutable code, path format, and QR/campaign
-   * design. Requires scope: source:list
+   * design. Requires API-key scope or current OAuth user permission: source:list
    *
    * @example
    * ```ts
@@ -39,7 +39,8 @@ export class ShortLinks extends APIResource {
    * compact code; `shortUrl` resolves as `/r/{pixel}` without tracking query
    * parameters. All body fields are optional: send `{}` to create an unconfigured
    * link and fill it in later with PATCH. A newly created short link only resolves
-   * at the edge once a version is published. Requires scope: source:create
+   * at the edge once a version is published. Requires API-key scope or current OAuth
+   * user permission: source:create
    *
    * @example
    * ```ts
@@ -56,7 +57,8 @@ export class ShortLinks extends APIResource {
   /**
    * Fetch a single short link by id, including its destination, immutable code,
    * composed `shortUrl`, and QR/campaign design. Returns 404 when no short link
-   * matches the id or it belongs to a different account. Requires scope: source:view
+   * matches the id or it belongs to a different account. Requires API-key scope or
+   * current OAuth user permission: source:view
    *
    * @example
    * ```ts
@@ -71,7 +73,8 @@ export class ShortLinks extends APIResource {
    * Partially update a short link. Only the fields you send are changed; omitted
    * fields are unchanged. Send explicit `null` to clear `redirectUrl`. The `utm` and
    * `qr` objects are replaced wholesale when sent. Returns the full short link
-   * entity after the update. Requires scope: source:update
+   * entity after the update. Requires API-key scope or current OAuth user
+   * permission: source:update
    *
    * @example
    * ```ts
@@ -88,7 +91,8 @@ export class ShortLinks extends APIResource {
 
   /**
    * Delete a short link and its QR/campaign design. After deletion the short URL
-   * stops resolving on the next publish. Requires scope: source:delete
+   * stops resolving on the next publish. Requires API-key scope or current OAuth
+   * user permission: source:delete
    *
    * @example
    * ```ts
@@ -102,7 +106,7 @@ export class ShortLinks extends APIResource {
   /**
    * Duplicate a short link with its campaign tags and QR styling. The copy starts
    * disabled with a new code. Requires permission to view the original and create a
-   * source. Requires scope: source:create
+   * source. Requires API-key scope or current OAuth user permission: source:create
    *
    * @example
    * ```ts
@@ -120,7 +124,7 @@ export class ShortLinks extends APIResource {
    * (`YYYY-MM-DD`); set `granularity=HOURLY` for hourly buckets and
    * `excludeBots=false` to include bot traffic. Requires the `shortlink:reporting`
    * scope, which is gated separately because analytics data is PHI-bearing. Requires
-   * scope: shortlink:reporting
+   * API-key scope or current OAuth user permission: shortlink:reporting
    *
    * @example
    * ```ts
