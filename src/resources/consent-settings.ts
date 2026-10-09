@@ -7,35 +7,41 @@ import { path } from '../internal/utils/path';
 
 export class ConsentSettings extends APIResource {
   /**
-   * List all consent settings. Requires scope: consentSettings:list
+   * List all consent settings. Requires API-key scope or current OAuth user
+   * permission: consentSettings:list
    */
   list(options?: RequestOptions): APIPromise<ConsentSettingListResponse> {
     return this._client.get('/rest/v1/consent-settings', options);
   }
 
   /**
-   * Create a new consent settings record. POST takes no request body — the server
-   * initializes the record with defaults (Disabled status, opt-out default rule,
-   * English translations, necessary/analytics/advertising categories, no regions, no
-   * whitelisted domains). Configure the record afterward with PATCH (partial update)
-   * or PUT (full replacement). Returns the same shape as GET so you can read the
-   * server-assigned `id`, default rule, and categories without a follow-up fetch.
-   * Requires scope: consentSettings:create
+   * Create a new consent setting. POST takes no request body. The new draft is
+   * Disabled with no allowed domains, an opt-out default rule, English translations,
+   * necessary/analytics/advertising categories, and no regions. Configure it with
+   * PATCH or PUT before enabling it. Returns the same fields as GET, including its
+   * `id`, default rule, and categories. Requires API-key scope or current OAuth user
+   * permission: consentSettings:create
    */
   create(options?: RequestOptions): APIPromise<ConsentSettingCreateResponse> {
     return this._client.post('/rest/v1/consent-settings', options);
   }
 
   /**
-   * Find a single consent setting by ID. Requires scope: consentSettings:find
+   * Find a single consent setting by ID. Requires API-key scope or current OAuth
+   * user permission: consentSettings:find
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<ConsentSettingRetrieveResponse | null> {
     return this._client.get(path`/rest/v1/consent-settings/${id}`, options);
   }
 
   /**
-   * Replace a consent setting. Send the full ConsentSettingsInput body — omitted
-   * optional fields are reset. Use PATCH for partial updates. Requires scope:
+   * Update a consent setting with all required fields. Omitted optional top-level
+   * fields retain their saved values; the required default rule and lists are
+   * replaced by supplied values. Send null or [] to clear an optional field when
+   * allowed. Enabled requires at least one allowed domain in this request. Omitting
+   * or clearing `whitelistDomains` with null or [] while Enabled returns an HTTP 400
+   * validation error. Disabled settings may have no allowed domains. Use PATCH for
+   * partial updates. Requires API-key scope or current OAuth user permission:
    * consentSettings:update
    */
   replace(
@@ -47,10 +53,14 @@ export class ConsentSettings extends APIResource {
   }
 
   /**
-   * Partially update a consent setting. Send only the fields you want to change —
-   * every field is optional and unspecified fields are preserved. List-valued fields
-   * (services, categories, regions) are replaced wholesale when sent. Requires
-   * scope: consentSettings:update
+   * Partially update a consent setting. Omitted fields keep their saved values.
+   * List-valued fields (services, categories, regions) are replaced in full when
+   * sent. Omitting `whitelistDomains` preserves saved domains; sending it replaces
+   * the list. Clear allowed domains with null or [] only when the resulting status
+   * is Disabled. Enabled requires at least one allowed domain, either already saved
+   * or sent with this request. Invalid combinations return HTTP 400 validation
+   * errors. Requires API-key scope or current OAuth user permission:
+   * consentSettings:update
    */
   update(
     id: string,
@@ -61,7 +71,8 @@ export class ConsentSettings extends APIResource {
   }
 
   /**
-   * Delete a consent setting. Requires scope: consentSettings:delete
+   * Delete a consent setting. Requires API-key scope or current OAuth user
+   * permission: consentSettings:delete
    */
   delete(id: string, options?: RequestOptions): APIPromise<ConsentSettingDeleteResponse> {
     return this._client.delete(path`/rest/v1/consent-settings/${id}`, options);
@@ -70,15 +81,18 @@ export class ConsentSettings extends APIResource {
   /**
    * Time-series consent analytics for a single consent settings record: banner
    * views, opt-ins, opt-outs, close-icon clicks, and derived opt-in/out rates per
-   * UTC day (or per UTC hour with `granularity=HOURLY`). The window is zero-filled
+   * UTC hour, day, Monday-based week, or calendar month. The window is zero-filled
    * so callers get a contiguous series, and rates are person-level
-   * (`COUNT(DISTINCT visitor_id)`). Use the optional `pagePath` and `region` filters
-   * to scope to one page or one visitor region; use `compareWithPreviousPeriod=true`
-   * to also receive the matching prior window. `DAILY` allows a 90-day window;
-   * `HOURLY` is capped at 14 days. Requires the API-key scope
-   * `report:consent-analytics` (this endpoint returns consent analytics report data,
-   * which is PHI-bearing and gated separately from consent-settings management).
-   * Requires scope: report:consent-analytics
+   * (`COUNT(DISTINCT visitor_id)`). Use the JSON-encoded shared analytics `filter`
+   * to scope events by source, page, visitor, or session properties; use
+   * `compareWithPreviousPeriod=true` to also receive the matching prior window.
+   * Included days: at most 180 days for `DAILY`, 365 for `WEEKLY`, 365 for
+   * `MONTHLY`, or 14 for `HOURLY`. Partial buckets identify their actual selected
+   * dates. Previous-period comparisons are supported for daily and hourly output.
+   * Requires the API-key scope `report:consent-analytics` (this endpoint returns
+   * consent analytics report data, which is PHI-bearing and gated separately from
+   * consent-settings management). Requires API-key scope or current OAuth user
+   * permission: report:consent-analytics
    */
   analytics(
     id: string,
@@ -89,13 +103,47 @@ export class ConsentSettings extends APIResource {
   }
 
   /**
+   * Monthly consent trends over up to 365 included days. Returns unique visitor
+   * counts within each UTC calendar month, event counts for dismissals, rates, and
+   * partial-month bounds. Uses the same shared analytics filter as the other consent
+   * reports. This series-only output omits whole-window totals and breakdowns.
+   * Requires API-key scope or current OAuth user permission:
+   * report:consent-analytics
+   */
+  analyticsMonthly(
+    id: string,
+    query: ConsentSettingAnalyticsMonthlyParams,
+    options?: RequestOptions,
+  ): APIPromise<ConsentSettingAnalyticsMonthlyResponse> {
+    return this._client.get(path`/rest/v1/consent-settings/${id}/analytics-monthly`, { query, ...options });
+  }
+
+  /**
+   * Returns interval limits for a Consent report kind: SUMMARY, TRENDS, or PAGES.
+   * The organization is determined by the API key. Default included days: at most
+   * 180 days for `DAILY`, 365 for `WEEKLY`, 365 for `MONTHLY`, or 14 for `HOURLY`;
+   * organization limits may narrow these allowances. TRENDS requires
+   * report:consent-analytics, PAGES requires report:consent-page-analysis, and
+   * SUMMARY requires both. Dates, filters, search and pagination are not part of
+   * this request. Requires API-key scope or current OAuth user permission:
+   * report:consent-analytics or report:consent-page-analysis
+   */
+  analyticsCapabilities(
+    query: ConsentSettingAnalyticsCapabilitiesParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ConsentSettingAnalyticsCapabilitiesResponse> {
+    return this._client.get('/rest/v1/consent-settings/analytics-capabilities', { query, ...options });
+  }
+
+  /**
    * Per-page consent breakdown for one consent settings record, ranked by opt-outs
    * (descending). Each row bundles banner views, opt-outs, close-icon clicks, and
-   * the derived opt-out rate. Documented exception to the cursor-pagination
-   * standard: this endpoint paginates with `limit` and `offset` rather than
-   * `cursor`. `search` is a substring match against `pathname`; `region` filters to
-   * one visitor region. Requires the API-key scope `report:consent-page-analysis`
-   * (PHI-bearing report data). Requires scope: report:consent-page-analysis
+   * the derived opt-out rate. Returns `{ entities, pagination }`. Continue with
+   * `pagination.nextCursor`; results sort by opt-outs descending, then page path
+   * ascending. `search` is a substring match against `pathname`; the JSON-encoded
+   * shared analytics `filter` scopes the underlying events. Requires the API-key
+   * scope `report:consent-page-analysis` (PHI-bearing report data). Requires API-key
+   * scope or current OAuth user permission: report:consent-page-analysis
    */
   pageAnalysis(
     id: string,
@@ -110,11 +158,10 @@ export class ConsentSettings extends APIResource {
    * close-icon clicks, and derived rates per visitor `country_region_name`, ranked
    * by banner views (descending). Visitors whose region cannot be resolved (e.g. bot
    * traffic, IP geo failure) are bucketed under the literal `Unknown` so per-region
-   * counts always sum to the global totals. Use this to discover the region names
-   * you can later pass to the `region` filter on
-   * `GET /rest/v1/consent-settings/{id}/analytics`. Requires the API-key scope
-   * `report:consent-analytics` (PHI-bearing report data). Requires scope:
-   * report:consent-analytics
+   * counts always sum to the global totals. Use the JSON-encoded shared analytics
+   * `filter` to scope the underlying events. Requires the API-key scope
+   * `report:consent-analytics` (PHI-bearing report data). Requires API-key scope or
+   * current OAuth user permission: report:consent-analytics
    */
   analyticsByRegion(
     id: string,
@@ -174,7 +221,8 @@ export namespace ConsentSettingListResponse {
     services: Array<Entity.Service>;
 
     /**
-     * Enabled means the CMP serves on whitelisted domains; Disabled means it does not.
+     * Enabled serves the CMP on its allowed domains and requires at least one.
+     * Disabled does not serve the CMP and may have no allowed domains.
      */
     status: 'Disabled' | 'Enabled';
 
@@ -221,9 +269,9 @@ export namespace ConsentSettingListResponse {
     webSDKToken?: string | null;
 
     /**
-     * Allowlist of domains where this CMP configuration may run. Used at runtime to
-     * derive the broadest matching base domain so consent can persist across matching
-     * subdomains.
+     * Domains where this CMP may run. An Enabled CMP requires at least one allowed
+     * domain; with none configured, the CMP does not run. Matching domains may share
+     * consent across subdomains.
      */
     whitelistDomains?: Array<string> | null;
   }
@@ -614,7 +662,8 @@ export interface ConsentSettingCreateResponse {
   services: Array<ConsentSettingCreateResponse.Service>;
 
   /**
-   * Enabled means the CMP serves on whitelisted domains; Disabled means it does not.
+   * Enabled serves the CMP on its allowed domains and requires at least one.
+   * Disabled does not serve the CMP and may have no allowed domains.
    */
   status: 'Disabled' | 'Enabled';
 
@@ -661,9 +710,9 @@ export interface ConsentSettingCreateResponse {
   webSDKToken?: string | null;
 
   /**
-   * Allowlist of domains where this CMP configuration may run. Used at runtime to
-   * derive the broadest matching base domain so consent can persist across matching
-   * subdomains.
+   * Domains where this CMP may run. An Enabled CMP requires at least one allowed
+   * domain; with none configured, the CMP does not run. Matching domains may share
+   * consent across subdomains.
    */
   whitelistDomains?: Array<string> | null;
 }
@@ -1053,7 +1102,8 @@ export interface ConsentSettingRetrieveResponse {
   services: Array<ConsentSettingRetrieveResponse.Service>;
 
   /**
-   * Enabled means the CMP serves on whitelisted domains; Disabled means it does not.
+   * Enabled serves the CMP on its allowed domains and requires at least one.
+   * Disabled does not serve the CMP and may have no allowed domains.
    */
   status: 'Disabled' | 'Enabled';
 
@@ -1100,9 +1150,9 @@ export interface ConsentSettingRetrieveResponse {
   webSDKToken?: string | null;
 
   /**
-   * Allowlist of domains where this CMP configuration may run. Used at runtime to
-   * derive the broadest matching base domain so consent can persist across matching
-   * subdomains.
+   * Domains where this CMP may run. An Enabled CMP requires at least one allowed
+   * domain; with none configured, the CMP does not run. Matching domains may share
+   * consent across subdomains.
    */
   whitelistDomains?: Array<string> | null;
 }
@@ -1492,7 +1542,8 @@ export interface ConsentSettingReplaceResponse {
   services: Array<ConsentSettingReplaceResponse.Service>;
 
   /**
-   * Enabled means the CMP serves on whitelisted domains; Disabled means it does not.
+   * Enabled serves the CMP on its allowed domains and requires at least one.
+   * Disabled does not serve the CMP and may have no allowed domains.
    */
   status: 'Disabled' | 'Enabled';
 
@@ -1539,9 +1590,9 @@ export interface ConsentSettingReplaceResponse {
   webSDKToken?: string | null;
 
   /**
-   * Allowlist of domains where this CMP configuration may run. Used at runtime to
-   * derive the broadest matching base domain so consent can persist across matching
-   * subdomains.
+   * Domains where this CMP may run. An Enabled CMP requires at least one allowed
+   * domain; with none configured, the CMP does not run. Matching domains may share
+   * consent across subdomains.
    */
   whitelistDomains?: Array<string> | null;
 }
@@ -1931,7 +1982,8 @@ export interface ConsentSettingUpdateResponse {
   services: Array<ConsentSettingUpdateResponse.Service>;
 
   /**
-   * Enabled means the CMP serves on whitelisted domains; Disabled means it does not.
+   * Enabled serves the CMP on its allowed domains and requires at least one.
+   * Disabled does not serve the CMP and may have no allowed domains.
    */
   status: 'Disabled' | 'Enabled';
 
@@ -1978,9 +2030,9 @@ export interface ConsentSettingUpdateResponse {
   webSDKToken?: string | null;
 
   /**
-   * Allowlist of domains where this CMP configuration may run. Used at runtime to
-   * derive the broadest matching base domain so consent can persist across matching
-   * subdomains.
+   * Domains where this CMP may run. An Enabled CMP requires at least one allowed
+   * domain; with none configured, the CMP does not run. Matching domains may share
+   * consent across subdomains.
    */
   whitelistDomains?: Array<string> | null;
 }
@@ -2370,7 +2422,8 @@ export interface ConsentSettingDeleteResponse {
   services: Array<ConsentSettingDeleteResponse.Service>;
 
   /**
-   * Enabled means the CMP serves on whitelisted domains; Disabled means it does not.
+   * Enabled serves the CMP on its allowed domains and requires at least one.
+   * Disabled does not serve the CMP and may have no allowed domains.
    */
   status: 'Disabled' | 'Enabled';
 
@@ -2417,9 +2470,9 @@ export interface ConsentSettingDeleteResponse {
   webSDKToken?: string | null;
 
   /**
-   * Allowlist of domains where this CMP configuration may run. Used at runtime to
-   * derive the broadest matching base domain so consent can persist across matching
-   * subdomains.
+   * Domains where this CMP may run. An Enabled CMP requires at least one allowed
+   * domain; with none configured, the CMP does not run. Matching domains may share
+   * consent across subdomains.
    */
   whitelistDomains?: Array<string> | null;
 }
@@ -2767,9 +2820,9 @@ export namespace ConsentSettingDeleteResponse {
 
 export interface ConsentSettingAnalyticsResponse {
   /**
-   * One entry per time bucket (day or hour, depending on `granularity`) covering the
-   * full window — empty windows are zero-filled so callers can render contiguous
-   * time series without gap-handling logic.
+   * One entry per time bucket (hour, day, week, or month, depending on
+   * `granularity`) covering the full window — empty windows are zero-filled so
+   * callers can render contiguous time series without gap-handling logic.
    */
   items: Array<ConsentSettingAnalyticsResponse.Item>;
 
@@ -2791,6 +2844,12 @@ export namespace ConsentSettingAnalyticsResponse {
     optInRate: number;
 
     optOutRate: number;
+
+    partialPeriod: boolean;
+
+    periodFrom: string;
+
+    periodTo: string;
 
     percentageChangeBannerViews?: number | null;
 
@@ -2828,28 +2887,63 @@ export namespace ConsentSettingAnalyticsResponse {
   }
 }
 
+export interface ConsentSettingAnalyticsMonthlyResponse {
+  items: Array<ConsentSettingAnalyticsMonthlyResponse.Item>;
+}
+
+export namespace ConsentSettingAnalyticsMonthlyResponse {
+  export interface Item {
+    bannerViews: number;
+
+    closeIconClicks: number;
+
+    dateTime: string;
+
+    explicitOptIns: number;
+
+    explicitOptOuts: number;
+
+    optInRate: number;
+
+    optOutRate: number;
+
+    partialPeriod: boolean;
+
+    periodFrom: string;
+
+    periodTo: string;
+  }
+}
+
+export interface ConsentSettingAnalyticsCapabilitiesResponse {
+  expiresAt: string;
+
+  intervals: Array<ConsentSettingAnalyticsCapabilitiesResponse.Interval>;
+
+  policyVersion: string;
+}
+
+export namespace ConsentSettingAnalyticsCapabilitiesResponse {
+  export interface Interval {
+    comparisonSupported: boolean;
+
+    granularity: 'DAILY' | 'HOURLY' | 'MONTHLY' | 'WEEKLY';
+
+    maxIncludedDays: number;
+  }
+}
+
 export interface ConsentSettingPageAnalysisResponse {
   /**
-   * True when at least one more page is available beyond the current window.
+   * Pages ranked by opt-outs descending, then page path ascending.
    */
-  hasMore: boolean;
+  entities: Array<ConsentSettingPageAnalysisResponse.Entity>;
 
-  /**
-   * Pages with consent activity in the window, ranked by opt-outs (descending). Each
-   * page bundles banner views, opt-outs, close-icon clicks, and the derived opt-out
-   * rate.
-   */
-  items: Array<ConsentSettingPageAnalysisResponse.Item>;
-
-  /**
-   * Running count of pages loaded so far (`offset + items.length`). Approximate for
-   * load-more flows; query without `offset` to get the exact size of the first page.
-   */
-  total: number;
+  pagination: ConsentSettingPageAnalysisResponse.Pagination;
 }
 
 export namespace ConsentSettingPageAnalysisResponse {
-  export interface Item {
+  export interface Entity {
     bannerViews: number;
 
     closeIconClicks: number;
@@ -2859,6 +2953,12 @@ export namespace ConsentSettingPageAnalysisResponse {
     optOuts: number;
 
     page: string;
+  }
+
+  export interface Pagination {
+    hasMore: boolean;
+
+    nextCursor?: string | null;
   }
 }
 
@@ -2919,7 +3019,7 @@ export interface ConsentSettingReplaceParams {
   services: Array<ConsentSettingReplaceParams.Service>;
 
   /**
-   * Enabled to serve the CMP, Disabled to take it offline.
+   * Enabled requires at least one allowed domain. Disabled may have none.
    */
   status: 'Disabled' | 'Enabled';
 
@@ -2957,7 +3057,9 @@ export interface ConsentSettingReplaceParams {
   webSDKToken?: string | null;
 
   /**
-   * Allowlist of domains where this CMP runs. Pass null/[] to clear.
+   * Domains where this CMP may run. Enabled requires at least one allowed domain;
+   * omitting, null, or [] fails validation when status is Enabled. Disabled may have
+   * none.
    */
   whitelistDomains?: Array<string> | null;
 }
@@ -3357,7 +3459,8 @@ export interface ConsentSettingUpdateParams {
   skipBlockingClassNames?: Array<string> | null;
 
   /**
-   * Toggle Enabled/Disabled without re-sending the rest of the config.
+   * Set Enabled or Disabled. Enabling requires at least one allowed domain, either
+   * already saved or sent with this request.
    */
   status?: 'Disabled' | 'Enabled';
 
@@ -3368,7 +3471,8 @@ export interface ConsentSettingUpdateParams {
   webSDKToken?: string | null;
 
   /**
-   * Replace the allowlist. Pass null/[] to clear.
+   * Replace the allowed domains when sent. Omit to preserve saved domains. Pass null
+   * or [] to clear only when the resulting status is Disabled.
    */
   whitelistDomains?: Array<string> | null;
 }
@@ -3717,22 +3821,22 @@ export namespace ConsentSettingUpdateParams {
 export interface ConsentSettingAnalyticsParams {
   /**
    * Inclusive lower bound of the analytics window, as a UTC calendar day in
-   * `YYYY-MM-DD` format. The window between `from` and `to` must be 90 days or fewer
-   * (14 for `HOURLY` granularity).
+   * `YYYY-MM-DD` format. Count both selected dates: at most 180 days for `DAILY`,
+   * 365 for `WEEKLY`, 365 for `MONTHLY`, or 14 for `HOURLY`.
    */
   from: string;
 
   /**
    * Inclusive upper bound of the analytics window, as a UTC calendar day in
-   * `YYYY-MM-DD` format. The window between `from` and `to` must be 90 days or fewer
-   * (14 for `HOURLY` granularity).
+   * `YYYY-MM-DD` format. Count both selected dates: at most 180 days for `DAILY`,
+   * 365 for `WEEKLY`, 365 for `MONTHLY`, or 14 for `HOURLY`.
    */
   to: string;
 
   /**
-   * When `true`, each bucket also returns the matching bucket from the immediately
-   * preceding window of equal length (in `previous*` and `percentageChange*`
-   * fields). Defaults to `false`.
+   * Supported for DAILY and HOURLY. When `true`, each bucket also returns the
+   * matching bucket from the immediately preceding window of equal length (in
+   * `previous*` and `percentageChange*` fields). Defaults to `false`.
    */
   compareWithPreviousPeriod?: boolean;
 
@@ -3754,65 +3858,87 @@ export interface ConsentSettingAnalyticsParams {
   comparisonTo?: string;
 
   /**
-   * Bucket size for the time-series rollup. `DAILY` (default) buckets per UTC day;
-   * `HOURLY` buckets per UTC hour and limits the window to 14 days.
+   * JSON-encoded versioned analytics filter. Uses the shared analytics catalog
+   * property IDs and operators, including event, session, and custom properties.
    */
-  granularity?: 'DAILY' | 'HOURLY';
+  filter?: string;
 
   /**
-   * Filter to events whose `default_properties.pathname` equals this value (exact
-   * match, case-sensitive). Use this to drill into a single page.
+   * Reporting interval: DAILY (default), WEEKLY (UTC weeks starting Monday), MONTHLY
+   * (UTC calendar months), or HOURLY. Included-day limits: at most 180 days for
+   * `DAILY`, 365 for `WEEKLY`, 365 for `MONTHLY`, or 14 for `HOURLY`. Breakdown
+   * reports aggregate the entire selected range.
    */
-  pagePath?: string;
-
-  /**
-   * Filter results to events whose `request_context.country_region_name` is in this
-   * set. Pass a single region (e.g. `California`) or a comma-separated list
-   * (`California,Texas`). Case-sensitive. Use
-   * `GET /rest/v1/consent-settings/{id}/analytics-by-region` to discover the region
-   * names available for an account.
-   */
-  regions?: string;
+  granularity?: 'DAILY' | 'HOURLY' | 'MONTHLY' | 'WEEKLY';
 }
 
-export interface ConsentSettingPageAnalysisParams {
+export interface ConsentSettingAnalyticsMonthlyParams {
   /**
    * Inclusive lower bound of the analytics window, as a UTC calendar day in
-   * `YYYY-MM-DD` format. The window between `from` and `to` must be 90 days or fewer
-   * (14 for `HOURLY` granularity).
+   * `YYYY-MM-DD` format. Count both selected dates: at most 180 days for `DAILY`,
+   * 365 for `WEEKLY`, 365 for `MONTHLY`, or 14 for `HOURLY`.
    */
   from: string;
 
   /**
    * Inclusive upper bound of the analytics window, as a UTC calendar day in
-   * `YYYY-MM-DD` format. The window between `from` and `to` must be 90 days or fewer
-   * (14 for `HOURLY` granularity).
+   * `YYYY-MM-DD` format. Count both selected dates: at most 180 days for `DAILY`,
+   * 365 for `WEEKLY`, 365 for `MONTHLY`, or 14 for `HOURLY`.
    */
   to: string;
 
   /**
-   * Maximum number of pages to return. Defaults to 50.
+   * JSON-encoded versioned analytics filter. Uses the shared analytics catalog
+   * property IDs and operators, including event, session, and custom properties.
    */
-  limit?: number;
+  filter?: string;
+}
+
+export interface ConsentSettingAnalyticsCapabilitiesParams {
+  kind?: 'PAGES' | 'SUMMARY' | 'TRENDS';
+}
+
+export interface ConsentSettingPageAnalysisParams {
+  /**
+   * Inclusive lower bound of the analytics window, as a UTC calendar day in
+   * `YYYY-MM-DD` format. Count both selected dates: at most 180 days for `DAILY`,
+   * 365 for `WEEKLY`, 365 for `MONTHLY`, or 14 for `HOURLY`.
+   */
+  from: string;
 
   /**
-   * Skip this many top-ranked pages before returning. Use together with `limit` for
-   * load-more pagination.
+   * Inclusive upper bound of the analytics window, as a UTC calendar day in
+   * `YYYY-MM-DD` format. Count both selected dates: at most 180 days for `DAILY`,
+   * 365 for `WEEKLY`, 365 for `MONTHLY`, or 14 for `HOURLY`.
    */
-  offset?: number | null;
+  to: string;
 
   /**
-   * Filter results to events whose `request_context.country_region_name` is in this
-   * set. Pass a single region (e.g. `California`) or a comma-separated list
-   * (`California,Texas`). Case-sensitive. Use
-   * `GET /rest/v1/consent-settings/{id}/analytics-by-region` to discover the region
-   * names available for an account.
+   * Opaque cursor from pagination.nextCursor. Omit for the first page.
    */
-  regions?: string;
+  cursor?: string;
 
   /**
-   * Case-sensitive substring match against `default_properties.pathname`. Wrapped in
-   * `%...%` server-side.
+   * JSON-encoded versioned analytics filter. Uses the shared analytics catalog
+   * property IDs and operators, including event, session, and custom properties.
+   */
+  filter?: string;
+
+  /**
+   * Reporting interval: DAILY (default), WEEKLY (UTC weeks starting Monday), MONTHLY
+   * (UTC calendar months), or HOURLY. Included-day limits: at most 180 days for
+   * `DAILY`, 365 for `WEEKLY`, 365 for `MONTHLY`, or 14 for `HOURLY`. Breakdown
+   * reports aggregate the entire selected range.
+   */
+  granularity?: 'DAILY' | 'HOURLY' | 'MONTHLY' | 'WEEKLY';
+
+  /**
+   * Maximum number of pages to return. Defaults to 50; clamped to 1–200.
+   */
+  limit?: number | null;
+
+  /**
+   * Case-sensitive substring match against the page path.
    */
   search?: string;
 }
@@ -3820,17 +3946,31 @@ export interface ConsentSettingPageAnalysisParams {
 export interface ConsentSettingAnalyticsByRegionParams {
   /**
    * Inclusive lower bound of the analytics window, as a UTC calendar day in
-   * `YYYY-MM-DD` format. The window between `from` and `to` must be 90 days or fewer
-   * (14 for `HOURLY` granularity).
+   * `YYYY-MM-DD` format. Count both selected dates: at most 180 days for `DAILY`,
+   * 365 for `WEEKLY`, 365 for `MONTHLY`, or 14 for `HOURLY`.
    */
   from: string;
 
   /**
    * Inclusive upper bound of the analytics window, as a UTC calendar day in
-   * `YYYY-MM-DD` format. The window between `from` and `to` must be 90 days or fewer
-   * (14 for `HOURLY` granularity).
+   * `YYYY-MM-DD` format. Count both selected dates: at most 180 days for `DAILY`,
+   * 365 for `WEEKLY`, 365 for `MONTHLY`, or 14 for `HOURLY`.
    */
   to: string;
+
+  /**
+   * JSON-encoded versioned analytics filter. Uses the shared analytics catalog
+   * property IDs and operators, including event, session, and custom properties.
+   */
+  filter?: string;
+
+  /**
+   * Reporting interval: DAILY (default), WEEKLY (UTC weeks starting Monday), MONTHLY
+   * (UTC calendar months), or HOURLY. Included-day limits: at most 180 days for
+   * `DAILY`, 365 for `WEEKLY`, 365 for `MONTHLY`, or 14 for `HOURLY`. Breakdown
+   * reports aggregate the entire selected range.
+   */
+  granularity?: 'DAILY' | 'HOURLY' | 'MONTHLY' | 'WEEKLY';
 }
 
 export declare namespace ConsentSettings {
@@ -3842,11 +3982,15 @@ export declare namespace ConsentSettings {
     type ConsentSettingUpdateResponse as ConsentSettingUpdateResponse,
     type ConsentSettingDeleteResponse as ConsentSettingDeleteResponse,
     type ConsentSettingAnalyticsResponse as ConsentSettingAnalyticsResponse,
+    type ConsentSettingAnalyticsMonthlyResponse as ConsentSettingAnalyticsMonthlyResponse,
+    type ConsentSettingAnalyticsCapabilitiesResponse as ConsentSettingAnalyticsCapabilitiesResponse,
     type ConsentSettingPageAnalysisResponse as ConsentSettingPageAnalysisResponse,
     type ConsentSettingAnalyticsByRegionResponse as ConsentSettingAnalyticsByRegionResponse,
     type ConsentSettingReplaceParams as ConsentSettingReplaceParams,
     type ConsentSettingUpdateParams as ConsentSettingUpdateParams,
     type ConsentSettingAnalyticsParams as ConsentSettingAnalyticsParams,
+    type ConsentSettingAnalyticsMonthlyParams as ConsentSettingAnalyticsMonthlyParams,
+    type ConsentSettingAnalyticsCapabilitiesParams as ConsentSettingAnalyticsCapabilitiesParams,
     type ConsentSettingPageAnalysisParams as ConsentSettingPageAnalysisParams,
     type ConsentSettingAnalyticsByRegionParams as ConsentSettingAnalyticsByRegionParams,
   };

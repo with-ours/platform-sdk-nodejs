@@ -13,7 +13,7 @@ export class Funnels extends APIResource {
    * funnels must not be treated as deleted. A complete list has
    * `unavailableCount: 0` and no warnings. Funnel results are computed on demand, so
    * `status` is always `READY` and `reportDateRange` is always `null`. Requires
-   * scope: web-analytics:view
+   * API-key scope or current OAuth user permission: web-analytics:view
    */
   list(options?: RequestOptions): APIPromise<FunnelListResponse> {
     return this._client.get('/rest/v1/funnels', options);
@@ -21,7 +21,8 @@ export class Funnels extends APIResource {
 
   /**
    * Create a funnel from a versioned definition. Returns the complete saved
-   * configuration. Requires scope: web-analytics:write
+   * configuration. Requires API-key scope or current OAuth user permission:
+   * web-analytics:write
    */
   create(body: FunnelCreateParams, options?: RequestOptions): APIPromise<FunnelCreateResponse> {
     return this._client.post('/rest/v1/funnels', { body, ...options });
@@ -29,8 +30,8 @@ export class Funnels extends APIResource {
 
   /**
    * Fetch a single funnel configuration by its id. Returns `404` when the funnel
-   * does not exist or belongs to a different account. Requires scope:
-   * web-analytics:view
+   * does not exist or belongs to a different account. Requires API-key scope or
+   * current OAuth user permission: web-analytics:view
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<FunnelRetrieveResponse> {
     return this._client.get(path`/rest/v1/funnels/${id}`, options);
@@ -38,8 +39,8 @@ export class Funnels extends APIResource {
 
   /**
    * Update one or more funnel fields. Omitted fields remain unchanged. The canonical
-   * definition can be replaced by supplying `queryDefinition`. Requires scope:
-   * web-analytics:write
+   * definition can be replaced by supplying `queryDefinition`. Requires API-key
+   * scope or current OAuth user permission: web-analytics:write
    */
   update(id: string, body: FunnelUpdateParams, options?: RequestOptions): APIPromise<FunnelUpdateResponse> {
     return this._client.patch(path`/rest/v1/funnels/${id}`, { body, ...options });
@@ -47,7 +48,7 @@ export class Funnels extends APIResource {
 
   /**
    * Delete a Funnel configuration. Existing analytics data is unaffected. Requires
-   * scope: web-analytics:write
+   * API-key scope or current OAuth user permission: web-analytics:write
    */
   delete(id: string, options?: RequestOptions): APIPromise<FunnelDeleteResponse> {
     return this._client.delete(path`/rest/v1/funnels/${id}`, options);
@@ -56,7 +57,7 @@ export class Funnels extends APIResource {
   /**
    * Duplicate a funnel configuration in the same account. The copy keeps the
    * canonical definition, receives a new ID, and is named `Copy of …`. Requires
-   * scope: web-analytics:write
+   * API-key scope or current OAuth user permission: web-analytics:write
    */
   duplicate(id: string, options?: RequestOptions): APIPromise<FunnelDuplicateResponse> {
     return this._client.post(path`/rest/v1/funnels/${id}/duplicate`, options);
@@ -70,8 +71,8 @@ export class Funnels extends APIResource {
    * data at request time; ad hoc filter, saved-scope, and web-source overrides are
    * not accepted. Observation completeness is null when the source coverage
    * watermark is unavailable. `to` must be on or after `from`, and the window may
-   * span at most 91 days including both endpoints. Requires scope:
-   * web-analytics:view
+   * span at most 91 days including both endpoints. Requires API-key scope or current
+   * OAuth user permission: web-analytics:view
    */
   results(
     id: string,

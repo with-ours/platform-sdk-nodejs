@@ -241,10 +241,51 @@ describe('resource consentSettings', () => {
       compareWithPreviousPeriod: true,
       comparisonFrom: '2026-03-01',
       comparisonTo: '2026-03-14',
+      filter:
+        '{"version":1,"filter":{"kind":"predicate","property":"event.source_id","operator":"eq","value":"source-1"}}',
       granularity: 'DAILY',
-      pagePath: '/pricing',
-      regions: 'California',
     });
+  });
+
+  test('analyticsMonthly: only required params', async () => {
+    const responsePromise = client.consentSettings.analyticsMonthly('id', {
+      from: '2026-04-01',
+      to: '2026-04-30',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('analyticsMonthly: required and optional params', async () => {
+    const response = await client.consentSettings.analyticsMonthly('id', {
+      from: '2026-04-01',
+      to: '2026-04-30',
+      filter:
+        '{"version":1,"filter":{"kind":"predicate","property":"event.source_id","operator":"eq","value":"source-1"}}',
+    });
+  });
+
+  test('analyticsCapabilities', async () => {
+    const responsePromise = client.consentSettings.analyticsCapabilities();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('analyticsCapabilities: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.consentSettings.analyticsCapabilities({ kind: 'PAGES' }, { path: '/_stainless_unknown_path' }),
+    ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
   });
 
   test('pageAnalysis: only required params', async () => {
@@ -265,9 +306,11 @@ describe('resource consentSettings', () => {
     const response = await client.consentSettings.pageAnalysis('id', {
       from: '2026-04-01',
       to: '2026-04-30',
-      limit: 1,
-      offset: 0,
-      regions: 'California',
+      cursor: 'cursor',
+      filter:
+        '{"version":1,"filter":{"kind":"predicate","property":"event.source_id","operator":"eq","value":"source-1"}}',
+      granularity: 'DAILY',
+      limit: 0,
       search: '/checkout',
     });
   });
@@ -290,6 +333,9 @@ describe('resource consentSettings', () => {
     const response = await client.consentSettings.analyticsByRegion('id', {
       from: '2026-04-01',
       to: '2026-04-30',
+      filter:
+        '{"version":1,"filter":{"kind":"predicate","property":"event.source_id","operator":"eq","value":"source-1"}}',
+      granularity: 'DAILY',
     });
   });
 });

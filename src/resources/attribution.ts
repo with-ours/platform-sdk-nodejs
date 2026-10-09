@@ -12,7 +12,7 @@ export class Attribution extends APIResource {
    * analysis window (max 60 days). Optionally filter to a specific UTM combo with
    * `utmSource`, `utmMedium`, etc. The counts represent unique visitors who
    * performed the specified `eventName` and were attributed to each UTM value.
-   * Requires scope: web-analytics:view
+   * Requires API-key scope or current OAuth user permission: web-analytics:view
    */
   initial(query: AttributionInitialParams, options?: RequestOptions): APIPromise<AttributionInitialResponse> {
     return this._client.get('/rest/v1/attribution/initial', { query, ...options });
@@ -24,7 +24,8 @@ export class Attribution extends APIResource {
    * a last-touch basis for the given date window. Use `from`/`to` to set the
    * analysis window (max 60 days). The counts represent unique visitors who
    * performed the specified `eventName` and were attributed to each UTM value on
-   * their most recent session. Requires scope: web-analytics:view
+   * their most recent session. Requires API-key scope or current OAuth user
+   * permission: web-analytics:view
    */
   lastTouch(
     query: AttributionLastTouchParams,
@@ -38,7 +39,8 @@ export class Attribution extends APIResource {
    * hierarchy with attributed converter credits distributed according to the
    * selected `attributionModel`. Scoped to all web sources by default; optionally
    * narrow to a single web source via `webSourceId`. Date range is capped at 31
-   * days; lookback window is capped at 60 days. Requires scope: web-analytics:view
+   * days; lookback window is capped at 60 days. Requires API-key scope or current
+   * OAuth user permission: web-analytics:view
    */
   conversion(
     query: AttributionConversionParams,
@@ -52,7 +54,8 @@ export class Attribution extends APIResource {
    * conversion rate for the selected event and date window, a per-day timeseries,
    * and a UTM source/medium/campaign breakdown. Optionally compare against the
    * preceding period of equal length when `attributionWindow` is `IN_RANGE`. Date
-   * range is capped at 60 days. Requires scope: web-analytics:view
+   * range is capped at 60 days. Requires API-key scope or current OAuth user
+   * permission: web-analytics:view
    */
   audienceConversion(
     query: AttributionAudienceConversionParams,
@@ -68,7 +71,7 @@ export class Attribution extends APIResource {
    * `web-analytics:view` and `report:event-count-by-day` API-key scopes. Date range
    * is capped at 31 days. Pass `combos` as a single JSON-encoded array:
    * `combos=[{"utmSource":"google","utmMedium":"cpc"},{"utmSource":"meta"}]`.
-   * Requires scope: web-analytics:view
+   * Requires API-key scope or current OAuth user permission: web-analytics:view
    */
   utmComparison(
     query: AttributionUtmComparisonParams,

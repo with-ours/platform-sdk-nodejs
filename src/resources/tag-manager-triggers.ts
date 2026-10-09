@@ -12,7 +12,7 @@ export class TagManagerTriggers extends APIResource {
    * parameter — triggers are always scoped to one parent container. Supports cursor
    * pagination via `limit` and `cursor`; the limit clamp is 1000 so a single request
    * can return the full set (the web-app workspace renders all triggers in one
-   * shot). Requires scope: tagManagers:find
+   * shot). Requires API-key scope or current OAuth user permission: tagManagers:find
    */
   list(
     query: TagManagerTriggerListParams,
@@ -27,7 +27,8 @@ export class TagManagerTriggers extends APIResource {
   /**
    * Create a new trigger inside a tag manager. `tagManagerId` is required in the
    * body. Send `conditions: []` for an unconditional trigger; otherwise supply
-   * type-specific condition objects. Requires scope: tagManagers:update
+   * type-specific condition objects. Requires API-key scope or current OAuth user
+   * permission: tagManagers:update
    */
   create(
     body: TagManagerTriggerCreateParams,
@@ -37,7 +38,8 @@ export class TagManagerTriggers extends APIResource {
   }
 
   /**
-   * Find a single tag manager trigger by ID. Requires scope: tagManagers:find
+   * Find a single tag manager trigger by ID. Requires API-key scope or current OAuth
+   * user permission: tagManagers:find
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<TagManagerTriggerRetrieveResponse> {
     return this._client.get(path`/rest/v1/tag-manager-triggers/${id}`, options);
@@ -46,7 +48,8 @@ export class TagManagerTriggers extends APIResource {
   /**
    * Partially update a trigger. Only the fields you send are changed. `conditions`
    * is replaced wholesale when sent. To assign a trigger to a folder, use
-   * `POST /rest/v1/tag-manager-asset-folders`. Requires scope: tagManagers:update
+   * `POST /rest/v1/tag-manager-asset-folders`. Requires API-key scope or current
+   * OAuth user permission: tagManagers:update
    */
   update(
     id: string,
@@ -57,7 +60,8 @@ export class TagManagerTriggers extends APIResource {
   }
 
   /**
-   * Delete a tag manager trigger. Requires scope: tagManagers:update
+   * Delete a tag manager trigger. Requires API-key scope or current OAuth user
+   * permission: tagManagers:update
    */
   delete(id: string, options?: RequestOptions): APIPromise<TagManagerTriggerDeleteResponse> {
     return this._client.delete(path`/rest/v1/tag-manager-triggers/${id}`, options);
@@ -68,7 +72,8 @@ export class TagManagerTriggers extends APIResource {
    * to send on create/patch, and the shape of the type-specific `parameters`
    * payload. Trigger `conditions` are evaluated at runtime (per-trigger, see the
    * resource docs) and are not part of this descriptor. Account-agnostic: the
-   * response is the same for every API key. Requires scope: tagManagers:find
+   * response is the same for every API key. Requires API-key scope or current OAuth
+   * user permission: tagManagers:find
    */
   types(options?: RequestOptions): APIPromise<TagManagerTriggerTypesResponse> {
     return this._client.get('/rest/v1/tag-manager-triggers/types', options);
@@ -320,7 +325,7 @@ export namespace TagManagerTriggerTypesResponse {
       /**
        * Default value when the caller omits the parameter on create.
        */
-      default?: { [key: string]: unknown };
+      default?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
 
       description?: string | null;
 

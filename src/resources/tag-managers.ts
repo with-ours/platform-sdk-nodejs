@@ -10,7 +10,8 @@ export class TagManagers extends APIResource {
    * List every tag manager on this account. Each tag manager is a pixel-scoped
    * container of tags, triggers, variables, and folders. Not paginated — accounts
    * are capped at a small number of tag managers in practice, so the response fits
-   * in a single page. Requires scope: tagManagers:list
+   * in a single page. Requires API-key scope or current OAuth user permission:
+   * tagManagers:list
    */
   list(options?: RequestOptions): APIPromise<TagManagerListResponse> {
     return this._client.get('/rest/v1/tag-managers', options);
@@ -23,7 +24,8 @@ export class TagManagers extends APIResource {
    * `GET /tag-manager-triggers?tagManagerId={id}` right after create to grab their
    * server-assigned ids so you can reuse them in `fireTriggerIds` instead of
    * redundantly creating a second `PageView`/`DomReady`/`Initialization`. Returns
-   * the bare entity. Requires scope: tagManagers:create
+   * the bare entity. Requires API-key scope or current OAuth user permission:
+   * tagManagers:create
    */
   create(body: TagManagerCreateParams, options?: RequestOptions): APIPromise<TagManagerCreateResponse> {
     return this._client.post('/rest/v1/tag-managers', { body, ...options });
@@ -31,7 +33,8 @@ export class TagManagers extends APIResource {
 
   /**
    * Fetch a single tag manager by id, including its server-assigned `pixel` token
-   * used by the install snippet. Requires scope: tagManagers:find
+   * used by the install snippet. Requires API-key scope or current OAuth user
+   * permission: tagManagers:find
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<TagManagerRetrieveResponse> {
     return this._client.get(path`/rest/v1/tag-managers/${id}`, options);
@@ -40,7 +43,8 @@ export class TagManagers extends APIResource {
   /**
    * Partially update a tag manager. Only the fields you send are changed; omitted
    * fields keep their current value. Send `dataLayerName: null` to clear the
-   * override and fall back to the SDK default. Requires scope: tagManagers:update
+   * override and fall back to the SDK default. Requires API-key scope or current
+   * OAuth user permission: tagManagers:update
    */
   update(
     id: string,
@@ -52,7 +56,8 @@ export class TagManagers extends APIResource {
 
   /**
    * Delete a tag manager. Child tags, triggers, variables, and folders are
-   * cascade-deleted with the container. Requires scope: tagManagers:delete
+   * cascade-deleted with the container. Requires API-key scope or current OAuth user
+   * permission: tagManagers:delete
    */
   delete(id: string, options?: RequestOptions): APIPromise<TagManagerDeleteResponse> {
     return this._client.delete(path`/rest/v1/tag-managers/${id}`, options);

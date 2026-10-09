@@ -9,7 +9,8 @@ export class WebScannerRules extends APIResource {
   /**
    * List suppression rules for a single web scanner. Requires the `scannerId` query
    * parameter — rules are always scoped to a parent scanner. Not paginated; the
-   * per-scanner rule count is bounded. Requires scope: webScanner:find
+   * per-scanner rule count is bounded. Requires API-key scope or current OAuth user
+   * permission: webScanner:find
    */
   list(query: WebScannerRuleListParams, options?: RequestOptions): APIPromise<WebScannerRuleListResponse> {
     return this._client.get('/rest/v1/web-scanner-rules', { query, ...options });
@@ -19,8 +20,8 @@ export class WebScannerRules extends APIResource {
    * Create a suppression rule on a web scanner. Auth is enforced against the parent
    * scanner via `webScanner:update`. At least one of `cookiePatterns`,
    * `domainPatterns`, or `scriptPatterns` should be set for the rule to match
-   * anything; omitted pattern arrays default to `[]`. Requires scope:
-   * webScanner:update
+   * anything; omitted pattern arrays default to `[]`. Requires API-key scope or
+   * current OAuth user permission: webScanner:update
    */
   create(
     body: WebScannerRuleCreateParams,
@@ -30,7 +31,8 @@ export class WebScannerRules extends APIResource {
   }
 
   /**
-   * Find a single web scanner rule by ID. Requires scope: webScanner:find
+   * Find a single web scanner rule by ID. Requires API-key scope or current OAuth
+   * user permission: webScanner:find
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<WebScannerRuleRetrieveResponse> {
     return this._client.get(path`/rest/v1/web-scanner-rules/${id}`, options);
@@ -39,7 +41,8 @@ export class WebScannerRules extends APIResource {
   /**
    * Partially update a suppression rule. Only the fields you send are changed.
    * List-valued fields (`cookiePatterns`, `domainPatterns`, `scriptPatterns`) are
-   * replaced wholesale when sent. Requires scope: webScanner:update
+   * replaced wholesale when sent. Requires API-key scope or current OAuth user
+   * permission: webScanner:update
    */
   update(
     id: string,
@@ -50,7 +53,8 @@ export class WebScannerRules extends APIResource {
   }
 
   /**
-   * Delete a web scanner rule. Requires scope: webScanner:update
+   * Delete a web scanner rule. Requires API-key scope or current OAuth user
+   * permission: webScanner:update
    */
   delete(id: string, options?: RequestOptions): APIPromise<WebScannerRuleDeleteResponse> {
     return this._client.delete(path`/rest/v1/web-scanner-rules/${id}`, options);

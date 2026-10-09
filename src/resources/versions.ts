@@ -10,7 +10,8 @@ export class Versions extends APIResource {
   /**
    * List versions for this account, newest first. Supports cursor pagination and
    * filtering by `isPublished`, `nameContains`, and `notesContains`. Combine filters
-   * with AND semantics. Requires scope: version:list
+   * with AND semantics. Requires API-key scope or current OAuth user permission:
+   * version:list
    */
   list(
     query: VersionListParams | null | undefined = {},
@@ -35,14 +36,16 @@ export class Versions extends APIResource {
    * an entity-id allowlist for one collection — omit (or send `[]`) to include every
    * draft change in that collection, or send a non-empty array to whitelist only
    * those ids. Unlisted collections inherit wholesale from the latest published
-   * version. Requires scope: version:publish
+   * version. Requires API-key scope or current OAuth user permission:
+   * version:publish
    */
   create(body: VersionCreateParams, options?: RequestOptions): APIPromise<VersionCreateResponse> {
     return this._client.post('/rest/v1/versions', { body, ...options });
   }
 
   /**
-   * Find a single version by ID. Requires scope: version:find
+   * Find a single version by ID. Requires API-key scope or current OAuth user
+   * permission: version:find
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<VersionRetrieveResponse> {
     return this._client.get(path`/rest/v1/versions/${id}`, options);
@@ -50,7 +53,7 @@ export class Versions extends APIResource {
 
   /**
    * Partially update a version. Only the fields you send are changed. Requires
-   * scope: version:update
+   * API-key scope or current OAuth user permission: version:update
    */
   update(id: string, body: VersionUpdateParams, options?: RequestOptions): APIPromise<VersionUpdateResponse> {
     return this._client.patch(path`/rest/v1/versions/${id}`, { body, ...options });
@@ -61,7 +64,7 @@ export class Versions extends APIResource {
    * to an older snapshot. Returns 409 if the version is already published, was
    * created more than 45 days ago, or another publish is already in flight. To
    * create-and-publish from current draft state, use POST /rest/v1/versions instead.
-   * Requires scope: version:publish
+   * Requires API-key scope or current OAuth user permission: version:publish
    */
   publish(id: string, options?: RequestOptions): APIPromise<VersionPublishResponse> {
     return this._client.post(path`/rest/v1/versions/${id}/publish`, options);
@@ -71,8 +74,8 @@ export class Versions extends APIResource {
    * Retrieve the full JSON snapshot captured by a version — every entity
    * (destinations, sources, mappings, consent settings, etc.) as it existed when
    * this version was published. Sensitive fields (API keys, tokens, secrets) are
-   * redacted. Useful for IaC export, audit, and backup workflows. Requires scope:
-   * version:find
+   * redacted. Useful for IaC export, audit, and backup workflows. Requires API-key
+   * scope or current OAuth user permission: version:find
    */
   snapshot(id: string, options?: RequestOptions): APIPromise<VersionSnapshotResponse> {
     return this._client.get(path`/rest/v1/versions/${id}/snapshot`, options);
@@ -97,7 +100,8 @@ export class Versions extends APIResource {
    *   latest published version.
    * - `GET /rest/v1/versions/{id}/diff?against={otherId}` — compare two specific
    *   versions. `otherId` may also be `draft` to diff a published snapshot against
-   *   the live draft state. Requires scope: version:find
+   *   the live draft state. Requires API-key scope or current OAuth user permission:
+   *   version:find
    */
   diff(
     id: 'draft' | (string & {}),
@@ -122,7 +126,7 @@ export class Versions extends APIResource {
    * `GET /rest/v1/versions/draft/diff` when you need the full change set instead of
    * one entity. (`draft` is a literal path segment identifying the live draft as the
    * target, which is why the entity is passed as `entityId` rather than `id`.)
-   * Requires scope: version:find
+   * Requires API-key scope or current OAuth user permission: version:find
    */
   status(
     id: 'draft',
@@ -147,7 +151,8 @@ export class Versions extends APIResource {
    * use the experiment lifecycle endpoints (`/start`, `/stop`) for those — but
    * `experimentSettings` is supported. To discard every pending change at once, use
    * `POST /rest/v1/versions/draft/abandon`. (`draft` is a literal path segment
-   * identifying the live draft as the target.) Requires scope: version:publish
+   * identifying the live draft as the target.) Requires API-key scope or current
+   * OAuth user permission: version:publish
    */
   revert(
     id: 'draft',
@@ -165,7 +170,7 @@ export class Versions extends APIResource {
    * version to revert to, or when another publish or abandon is already in flight.
    * To revert only specific changes, use `POST /rest/v1/versions/draft/revert`.
    * (`draft` is a literal path segment identifying the live draft as the target.)
-   * Requires scope: version:publish
+   * Requires API-key scope or current OAuth user permission: version:publish
    */
   abandon(id: 'draft', options?: RequestOptions): APIPromise<VersionAbandonResponse> {
     return this._client.post(path`/rest/v1/versions/${id}/abandon`, options);
@@ -3213,6 +3218,12 @@ export interface VersionListParams extends CursorParams {
 }
 
 export interface VersionCreateParams {
+  /**
+   * Allow publishing web sources without allowed domains for this version. Defaults
+   * to false. Sources without allowed domains accept events from any domain.
+   */
+  bypassWebSourceDomainValidation?: boolean | null;
+
   /**
    * Cherry-pick: allowed event ids (slug-like strings) to include from the draft.
    * Omit or send `[]` to include all draft changes in this collection.

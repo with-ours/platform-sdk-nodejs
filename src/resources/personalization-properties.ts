@@ -12,8 +12,8 @@ export class PersonalizationProperties extends APIResource {
    * `experimentSettingsId` query parameter — properties are always scoped to a
    * single record; list the records with `GET /rest/v1/experiment-settings`.
    * Supports cursor pagination via `limit` and `cursor`; the limit clamp is 1000 so
-   * a single request can return the full set. Requires scope:
-   * experimentSettings:list
+   * a single request can return the full set. Requires API-key scope or current
+   * OAuth user permission: experimentSettings:list
    *
    * @example
    * ```ts
@@ -43,7 +43,8 @@ export class PersonalizationProperties extends APIResource {
    * Create a personalization property on an experiment settings record. The new rule
    * is published automatically and starts accumulating from the next matching event
    * — no separate publish call is needed. `propertyKey` must be unique within the
-   * parent record. Requires scope: experimentSettings:update
+   * parent record. Requires API-key scope or current OAuth user permission:
+   * experimentSettings:update
    *
    * @example
    * ```ts
@@ -66,7 +67,8 @@ export class PersonalizationProperties extends APIResource {
 
   /**
    * Find a single personalization property by ID. Returns 404 when no property
-   * matches the supplied id. Requires scope: experimentSettings:find
+   * matches the supplied id. Requires API-key scope or current OAuth user
+   * permission: experimentSettings:find
    *
    * @example
    * ```ts
@@ -83,8 +85,8 @@ export class PersonalizationProperties extends APIResource {
    * changed, and the update is published automatically. Sending `triggerConditions`
    * replaces the prior list — partial-array merging is not supported. Values already
    * accumulated for visitors are kept; the new rule applies to events from here on.
-   * Returns 404 when no property matches the supplied id. Requires scope:
-   * experimentSettings:update
+   * Returns 404 when no property matches the supplied id. Requires API-key scope or
+   * current OAuth user permission: experimentSettings:update
    *
    * @example
    * ```ts
@@ -103,7 +105,8 @@ export class PersonalizationProperties extends APIResource {
   /**
    * Delete a personalization property. The rule stops accumulating immediately;
    * values already recorded for visitors are no longer maintained. Returns 404 when
-   * no property matches the supplied id. Requires scope: experimentSettings:update
+   * no property matches the supplied id. Requires API-key scope or current OAuth
+   * user permission: experimentSettings:update
    *
    * @example
    * ```ts

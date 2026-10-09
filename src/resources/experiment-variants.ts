@@ -11,7 +11,8 @@ export class ExperimentVariants extends APIResource {
    * List variants for a specific parent experiment. Requires the `experimentId`
    * query parameter — variants are always scoped to a single experiment. Supports
    * cursor pagination via `limit` and `cursor`; SDK runtimes that need the full set
-   * in one request can pass `?limit=100`. Requires scope: experiment:find
+   * in one request can pass `?limit=100`. Requires API-key scope or current OAuth
+   * user permission: experiment:find
    *
    * @example
    * ```ts
@@ -34,7 +35,8 @@ export class ExperimentVariants extends APIResource {
   }
 
   /**
-   * Create a new experiment variant. Requires scope: experiment:update
+   * Create a new experiment variant. Requires API-key scope or current OAuth user
+   * permission: experiment:update
    *
    * @example
    * ```ts
@@ -54,7 +56,8 @@ export class ExperimentVariants extends APIResource {
   }
 
   /**
-   * Find a single experiment variant by ID. Requires scope: experiment:find
+   * Find a single experiment variant by ID. Requires API-key scope or current OAuth
+   * user permission: experiment:find
    *
    * @example
    * ```ts
@@ -68,7 +71,7 @@ export class ExperimentVariants extends APIResource {
 
   /**
    * Partially update an experiment variant. Only the fields you send are changed.
-   * Requires scope: experiment:update
+   * Requires API-key scope or current OAuth user permission: experiment:update
    *
    * @example
    * ```ts
@@ -85,7 +88,8 @@ export class ExperimentVariants extends APIResource {
   }
 
   /**
-   * Delete an experiment variant. Requires scope: experiment:update
+   * Delete an experiment variant. Requires API-key scope or current OAuth user
+   * permission: experiment:update
    *
    * @example
    * ```ts

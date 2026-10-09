@@ -8,8 +8,8 @@ export class WebAnalytics extends APIResource {
   /**
    * Return privacy-first traffic metrics and a timeseries for the requested date
    * range. Filter by source, geography, page, campaign, device, or other supported
-   * dimensions with the JSON-encoded `filters` query parameter. Requires scope:
-   * web-analytics:view
+   * dimensions with the JSON-encoded `filters` query parameter. Requires API-key
+   * scope or current OAuth user permission: web-analytics:view
    */
   overview(
     query: WebAnalyticsOverviewParams,
@@ -20,7 +20,8 @@ export class WebAnalytics extends APIResource {
 
   /**
    * Return visitor counts grouped by referrer or UTM source dimension for the
-   * requested date range. Requires scope: web-analytics:view
+   * requested date range. Requires API-key scope or current OAuth user permission:
+   * web-analytics:view
    */
   sources(
     query: WebAnalyticsSourcesParams,
@@ -31,7 +32,8 @@ export class WebAnalytics extends APIResource {
 
   /**
    * Return page-level traffic metrics for top pages, entry pages, or exit pages in
-   * the requested date range. Requires scope: web-analytics:view
+   * the requested date range. Requires API-key scope or current OAuth user
+   * permission: web-analytics:view
    */
   pages(query: WebAnalyticsPagesParams, options?: RequestOptions): APIPromise<WebAnalyticsPagesResponse> {
     return this._client.get('/rest/v1/web-analytics/pages', { query, ...options });
@@ -39,7 +41,8 @@ export class WebAnalytics extends APIResource {
 
   /**
    * Return visitor counts grouped by country, region, or city for the requested date
-   * range. Requires scope: web-analytics:view
+   * range. Requires API-key scope or current OAuth user permission:
+   * web-analytics:view
    */
   locations(
     query: WebAnalyticsLocationsParams,
@@ -50,7 +53,8 @@ export class WebAnalytics extends APIResource {
 
   /**
    * Return visitor counts grouped by device type, browser, or operating system for
-   * the requested date range. Requires scope: web-analytics:view
+   * the requested date range. Requires API-key scope or current OAuth user
+   * permission: web-analytics:view
    */
   devices(
     query: WebAnalyticsDevicesParams,
@@ -61,7 +65,8 @@ export class WebAnalytics extends APIResource {
 
   /**
    * Return the distinct visitors active in the most recent 15-minute window,
-   * optionally scoped to one web source. Requires scope: web-analytics:view
+   * optionally scoped to one web source. Requires API-key scope or current OAuth
+   * user permission: web-analytics:view
    */
   currentVisitors(
     query: WebAnalyticsCurrentVisitorsParams | null | undefined = {},
@@ -72,8 +77,8 @@ export class WebAnalytics extends APIResource {
 
   /**
    * Return the next or previous journey steps for a pinned path. The `path` and
-   * `filters` query parameters are JSON-encoded arrays. Requires scope:
-   * web-analytics:view
+   * `filters` query parameters are JSON-encoded arrays. Requires API-key scope or
+   * current OAuth user permission: web-analytics:view
    */
   pathExplorer(
     query: WebAnalyticsPathExplorerParams,

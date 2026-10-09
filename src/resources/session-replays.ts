@@ -8,7 +8,8 @@ export class SessionReplays extends APIResource {
   /**
    * List recorded sessions for a date range. Filter by event, page, visitor, UTM
    * fields, or an explicit JSON-encoded session ID list. Use `pagination.nextCursor`
-   * to retrieve the next page. Requires scope: web-analytics:view
+   * to retrieve the next page. Requires API-key scope or current OAuth user
+   * permission: web-analytics:view
    */
   list(query: SessionReplayListParams, options?: RequestOptions): APIPromise<SessionReplayListResponse> {
     return this._client.get('/rest/v1/session-replays', { query, ...options });
@@ -16,7 +17,8 @@ export class SessionReplays extends APIResource {
 
   /**
    * Return the total number of replay-bearing sessions and a daily timeseries for
-   * the requested date range. Requires scope: web-analytics:view
+   * the requested date range. Requires API-key scope or current OAuth user
+   * permission: web-analytics:view
    */
   overview(
     query: SessionReplayOverviewParams,
