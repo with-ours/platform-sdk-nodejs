@@ -49,9 +49,9 @@ describe('resource tagManagerVariables', () => {
       parameters: { foo: 'bar' },
       tagManagerId: 'x',
       type: 'type',
-      defaultValue: { foo: 'bar' },
+      defaultValue: 'string',
       enabled: true,
-      lookUpTable: { foo: 'bar' },
+      lookUpTable: 'string',
     });
   });
 

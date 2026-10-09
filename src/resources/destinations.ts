@@ -8,7 +8,8 @@ import { path } from '../internal/utils/path';
 
 export class Destinations extends APIResource {
   /**
-   * List all destinations. Requires scope: destination:list
+   * List all destinations. Requires API-key scope or current OAuth user permission:
+   * destination:list
    */
   list(
     query: DestinationListParams | null | undefined = {},
@@ -21,14 +22,16 @@ export class Destinations extends APIResource {
   }
 
   /**
-   * Create a new destination. Requires scope: destination:create
+   * Create a new destination. Requires API-key scope or current OAuth user
+   * permission: destination:create
    */
   create(body: DestinationCreateParams, options?: RequestOptions): APIPromise<DestinationCreateResponse> {
     return this._client.post('/rest/v1/destinations', { body, ...options });
   }
 
   /**
-   * Find a single destination by ID. Requires scope: destination:find
+   * Find a single destination by ID. Requires API-key scope or current OAuth user
+   * permission: destination:find
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<DestinationRetrieveResponse> {
     return this._client.get(path`/rest/v1/destinations/${id}`, options);
@@ -38,7 +41,7 @@ export class Destinations extends APIResource {
    * Partially update a destination. Only the fields you send are changed; omitted
    * fields are unchanged. The `settings` object is patch-only: omitted keys keep
    * their current value, and send `null` to clear a specific setting. Requires
-   * scope: destination:update
+   * API-key scope or current OAuth user permission: destination:update
    */
   update(
     id: string,
@@ -49,7 +52,8 @@ export class Destinations extends APIResource {
   }
 
   /**
-   * Delete a destination. Requires scope: destination:delete
+   * Delete a destination. Requires API-key scope or current OAuth user permission:
+   * destination:delete
    */
   delete(id: string, options?: RequestOptions): APIPromise<DestinationDeleteResponse> {
     return this._client.delete(path`/rest/v1/destinations/${id}`, options);
@@ -61,7 +65,7 @@ export class Destinations extends APIResource {
    * settings descriptor used to configure a destination of that type.
    * Account-agnostic — the response is the same for every API key. Filter
    * client-side to find a specific type (e.g. `Klaviyo`, `Facebook`). Requires
-   * scope: destination:list
+   * API-key scope or current OAuth user permission: destination:list
    */
   types(options?: RequestOptions): APIPromise<DestinationTypesResponse> {
     return this._client.get('/rest/v1/destinations/types', options);
@@ -70,7 +74,8 @@ export class Destinations extends APIResource {
   /**
    * Snapshot of dispatch health for this destination over the trailing 24 hours:
    * counts of succeeded, failed, and intentionally stopped/blocked dispatches, plus
-   * a derived `status`. Requires scope: destination:find
+   * a derived `status`. Requires API-key scope or current OAuth user permission:
+   * destination:find
    */
   health(id: string, options?: RequestOptions): APIPromise<DestinationHealthResponse> {
     return this._client.get(path`/rest/v1/destinations/${id}/health`, options);
@@ -147,6 +152,7 @@ export interface DestinationListResponse {
     | 'MNTN'
     | 'MNTNAudience'
     | 'Mailchimp'
+    | 'MailchimpAudience'
     | 'MicrosoftCAPI'
     | 'Mixpanel'
     | 'NextdoorAds'
@@ -264,6 +270,7 @@ export interface DestinationCreateResponse {
     | 'MNTN'
     | 'MNTNAudience'
     | 'Mailchimp'
+    | 'MailchimpAudience'
     | 'MicrosoftCAPI'
     | 'Mixpanel'
     | 'NextdoorAds'
@@ -381,6 +388,7 @@ export interface DestinationRetrieveResponse {
     | 'MNTN'
     | 'MNTNAudience'
     | 'Mailchimp'
+    | 'MailchimpAudience'
     | 'MicrosoftCAPI'
     | 'Mixpanel'
     | 'NextdoorAds'
@@ -498,6 +506,7 @@ export interface DestinationUpdateResponse {
     | 'MNTN'
     | 'MNTNAudience'
     | 'Mailchimp'
+    | 'MailchimpAudience'
     | 'MicrosoftCAPI'
     | 'Mixpanel'
     | 'NextdoorAds'
@@ -851,6 +860,7 @@ export interface DestinationListParams extends CursorParams {
     | 'MNTN'
     | 'MNTNAudience'
     | 'Mailchimp'
+    | 'MailchimpAudience'
     | 'MicrosoftCAPI'
     | 'Mixpanel'
     | 'NextdoorAds'

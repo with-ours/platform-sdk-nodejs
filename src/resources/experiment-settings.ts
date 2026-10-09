@@ -8,8 +8,8 @@ import { path } from '../internal/utils/path';
 export class ExperimentSettings extends APIResource {
   /**
    * List experiment settings records for the account. Use the returned `id` as
-   * `experimentSettingsId` when creating an experiment. Requires scope:
-   * experimentSettings:list
+   * `experimentSettingsId` when creating an experiment. Requires API-key scope or
+   * current OAuth user permission: experimentSettings:list
    *
    * @example
    * ```ts
@@ -23,7 +23,8 @@ export class ExperimentSettings extends APIResource {
 
   /**
    * Create the account-level experimentation bootstrap record. Most accounts should
-   * only ever have one. Requires scope: experimentSettings:create
+   * only ever have one. Requires API-key scope or current OAuth user permission:
+   * experimentSettings:create
    *
    * @example
    * ```ts
@@ -40,7 +41,8 @@ export class ExperimentSettings extends APIResource {
 
   /**
    * Find a single experiment settings record by ID. Returns 404 when no record
-   * matches the supplied id. Requires scope: experimentSettings:find
+   * matches the supplied id. Requires API-key scope or current OAuth user
+   * permission: experimentSettings:find
    *
    * @example
    * ```ts
@@ -54,7 +56,8 @@ export class ExperimentSettings extends APIResource {
 
   /**
    * Partially update an experiment settings. Only the fields you send are changed.
-   * Requires scope: experimentSettings:update
+   * Requires API-key scope or current OAuth user permission:
+   * experimentSettings:update
    *
    * @example
    * ```ts
@@ -73,7 +76,7 @@ export class ExperimentSettings extends APIResource {
   /**
    * Delete the experimentation bootstrap record. This also deletes child
    * experiments, variants, and personalization properties owned by it. Requires
-   * scope: experimentSettings:delete
+   * API-key scope or current OAuth user permission: experimentSettings:delete
    *
    * @example
    * ```ts

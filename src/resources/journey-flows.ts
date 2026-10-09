@@ -9,8 +9,8 @@ import { path } from '../internal/utils/path';
 export class JourneyFlows extends APIResource {
   /**
    * List saved Journey Flow configurations, most recently updated first. Supports
-   * cursor pagination and name/description search. Requires scope:
-   * web-analytics:view
+   * cursor pagination and name/description search. Requires API-key scope or current
+   * OAuth user permission: web-analytics:view
    */
   list(
     query: JourneyFlowListParams | null | undefined = {},
@@ -25,7 +25,8 @@ export class JourneyFlows extends APIResource {
   /**
    * Save a validated Journey Flow configuration. Source ownership, UTC scope,
    * bounded entry dates, and compiler-supported semantics are enforced by the
-   * GraphQL domain path. Requires scope: web-analytics:write
+   * GraphQL domain path. Requires API-key scope or current OAuth user permission:
+   * web-analytics:write
    */
   create(body: JourneyFlowCreateParams, options?: RequestOptions): APIPromise<JourneyFlowCreateResponse> {
     return this._client.post('/rest/v1/journey-flows', { body, ...options });
@@ -33,7 +34,8 @@ export class JourneyFlows extends APIResource {
 
   /**
    * Fetch a saved Journey Flow configuration by id. Returns 404 when it does not
-   * exist or is not readable by this account. Requires scope: web-analytics:view
+   * exist or is not readable by this account. Requires API-key scope or current
+   * OAuth user permission: web-analytics:view
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<JourneyFlowRetrieveResponse> {
     return this._client.get(path`/rest/v1/journey-flows/${id}`, options);
@@ -42,7 +44,8 @@ export class JourneyFlows extends APIResource {
   /**
    * Partially update a Journey Flow using expectedRevision for optimistic
    * concurrency. Omitted top-level fields remain unchanged; nested values replace
-   * the complete nested value. Requires scope: web-analytics:write
+   * the complete nested value. Requires API-key scope or current OAuth user
+   * permission: web-analytics:write
    */
   update(
     id: string,
@@ -54,7 +57,8 @@ export class JourneyFlows extends APIResource {
 
   /**
    * Delete a Journey Flow using expectedRevision for optimistic concurrency. The
-   * response includes the deleted revision. Requires scope: web-analytics:write
+   * response includes the deleted revision. Requires API-key scope or current OAuth
+   * user permission: web-analytics:write
    */
   delete(
     id: string,
@@ -70,8 +74,8 @@ export class JourneyFlows extends APIResource {
 
   /**
    * Return the currently supported Journey Flow counting modes, visualizations,
-   * matcher kinds, limits, and unsupported-feature flags. Requires scope:
-   * web-analytics:view
+   * matcher kinds, limits, and unsupported-feature flags. Requires API-key scope or
+   * current OAuth user permission: web-analytics:view
    */
   capabilities(options?: RequestOptions): APIPromise<JourneyFlowCapabilitiesResponse> {
     return this._client.get('/rest/v1/journey-flows/capabilities', options);
@@ -79,8 +83,8 @@ export class JourneyFlows extends APIResource {
 
   /**
    * Compute a saved Journey Flow result on demand. Requires expectedRevision and
-   * permits an optional complete report context override. Requires scope:
-   * web-analytics:view
+   * permits an optional complete report context override. Requires API-key scope or
+   * current OAuth user permission: web-analytics:view
    */
   results(
     id: string,
@@ -95,7 +99,7 @@ export class JourneyFlows extends APIResource {
    * counts, timing, graph and bounded Top Paths. Requires expectedRevision; display
    * limits and omitted path weight are included. The response contains the CSV
    * content and filename. Visitor and session samples are not included. Requires
-   * scope: web-analytics:view
+   * API-key scope or current OAuth user permission: web-analytics:view
    */
   export(
     id: string,
@@ -108,7 +112,8 @@ export class JourneyFlows extends APIResource {
   /**
    * Compute a bounded preview from a serialized Journey Flow definition, report
    * context, and view. Use GraphQL when the serialized input exceeds the HTTP URL
-   * budget. Requires scope: web-analytics:view
+   * budget. Requires API-key scope or current OAuth user permission:
+   * web-analytics:view
    */
   preview(query: JourneyFlowPreviewParams, options?: RequestOptions): APIPromise<JourneyFlowPreviewResponse> {
     return this._client.get('/rest/v1/journey-flows/preview', { query, ...options });

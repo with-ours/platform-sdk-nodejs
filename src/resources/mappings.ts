@@ -10,8 +10,8 @@ export class Mappings extends APIResource {
   /**
    * List mappings for an entity (a source or destination). Requires the `entityId`
    * query parameter. Supports cursor pagination via `limit` and `cursor`. Sorted by
-   * `priority` ascending, then by `id` for deterministic pagination. Requires scope:
-   * mapping:list
+   * `priority` ascending, then by `id` for deterministic pagination. Requires
+   * API-key scope or current OAuth user permission: mapping:list
    */
   list(
     query: MappingListParams,
@@ -32,15 +32,16 @@ export class Mappings extends APIResource {
    *    `GET /rest/v1/mapping-templates?entityId=...` to discover the valid
    *    `templateId` and `mappings[].property` values.
    *
-   * Sending both `allowedEventId` and `templateId` returns 400. Requires scope:
-   * mapping:create
+   * Sending both `allowedEventId` and `templateId` returns 400. Requires API-key
+   * scope or current OAuth user permission: mapping:create
    */
   create(body: MappingCreateParams, options?: RequestOptions): APIPromise<MappingCreateResponse> {
     return this._client.post('/rest/v1/mappings', { body, ...options });
   }
 
   /**
-   * Find a single mapping by ID. Requires scope: mapping:find
+   * Find a single mapping by ID. Requires API-key scope or current OAuth user
+   * permission: mapping:find
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<MappingRetrieveResponse> {
     return this._client.get(path`/rest/v1/mappings/${id}`, options);
@@ -50,14 +51,15 @@ export class Mappings extends APIResource {
    * Partially update a mapping. Only the fields you send are changed. Send
    * `isEnabled: false` to pause the mapping without changing other fields (mirrors
    * `status` on destinations). `mappings[]` is replaced wholesale when sent.
-   * Requires scope: mapping:update
+   * Requires API-key scope or current OAuth user permission: mapping:update
    */
   update(id: string, body: MappingUpdateParams, options?: RequestOptions): APIPromise<MappingUpdateResponse> {
     return this._client.patch(path`/rest/v1/mappings/${id}`, { body, ...options });
   }
 
   /**
-   * Delete a mapping. Requires scope: mapping:delete
+   * Delete a mapping. Requires API-key scope or current OAuth user permission:
+   * mapping:delete
    */
   delete(id: string, options?: RequestOptions): APIPromise<MappingDeleteResponse> {
     return this._client.delete(path`/rest/v1/mappings/${id}`, options);
@@ -67,7 +69,8 @@ export class Mappings extends APIResource {
    * Reassign `priority` for a set of mappings. Pass `{ uuids: [...] }` with the
    * mapping ids in their new order — index 0 becomes the highest-priority mapping.
    * All ids must belong to the same parent entity (source or destination); mixing
-   * entities returns 400. Requires scope: mapping:update
+   * entities returns 400. Requires API-key scope or current OAuth user permission:
+   * mapping:update
    */
   reorder(body: MappingReorderParams, options?: RequestOptions): APIPromise<MappingReorderResponse> {
     return this._client.post('/rest/v1/mappings/reorder', { body, ...options });
@@ -80,7 +83,8 @@ export class Mappings extends APIResource {
    * `mappings[]` to learn the valid `property`, `kind`, `modificationOptions`, and
    * any enforced `options`. The `isDefault: true` entry is the destination's
    * built-in default template, configured via
-   * `PUT /rest/v1/default-mappings/{destinationId}`. Requires scope: mapping:find
+   * `PUT /rest/v1/default-mappings/{destinationId}`. Requires API-key scope or
+   * current OAuth user permission: mapping:find
    */
   templates(query: MappingTemplatesParams, options?: RequestOptions): APIPromise<MappingTemplatesResponse> {
     return this._client.get('/rest/v1/mappings/templates', { query, ...options });
@@ -90,7 +94,7 @@ export class Mappings extends APIResource {
    * Lists the platform-provided variables that any mapping `value` can reference
    * (e.g. `event.email`, `event.request_context.ip`, `visitor.id`). Account-agnostic
    * discovery — use these paths as the right-hand side of a mapping field. Requires
-   * scope: variables:find-default
+   * API-key scope or current OAuth user permission: variables:find-default
    */
   defaultVariables(options?: RequestOptions): APIPromise<MappingDefaultVariablesResponse> {
     return this._client.get('/rest/v1/mappings/default-variables', options);
@@ -101,7 +105,8 @@ export class Mappings extends APIResource {
    * 14 days). These are dot-paths under `event.event_properties.*` that callers can
    * target in mapping `value` fields. Newly seen properties may take a few minutes
    * to appear; an empty list means no custom properties have been observed yet for
-   * this account. Requires scope: variables:find-custom
+   * this account. Requires API-key scope or current OAuth user permission:
+   * variables:find-custom
    */
   customVariables(options?: RequestOptions): APIPromise<MappingCustomVariablesResponse> {
     return this._client.get('/rest/v1/mappings/custom-variables', options);
@@ -111,7 +116,8 @@ export class Mappings extends APIResource {
    * Lists every value accepted on a mapping field’s `modification` property, with a
    * human-readable label and one-sentence description. Account-agnostic. Use this
    * alongside `GET /rest/v1/mapping-templates` to render a labelled modification
-   * picker without hardcoding the enum. Requires scope: variables:find-default
+   * picker without hardcoding the enum. Requires API-key scope or current OAuth user
+   * permission: variables:find-default
    */
   modifications(options?: RequestOptions): APIPromise<MappingModificationsResponse> {
     return this._client.get('/rest/v1/mappings/modifications', options);

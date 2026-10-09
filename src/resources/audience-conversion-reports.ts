@@ -8,7 +8,8 @@ import { path } from '../internal/utils/path';
 export class AudienceConversionReports extends APIResource {
   /**
    * List saved Audience Performance report configurations, most recently updated
-   * first. Requires scope: web-analytics:view
+   * first. Requires API-key scope or current OAuth user permission:
+   * web-analytics:view
    */
   list(options?: RequestOptions): APIPromise<AudienceConversionReportListResponse> {
     return this._client.get('/rest/v1/audience-conversion-reports', options);
@@ -16,8 +17,8 @@ export class AudienceConversionReports extends APIResource {
 
   /**
    * Save an Audience Performance report configuration. Returns the full report so
-   * callers can run or update it without another request. Requires scope:
-   * web-analytics:write
+   * callers can run or update it without another request. Requires API-key scope or
+   * current OAuth user permission: web-analytics:write
    */
   create(
     body: AudienceConversionReportCreateParams,
@@ -27,8 +28,8 @@ export class AudienceConversionReports extends APIResource {
   }
 
   /**
-   * Fetch a saved Audience Performance report by id. Requires scope:
-   * web-analytics:view
+   * Fetch a saved Audience Performance report by id. Requires API-key scope or
+   * current OAuth user permission: web-analytics:view
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<AudienceConversionReportRetrieveResponse> {
     return this._client.get(path`/rest/v1/audience-conversion-reports/${id}`, options);
@@ -37,7 +38,7 @@ export class AudienceConversionReports extends APIResource {
   /**
    * Update a saved Audience Performance report. Omitted fields remain unchanged,
    * `filters: []` clears all filters, and dates must be sent or cleared as a pair.
-   * Requires scope: web-analytics:write
+   * Requires API-key scope or current OAuth user permission: web-analytics:write
    */
   update(
     id: string,
@@ -48,8 +49,8 @@ export class AudienceConversionReports extends APIResource {
   }
 
   /**
-   * Delete a saved Audience Performance report configuration. Requires scope:
-   * web-analytics:write
+   * Delete a saved Audience Performance report configuration. Requires API-key scope
+   * or current OAuth user permission: web-analytics:write
    */
   delete(id: string, options?: RequestOptions): APIPromise<AudienceConversionReportDeleteResponse> {
     return this._client.delete(path`/rest/v1/audience-conversion-reports/${id}`, options);
@@ -58,7 +59,8 @@ export class AudienceConversionReports extends APIResource {
   /**
    * Run a saved Audience Performance report. `from` and `to` override the saved date
    * range when provided together. Returns 400 when neither a saved range nor an
-   * override is available. Requires scope: web-analytics:view
+   * override is available. Requires API-key scope or current OAuth user permission:
+   * web-analytics:view
    */
   results(
     id: string,

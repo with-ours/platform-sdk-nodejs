@@ -14,7 +14,8 @@ export class DataGovernance extends APIResource {
    * meaningful here. Data governance is the second stage of the dispatch flow
    * (Source → Allowed Events → Data Governance → Mappings → Destination) — it
    * evaluates each event against the configured category logic and stops dispatch to
-   * the destinations on any matching category. Requires scope: globalDispatch:list
+   * the destinations on any matching category. Requires API-key scope or current
+   * OAuth user permission: globalDispatch:list
    */
   list(
     query: DataGovernanceListParams | null | undefined = {},
@@ -30,7 +31,7 @@ export class DataGovernance extends APIResource {
    * Create the data-governance record for this account. Each account may have at
    * most one — a second POST returns 409. Body is optional; defaults are
    * `isEnabled: false` and no categories. Categories are added later via PATCH.
-   * Requires scope: globalDispatch:create
+   * Requires API-key scope or current OAuth user permission: globalDispatch:create
    */
   create(
     body: DataGovernanceCreateParams,
@@ -41,8 +42,8 @@ export class DataGovernance extends APIResource {
 
   /**
    * Fetch the data-governance record by id, including its categories (logic,
-   * destinations, priority). Returns 404 when no record matches. Requires scope:
-   * globalDispatch:find
+   * destinations, priority). Returns 404 when no record matches. Requires API-key
+   * scope or current OAuth user permission: globalDispatch:find
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<DataGovernanceRetrieveResponse | null> {
     return this._client.get(path`/rest/v1/data-governance/${id}`, options);
@@ -62,7 +63,7 @@ export class DataGovernance extends APIResource {
    * sequential with no gaps. Stale `destinationIds` (deleted destinations or
    * destinations on another account) are silently filtered out — the response echoes
    * the filtered list, so a follow-up GET is not required to see what was saved.
-   * Requires scope: globalDispatch:update
+   * Requires API-key scope or current OAuth user permission: globalDispatch:update
    */
   update(
     id: string,
@@ -75,7 +76,8 @@ export class DataGovernance extends APIResource {
   /**
    * Delete the data-governance record. After deletion, inbound events flow through
    * to destinations without category-level gating. Create a new record with POST to
-   * reinstate governance. Requires scope: globalDispatch:delete
+   * reinstate governance. Requires API-key scope or current OAuth user permission:
+   * globalDispatch:delete
    */
   delete(id: string, options?: RequestOptions): APIPromise<DataGovernanceDeleteResponse> {
     return this._client.delete(path`/rest/v1/data-governance/${id}`, options);

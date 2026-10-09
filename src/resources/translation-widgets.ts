@@ -9,8 +9,8 @@ export class TranslationWidgets extends APIResource {
   /**
    * List every translation widget configured on the account, including the domains
    * it runs on, its appearance settings, and the languages it offers. Not paginated
-   * — widgets are capped by the account's translation widget limit. Requires scope:
-   * translationWidget:list
+   * — widgets are capped by the account's translation widget limit. Requires API-key
+   * scope or current OAuth user permission: translationWidget:list
    *
    * @example
    * ```ts
@@ -27,7 +27,8 @@ export class TranslationWidgets extends APIResource {
    * back as `null` and the widget falls back to its built-in appearance, and
    * omitting `enabledLanguages` offers every supported language. Returns the full
    * widget, including its id, so it can be installed without a follow-up request.
-   * Requires scope: translationWidget:create
+   * Requires API-key scope or current OAuth user permission:
+   * translationWidget:create
    *
    * @example
    * ```ts
@@ -44,7 +45,7 @@ export class TranslationWidgets extends APIResource {
 
   /**
    * Fetch one translation widget by its id. Returns 404 when it does not exist.
-   * Requires scope: translationWidget:find
+   * Requires API-key scope or current OAuth user permission: translationWidget:find
    *
    * @example
    * ```ts
@@ -60,8 +61,8 @@ export class TranslationWidgets extends APIResource {
 
   /**
    * Return usage totals and language, host, and page breakdowns for one translation
-   * widget over the requested date range. Requires scope:
-   * report:translation-analytics
+   * widget over the requested date range. Requires API-key scope or current OAuth
+   * user permission: report:translation-analytics
    *
    * @example
    * ```ts

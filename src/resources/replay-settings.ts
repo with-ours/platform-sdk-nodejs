@@ -10,8 +10,8 @@ export class ReplaySettings extends APIResource {
   /**
    * List the replay configurations on this account. Supports cursor pagination via
    * `limit` and `cursor`. Replay settings control which domains may capture session
-   * replays and where the capture script is hosted. Requires scope:
-   * replaySettings:list
+   * replays and where the capture script is hosted. Requires API-key scope or
+   * current OAuth user permission: replaySettings:list
    */
   list(
     query: ReplaySettingListParams | null | undefined = {},
@@ -26,7 +26,8 @@ export class ReplaySettings extends APIResource {
   /**
    * Create the replay configuration for this account. Each account is limited to one
    * replay configuration — calls made when one already exists return HTTP 409 with
-   * the reason in the response `error` field. Requires scope: replaySettings:create
+   * the reason in the response `error` field. Requires API-key scope or current
+   * OAuth user permission: replaySettings:create
    */
   create(body: ReplaySettingCreateParams, options?: RequestOptions): APIPromise<ReplaySettingCreateResponse> {
     return this._client.post('/rest/v1/replay-settings', { body, ...options });
@@ -34,7 +35,8 @@ export class ReplaySettings extends APIResource {
 
   /**
    * Fetch a single replay configuration by ID, including its whitelisted domains and
-   * custom domain. Requires scope: replaySettings:find
+   * custom domain. Requires API-key scope or current OAuth user permission:
+   * replaySettings:find
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<ReplaySettingRetrieveResponse | null> {
     return this._client.get(path`/rest/v1/replay-settings/${id}`, options);
@@ -44,7 +46,7 @@ export class ReplaySettings extends APIResource {
    * Update one or more fields on an existing replay configuration. Only the fields
    * you send are changed; omitted fields keep their current value. Note that
    * `whitelistDomains` is replaced wholesale (not merged with the existing list).
-   * Requires scope: replaySettings:update
+   * Requires API-key scope or current OAuth user permission: replaySettings:update
    */
   update(
     id: string,
@@ -56,7 +58,8 @@ export class ReplaySettings extends APIResource {
 
   /**
    * Delete the replay configuration. Capture stops immediately for all whitelisted
-   * domains. Requires scope: replaySettings:delete
+   * domains. Requires API-key scope or current OAuth user permission:
+   * replaySettings:delete
    */
   delete(id: string, options?: RequestOptions): APIPromise<ReplaySettingDeleteResponse> {
     return this._client.delete(path`/rest/v1/replay-settings/${id}`, options);

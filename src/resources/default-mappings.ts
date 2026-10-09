@@ -10,8 +10,8 @@ export class DefaultMappings extends APIResource {
    * List every stored default mapping for the account, one per destination that has
    * ever written a default. Destinations that have not yet written a default mapping
    * do not appear here. Use `GET /rest/v1/default-mappings/{destinationId}` to fetch
-   * the hydrated would-be row for a specific destination. Requires scope:
-   * mapping:list
+   * the hydrated would-be row for a specific destination. Requires API-key scope or
+   * current OAuth user permission: mapping:list
    */
   list(options?: RequestOptions): APIPromise<DefaultMappingListResponse> {
     return this._client.get('/rest/v1/default-mappings', options);
@@ -21,7 +21,8 @@ export class DefaultMappings extends APIResource {
    * Fetch the destination's default mapping by destination id. Returns a hydrated
    * row with empty `mappings[]` when no default mapping has been written yet (so
    * callers do not need to handle a 404-vs-200 branch). Each destination has at most
-   * one default mapping. Requires scope: mapping:find
+   * one default mapping. Requires API-key scope or current OAuth user permission:
+   * mapping:find
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<DefaultMappingRetrieveResponse> {
     return this._client.get(path`/rest/v1/default-mappings/${id}`, options);
@@ -30,8 +31,8 @@ export class DefaultMappings extends APIResource {
   /**
    * Upsert the destination default mapping. Always replaces `mappings[]` wholesale
    * (default mappings have no merge-partial semantic). Default mappings cannot have
-   * custom `logic`; the field is not accepted on this endpoint. Requires scope:
-   * mapping:update
+   * custom `logic`; the field is not accepted on this endpoint. Requires API-key
+   * scope or current OAuth user permission: mapping:update
    */
   replace(
     id: string,

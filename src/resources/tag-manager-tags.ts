@@ -12,7 +12,7 @@ export class TagManagerTags extends APIResource {
    * parameter — tags are always scoped to one parent container. Supports cursor
    * pagination via `limit` and `cursor`; the limit clamp is 1000 so a single request
    * can return the full set (the web-app workspace renders all tags in one shot).
-   * Requires scope: tagManagers:find
+   * Requires API-key scope or current OAuth user permission: tagManagers:find
    */
   list(
     query: TagManagerTagListParams,
@@ -27,7 +27,8 @@ export class TagManagerTags extends APIResource {
   /**
    * Create a new tag inside a tag manager. `tagManagerId` is required in the body.
    * Newly created tags are not assigned to any folder — assign them with
-   * `POST /rest/v1/tag-manager-asset-folders`. Requires scope: tagManagers:update
+   * `POST /rest/v1/tag-manager-asset-folders`. Requires API-key scope or current
+   * OAuth user permission: tagManagers:update
    */
   create(body: TagManagerTagCreateParams, options?: RequestOptions): APIPromise<TagManagerTagCreateResponse> {
     return this._client.post('/rest/v1/tag-manager-tags', { body, ...options });
@@ -35,7 +36,7 @@ export class TagManagerTags extends APIResource {
 
   /**
    * Fetch a single tag by id, including its `folderId` (read-only on this endpoint).
-   * Requires scope: tagManagers:find
+   * Requires API-key scope or current OAuth user permission: tagManagers:find
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<TagManagerTagRetrieveResponse> {
     return this._client.get(path`/rest/v1/tag-manager-tags/${id}`, options);
@@ -44,7 +45,8 @@ export class TagManagerTags extends APIResource {
   /**
    * Partially update a tag. Only the fields you send are changed. Tags cannot be
    * moved between tag managers. To assign a tag to a folder, use
-   * `POST /rest/v1/tag-manager-asset-folders`. Requires scope: tagManagers:update
+   * `POST /rest/v1/tag-manager-asset-folders`. Requires API-key scope or current
+   * OAuth user permission: tagManagers:update
    */
   update(
     id: string,
@@ -55,7 +57,8 @@ export class TagManagerTags extends APIResource {
   }
 
   /**
-   * Delete a tag manager tag. Requires scope: tagManagers:update
+   * Delete a tag manager tag. Requires API-key scope or current OAuth user
+   * permission: tagManagers:update
    */
   delete(id: string, options?: RequestOptions): APIPromise<TagManagerTagDeleteResponse> {
     return this._client.delete(path`/rest/v1/tag-manager-tags/${id}`, options);
@@ -67,7 +70,8 @@ export class TagManagerTags extends APIResource {
    * (fields, validators, required flags, available values for selects).
    * Account-agnostic: the response is the same for every API key. The same registry
    * powers server-side validation on `POST` / `PATCH` so what this endpoint
-   * advertises matches what the server enforces. Requires scope: tagManagers:find
+   * advertises matches what the server enforces. Requires API-key scope or current
+   * OAuth user permission: tagManagers:find
    */
   types(options?: RequestOptions): APIPromise<TagManagerTagTypesResponse> {
     return this._client.get('/rest/v1/tag-manager-tags/types', options);
@@ -395,7 +399,7 @@ export namespace TagManagerTagTypesResponse {
       /**
        * Default value when the caller omits the parameter on create.
        */
-      default?: { [key: string]: unknown };
+      default?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
 
       description?: string | null;
 

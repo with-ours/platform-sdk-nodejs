@@ -9,7 +9,8 @@ import { path } from '../internal/utils/path';
 export class Videos extends APIResource {
   /**
    * List videos for the account, newest first. Supports cursor pagination and an
-   * optional case-insensitive title filter. Requires scope: media:list
+   * optional case-insensitive title filter. Requires API-key scope or current OAuth
+   * user permission: media:list
    *
    * @example
    * ```ts
@@ -30,7 +31,7 @@ export class Videos extends APIResource {
    * Create a video record and return a temporary upload target for the original MP4
    * or WebM file. Upload the file directly using the returned URL and matching
    * content type, then poll the video to observe processing progress. Requires
-   * scope: media:create
+   * API-key scope or current OAuth user permission: media:create
    *
    * @example
    * ```ts
@@ -45,8 +46,8 @@ export class Videos extends APIResource {
 
   /**
    * Fetch a video and its current playback asset availability. The processed video,
-   * poster, and transcript are prepared asynchronously after upload. Requires scope:
-   * media:find
+   * poster, and transcript are prepared asynchronously after upload. Requires
+   * API-key scope or current OAuth user permission: media:find
    *
    * @example
    * ```ts
@@ -59,7 +60,8 @@ export class Videos extends APIResource {
 
   /**
    * Partially update video metadata. Only fields included in the body change; send
-   * `null` to clear a nullable field. Requires scope: media:update
+   * `null` to clear a nullable field. Requires API-key scope or current OAuth user
+   * permission: media:update
    *
    * @example
    * ```ts
@@ -71,7 +73,8 @@ export class Videos extends APIResource {
   }
 
   /**
-   * Delete a video and its related assets. Requires scope: media:delete
+   * Delete a video and its related assets. Requires API-key scope or current OAuth
+   * user permission: media:delete
    *
    * @example
    * ```ts
@@ -85,8 +88,8 @@ export class Videos extends APIResource {
   /**
    * Return a temporary upload target for replacing this video’s original MP4 or WebM
    * source. Upload the file directly using the returned URL and matching content
-   * type, then poll the video to observe processing progress. Requires scope:
-   * media:update
+   * type, then poll the video to observe processing progress. Requires API-key scope
+   * or current OAuth user permission: media:update
    *
    * @example
    * ```ts
@@ -102,7 +105,7 @@ export class Videos extends APIResource {
   /**
    * Read the current WebVTT transcript. Transcript text is available wherever the
    * video is embedded, so do not include PHI or other confidential information.
-   * Requires scope: media:find
+   * Requires API-key scope or current OAuth user permission: media:find
    *
    * @example
    * ```ts
@@ -120,7 +123,8 @@ export class Videos extends APIResource {
   /**
    * Replace the transcript with VTT or SRT text. SRT is normalized to WebVTT.
    * Transcript text is available wherever the video is embedded, so do not include
-   * PHI or other confidential information. Requires scope: media:update
+   * PHI or other confidential information. Requires API-key scope or current OAuth
+   * user permission: media:update
    *
    * @example
    * ```ts
@@ -140,7 +144,8 @@ export class Videos extends APIResource {
 
   /**
    * Queue a target-language caption translation. Specify replace to explicitly
-   * overwrite a track. Requires scope: media:update
+   * overwrite a track. Requires API-key scope or current OAuth user permission:
+   * media:update
    *
    * @example
    * ```ts
@@ -160,7 +165,7 @@ export class Videos extends APIResource {
 
   /**
    * Cancel a queued or in-progress language translation without modifying other
-   * tracks. Requires scope: media:update
+   * tracks. Requires API-key scope or current OAuth user permission: media:update
    *
    * @example
    * ```ts
@@ -183,7 +188,8 @@ export class Videos extends APIResource {
    * for a date window. Optionally filter to one video with `videoId`; omit it to
    * include all account videos. This derived report uses `limit` and `offset`
    * pagination; `total` is the number of rows returned through the current offset,
-   * not a total match count. Requires scope: report:video-analytics
+   * not a total match count. Requires API-key scope or current OAuth user
+   * permission: report:video-analytics
    *
    * @example
    * ```ts
@@ -200,7 +206,8 @@ export class Videos extends APIResource {
   /**
    * Return daily or hourly starts, unique viewers, completions, and completion rate
    * for one video. Daily windows support up to 90 days; hourly windows support up to
-   * 14 days. Requires scope: report:video-analytics
+   * 14 days. Requires API-key scope or current OAuth user permission:
+   * report:video-analytics
    *
    * @example
    * ```ts

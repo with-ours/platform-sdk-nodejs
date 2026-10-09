@@ -10,7 +10,8 @@ export class Sources extends APIResource {
   /**
    * List all sources for this account. Supports cursor pagination and optional
    * filters for `type`, `status`, and `nameContains`. Results are sorted by creation
-   * date descending. Requires scope: source:list
+   * date descending. Requires API-key scope or current OAuth user permission:
+   * source:list
    */
   list(
     query: SourceListParams | null | undefined = {},
@@ -22,14 +23,16 @@ export class Sources extends APIResource {
   /**
    * Create a new source. Returns the full source entity (same shape as GET
    * /sources/{id}) so callers can read all server-assigned fields without a
-   * follow-up GET. Requires scope: source:create
+   * follow-up GET. Requires API-key scope or current OAuth user permission:
+   * source:create
    */
   create(body: SourceCreateParams, options?: RequestOptions): APIPromise<SourceCreateResponse> {
     return this._client.post('/rest/v1/sources', { body, ...options });
   }
 
   /**
-   * Find a single source by ID. Requires scope: source:view
+   * Find a single source by ID. Requires API-key scope or current OAuth user
+   * permission: source:view
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<SourceRetrieveResponse> {
     return this._client.get(path`/rest/v1/sources/${id}`, options);
@@ -38,14 +41,16 @@ export class Sources extends APIResource {
   /**
    * Partially update a source. Only the fields you send are changed; omitted fields
    * are unchanged. Send explicit `null` to clear a nullable field. Returns the full
-   * source entity after the update. Requires scope: source:update
+   * source entity after the update. Requires API-key scope or current OAuth user
+   * permission: source:update
    */
   update(id: string, body: SourceUpdateParams, options?: RequestOptions): APIPromise<SourceUpdateResponse> {
     return this._client.patch(path`/rest/v1/sources/${id}`, { body, ...options });
   }
 
   /**
-   * Delete a source. Requires scope: source:delete
+   * Delete a source. Requires API-key scope or current OAuth user permission:
+   * source:delete
    */
   delete(id: string, options?: RequestOptions): APIPromise<SourceDeleteResponse> {
     return this._client.delete(path`/rest/v1/sources/${id}`, options);
@@ -58,7 +63,8 @@ export class Sources extends APIResource {
    * and webhook sources return
    * `{ sourceType: "webhook", token, testToken, ingestUrl, testIngestUrl, sampleCurl }`.
    * Inspect the source's `type` field (`GET /rest/v1/sources/{id}`) to know which
-   * variant to expect. Requires scope: source:view
+   * variant to expect. Requires API-key scope or current OAuth user permission:
+   * source:view
    */
   tokens(id: string, options?: RequestOptions): APIPromise<SourceTokensResponse> {
     return this._client.get(path`/rest/v1/sources/${id}/tokens`, options);

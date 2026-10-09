@@ -15,7 +15,7 @@ export class HeatmapPages extends APIResource {
    * depth capped at roughly 10,000 entries; if you need pages beyond that, narrow
    * `from`/`to` or add filters rather than paginating further. `from`/`to` are UTC
    * calendar days in `YYYY-MM-DD`; the window must be 60 days or fewer. Requires
-   * scope: web-analytics:view
+   * API-key scope or current OAuth user permission: web-analytics:view
    */
   list(
     query: HeatmapPageListParams,
@@ -39,7 +39,8 @@ export class HeatmapPages extends APIResource {
    * `breakpoint` (weighted to cover multiple viewports) so callers can compare
    * devices. `clickGrid` always supplies fine click positions for rendering.
    * `clickBins` derives compatible 64×64 counts from the same grid; its totals must
-   * not be added to them. Requires scope: web-analytics:view
+   * not be added to them. Requires API-key scope or current OAuth user permission:
+   * web-analytics:view
    */
   summary(query: HeatmapPageSummaryParams, options?: RequestOptions): APIPromise<HeatmapPageSummaryResponse> {
     return this._client.get('/rest/v1/heatmap-pages/summary', { query, ...options });
