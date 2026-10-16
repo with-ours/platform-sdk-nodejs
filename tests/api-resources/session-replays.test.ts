@@ -25,6 +25,8 @@ describe('resource sessionReplays', () => {
       to: '2019-12-27',
       cursor: 'x',
       eventName: 'x',
+      filter:
+        '{"version":1,"filter":{"kind":"predicate","property":"event.source_id","operator":"eq","value":"source-1"}}',
       limit: 1,
       pathname: 'x',
       sessionIds: 'sessionIds',

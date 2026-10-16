@@ -147,7 +147,7 @@ export interface ExperimentVariantListResponse {
    * How this variant changes the user experience. `dom_modifications` for on-page
    * changes or `redirect` for redirect tests.
    */
-  variantType?: string | null;
+  variantType?: 'dom_modifications' | 'redirect' | null;
 }
 
 export namespace ExperimentVariantListResponse {
@@ -187,7 +187,7 @@ export namespace ExperimentVariantListResponse {
      * Customers may also send this field instead of a JSON-stringified `value` on
      * write — see `domModificationInputSchema`.
      */
-    attribute?: unknown | null;
+    attribute?: DomModification.Attribute | null;
 
     /**
      * Populated on read for `setStyle` modifications, parsed from `value`. Customers
@@ -198,6 +198,23 @@ export namespace ExperimentVariantListResponse {
   }
 
   export namespace DomModification {
+    /**
+     * Populated on read for `setAttribute` modifications, parsed from `value`.
+     * Customers may also send this field instead of a JSON-stringified `value` on
+     * write — see `domModificationInputSchema`.
+     */
+    export interface Attribute {
+      /**
+       * HTML attribute name.
+       */
+      name: string;
+
+      /**
+       * Attribute value to assign.
+       */
+      value: string;
+    }
+
     export interface Style {
       /**
        * CSS property name in camelCase or kebab-case.
@@ -255,7 +272,7 @@ export interface ExperimentVariantCreateResponse {
    * How this variant changes the user experience. `dom_modifications` for on-page
    * changes or `redirect` for redirect tests.
    */
-  variantType?: string | null;
+  variantType?: 'dom_modifications' | 'redirect' | null;
 }
 
 export namespace ExperimentVariantCreateResponse {
@@ -295,7 +312,7 @@ export namespace ExperimentVariantCreateResponse {
      * Customers may also send this field instead of a JSON-stringified `value` on
      * write — see `domModificationInputSchema`.
      */
-    attribute?: unknown | null;
+    attribute?: DomModification.Attribute | null;
 
     /**
      * Populated on read for `setStyle` modifications, parsed from `value`. Customers
@@ -306,6 +323,23 @@ export namespace ExperimentVariantCreateResponse {
   }
 
   export namespace DomModification {
+    /**
+     * Populated on read for `setAttribute` modifications, parsed from `value`.
+     * Customers may also send this field instead of a JSON-stringified `value` on
+     * write — see `domModificationInputSchema`.
+     */
+    export interface Attribute {
+      /**
+       * HTML attribute name.
+       */
+      name: string;
+
+      /**
+       * Attribute value to assign.
+       */
+      value: string;
+    }
+
     export interface Style {
       /**
        * CSS property name in camelCase or kebab-case.
@@ -363,7 +397,7 @@ export interface ExperimentVariantRetrieveResponse {
    * How this variant changes the user experience. `dom_modifications` for on-page
    * changes or `redirect` for redirect tests.
    */
-  variantType?: string | null;
+  variantType?: 'dom_modifications' | 'redirect' | null;
 }
 
 export namespace ExperimentVariantRetrieveResponse {
@@ -403,7 +437,7 @@ export namespace ExperimentVariantRetrieveResponse {
      * Customers may also send this field instead of a JSON-stringified `value` on
      * write — see `domModificationInputSchema`.
      */
-    attribute?: unknown | null;
+    attribute?: DomModification.Attribute | null;
 
     /**
      * Populated on read for `setStyle` modifications, parsed from `value`. Customers
@@ -414,6 +448,23 @@ export namespace ExperimentVariantRetrieveResponse {
   }
 
   export namespace DomModification {
+    /**
+     * Populated on read for `setAttribute` modifications, parsed from `value`.
+     * Customers may also send this field instead of a JSON-stringified `value` on
+     * write — see `domModificationInputSchema`.
+     */
+    export interface Attribute {
+      /**
+       * HTML attribute name.
+       */
+      name: string;
+
+      /**
+       * Attribute value to assign.
+       */
+      value: string;
+    }
+
     export interface Style {
       /**
        * CSS property name in camelCase or kebab-case.
@@ -471,7 +522,7 @@ export interface ExperimentVariantUpdateResponse {
    * How this variant changes the user experience. `dom_modifications` for on-page
    * changes or `redirect` for redirect tests.
    */
-  variantType?: string | null;
+  variantType?: 'dom_modifications' | 'redirect' | null;
 }
 
 export namespace ExperimentVariantUpdateResponse {
@@ -511,7 +562,7 @@ export namespace ExperimentVariantUpdateResponse {
      * Customers may also send this field instead of a JSON-stringified `value` on
      * write — see `domModificationInputSchema`.
      */
-    attribute?: unknown | null;
+    attribute?: DomModification.Attribute | null;
 
     /**
      * Populated on read for `setStyle` modifications, parsed from `value`. Customers
@@ -522,6 +573,23 @@ export namespace ExperimentVariantUpdateResponse {
   }
 
   export namespace DomModification {
+    /**
+     * Populated on read for `setAttribute` modifications, parsed from `value`.
+     * Customers may also send this field instead of a JSON-stringified `value` on
+     * write — see `domModificationInputSchema`.
+     */
+    export interface Attribute {
+      /**
+       * HTML attribute name.
+       */
+      name: string;
+
+      /**
+       * Attribute value to assign.
+       */
+      value: string;
+    }
+
     export interface Style {
       /**
        * CSS property name in camelCase or kebab-case.
@@ -579,7 +647,7 @@ export interface ExperimentVariantDeleteResponse {
    * How this variant changes the user experience. `dom_modifications` for on-page
    * changes or `redirect` for redirect tests.
    */
-  variantType?: string | null;
+  variantType?: 'dom_modifications' | 'redirect' | null;
 }
 
 export namespace ExperimentVariantDeleteResponse {
@@ -619,7 +687,7 @@ export namespace ExperimentVariantDeleteResponse {
      * Customers may also send this field instead of a JSON-stringified `value` on
      * write — see `domModificationInputSchema`.
      */
-    attribute?: unknown | null;
+    attribute?: DomModification.Attribute | null;
 
     /**
      * Populated on read for `setStyle` modifications, parsed from `value`. Customers
@@ -630,6 +698,23 @@ export namespace ExperimentVariantDeleteResponse {
   }
 
   export namespace DomModification {
+    /**
+     * Populated on read for `setAttribute` modifications, parsed from `value`.
+     * Customers may also send this field instead of a JSON-stringified `value` on
+     * write — see `domModificationInputSchema`.
+     */
+    export interface Attribute {
+      /**
+       * HTML attribute name.
+       */
+      name: string;
+
+      /**
+       * Attribute value to assign.
+       */
+      value: string;
+    }
+
     export interface Style {
       /**
        * CSS property name in camelCase or kebab-case.
@@ -741,7 +826,7 @@ export namespace ExperimentVariantCreateParams {
      * Use this for `setAttribute` to avoid JSON-stringifying `{name: value}` yourself.
      * Ignored for other actions.
      */
-    attribute?: unknown | null;
+    attribute?: DomModification.Attribute | null;
 
     /**
      * Use this for `setStyle` to avoid JSON-stringifying `{property: value}` yourself.
@@ -760,6 +845,22 @@ export namespace ExperimentVariantCreateParams {
   }
 
   export namespace DomModification {
+    /**
+     * Use this for `setAttribute` to avoid JSON-stringifying `{name: value}` yourself.
+     * Ignored for other actions.
+     */
+    export interface Attribute {
+      /**
+       * HTML attribute name.
+       */
+      name: string;
+
+      /**
+       * Attribute value to assign.
+       */
+      value: string;
+    }
+
     export interface Style {
       /**
        * CSS property name in camelCase or kebab-case.
@@ -784,8 +885,8 @@ export interface ExperimentVariantUpdateParams {
   /**
    * Promote or demote this variant as the control. Promoting a second variant while
    * another already has `isControl: true` is rejected with 409. Demoting the control
-   * (`isControl: false`) is rejected when it would leave the treatments at 100% —
-   * there must always be room for a control.
+   * (`isControl: false`) is rejected — an experiment must always keep a control.
+   * Null leaves the control flag unchanged.
    */
   isControl?: boolean | null;
 
@@ -850,7 +951,7 @@ export namespace ExperimentVariantUpdateParams {
      * Use this for `setAttribute` to avoid JSON-stringifying `{name: value}` yourself.
      * Ignored for other actions.
      */
-    attribute?: unknown | null;
+    attribute?: DomModification.Attribute | null;
 
     /**
      * Use this for `setStyle` to avoid JSON-stringifying `{property: value}` yourself.
@@ -869,6 +970,22 @@ export namespace ExperimentVariantUpdateParams {
   }
 
   export namespace DomModification {
+    /**
+     * Use this for `setAttribute` to avoid JSON-stringifying `{name: value}` yourself.
+     * Ignored for other actions.
+     */
+    export interface Attribute {
+      /**
+       * HTML attribute name.
+       */
+      name: string;
+
+      /**
+       * Attribute value to assign.
+       */
+      value: string;
+    }
+
     export interface Style {
       /**
        * CSS property name in camelCase or kebab-case.

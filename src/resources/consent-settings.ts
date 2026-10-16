@@ -338,12 +338,12 @@ export namespace ConsentSettingListResponse {
       /**
        * Threshold config for autoShowDismissMode (page count or seconds).
        */
-      autoShowDismissConfig?: unknown | null;
+      autoShowDismissConfig?: Default.AutoShowDismissConfig | null;
 
       /**
        * How the modal is treated as dismissed (never, after_pages, after_seconds).
        */
-      autoShowDismissMode?: string | null;
+      autoShowDismissMode?: 'after_pages' | 'after_seconds' | 'never' | null;
 
       /**
        * When true, the rest of the page is locked behind a backdrop until the user
@@ -354,7 +354,7 @@ export namespace ConsentSettingListResponse {
       /**
        * Visual options for the modals (layout/position/colors).
        */
-      guiOptions?: unknown | null;
+      guiOptions?: Default.GuiOptions | null;
 
       /**
        * When true, the modal is suppressed for known bot user agents.
@@ -418,12 +418,444 @@ export namespace ConsentSettingListResponse {
           /**
            * Translated copy for the initial consent modal.
            */
-          consentModal?: unknown | null;
+          consentModal?: Value.ConsentModal | null;
 
           /**
            * Translated copy for the preferences modal.
            */
-          preferencesModal?: unknown | null;
+          preferencesModal?: Value.PreferencesModal | null;
+        }
+
+        export namespace Value {
+          /**
+           * Translated copy for the initial consent modal.
+           */
+          export interface ConsentModal {
+            /**
+             * Label for the "accept all" button.
+             */
+            acceptAllBtn: string;
+
+            /**
+             * Body text shown in the consent modal.
+             */
+            description: string;
+
+            /**
+             * Label for the "reject all" / "necessary only" button.
+             */
+            rejectAllBtn: string;
+
+            /**
+             * Label for the button that opens the preferences modal.
+             */
+            showPreferencesBtn: string;
+
+            /**
+             * Heading shown at the top of the consent modal.
+             */
+            title: string;
+
+            /**
+             * Accessibility label for the close (X) icon.
+             */
+            closeIconLabel?: string | null;
+
+            /**
+             * Optional footer HTML/text shown below the body.
+             */
+            footer?: string | null;
+
+            /**
+             * Optional text shown when the browser is sending Sec-GPC: 1.
+             */
+            gpcNotification?: string | null;
+
+            /**
+             * Link label for the privacy policy (defaults to "Privacy Policy").
+             */
+            privacyPolicyLabel?: string | null;
+
+            /**
+             * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
+             * (/legal/privacy) so one config can run across multiple domains. javascript:,
+             * data:, and vbscript: schemes are rejected.
+             */
+            privacyPolicyUrl?: string | null;
+
+            /**
+             * Optional message shown when the consent revision has bumped (re-prompt copy).
+             */
+            revisionMessage?: string | null;
+
+            /**
+             * Link label for terms of service (defaults to "Terms of Service").
+             */
+            termsOfServiceLabel?: string | null;
+
+            /**
+             * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
+             * relative path only.
+             */
+            termsOfServiceUrl?: string | null;
+          }
+
+          /**
+           * Translated copy for the preferences modal.
+           */
+          export interface PreferencesModal {
+            /**
+             * Label for the "accept all" button in the preferences modal.
+             */
+            acceptAllBtn: string;
+
+            /**
+             * Accessibility label for the close (X) icon.
+             */
+            closeIconLabel: string;
+
+            /**
+             * Label for the "reject all" / "necessary only" button.
+             */
+            rejectAllBtn: string;
+
+            /**
+             * Label for the "save my choices" button.
+             */
+            savePreferencesBtn: string;
+
+            /**
+             * Per-category sections plus a leading general section. The server backfills
+             * sections for each defined category if absent.
+             */
+            sections: Array<PreferencesModal.Section>;
+
+            /**
+             * Heading for the preferences modal.
+             */
+            title: string;
+
+            /**
+             * Optional collapsible info block rendered after the category sections. Renders
+             * only when both title and body are non-empty. Use it for long-form text unrelated
+             * to any specific category (e.g. a third-party advertisers disclosure).
+             */
+            additionalInfo?: PreferencesModal.AdditionalInfo | null;
+
+            /**
+             * Pluralizable label for the "N services" counter (e.g. "Service|Services").
+             */
+            serviceCounterLabel?: string | null;
+          }
+
+          export namespace PreferencesModal {
+            export interface Section {
+              /**
+               * Body text for this preferences-modal section.
+               */
+              description: string;
+
+              /**
+               * Heading for this preferences-modal section.
+               */
+              title: string;
+
+              /**
+               * Optional disclosure table listing cookies/services in this section.
+               */
+              cookieTable?: Section.CookieTable | null;
+
+              /**
+               * Category value this section configures. Use null/omit for the introductory
+               * section that applies to no specific category.
+               */
+              linkedCategory?: string | null;
+            }
+
+            export namespace Section {
+              /**
+               * Optional disclosure table listing cookies/services in this section.
+               */
+              export interface CookieTable {
+                /**
+                 * Rows of the cookie table — each row is a {key,value} pair (e.g. cookie name →
+                 * purpose).
+                 */
+                body: Array<CookieTable.Body>;
+
+                /**
+                 * Header cells. Same {key,value} shape as rows.
+                 */
+                headers: Array<CookieTable.Header>;
+
+                /**
+                 * Optional table caption.
+                 */
+                caption?: string | null;
+              }
+
+              export namespace CookieTable {
+                export interface Body {
+                  key: string;
+
+                  value: string;
+                }
+
+                export interface Header {
+                  key: string;
+
+                  value: string;
+                }
+              }
+            }
+
+            /**
+             * Optional collapsible info block rendered after the category sections. Renders
+             * only when both title and body are non-empty. Use it for long-form text unrelated
+             * to any specific category (e.g. a third-party advertisers disclosure).
+             */
+            export interface AdditionalInfo {
+              /**
+               * Body text for the additional-info block. Supports the rich-text markdown subset
+               * used by section descriptions: line breaks, [text](url) links (https:// or
+               * relative paths), and **bold**. HTML is stripped.
+               */
+              body: string;
+
+              /**
+               * Heading for the additional-info block.
+               */
+              title: string;
+            }
+          }
+        }
+      }
+
+      /**
+       * Threshold config for autoShowDismissMode (page count or seconds).
+       */
+      export interface AutoShowDismissConfig {
+        /**
+         * Pages-viewed threshold when autoShowDismissMode = after_pages.
+         */
+        pageCount?: number | null;
+
+        /**
+         * Seconds-on-page threshold when autoShowDismissMode = after_seconds.
+         */
+        seconds?: number | null;
+      }
+
+      /**
+       * Visual options for the modals (layout/position/colors).
+       */
+      export interface GuiOptions {
+        /**
+         * Visual options for the initial consent modal.
+         */
+        consentModal?: GuiOptions.ConsentModal | null;
+
+        /**
+         * Global CSS variable overrides applied to both modals.
+         */
+        cssVariables?: GuiOptions.CssVariables | null;
+
+        /**
+         * Visual options for the per-category preferences modal.
+         */
+        preferencesModal?: GuiOptions.PreferencesModal | null;
+      }
+
+      export namespace GuiOptions {
+        /**
+         * Visual options for the initial consent modal.
+         */
+        export interface ConsentModal {
+          /**
+           * Which buttons to render in the consent modal and in what arrangement.
+           */
+          buttonLayout?:
+            | 'AcceptAllNecessaryPreferences'
+            | 'AcceptAllPreferences'
+            | 'AcceptOnly'
+            | 'InformationOnly'
+            | 'PreferencesOnly'
+            | null;
+
+          /**
+           * When true, accept and reject buttons share the same visual weight (no
+           * primary/secondary).
+           */
+          equalWeightButtons?: boolean | null;
+
+          /**
+           * When true, swap accept/reject button order.
+           */
+          flipButtons?: boolean | null;
+
+          /**
+           * Modal layout style (box, bar, cloud, etc.).
+           */
+          layout?: 'bar' | 'bar_inline' | 'box' | 'box_inline' | 'box_wide' | 'cloud' | 'cloud_inline' | null;
+
+          /**
+           * Where the modal anchors on the viewport (e.g. bottom_left, top_right,
+           * middle_center).
+           */
+          position?:
+            | 'bottom'
+            | 'bottom_center'
+            | 'bottom_left'
+            | 'bottom_right'
+            | 'middle'
+            | 'middle_center'
+            | 'middle_left'
+            | 'middle_right'
+            | 'top'
+            | 'top_center'
+            | 'top_left'
+            | 'top_right'
+            | null;
+
+          /**
+           * Show an X to dismiss the modal without choosing.
+           */
+          showCloseIcon?: boolean | null;
+        }
+
+        /**
+         * Global CSS variable overrides applied to both modals.
+         */
+        export interface CssVariables {
+          /**
+           * CSS length, e.g. "4px" or "0.25rem".
+           */
+          buttonBorderRadius?: string | null;
+
+          /**
+           * CSS color for the per-category block background in the preferences modal.
+           */
+          cookieCategoryBlockBg?: string | null;
+
+          /**
+           * CSS color for the per-category block background on hover.
+           */
+          cookieCategoryBlockHoverBg?: string | null;
+
+          /**
+           * CSS color for the modal footer background.
+           */
+          footerBg?: string | null;
+
+          /**
+           * CSS color for footer text.
+           */
+          footerColor?: string | null;
+
+          /**
+           * CSS color for footer links.
+           */
+          footerLinkColor?: string | null;
+
+          /**
+           * CSS color for footer links on hover.
+           */
+          footerLinkHoverColor?: string | null;
+
+          /**
+           * CSS color for the modal background.
+           */
+          modalBg?: string | null;
+
+          /**
+           * CSS length for modal corner radius.
+           */
+          modalBorderRadius?: string | null;
+
+          /**
+           * CSS color for the primary button background.
+           */
+          primaryButtonBg?: string | null;
+
+          /**
+           * CSS color for primary button text.
+           */
+          primaryButtonColor?: string | null;
+
+          /**
+           * CSS color for the primary button background on hover.
+           */
+          primaryButtonHoverBg?: string | null;
+
+          /**
+           * CSS color for primary button text on hover.
+           */
+          primaryButtonHoverColor?: string | null;
+
+          /**
+           * CSS color for primary text in the modal body.
+           */
+          primaryTextColor?: string | null;
+
+          /**
+           * CSS color for the secondary button background.
+           */
+          secondaryButtonBg?: string | null;
+
+          /**
+           * CSS color for secondary button text.
+           */
+          secondaryButtonColor?: string | null;
+
+          /**
+           * CSS color for secondary button background on hover.
+           */
+          secondaryButtonHoverBg?: string | null;
+
+          /**
+           * CSS color for secondary button text on hover.
+           */
+          secondaryButtonHoverColor?: string | null;
+
+          /**
+           * CSS color for secondary text in the modal body.
+           */
+          secondaryTextColor?: string | null;
+
+          /**
+           * CSS color for the "on" state of category toggles.
+           */
+          toggleOnBg?: string | null;
+        }
+
+        /**
+         * Visual options for the per-category preferences modal.
+         */
+        export interface PreferencesModal {
+          /**
+           * Button layout for the preferences modal.
+           */
+          buttonLayout?: 'AcceptAllRejectAllSave' | 'AcceptAllSave' | null;
+
+          /**
+           * When true, accept/reject share the same visual weight.
+           */
+          equalWeightButtons?: boolean | null;
+
+          /**
+           * When true, swap accept/reject button order.
+           */
+          flipButtons?: boolean | null;
+
+          /**
+           * Preferences modal layout (box, bar, bar_wide).
+           */
+          layout?: 'bar' | 'bar_wide' | 'box' | null;
+
+          /**
+           * Preferences modal anchor (left, right).
+           */
+          position?: 'left' | 'right' | null;
         }
       }
     }
@@ -493,12 +925,12 @@ export namespace ConsentSettingListResponse {
         /**
          * Threshold config for autoShowDismissMode (page count or seconds).
          */
-        autoShowDismissConfig?: unknown | null;
+        autoShowDismissConfig?: Rule.AutoShowDismissConfig | null;
 
         /**
          * How the modal is treated as dismissed (never, after_pages, after_seconds).
          */
-        autoShowDismissMode?: string | null;
+        autoShowDismissMode?: 'after_pages' | 'after_seconds' | 'never' | null;
 
         /**
          * When true, the rest of the page is locked behind a backdrop until the user
@@ -509,7 +941,7 @@ export namespace ConsentSettingListResponse {
         /**
          * Visual options for the modals (layout/position/colors).
          */
-        guiOptions?: unknown | null;
+        guiOptions?: Rule.GuiOptions | null;
 
         /**
          * When true, the modal is suppressed for known bot user agents.
@@ -573,12 +1005,445 @@ export namespace ConsentSettingListResponse {
             /**
              * Translated copy for the initial consent modal.
              */
-            consentModal?: unknown | null;
+            consentModal?: Value.ConsentModal | null;
 
             /**
              * Translated copy for the preferences modal.
              */
-            preferencesModal?: unknown | null;
+            preferencesModal?: Value.PreferencesModal | null;
+          }
+
+          export namespace Value {
+            /**
+             * Translated copy for the initial consent modal.
+             */
+            export interface ConsentModal {
+              /**
+               * Label for the "accept all" button.
+               */
+              acceptAllBtn: string;
+
+              /**
+               * Body text shown in the consent modal.
+               */
+              description: string;
+
+              /**
+               * Label for the "reject all" / "necessary only" button.
+               */
+              rejectAllBtn: string;
+
+              /**
+               * Label for the button that opens the preferences modal.
+               */
+              showPreferencesBtn: string;
+
+              /**
+               * Heading shown at the top of the consent modal.
+               */
+              title: string;
+
+              /**
+               * Accessibility label for the close (X) icon.
+               */
+              closeIconLabel?: string | null;
+
+              /**
+               * Optional footer HTML/text shown below the body.
+               */
+              footer?: string | null;
+
+              /**
+               * Optional text shown when the browser is sending Sec-GPC: 1.
+               */
+              gpcNotification?: string | null;
+
+              /**
+               * Link label for the privacy policy (defaults to "Privacy Policy").
+               */
+              privacyPolicyLabel?: string | null;
+
+              /**
+               * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
+               * (/legal/privacy) so one config can run across multiple domains. javascript:,
+               * data:, and vbscript: schemes are rejected.
+               */
+              privacyPolicyUrl?: string | null;
+
+              /**
+               * Optional message shown when the consent revision has bumped (re-prompt copy).
+               */
+              revisionMessage?: string | null;
+
+              /**
+               * Link label for terms of service (defaults to "Terms of Service").
+               */
+              termsOfServiceLabel?: string | null;
+
+              /**
+               * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
+               * relative path only.
+               */
+              termsOfServiceUrl?: string | null;
+            }
+
+            /**
+             * Translated copy for the preferences modal.
+             */
+            export interface PreferencesModal {
+              /**
+               * Label for the "accept all" button in the preferences modal.
+               */
+              acceptAllBtn: string;
+
+              /**
+               * Accessibility label for the close (X) icon.
+               */
+              closeIconLabel: string;
+
+              /**
+               * Label for the "reject all" / "necessary only" button.
+               */
+              rejectAllBtn: string;
+
+              /**
+               * Label for the "save my choices" button.
+               */
+              savePreferencesBtn: string;
+
+              /**
+               * Per-category sections plus a leading general section. The server backfills
+               * sections for each defined category if absent.
+               */
+              sections: Array<PreferencesModal.Section>;
+
+              /**
+               * Heading for the preferences modal.
+               */
+              title: string;
+
+              /**
+               * Optional collapsible info block rendered after the category sections. Renders
+               * only when both title and body are non-empty. Use it for long-form text unrelated
+               * to any specific category (e.g. a third-party advertisers disclosure).
+               */
+              additionalInfo?: PreferencesModal.AdditionalInfo | null;
+
+              /**
+               * Pluralizable label for the "N services" counter (e.g. "Service|Services").
+               */
+              serviceCounterLabel?: string | null;
+            }
+
+            export namespace PreferencesModal {
+              export interface Section {
+                /**
+                 * Body text for this preferences-modal section.
+                 */
+                description: string;
+
+                /**
+                 * Heading for this preferences-modal section.
+                 */
+                title: string;
+
+                /**
+                 * Optional disclosure table listing cookies/services in this section.
+                 */
+                cookieTable?: Section.CookieTable | null;
+
+                /**
+                 * Category value this section configures. Use null/omit for the introductory
+                 * section that applies to no specific category.
+                 */
+                linkedCategory?: string | null;
+              }
+
+              export namespace Section {
+                /**
+                 * Optional disclosure table listing cookies/services in this section.
+                 */
+                export interface CookieTable {
+                  /**
+                   * Rows of the cookie table — each row is a {key,value} pair (e.g. cookie name →
+                   * purpose).
+                   */
+                  body: Array<CookieTable.Body>;
+
+                  /**
+                   * Header cells. Same {key,value} shape as rows.
+                   */
+                  headers: Array<CookieTable.Header>;
+
+                  /**
+                   * Optional table caption.
+                   */
+                  caption?: string | null;
+                }
+
+                export namespace CookieTable {
+                  export interface Body {
+                    key: string;
+
+                    value: string;
+                  }
+
+                  export interface Header {
+                    key: string;
+
+                    value: string;
+                  }
+                }
+              }
+
+              /**
+               * Optional collapsible info block rendered after the category sections. Renders
+               * only when both title and body are non-empty. Use it for long-form text unrelated
+               * to any specific category (e.g. a third-party advertisers disclosure).
+               */
+              export interface AdditionalInfo {
+                /**
+                 * Body text for the additional-info block. Supports the rich-text markdown subset
+                 * used by section descriptions: line breaks, [text](url) links (https:// or
+                 * relative paths), and **bold**. HTML is stripped.
+                 */
+                body: string;
+
+                /**
+                 * Heading for the additional-info block.
+                 */
+                title: string;
+              }
+            }
+          }
+        }
+
+        /**
+         * Threshold config for autoShowDismissMode (page count or seconds).
+         */
+        export interface AutoShowDismissConfig {
+          /**
+           * Pages-viewed threshold when autoShowDismissMode = after_pages.
+           */
+          pageCount?: number | null;
+
+          /**
+           * Seconds-on-page threshold when autoShowDismissMode = after_seconds.
+           */
+          seconds?: number | null;
+        }
+
+        /**
+         * Visual options for the modals (layout/position/colors).
+         */
+        export interface GuiOptions {
+          /**
+           * Visual options for the initial consent modal.
+           */
+          consentModal?: GuiOptions.ConsentModal | null;
+
+          /**
+           * Global CSS variable overrides applied to both modals.
+           */
+          cssVariables?: GuiOptions.CssVariables | null;
+
+          /**
+           * Visual options for the per-category preferences modal.
+           */
+          preferencesModal?: GuiOptions.PreferencesModal | null;
+        }
+
+        export namespace GuiOptions {
+          /**
+           * Visual options for the initial consent modal.
+           */
+          export interface ConsentModal {
+            /**
+             * Which buttons to render in the consent modal and in what arrangement.
+             */
+            buttonLayout?:
+              | 'AcceptAllNecessaryPreferences'
+              | 'AcceptAllPreferences'
+              | 'AcceptOnly'
+              | 'InformationOnly'
+              | 'PreferencesOnly'
+              | null;
+
+            /**
+             * When true, accept and reject buttons share the same visual weight (no
+             * primary/secondary).
+             */
+            equalWeightButtons?: boolean | null;
+
+            /**
+             * When true, swap accept/reject button order.
+             */
+            flipButtons?: boolean | null;
+
+            /**
+             * Modal layout style (box, bar, cloud, etc.).
+             */
+            layout?:
+              'bar' | 'bar_inline' | 'box' | 'box_inline' | 'box_wide' | 'cloud' | 'cloud_inline' | null;
+
+            /**
+             * Where the modal anchors on the viewport (e.g. bottom_left, top_right,
+             * middle_center).
+             */
+            position?:
+              | 'bottom'
+              | 'bottom_center'
+              | 'bottom_left'
+              | 'bottom_right'
+              | 'middle'
+              | 'middle_center'
+              | 'middle_left'
+              | 'middle_right'
+              | 'top'
+              | 'top_center'
+              | 'top_left'
+              | 'top_right'
+              | null;
+
+            /**
+             * Show an X to dismiss the modal without choosing.
+             */
+            showCloseIcon?: boolean | null;
+          }
+
+          /**
+           * Global CSS variable overrides applied to both modals.
+           */
+          export interface CssVariables {
+            /**
+             * CSS length, e.g. "4px" or "0.25rem".
+             */
+            buttonBorderRadius?: string | null;
+
+            /**
+             * CSS color for the per-category block background in the preferences modal.
+             */
+            cookieCategoryBlockBg?: string | null;
+
+            /**
+             * CSS color for the per-category block background on hover.
+             */
+            cookieCategoryBlockHoverBg?: string | null;
+
+            /**
+             * CSS color for the modal footer background.
+             */
+            footerBg?: string | null;
+
+            /**
+             * CSS color for footer text.
+             */
+            footerColor?: string | null;
+
+            /**
+             * CSS color for footer links.
+             */
+            footerLinkColor?: string | null;
+
+            /**
+             * CSS color for footer links on hover.
+             */
+            footerLinkHoverColor?: string | null;
+
+            /**
+             * CSS color for the modal background.
+             */
+            modalBg?: string | null;
+
+            /**
+             * CSS length for modal corner radius.
+             */
+            modalBorderRadius?: string | null;
+
+            /**
+             * CSS color for the primary button background.
+             */
+            primaryButtonBg?: string | null;
+
+            /**
+             * CSS color for primary button text.
+             */
+            primaryButtonColor?: string | null;
+
+            /**
+             * CSS color for the primary button background on hover.
+             */
+            primaryButtonHoverBg?: string | null;
+
+            /**
+             * CSS color for primary button text on hover.
+             */
+            primaryButtonHoverColor?: string | null;
+
+            /**
+             * CSS color for primary text in the modal body.
+             */
+            primaryTextColor?: string | null;
+
+            /**
+             * CSS color for the secondary button background.
+             */
+            secondaryButtonBg?: string | null;
+
+            /**
+             * CSS color for secondary button text.
+             */
+            secondaryButtonColor?: string | null;
+
+            /**
+             * CSS color for secondary button background on hover.
+             */
+            secondaryButtonHoverBg?: string | null;
+
+            /**
+             * CSS color for secondary button text on hover.
+             */
+            secondaryButtonHoverColor?: string | null;
+
+            /**
+             * CSS color for secondary text in the modal body.
+             */
+            secondaryTextColor?: string | null;
+
+            /**
+             * CSS color for the "on" state of category toggles.
+             */
+            toggleOnBg?: string | null;
+          }
+
+          /**
+           * Visual options for the per-category preferences modal.
+           */
+          export interface PreferencesModal {
+            /**
+             * Button layout for the preferences modal.
+             */
+            buttonLayout?: 'AcceptAllRejectAllSave' | 'AcceptAllSave' | null;
+
+            /**
+             * When true, accept/reject share the same visual weight.
+             */
+            equalWeightButtons?: boolean | null;
+
+            /**
+             * When true, swap accept/reject button order.
+             */
+            flipButtons?: boolean | null;
+
+            /**
+             * Preferences modal layout (box, bar, bar_wide).
+             */
+            layout?: 'bar' | 'bar_wide' | 'box' | null;
+
+            /**
+             * Preferences modal anchor (left, right).
+             */
+            position?: 'left' | 'right' | null;
           }
         }
       }
@@ -779,12 +1644,12 @@ export namespace ConsentSettingCreateResponse {
     /**
      * Threshold config for autoShowDismissMode (page count or seconds).
      */
-    autoShowDismissConfig?: unknown | null;
+    autoShowDismissConfig?: Default.AutoShowDismissConfig | null;
 
     /**
      * How the modal is treated as dismissed (never, after_pages, after_seconds).
      */
-    autoShowDismissMode?: string | null;
+    autoShowDismissMode?: 'after_pages' | 'after_seconds' | 'never' | null;
 
     /**
      * When true, the rest of the page is locked behind a backdrop until the user
@@ -795,7 +1660,7 @@ export namespace ConsentSettingCreateResponse {
     /**
      * Visual options for the modals (layout/position/colors).
      */
-    guiOptions?: unknown | null;
+    guiOptions?: Default.GuiOptions | null;
 
     /**
      * When true, the modal is suppressed for known bot user agents.
@@ -859,12 +1724,444 @@ export namespace ConsentSettingCreateResponse {
         /**
          * Translated copy for the initial consent modal.
          */
-        consentModal?: unknown | null;
+        consentModal?: Value.ConsentModal | null;
 
         /**
          * Translated copy for the preferences modal.
          */
-        preferencesModal?: unknown | null;
+        preferencesModal?: Value.PreferencesModal | null;
+      }
+
+      export namespace Value {
+        /**
+         * Translated copy for the initial consent modal.
+         */
+        export interface ConsentModal {
+          /**
+           * Label for the "accept all" button.
+           */
+          acceptAllBtn: string;
+
+          /**
+           * Body text shown in the consent modal.
+           */
+          description: string;
+
+          /**
+           * Label for the "reject all" / "necessary only" button.
+           */
+          rejectAllBtn: string;
+
+          /**
+           * Label for the button that opens the preferences modal.
+           */
+          showPreferencesBtn: string;
+
+          /**
+           * Heading shown at the top of the consent modal.
+           */
+          title: string;
+
+          /**
+           * Accessibility label for the close (X) icon.
+           */
+          closeIconLabel?: string | null;
+
+          /**
+           * Optional footer HTML/text shown below the body.
+           */
+          footer?: string | null;
+
+          /**
+           * Optional text shown when the browser is sending Sec-GPC: 1.
+           */
+          gpcNotification?: string | null;
+
+          /**
+           * Link label for the privacy policy (defaults to "Privacy Policy").
+           */
+          privacyPolicyLabel?: string | null;
+
+          /**
+           * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
+           * (/legal/privacy) so one config can run across multiple domains. javascript:,
+           * data:, and vbscript: schemes are rejected.
+           */
+          privacyPolicyUrl?: string | null;
+
+          /**
+           * Optional message shown when the consent revision has bumped (re-prompt copy).
+           */
+          revisionMessage?: string | null;
+
+          /**
+           * Link label for terms of service (defaults to "Terms of Service").
+           */
+          termsOfServiceLabel?: string | null;
+
+          /**
+           * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
+           * relative path only.
+           */
+          termsOfServiceUrl?: string | null;
+        }
+
+        /**
+         * Translated copy for the preferences modal.
+         */
+        export interface PreferencesModal {
+          /**
+           * Label for the "accept all" button in the preferences modal.
+           */
+          acceptAllBtn: string;
+
+          /**
+           * Accessibility label for the close (X) icon.
+           */
+          closeIconLabel: string;
+
+          /**
+           * Label for the "reject all" / "necessary only" button.
+           */
+          rejectAllBtn: string;
+
+          /**
+           * Label for the "save my choices" button.
+           */
+          savePreferencesBtn: string;
+
+          /**
+           * Per-category sections plus a leading general section. The server backfills
+           * sections for each defined category if absent.
+           */
+          sections: Array<PreferencesModal.Section>;
+
+          /**
+           * Heading for the preferences modal.
+           */
+          title: string;
+
+          /**
+           * Optional collapsible info block rendered after the category sections. Renders
+           * only when both title and body are non-empty. Use it for long-form text unrelated
+           * to any specific category (e.g. a third-party advertisers disclosure).
+           */
+          additionalInfo?: PreferencesModal.AdditionalInfo | null;
+
+          /**
+           * Pluralizable label for the "N services" counter (e.g. "Service|Services").
+           */
+          serviceCounterLabel?: string | null;
+        }
+
+        export namespace PreferencesModal {
+          export interface Section {
+            /**
+             * Body text for this preferences-modal section.
+             */
+            description: string;
+
+            /**
+             * Heading for this preferences-modal section.
+             */
+            title: string;
+
+            /**
+             * Optional disclosure table listing cookies/services in this section.
+             */
+            cookieTable?: Section.CookieTable | null;
+
+            /**
+             * Category value this section configures. Use null/omit for the introductory
+             * section that applies to no specific category.
+             */
+            linkedCategory?: string | null;
+          }
+
+          export namespace Section {
+            /**
+             * Optional disclosure table listing cookies/services in this section.
+             */
+            export interface CookieTable {
+              /**
+               * Rows of the cookie table — each row is a {key,value} pair (e.g. cookie name →
+               * purpose).
+               */
+              body: Array<CookieTable.Body>;
+
+              /**
+               * Header cells. Same {key,value} shape as rows.
+               */
+              headers: Array<CookieTable.Header>;
+
+              /**
+               * Optional table caption.
+               */
+              caption?: string | null;
+            }
+
+            export namespace CookieTable {
+              export interface Body {
+                key: string;
+
+                value: string;
+              }
+
+              export interface Header {
+                key: string;
+
+                value: string;
+              }
+            }
+          }
+
+          /**
+           * Optional collapsible info block rendered after the category sections. Renders
+           * only when both title and body are non-empty. Use it for long-form text unrelated
+           * to any specific category (e.g. a third-party advertisers disclosure).
+           */
+          export interface AdditionalInfo {
+            /**
+             * Body text for the additional-info block. Supports the rich-text markdown subset
+             * used by section descriptions: line breaks, [text](url) links (https:// or
+             * relative paths), and **bold**. HTML is stripped.
+             */
+            body: string;
+
+            /**
+             * Heading for the additional-info block.
+             */
+            title: string;
+          }
+        }
+      }
+    }
+
+    /**
+     * Threshold config for autoShowDismissMode (page count or seconds).
+     */
+    export interface AutoShowDismissConfig {
+      /**
+       * Pages-viewed threshold when autoShowDismissMode = after_pages.
+       */
+      pageCount?: number | null;
+
+      /**
+       * Seconds-on-page threshold when autoShowDismissMode = after_seconds.
+       */
+      seconds?: number | null;
+    }
+
+    /**
+     * Visual options for the modals (layout/position/colors).
+     */
+    export interface GuiOptions {
+      /**
+       * Visual options for the initial consent modal.
+       */
+      consentModal?: GuiOptions.ConsentModal | null;
+
+      /**
+       * Global CSS variable overrides applied to both modals.
+       */
+      cssVariables?: GuiOptions.CssVariables | null;
+
+      /**
+       * Visual options for the per-category preferences modal.
+       */
+      preferencesModal?: GuiOptions.PreferencesModal | null;
+    }
+
+    export namespace GuiOptions {
+      /**
+       * Visual options for the initial consent modal.
+       */
+      export interface ConsentModal {
+        /**
+         * Which buttons to render in the consent modal and in what arrangement.
+         */
+        buttonLayout?:
+          | 'AcceptAllNecessaryPreferences'
+          | 'AcceptAllPreferences'
+          | 'AcceptOnly'
+          | 'InformationOnly'
+          | 'PreferencesOnly'
+          | null;
+
+        /**
+         * When true, accept and reject buttons share the same visual weight (no
+         * primary/secondary).
+         */
+        equalWeightButtons?: boolean | null;
+
+        /**
+         * When true, swap accept/reject button order.
+         */
+        flipButtons?: boolean | null;
+
+        /**
+         * Modal layout style (box, bar, cloud, etc.).
+         */
+        layout?: 'bar' | 'bar_inline' | 'box' | 'box_inline' | 'box_wide' | 'cloud' | 'cloud_inline' | null;
+
+        /**
+         * Where the modal anchors on the viewport (e.g. bottom_left, top_right,
+         * middle_center).
+         */
+        position?:
+          | 'bottom'
+          | 'bottom_center'
+          | 'bottom_left'
+          | 'bottom_right'
+          | 'middle'
+          | 'middle_center'
+          | 'middle_left'
+          | 'middle_right'
+          | 'top'
+          | 'top_center'
+          | 'top_left'
+          | 'top_right'
+          | null;
+
+        /**
+         * Show an X to dismiss the modal without choosing.
+         */
+        showCloseIcon?: boolean | null;
+      }
+
+      /**
+       * Global CSS variable overrides applied to both modals.
+       */
+      export interface CssVariables {
+        /**
+         * CSS length, e.g. "4px" or "0.25rem".
+         */
+        buttonBorderRadius?: string | null;
+
+        /**
+         * CSS color for the per-category block background in the preferences modal.
+         */
+        cookieCategoryBlockBg?: string | null;
+
+        /**
+         * CSS color for the per-category block background on hover.
+         */
+        cookieCategoryBlockHoverBg?: string | null;
+
+        /**
+         * CSS color for the modal footer background.
+         */
+        footerBg?: string | null;
+
+        /**
+         * CSS color for footer text.
+         */
+        footerColor?: string | null;
+
+        /**
+         * CSS color for footer links.
+         */
+        footerLinkColor?: string | null;
+
+        /**
+         * CSS color for footer links on hover.
+         */
+        footerLinkHoverColor?: string | null;
+
+        /**
+         * CSS color for the modal background.
+         */
+        modalBg?: string | null;
+
+        /**
+         * CSS length for modal corner radius.
+         */
+        modalBorderRadius?: string | null;
+
+        /**
+         * CSS color for the primary button background.
+         */
+        primaryButtonBg?: string | null;
+
+        /**
+         * CSS color for primary button text.
+         */
+        primaryButtonColor?: string | null;
+
+        /**
+         * CSS color for the primary button background on hover.
+         */
+        primaryButtonHoverBg?: string | null;
+
+        /**
+         * CSS color for primary button text on hover.
+         */
+        primaryButtonHoverColor?: string | null;
+
+        /**
+         * CSS color for primary text in the modal body.
+         */
+        primaryTextColor?: string | null;
+
+        /**
+         * CSS color for the secondary button background.
+         */
+        secondaryButtonBg?: string | null;
+
+        /**
+         * CSS color for secondary button text.
+         */
+        secondaryButtonColor?: string | null;
+
+        /**
+         * CSS color for secondary button background on hover.
+         */
+        secondaryButtonHoverBg?: string | null;
+
+        /**
+         * CSS color for secondary button text on hover.
+         */
+        secondaryButtonHoverColor?: string | null;
+
+        /**
+         * CSS color for secondary text in the modal body.
+         */
+        secondaryTextColor?: string | null;
+
+        /**
+         * CSS color for the "on" state of category toggles.
+         */
+        toggleOnBg?: string | null;
+      }
+
+      /**
+       * Visual options for the per-category preferences modal.
+       */
+      export interface PreferencesModal {
+        /**
+         * Button layout for the preferences modal.
+         */
+        buttonLayout?: 'AcceptAllRejectAllSave' | 'AcceptAllSave' | null;
+
+        /**
+         * When true, accept/reject share the same visual weight.
+         */
+        equalWeightButtons?: boolean | null;
+
+        /**
+         * When true, swap accept/reject button order.
+         */
+        flipButtons?: boolean | null;
+
+        /**
+         * Preferences modal layout (box, bar, bar_wide).
+         */
+        layout?: 'bar' | 'bar_wide' | 'box' | null;
+
+        /**
+         * Preferences modal anchor (left, right).
+         */
+        position?: 'left' | 'right' | null;
       }
     }
   }
@@ -934,12 +2231,12 @@ export namespace ConsentSettingCreateResponse {
       /**
        * Threshold config for autoShowDismissMode (page count or seconds).
        */
-      autoShowDismissConfig?: unknown | null;
+      autoShowDismissConfig?: Rule.AutoShowDismissConfig | null;
 
       /**
        * How the modal is treated as dismissed (never, after_pages, after_seconds).
        */
-      autoShowDismissMode?: string | null;
+      autoShowDismissMode?: 'after_pages' | 'after_seconds' | 'never' | null;
 
       /**
        * When true, the rest of the page is locked behind a backdrop until the user
@@ -950,7 +2247,7 @@ export namespace ConsentSettingCreateResponse {
       /**
        * Visual options for the modals (layout/position/colors).
        */
-      guiOptions?: unknown | null;
+      guiOptions?: Rule.GuiOptions | null;
 
       /**
        * When true, the modal is suppressed for known bot user agents.
@@ -1014,12 +2311,444 @@ export namespace ConsentSettingCreateResponse {
           /**
            * Translated copy for the initial consent modal.
            */
-          consentModal?: unknown | null;
+          consentModal?: Value.ConsentModal | null;
 
           /**
            * Translated copy for the preferences modal.
            */
-          preferencesModal?: unknown | null;
+          preferencesModal?: Value.PreferencesModal | null;
+        }
+
+        export namespace Value {
+          /**
+           * Translated copy for the initial consent modal.
+           */
+          export interface ConsentModal {
+            /**
+             * Label for the "accept all" button.
+             */
+            acceptAllBtn: string;
+
+            /**
+             * Body text shown in the consent modal.
+             */
+            description: string;
+
+            /**
+             * Label for the "reject all" / "necessary only" button.
+             */
+            rejectAllBtn: string;
+
+            /**
+             * Label for the button that opens the preferences modal.
+             */
+            showPreferencesBtn: string;
+
+            /**
+             * Heading shown at the top of the consent modal.
+             */
+            title: string;
+
+            /**
+             * Accessibility label for the close (X) icon.
+             */
+            closeIconLabel?: string | null;
+
+            /**
+             * Optional footer HTML/text shown below the body.
+             */
+            footer?: string | null;
+
+            /**
+             * Optional text shown when the browser is sending Sec-GPC: 1.
+             */
+            gpcNotification?: string | null;
+
+            /**
+             * Link label for the privacy policy (defaults to "Privacy Policy").
+             */
+            privacyPolicyLabel?: string | null;
+
+            /**
+             * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
+             * (/legal/privacy) so one config can run across multiple domains. javascript:,
+             * data:, and vbscript: schemes are rejected.
+             */
+            privacyPolicyUrl?: string | null;
+
+            /**
+             * Optional message shown when the consent revision has bumped (re-prompt copy).
+             */
+            revisionMessage?: string | null;
+
+            /**
+             * Link label for terms of service (defaults to "Terms of Service").
+             */
+            termsOfServiceLabel?: string | null;
+
+            /**
+             * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
+             * relative path only.
+             */
+            termsOfServiceUrl?: string | null;
+          }
+
+          /**
+           * Translated copy for the preferences modal.
+           */
+          export interface PreferencesModal {
+            /**
+             * Label for the "accept all" button in the preferences modal.
+             */
+            acceptAllBtn: string;
+
+            /**
+             * Accessibility label for the close (X) icon.
+             */
+            closeIconLabel: string;
+
+            /**
+             * Label for the "reject all" / "necessary only" button.
+             */
+            rejectAllBtn: string;
+
+            /**
+             * Label for the "save my choices" button.
+             */
+            savePreferencesBtn: string;
+
+            /**
+             * Per-category sections plus a leading general section. The server backfills
+             * sections for each defined category if absent.
+             */
+            sections: Array<PreferencesModal.Section>;
+
+            /**
+             * Heading for the preferences modal.
+             */
+            title: string;
+
+            /**
+             * Optional collapsible info block rendered after the category sections. Renders
+             * only when both title and body are non-empty. Use it for long-form text unrelated
+             * to any specific category (e.g. a third-party advertisers disclosure).
+             */
+            additionalInfo?: PreferencesModal.AdditionalInfo | null;
+
+            /**
+             * Pluralizable label for the "N services" counter (e.g. "Service|Services").
+             */
+            serviceCounterLabel?: string | null;
+          }
+
+          export namespace PreferencesModal {
+            export interface Section {
+              /**
+               * Body text for this preferences-modal section.
+               */
+              description: string;
+
+              /**
+               * Heading for this preferences-modal section.
+               */
+              title: string;
+
+              /**
+               * Optional disclosure table listing cookies/services in this section.
+               */
+              cookieTable?: Section.CookieTable | null;
+
+              /**
+               * Category value this section configures. Use null/omit for the introductory
+               * section that applies to no specific category.
+               */
+              linkedCategory?: string | null;
+            }
+
+            export namespace Section {
+              /**
+               * Optional disclosure table listing cookies/services in this section.
+               */
+              export interface CookieTable {
+                /**
+                 * Rows of the cookie table — each row is a {key,value} pair (e.g. cookie name →
+                 * purpose).
+                 */
+                body: Array<CookieTable.Body>;
+
+                /**
+                 * Header cells. Same {key,value} shape as rows.
+                 */
+                headers: Array<CookieTable.Header>;
+
+                /**
+                 * Optional table caption.
+                 */
+                caption?: string | null;
+              }
+
+              export namespace CookieTable {
+                export interface Body {
+                  key: string;
+
+                  value: string;
+                }
+
+                export interface Header {
+                  key: string;
+
+                  value: string;
+                }
+              }
+            }
+
+            /**
+             * Optional collapsible info block rendered after the category sections. Renders
+             * only when both title and body are non-empty. Use it for long-form text unrelated
+             * to any specific category (e.g. a third-party advertisers disclosure).
+             */
+            export interface AdditionalInfo {
+              /**
+               * Body text for the additional-info block. Supports the rich-text markdown subset
+               * used by section descriptions: line breaks, [text](url) links (https:// or
+               * relative paths), and **bold**. HTML is stripped.
+               */
+              body: string;
+
+              /**
+               * Heading for the additional-info block.
+               */
+              title: string;
+            }
+          }
+        }
+      }
+
+      /**
+       * Threshold config for autoShowDismissMode (page count or seconds).
+       */
+      export interface AutoShowDismissConfig {
+        /**
+         * Pages-viewed threshold when autoShowDismissMode = after_pages.
+         */
+        pageCount?: number | null;
+
+        /**
+         * Seconds-on-page threshold when autoShowDismissMode = after_seconds.
+         */
+        seconds?: number | null;
+      }
+
+      /**
+       * Visual options for the modals (layout/position/colors).
+       */
+      export interface GuiOptions {
+        /**
+         * Visual options for the initial consent modal.
+         */
+        consentModal?: GuiOptions.ConsentModal | null;
+
+        /**
+         * Global CSS variable overrides applied to both modals.
+         */
+        cssVariables?: GuiOptions.CssVariables | null;
+
+        /**
+         * Visual options for the per-category preferences modal.
+         */
+        preferencesModal?: GuiOptions.PreferencesModal | null;
+      }
+
+      export namespace GuiOptions {
+        /**
+         * Visual options for the initial consent modal.
+         */
+        export interface ConsentModal {
+          /**
+           * Which buttons to render in the consent modal and in what arrangement.
+           */
+          buttonLayout?:
+            | 'AcceptAllNecessaryPreferences'
+            | 'AcceptAllPreferences'
+            | 'AcceptOnly'
+            | 'InformationOnly'
+            | 'PreferencesOnly'
+            | null;
+
+          /**
+           * When true, accept and reject buttons share the same visual weight (no
+           * primary/secondary).
+           */
+          equalWeightButtons?: boolean | null;
+
+          /**
+           * When true, swap accept/reject button order.
+           */
+          flipButtons?: boolean | null;
+
+          /**
+           * Modal layout style (box, bar, cloud, etc.).
+           */
+          layout?: 'bar' | 'bar_inline' | 'box' | 'box_inline' | 'box_wide' | 'cloud' | 'cloud_inline' | null;
+
+          /**
+           * Where the modal anchors on the viewport (e.g. bottom_left, top_right,
+           * middle_center).
+           */
+          position?:
+            | 'bottom'
+            | 'bottom_center'
+            | 'bottom_left'
+            | 'bottom_right'
+            | 'middle'
+            | 'middle_center'
+            | 'middle_left'
+            | 'middle_right'
+            | 'top'
+            | 'top_center'
+            | 'top_left'
+            | 'top_right'
+            | null;
+
+          /**
+           * Show an X to dismiss the modal without choosing.
+           */
+          showCloseIcon?: boolean | null;
+        }
+
+        /**
+         * Global CSS variable overrides applied to both modals.
+         */
+        export interface CssVariables {
+          /**
+           * CSS length, e.g. "4px" or "0.25rem".
+           */
+          buttonBorderRadius?: string | null;
+
+          /**
+           * CSS color for the per-category block background in the preferences modal.
+           */
+          cookieCategoryBlockBg?: string | null;
+
+          /**
+           * CSS color for the per-category block background on hover.
+           */
+          cookieCategoryBlockHoverBg?: string | null;
+
+          /**
+           * CSS color for the modal footer background.
+           */
+          footerBg?: string | null;
+
+          /**
+           * CSS color for footer text.
+           */
+          footerColor?: string | null;
+
+          /**
+           * CSS color for footer links.
+           */
+          footerLinkColor?: string | null;
+
+          /**
+           * CSS color for footer links on hover.
+           */
+          footerLinkHoverColor?: string | null;
+
+          /**
+           * CSS color for the modal background.
+           */
+          modalBg?: string | null;
+
+          /**
+           * CSS length for modal corner radius.
+           */
+          modalBorderRadius?: string | null;
+
+          /**
+           * CSS color for the primary button background.
+           */
+          primaryButtonBg?: string | null;
+
+          /**
+           * CSS color for primary button text.
+           */
+          primaryButtonColor?: string | null;
+
+          /**
+           * CSS color for the primary button background on hover.
+           */
+          primaryButtonHoverBg?: string | null;
+
+          /**
+           * CSS color for primary button text on hover.
+           */
+          primaryButtonHoverColor?: string | null;
+
+          /**
+           * CSS color for primary text in the modal body.
+           */
+          primaryTextColor?: string | null;
+
+          /**
+           * CSS color for the secondary button background.
+           */
+          secondaryButtonBg?: string | null;
+
+          /**
+           * CSS color for secondary button text.
+           */
+          secondaryButtonColor?: string | null;
+
+          /**
+           * CSS color for secondary button background on hover.
+           */
+          secondaryButtonHoverBg?: string | null;
+
+          /**
+           * CSS color for secondary button text on hover.
+           */
+          secondaryButtonHoverColor?: string | null;
+
+          /**
+           * CSS color for secondary text in the modal body.
+           */
+          secondaryTextColor?: string | null;
+
+          /**
+           * CSS color for the "on" state of category toggles.
+           */
+          toggleOnBg?: string | null;
+        }
+
+        /**
+         * Visual options for the per-category preferences modal.
+         */
+        export interface PreferencesModal {
+          /**
+           * Button layout for the preferences modal.
+           */
+          buttonLayout?: 'AcceptAllRejectAllSave' | 'AcceptAllSave' | null;
+
+          /**
+           * When true, accept/reject share the same visual weight.
+           */
+          equalWeightButtons?: boolean | null;
+
+          /**
+           * When true, swap accept/reject button order.
+           */
+          flipButtons?: boolean | null;
+
+          /**
+           * Preferences modal layout (box, bar, bar_wide).
+           */
+          layout?: 'bar' | 'bar_wide' | 'box' | null;
+
+          /**
+           * Preferences modal anchor (left, right).
+           */
+          position?: 'left' | 'right' | null;
         }
       }
     }
@@ -1219,12 +2948,12 @@ export namespace ConsentSettingRetrieveResponse {
     /**
      * Threshold config for autoShowDismissMode (page count or seconds).
      */
-    autoShowDismissConfig?: unknown | null;
+    autoShowDismissConfig?: Default.AutoShowDismissConfig | null;
 
     /**
      * How the modal is treated as dismissed (never, after_pages, after_seconds).
      */
-    autoShowDismissMode?: string | null;
+    autoShowDismissMode?: 'after_pages' | 'after_seconds' | 'never' | null;
 
     /**
      * When true, the rest of the page is locked behind a backdrop until the user
@@ -1235,7 +2964,7 @@ export namespace ConsentSettingRetrieveResponse {
     /**
      * Visual options for the modals (layout/position/colors).
      */
-    guiOptions?: unknown | null;
+    guiOptions?: Default.GuiOptions | null;
 
     /**
      * When true, the modal is suppressed for known bot user agents.
@@ -1299,12 +3028,444 @@ export namespace ConsentSettingRetrieveResponse {
         /**
          * Translated copy for the initial consent modal.
          */
-        consentModal?: unknown | null;
+        consentModal?: Value.ConsentModal | null;
 
         /**
          * Translated copy for the preferences modal.
          */
-        preferencesModal?: unknown | null;
+        preferencesModal?: Value.PreferencesModal | null;
+      }
+
+      export namespace Value {
+        /**
+         * Translated copy for the initial consent modal.
+         */
+        export interface ConsentModal {
+          /**
+           * Label for the "accept all" button.
+           */
+          acceptAllBtn: string;
+
+          /**
+           * Body text shown in the consent modal.
+           */
+          description: string;
+
+          /**
+           * Label for the "reject all" / "necessary only" button.
+           */
+          rejectAllBtn: string;
+
+          /**
+           * Label for the button that opens the preferences modal.
+           */
+          showPreferencesBtn: string;
+
+          /**
+           * Heading shown at the top of the consent modal.
+           */
+          title: string;
+
+          /**
+           * Accessibility label for the close (X) icon.
+           */
+          closeIconLabel?: string | null;
+
+          /**
+           * Optional footer HTML/text shown below the body.
+           */
+          footer?: string | null;
+
+          /**
+           * Optional text shown when the browser is sending Sec-GPC: 1.
+           */
+          gpcNotification?: string | null;
+
+          /**
+           * Link label for the privacy policy (defaults to "Privacy Policy").
+           */
+          privacyPolicyLabel?: string | null;
+
+          /**
+           * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
+           * (/legal/privacy) so one config can run across multiple domains. javascript:,
+           * data:, and vbscript: schemes are rejected.
+           */
+          privacyPolicyUrl?: string | null;
+
+          /**
+           * Optional message shown when the consent revision has bumped (re-prompt copy).
+           */
+          revisionMessage?: string | null;
+
+          /**
+           * Link label for terms of service (defaults to "Terms of Service").
+           */
+          termsOfServiceLabel?: string | null;
+
+          /**
+           * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
+           * relative path only.
+           */
+          termsOfServiceUrl?: string | null;
+        }
+
+        /**
+         * Translated copy for the preferences modal.
+         */
+        export interface PreferencesModal {
+          /**
+           * Label for the "accept all" button in the preferences modal.
+           */
+          acceptAllBtn: string;
+
+          /**
+           * Accessibility label for the close (X) icon.
+           */
+          closeIconLabel: string;
+
+          /**
+           * Label for the "reject all" / "necessary only" button.
+           */
+          rejectAllBtn: string;
+
+          /**
+           * Label for the "save my choices" button.
+           */
+          savePreferencesBtn: string;
+
+          /**
+           * Per-category sections plus a leading general section. The server backfills
+           * sections for each defined category if absent.
+           */
+          sections: Array<PreferencesModal.Section>;
+
+          /**
+           * Heading for the preferences modal.
+           */
+          title: string;
+
+          /**
+           * Optional collapsible info block rendered after the category sections. Renders
+           * only when both title and body are non-empty. Use it for long-form text unrelated
+           * to any specific category (e.g. a third-party advertisers disclosure).
+           */
+          additionalInfo?: PreferencesModal.AdditionalInfo | null;
+
+          /**
+           * Pluralizable label for the "N services" counter (e.g. "Service|Services").
+           */
+          serviceCounterLabel?: string | null;
+        }
+
+        export namespace PreferencesModal {
+          export interface Section {
+            /**
+             * Body text for this preferences-modal section.
+             */
+            description: string;
+
+            /**
+             * Heading for this preferences-modal section.
+             */
+            title: string;
+
+            /**
+             * Optional disclosure table listing cookies/services in this section.
+             */
+            cookieTable?: Section.CookieTable | null;
+
+            /**
+             * Category value this section configures. Use null/omit for the introductory
+             * section that applies to no specific category.
+             */
+            linkedCategory?: string | null;
+          }
+
+          export namespace Section {
+            /**
+             * Optional disclosure table listing cookies/services in this section.
+             */
+            export interface CookieTable {
+              /**
+               * Rows of the cookie table — each row is a {key,value} pair (e.g. cookie name →
+               * purpose).
+               */
+              body: Array<CookieTable.Body>;
+
+              /**
+               * Header cells. Same {key,value} shape as rows.
+               */
+              headers: Array<CookieTable.Header>;
+
+              /**
+               * Optional table caption.
+               */
+              caption?: string | null;
+            }
+
+            export namespace CookieTable {
+              export interface Body {
+                key: string;
+
+                value: string;
+              }
+
+              export interface Header {
+                key: string;
+
+                value: string;
+              }
+            }
+          }
+
+          /**
+           * Optional collapsible info block rendered after the category sections. Renders
+           * only when both title and body are non-empty. Use it for long-form text unrelated
+           * to any specific category (e.g. a third-party advertisers disclosure).
+           */
+          export interface AdditionalInfo {
+            /**
+             * Body text for the additional-info block. Supports the rich-text markdown subset
+             * used by section descriptions: line breaks, [text](url) links (https:// or
+             * relative paths), and **bold**. HTML is stripped.
+             */
+            body: string;
+
+            /**
+             * Heading for the additional-info block.
+             */
+            title: string;
+          }
+        }
+      }
+    }
+
+    /**
+     * Threshold config for autoShowDismissMode (page count or seconds).
+     */
+    export interface AutoShowDismissConfig {
+      /**
+       * Pages-viewed threshold when autoShowDismissMode = after_pages.
+       */
+      pageCount?: number | null;
+
+      /**
+       * Seconds-on-page threshold when autoShowDismissMode = after_seconds.
+       */
+      seconds?: number | null;
+    }
+
+    /**
+     * Visual options for the modals (layout/position/colors).
+     */
+    export interface GuiOptions {
+      /**
+       * Visual options for the initial consent modal.
+       */
+      consentModal?: GuiOptions.ConsentModal | null;
+
+      /**
+       * Global CSS variable overrides applied to both modals.
+       */
+      cssVariables?: GuiOptions.CssVariables | null;
+
+      /**
+       * Visual options for the per-category preferences modal.
+       */
+      preferencesModal?: GuiOptions.PreferencesModal | null;
+    }
+
+    export namespace GuiOptions {
+      /**
+       * Visual options for the initial consent modal.
+       */
+      export interface ConsentModal {
+        /**
+         * Which buttons to render in the consent modal and in what arrangement.
+         */
+        buttonLayout?:
+          | 'AcceptAllNecessaryPreferences'
+          | 'AcceptAllPreferences'
+          | 'AcceptOnly'
+          | 'InformationOnly'
+          | 'PreferencesOnly'
+          | null;
+
+        /**
+         * When true, accept and reject buttons share the same visual weight (no
+         * primary/secondary).
+         */
+        equalWeightButtons?: boolean | null;
+
+        /**
+         * When true, swap accept/reject button order.
+         */
+        flipButtons?: boolean | null;
+
+        /**
+         * Modal layout style (box, bar, cloud, etc.).
+         */
+        layout?: 'bar' | 'bar_inline' | 'box' | 'box_inline' | 'box_wide' | 'cloud' | 'cloud_inline' | null;
+
+        /**
+         * Where the modal anchors on the viewport (e.g. bottom_left, top_right,
+         * middle_center).
+         */
+        position?:
+          | 'bottom'
+          | 'bottom_center'
+          | 'bottom_left'
+          | 'bottom_right'
+          | 'middle'
+          | 'middle_center'
+          | 'middle_left'
+          | 'middle_right'
+          | 'top'
+          | 'top_center'
+          | 'top_left'
+          | 'top_right'
+          | null;
+
+        /**
+         * Show an X to dismiss the modal without choosing.
+         */
+        showCloseIcon?: boolean | null;
+      }
+
+      /**
+       * Global CSS variable overrides applied to both modals.
+       */
+      export interface CssVariables {
+        /**
+         * CSS length, e.g. "4px" or "0.25rem".
+         */
+        buttonBorderRadius?: string | null;
+
+        /**
+         * CSS color for the per-category block background in the preferences modal.
+         */
+        cookieCategoryBlockBg?: string | null;
+
+        /**
+         * CSS color for the per-category block background on hover.
+         */
+        cookieCategoryBlockHoverBg?: string | null;
+
+        /**
+         * CSS color for the modal footer background.
+         */
+        footerBg?: string | null;
+
+        /**
+         * CSS color for footer text.
+         */
+        footerColor?: string | null;
+
+        /**
+         * CSS color for footer links.
+         */
+        footerLinkColor?: string | null;
+
+        /**
+         * CSS color for footer links on hover.
+         */
+        footerLinkHoverColor?: string | null;
+
+        /**
+         * CSS color for the modal background.
+         */
+        modalBg?: string | null;
+
+        /**
+         * CSS length for modal corner radius.
+         */
+        modalBorderRadius?: string | null;
+
+        /**
+         * CSS color for the primary button background.
+         */
+        primaryButtonBg?: string | null;
+
+        /**
+         * CSS color for primary button text.
+         */
+        primaryButtonColor?: string | null;
+
+        /**
+         * CSS color for the primary button background on hover.
+         */
+        primaryButtonHoverBg?: string | null;
+
+        /**
+         * CSS color for primary button text on hover.
+         */
+        primaryButtonHoverColor?: string | null;
+
+        /**
+         * CSS color for primary text in the modal body.
+         */
+        primaryTextColor?: string | null;
+
+        /**
+         * CSS color for the secondary button background.
+         */
+        secondaryButtonBg?: string | null;
+
+        /**
+         * CSS color for secondary button text.
+         */
+        secondaryButtonColor?: string | null;
+
+        /**
+         * CSS color for secondary button background on hover.
+         */
+        secondaryButtonHoverBg?: string | null;
+
+        /**
+         * CSS color for secondary button text on hover.
+         */
+        secondaryButtonHoverColor?: string | null;
+
+        /**
+         * CSS color for secondary text in the modal body.
+         */
+        secondaryTextColor?: string | null;
+
+        /**
+         * CSS color for the "on" state of category toggles.
+         */
+        toggleOnBg?: string | null;
+      }
+
+      /**
+       * Visual options for the per-category preferences modal.
+       */
+      export interface PreferencesModal {
+        /**
+         * Button layout for the preferences modal.
+         */
+        buttonLayout?: 'AcceptAllRejectAllSave' | 'AcceptAllSave' | null;
+
+        /**
+         * When true, accept/reject share the same visual weight.
+         */
+        equalWeightButtons?: boolean | null;
+
+        /**
+         * When true, swap accept/reject button order.
+         */
+        flipButtons?: boolean | null;
+
+        /**
+         * Preferences modal layout (box, bar, bar_wide).
+         */
+        layout?: 'bar' | 'bar_wide' | 'box' | null;
+
+        /**
+         * Preferences modal anchor (left, right).
+         */
+        position?: 'left' | 'right' | null;
       }
     }
   }
@@ -1374,12 +3535,12 @@ export namespace ConsentSettingRetrieveResponse {
       /**
        * Threshold config for autoShowDismissMode (page count or seconds).
        */
-      autoShowDismissConfig?: unknown | null;
+      autoShowDismissConfig?: Rule.AutoShowDismissConfig | null;
 
       /**
        * How the modal is treated as dismissed (never, after_pages, after_seconds).
        */
-      autoShowDismissMode?: string | null;
+      autoShowDismissMode?: 'after_pages' | 'after_seconds' | 'never' | null;
 
       /**
        * When true, the rest of the page is locked behind a backdrop until the user
@@ -1390,7 +3551,7 @@ export namespace ConsentSettingRetrieveResponse {
       /**
        * Visual options for the modals (layout/position/colors).
        */
-      guiOptions?: unknown | null;
+      guiOptions?: Rule.GuiOptions | null;
 
       /**
        * When true, the modal is suppressed for known bot user agents.
@@ -1454,12 +3615,444 @@ export namespace ConsentSettingRetrieveResponse {
           /**
            * Translated copy for the initial consent modal.
            */
-          consentModal?: unknown | null;
+          consentModal?: Value.ConsentModal | null;
 
           /**
            * Translated copy for the preferences modal.
            */
-          preferencesModal?: unknown | null;
+          preferencesModal?: Value.PreferencesModal | null;
+        }
+
+        export namespace Value {
+          /**
+           * Translated copy for the initial consent modal.
+           */
+          export interface ConsentModal {
+            /**
+             * Label for the "accept all" button.
+             */
+            acceptAllBtn: string;
+
+            /**
+             * Body text shown in the consent modal.
+             */
+            description: string;
+
+            /**
+             * Label for the "reject all" / "necessary only" button.
+             */
+            rejectAllBtn: string;
+
+            /**
+             * Label for the button that opens the preferences modal.
+             */
+            showPreferencesBtn: string;
+
+            /**
+             * Heading shown at the top of the consent modal.
+             */
+            title: string;
+
+            /**
+             * Accessibility label for the close (X) icon.
+             */
+            closeIconLabel?: string | null;
+
+            /**
+             * Optional footer HTML/text shown below the body.
+             */
+            footer?: string | null;
+
+            /**
+             * Optional text shown when the browser is sending Sec-GPC: 1.
+             */
+            gpcNotification?: string | null;
+
+            /**
+             * Link label for the privacy policy (defaults to "Privacy Policy").
+             */
+            privacyPolicyLabel?: string | null;
+
+            /**
+             * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
+             * (/legal/privacy) so one config can run across multiple domains. javascript:,
+             * data:, and vbscript: schemes are rejected.
+             */
+            privacyPolicyUrl?: string | null;
+
+            /**
+             * Optional message shown when the consent revision has bumped (re-prompt copy).
+             */
+            revisionMessage?: string | null;
+
+            /**
+             * Link label for terms of service (defaults to "Terms of Service").
+             */
+            termsOfServiceLabel?: string | null;
+
+            /**
+             * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
+             * relative path only.
+             */
+            termsOfServiceUrl?: string | null;
+          }
+
+          /**
+           * Translated copy for the preferences modal.
+           */
+          export interface PreferencesModal {
+            /**
+             * Label for the "accept all" button in the preferences modal.
+             */
+            acceptAllBtn: string;
+
+            /**
+             * Accessibility label for the close (X) icon.
+             */
+            closeIconLabel: string;
+
+            /**
+             * Label for the "reject all" / "necessary only" button.
+             */
+            rejectAllBtn: string;
+
+            /**
+             * Label for the "save my choices" button.
+             */
+            savePreferencesBtn: string;
+
+            /**
+             * Per-category sections plus a leading general section. The server backfills
+             * sections for each defined category if absent.
+             */
+            sections: Array<PreferencesModal.Section>;
+
+            /**
+             * Heading for the preferences modal.
+             */
+            title: string;
+
+            /**
+             * Optional collapsible info block rendered after the category sections. Renders
+             * only when both title and body are non-empty. Use it for long-form text unrelated
+             * to any specific category (e.g. a third-party advertisers disclosure).
+             */
+            additionalInfo?: PreferencesModal.AdditionalInfo | null;
+
+            /**
+             * Pluralizable label for the "N services" counter (e.g. "Service|Services").
+             */
+            serviceCounterLabel?: string | null;
+          }
+
+          export namespace PreferencesModal {
+            export interface Section {
+              /**
+               * Body text for this preferences-modal section.
+               */
+              description: string;
+
+              /**
+               * Heading for this preferences-modal section.
+               */
+              title: string;
+
+              /**
+               * Optional disclosure table listing cookies/services in this section.
+               */
+              cookieTable?: Section.CookieTable | null;
+
+              /**
+               * Category value this section configures. Use null/omit for the introductory
+               * section that applies to no specific category.
+               */
+              linkedCategory?: string | null;
+            }
+
+            export namespace Section {
+              /**
+               * Optional disclosure table listing cookies/services in this section.
+               */
+              export interface CookieTable {
+                /**
+                 * Rows of the cookie table — each row is a {key,value} pair (e.g. cookie name →
+                 * purpose).
+                 */
+                body: Array<CookieTable.Body>;
+
+                /**
+                 * Header cells. Same {key,value} shape as rows.
+                 */
+                headers: Array<CookieTable.Header>;
+
+                /**
+                 * Optional table caption.
+                 */
+                caption?: string | null;
+              }
+
+              export namespace CookieTable {
+                export interface Body {
+                  key: string;
+
+                  value: string;
+                }
+
+                export interface Header {
+                  key: string;
+
+                  value: string;
+                }
+              }
+            }
+
+            /**
+             * Optional collapsible info block rendered after the category sections. Renders
+             * only when both title and body are non-empty. Use it for long-form text unrelated
+             * to any specific category (e.g. a third-party advertisers disclosure).
+             */
+            export interface AdditionalInfo {
+              /**
+               * Body text for the additional-info block. Supports the rich-text markdown subset
+               * used by section descriptions: line breaks, [text](url) links (https:// or
+               * relative paths), and **bold**. HTML is stripped.
+               */
+              body: string;
+
+              /**
+               * Heading for the additional-info block.
+               */
+              title: string;
+            }
+          }
+        }
+      }
+
+      /**
+       * Threshold config for autoShowDismissMode (page count or seconds).
+       */
+      export interface AutoShowDismissConfig {
+        /**
+         * Pages-viewed threshold when autoShowDismissMode = after_pages.
+         */
+        pageCount?: number | null;
+
+        /**
+         * Seconds-on-page threshold when autoShowDismissMode = after_seconds.
+         */
+        seconds?: number | null;
+      }
+
+      /**
+       * Visual options for the modals (layout/position/colors).
+       */
+      export interface GuiOptions {
+        /**
+         * Visual options for the initial consent modal.
+         */
+        consentModal?: GuiOptions.ConsentModal | null;
+
+        /**
+         * Global CSS variable overrides applied to both modals.
+         */
+        cssVariables?: GuiOptions.CssVariables | null;
+
+        /**
+         * Visual options for the per-category preferences modal.
+         */
+        preferencesModal?: GuiOptions.PreferencesModal | null;
+      }
+
+      export namespace GuiOptions {
+        /**
+         * Visual options for the initial consent modal.
+         */
+        export interface ConsentModal {
+          /**
+           * Which buttons to render in the consent modal and in what arrangement.
+           */
+          buttonLayout?:
+            | 'AcceptAllNecessaryPreferences'
+            | 'AcceptAllPreferences'
+            | 'AcceptOnly'
+            | 'InformationOnly'
+            | 'PreferencesOnly'
+            | null;
+
+          /**
+           * When true, accept and reject buttons share the same visual weight (no
+           * primary/secondary).
+           */
+          equalWeightButtons?: boolean | null;
+
+          /**
+           * When true, swap accept/reject button order.
+           */
+          flipButtons?: boolean | null;
+
+          /**
+           * Modal layout style (box, bar, cloud, etc.).
+           */
+          layout?: 'bar' | 'bar_inline' | 'box' | 'box_inline' | 'box_wide' | 'cloud' | 'cloud_inline' | null;
+
+          /**
+           * Where the modal anchors on the viewport (e.g. bottom_left, top_right,
+           * middle_center).
+           */
+          position?:
+            | 'bottom'
+            | 'bottom_center'
+            | 'bottom_left'
+            | 'bottom_right'
+            | 'middle'
+            | 'middle_center'
+            | 'middle_left'
+            | 'middle_right'
+            | 'top'
+            | 'top_center'
+            | 'top_left'
+            | 'top_right'
+            | null;
+
+          /**
+           * Show an X to dismiss the modal without choosing.
+           */
+          showCloseIcon?: boolean | null;
+        }
+
+        /**
+         * Global CSS variable overrides applied to both modals.
+         */
+        export interface CssVariables {
+          /**
+           * CSS length, e.g. "4px" or "0.25rem".
+           */
+          buttonBorderRadius?: string | null;
+
+          /**
+           * CSS color for the per-category block background in the preferences modal.
+           */
+          cookieCategoryBlockBg?: string | null;
+
+          /**
+           * CSS color for the per-category block background on hover.
+           */
+          cookieCategoryBlockHoverBg?: string | null;
+
+          /**
+           * CSS color for the modal footer background.
+           */
+          footerBg?: string | null;
+
+          /**
+           * CSS color for footer text.
+           */
+          footerColor?: string | null;
+
+          /**
+           * CSS color for footer links.
+           */
+          footerLinkColor?: string | null;
+
+          /**
+           * CSS color for footer links on hover.
+           */
+          footerLinkHoverColor?: string | null;
+
+          /**
+           * CSS color for the modal background.
+           */
+          modalBg?: string | null;
+
+          /**
+           * CSS length for modal corner radius.
+           */
+          modalBorderRadius?: string | null;
+
+          /**
+           * CSS color for the primary button background.
+           */
+          primaryButtonBg?: string | null;
+
+          /**
+           * CSS color for primary button text.
+           */
+          primaryButtonColor?: string | null;
+
+          /**
+           * CSS color for the primary button background on hover.
+           */
+          primaryButtonHoverBg?: string | null;
+
+          /**
+           * CSS color for primary button text on hover.
+           */
+          primaryButtonHoverColor?: string | null;
+
+          /**
+           * CSS color for primary text in the modal body.
+           */
+          primaryTextColor?: string | null;
+
+          /**
+           * CSS color for the secondary button background.
+           */
+          secondaryButtonBg?: string | null;
+
+          /**
+           * CSS color for secondary button text.
+           */
+          secondaryButtonColor?: string | null;
+
+          /**
+           * CSS color for secondary button background on hover.
+           */
+          secondaryButtonHoverBg?: string | null;
+
+          /**
+           * CSS color for secondary button text on hover.
+           */
+          secondaryButtonHoverColor?: string | null;
+
+          /**
+           * CSS color for secondary text in the modal body.
+           */
+          secondaryTextColor?: string | null;
+
+          /**
+           * CSS color for the "on" state of category toggles.
+           */
+          toggleOnBg?: string | null;
+        }
+
+        /**
+         * Visual options for the per-category preferences modal.
+         */
+        export interface PreferencesModal {
+          /**
+           * Button layout for the preferences modal.
+           */
+          buttonLayout?: 'AcceptAllRejectAllSave' | 'AcceptAllSave' | null;
+
+          /**
+           * When true, accept/reject share the same visual weight.
+           */
+          equalWeightButtons?: boolean | null;
+
+          /**
+           * When true, swap accept/reject button order.
+           */
+          flipButtons?: boolean | null;
+
+          /**
+           * Preferences modal layout (box, bar, bar_wide).
+           */
+          layout?: 'bar' | 'bar_wide' | 'box' | null;
+
+          /**
+           * Preferences modal anchor (left, right).
+           */
+          position?: 'left' | 'right' | null;
         }
       }
     }
@@ -1659,12 +4252,12 @@ export namespace ConsentSettingReplaceResponse {
     /**
      * Threshold config for autoShowDismissMode (page count or seconds).
      */
-    autoShowDismissConfig?: unknown | null;
+    autoShowDismissConfig?: Default.AutoShowDismissConfig | null;
 
     /**
      * How the modal is treated as dismissed (never, after_pages, after_seconds).
      */
-    autoShowDismissMode?: string | null;
+    autoShowDismissMode?: 'after_pages' | 'after_seconds' | 'never' | null;
 
     /**
      * When true, the rest of the page is locked behind a backdrop until the user
@@ -1675,7 +4268,7 @@ export namespace ConsentSettingReplaceResponse {
     /**
      * Visual options for the modals (layout/position/colors).
      */
-    guiOptions?: unknown | null;
+    guiOptions?: Default.GuiOptions | null;
 
     /**
      * When true, the modal is suppressed for known bot user agents.
@@ -1739,12 +4332,444 @@ export namespace ConsentSettingReplaceResponse {
         /**
          * Translated copy for the initial consent modal.
          */
-        consentModal?: unknown | null;
+        consentModal?: Value.ConsentModal | null;
 
         /**
          * Translated copy for the preferences modal.
          */
-        preferencesModal?: unknown | null;
+        preferencesModal?: Value.PreferencesModal | null;
+      }
+
+      export namespace Value {
+        /**
+         * Translated copy for the initial consent modal.
+         */
+        export interface ConsentModal {
+          /**
+           * Label for the "accept all" button.
+           */
+          acceptAllBtn: string;
+
+          /**
+           * Body text shown in the consent modal.
+           */
+          description: string;
+
+          /**
+           * Label for the "reject all" / "necessary only" button.
+           */
+          rejectAllBtn: string;
+
+          /**
+           * Label for the button that opens the preferences modal.
+           */
+          showPreferencesBtn: string;
+
+          /**
+           * Heading shown at the top of the consent modal.
+           */
+          title: string;
+
+          /**
+           * Accessibility label for the close (X) icon.
+           */
+          closeIconLabel?: string | null;
+
+          /**
+           * Optional footer HTML/text shown below the body.
+           */
+          footer?: string | null;
+
+          /**
+           * Optional text shown when the browser is sending Sec-GPC: 1.
+           */
+          gpcNotification?: string | null;
+
+          /**
+           * Link label for the privacy policy (defaults to "Privacy Policy").
+           */
+          privacyPolicyLabel?: string | null;
+
+          /**
+           * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
+           * (/legal/privacy) so one config can run across multiple domains. javascript:,
+           * data:, and vbscript: schemes are rejected.
+           */
+          privacyPolicyUrl?: string | null;
+
+          /**
+           * Optional message shown when the consent revision has bumped (re-prompt copy).
+           */
+          revisionMessage?: string | null;
+
+          /**
+           * Link label for terms of service (defaults to "Terms of Service").
+           */
+          termsOfServiceLabel?: string | null;
+
+          /**
+           * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
+           * relative path only.
+           */
+          termsOfServiceUrl?: string | null;
+        }
+
+        /**
+         * Translated copy for the preferences modal.
+         */
+        export interface PreferencesModal {
+          /**
+           * Label for the "accept all" button in the preferences modal.
+           */
+          acceptAllBtn: string;
+
+          /**
+           * Accessibility label for the close (X) icon.
+           */
+          closeIconLabel: string;
+
+          /**
+           * Label for the "reject all" / "necessary only" button.
+           */
+          rejectAllBtn: string;
+
+          /**
+           * Label for the "save my choices" button.
+           */
+          savePreferencesBtn: string;
+
+          /**
+           * Per-category sections plus a leading general section. The server backfills
+           * sections for each defined category if absent.
+           */
+          sections: Array<PreferencesModal.Section>;
+
+          /**
+           * Heading for the preferences modal.
+           */
+          title: string;
+
+          /**
+           * Optional collapsible info block rendered after the category sections. Renders
+           * only when both title and body are non-empty. Use it for long-form text unrelated
+           * to any specific category (e.g. a third-party advertisers disclosure).
+           */
+          additionalInfo?: PreferencesModal.AdditionalInfo | null;
+
+          /**
+           * Pluralizable label for the "N services" counter (e.g. "Service|Services").
+           */
+          serviceCounterLabel?: string | null;
+        }
+
+        export namespace PreferencesModal {
+          export interface Section {
+            /**
+             * Body text for this preferences-modal section.
+             */
+            description: string;
+
+            /**
+             * Heading for this preferences-modal section.
+             */
+            title: string;
+
+            /**
+             * Optional disclosure table listing cookies/services in this section.
+             */
+            cookieTable?: Section.CookieTable | null;
+
+            /**
+             * Category value this section configures. Use null/omit for the introductory
+             * section that applies to no specific category.
+             */
+            linkedCategory?: string | null;
+          }
+
+          export namespace Section {
+            /**
+             * Optional disclosure table listing cookies/services in this section.
+             */
+            export interface CookieTable {
+              /**
+               * Rows of the cookie table — each row is a {key,value} pair (e.g. cookie name →
+               * purpose).
+               */
+              body: Array<CookieTable.Body>;
+
+              /**
+               * Header cells. Same {key,value} shape as rows.
+               */
+              headers: Array<CookieTable.Header>;
+
+              /**
+               * Optional table caption.
+               */
+              caption?: string | null;
+            }
+
+            export namespace CookieTable {
+              export interface Body {
+                key: string;
+
+                value: string;
+              }
+
+              export interface Header {
+                key: string;
+
+                value: string;
+              }
+            }
+          }
+
+          /**
+           * Optional collapsible info block rendered after the category sections. Renders
+           * only when both title and body are non-empty. Use it for long-form text unrelated
+           * to any specific category (e.g. a third-party advertisers disclosure).
+           */
+          export interface AdditionalInfo {
+            /**
+             * Body text for the additional-info block. Supports the rich-text markdown subset
+             * used by section descriptions: line breaks, [text](url) links (https:// or
+             * relative paths), and **bold**. HTML is stripped.
+             */
+            body: string;
+
+            /**
+             * Heading for the additional-info block.
+             */
+            title: string;
+          }
+        }
+      }
+    }
+
+    /**
+     * Threshold config for autoShowDismissMode (page count or seconds).
+     */
+    export interface AutoShowDismissConfig {
+      /**
+       * Pages-viewed threshold when autoShowDismissMode = after_pages.
+       */
+      pageCount?: number | null;
+
+      /**
+       * Seconds-on-page threshold when autoShowDismissMode = after_seconds.
+       */
+      seconds?: number | null;
+    }
+
+    /**
+     * Visual options for the modals (layout/position/colors).
+     */
+    export interface GuiOptions {
+      /**
+       * Visual options for the initial consent modal.
+       */
+      consentModal?: GuiOptions.ConsentModal | null;
+
+      /**
+       * Global CSS variable overrides applied to both modals.
+       */
+      cssVariables?: GuiOptions.CssVariables | null;
+
+      /**
+       * Visual options for the per-category preferences modal.
+       */
+      preferencesModal?: GuiOptions.PreferencesModal | null;
+    }
+
+    export namespace GuiOptions {
+      /**
+       * Visual options for the initial consent modal.
+       */
+      export interface ConsentModal {
+        /**
+         * Which buttons to render in the consent modal and in what arrangement.
+         */
+        buttonLayout?:
+          | 'AcceptAllNecessaryPreferences'
+          | 'AcceptAllPreferences'
+          | 'AcceptOnly'
+          | 'InformationOnly'
+          | 'PreferencesOnly'
+          | null;
+
+        /**
+         * When true, accept and reject buttons share the same visual weight (no
+         * primary/secondary).
+         */
+        equalWeightButtons?: boolean | null;
+
+        /**
+         * When true, swap accept/reject button order.
+         */
+        flipButtons?: boolean | null;
+
+        /**
+         * Modal layout style (box, bar, cloud, etc.).
+         */
+        layout?: 'bar' | 'bar_inline' | 'box' | 'box_inline' | 'box_wide' | 'cloud' | 'cloud_inline' | null;
+
+        /**
+         * Where the modal anchors on the viewport (e.g. bottom_left, top_right,
+         * middle_center).
+         */
+        position?:
+          | 'bottom'
+          | 'bottom_center'
+          | 'bottom_left'
+          | 'bottom_right'
+          | 'middle'
+          | 'middle_center'
+          | 'middle_left'
+          | 'middle_right'
+          | 'top'
+          | 'top_center'
+          | 'top_left'
+          | 'top_right'
+          | null;
+
+        /**
+         * Show an X to dismiss the modal without choosing.
+         */
+        showCloseIcon?: boolean | null;
+      }
+
+      /**
+       * Global CSS variable overrides applied to both modals.
+       */
+      export interface CssVariables {
+        /**
+         * CSS length, e.g. "4px" or "0.25rem".
+         */
+        buttonBorderRadius?: string | null;
+
+        /**
+         * CSS color for the per-category block background in the preferences modal.
+         */
+        cookieCategoryBlockBg?: string | null;
+
+        /**
+         * CSS color for the per-category block background on hover.
+         */
+        cookieCategoryBlockHoverBg?: string | null;
+
+        /**
+         * CSS color for the modal footer background.
+         */
+        footerBg?: string | null;
+
+        /**
+         * CSS color for footer text.
+         */
+        footerColor?: string | null;
+
+        /**
+         * CSS color for footer links.
+         */
+        footerLinkColor?: string | null;
+
+        /**
+         * CSS color for footer links on hover.
+         */
+        footerLinkHoverColor?: string | null;
+
+        /**
+         * CSS color for the modal background.
+         */
+        modalBg?: string | null;
+
+        /**
+         * CSS length for modal corner radius.
+         */
+        modalBorderRadius?: string | null;
+
+        /**
+         * CSS color for the primary button background.
+         */
+        primaryButtonBg?: string | null;
+
+        /**
+         * CSS color for primary button text.
+         */
+        primaryButtonColor?: string | null;
+
+        /**
+         * CSS color for the primary button background on hover.
+         */
+        primaryButtonHoverBg?: string | null;
+
+        /**
+         * CSS color for primary button text on hover.
+         */
+        primaryButtonHoverColor?: string | null;
+
+        /**
+         * CSS color for primary text in the modal body.
+         */
+        primaryTextColor?: string | null;
+
+        /**
+         * CSS color for the secondary button background.
+         */
+        secondaryButtonBg?: string | null;
+
+        /**
+         * CSS color for secondary button text.
+         */
+        secondaryButtonColor?: string | null;
+
+        /**
+         * CSS color for secondary button background on hover.
+         */
+        secondaryButtonHoverBg?: string | null;
+
+        /**
+         * CSS color for secondary button text on hover.
+         */
+        secondaryButtonHoverColor?: string | null;
+
+        /**
+         * CSS color for secondary text in the modal body.
+         */
+        secondaryTextColor?: string | null;
+
+        /**
+         * CSS color for the "on" state of category toggles.
+         */
+        toggleOnBg?: string | null;
+      }
+
+      /**
+       * Visual options for the per-category preferences modal.
+       */
+      export interface PreferencesModal {
+        /**
+         * Button layout for the preferences modal.
+         */
+        buttonLayout?: 'AcceptAllRejectAllSave' | 'AcceptAllSave' | null;
+
+        /**
+         * When true, accept/reject share the same visual weight.
+         */
+        equalWeightButtons?: boolean | null;
+
+        /**
+         * When true, swap accept/reject button order.
+         */
+        flipButtons?: boolean | null;
+
+        /**
+         * Preferences modal layout (box, bar, bar_wide).
+         */
+        layout?: 'bar' | 'bar_wide' | 'box' | null;
+
+        /**
+         * Preferences modal anchor (left, right).
+         */
+        position?: 'left' | 'right' | null;
       }
     }
   }
@@ -1814,12 +4839,12 @@ export namespace ConsentSettingReplaceResponse {
       /**
        * Threshold config for autoShowDismissMode (page count or seconds).
        */
-      autoShowDismissConfig?: unknown | null;
+      autoShowDismissConfig?: Rule.AutoShowDismissConfig | null;
 
       /**
        * How the modal is treated as dismissed (never, after_pages, after_seconds).
        */
-      autoShowDismissMode?: string | null;
+      autoShowDismissMode?: 'after_pages' | 'after_seconds' | 'never' | null;
 
       /**
        * When true, the rest of the page is locked behind a backdrop until the user
@@ -1830,7 +4855,7 @@ export namespace ConsentSettingReplaceResponse {
       /**
        * Visual options for the modals (layout/position/colors).
        */
-      guiOptions?: unknown | null;
+      guiOptions?: Rule.GuiOptions | null;
 
       /**
        * When true, the modal is suppressed for known bot user agents.
@@ -1894,12 +4919,444 @@ export namespace ConsentSettingReplaceResponse {
           /**
            * Translated copy for the initial consent modal.
            */
-          consentModal?: unknown | null;
+          consentModal?: Value.ConsentModal | null;
 
           /**
            * Translated copy for the preferences modal.
            */
-          preferencesModal?: unknown | null;
+          preferencesModal?: Value.PreferencesModal | null;
+        }
+
+        export namespace Value {
+          /**
+           * Translated copy for the initial consent modal.
+           */
+          export interface ConsentModal {
+            /**
+             * Label for the "accept all" button.
+             */
+            acceptAllBtn: string;
+
+            /**
+             * Body text shown in the consent modal.
+             */
+            description: string;
+
+            /**
+             * Label for the "reject all" / "necessary only" button.
+             */
+            rejectAllBtn: string;
+
+            /**
+             * Label for the button that opens the preferences modal.
+             */
+            showPreferencesBtn: string;
+
+            /**
+             * Heading shown at the top of the consent modal.
+             */
+            title: string;
+
+            /**
+             * Accessibility label for the close (X) icon.
+             */
+            closeIconLabel?: string | null;
+
+            /**
+             * Optional footer HTML/text shown below the body.
+             */
+            footer?: string | null;
+
+            /**
+             * Optional text shown when the browser is sending Sec-GPC: 1.
+             */
+            gpcNotification?: string | null;
+
+            /**
+             * Link label for the privacy policy (defaults to "Privacy Policy").
+             */
+            privacyPolicyLabel?: string | null;
+
+            /**
+             * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
+             * (/legal/privacy) so one config can run across multiple domains. javascript:,
+             * data:, and vbscript: schemes are rejected.
+             */
+            privacyPolicyUrl?: string | null;
+
+            /**
+             * Optional message shown when the consent revision has bumped (re-prompt copy).
+             */
+            revisionMessage?: string | null;
+
+            /**
+             * Link label for terms of service (defaults to "Terms of Service").
+             */
+            termsOfServiceLabel?: string | null;
+
+            /**
+             * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
+             * relative path only.
+             */
+            termsOfServiceUrl?: string | null;
+          }
+
+          /**
+           * Translated copy for the preferences modal.
+           */
+          export interface PreferencesModal {
+            /**
+             * Label for the "accept all" button in the preferences modal.
+             */
+            acceptAllBtn: string;
+
+            /**
+             * Accessibility label for the close (X) icon.
+             */
+            closeIconLabel: string;
+
+            /**
+             * Label for the "reject all" / "necessary only" button.
+             */
+            rejectAllBtn: string;
+
+            /**
+             * Label for the "save my choices" button.
+             */
+            savePreferencesBtn: string;
+
+            /**
+             * Per-category sections plus a leading general section. The server backfills
+             * sections for each defined category if absent.
+             */
+            sections: Array<PreferencesModal.Section>;
+
+            /**
+             * Heading for the preferences modal.
+             */
+            title: string;
+
+            /**
+             * Optional collapsible info block rendered after the category sections. Renders
+             * only when both title and body are non-empty. Use it for long-form text unrelated
+             * to any specific category (e.g. a third-party advertisers disclosure).
+             */
+            additionalInfo?: PreferencesModal.AdditionalInfo | null;
+
+            /**
+             * Pluralizable label for the "N services" counter (e.g. "Service|Services").
+             */
+            serviceCounterLabel?: string | null;
+          }
+
+          export namespace PreferencesModal {
+            export interface Section {
+              /**
+               * Body text for this preferences-modal section.
+               */
+              description: string;
+
+              /**
+               * Heading for this preferences-modal section.
+               */
+              title: string;
+
+              /**
+               * Optional disclosure table listing cookies/services in this section.
+               */
+              cookieTable?: Section.CookieTable | null;
+
+              /**
+               * Category value this section configures. Use null/omit for the introductory
+               * section that applies to no specific category.
+               */
+              linkedCategory?: string | null;
+            }
+
+            export namespace Section {
+              /**
+               * Optional disclosure table listing cookies/services in this section.
+               */
+              export interface CookieTable {
+                /**
+                 * Rows of the cookie table — each row is a {key,value} pair (e.g. cookie name →
+                 * purpose).
+                 */
+                body: Array<CookieTable.Body>;
+
+                /**
+                 * Header cells. Same {key,value} shape as rows.
+                 */
+                headers: Array<CookieTable.Header>;
+
+                /**
+                 * Optional table caption.
+                 */
+                caption?: string | null;
+              }
+
+              export namespace CookieTable {
+                export interface Body {
+                  key: string;
+
+                  value: string;
+                }
+
+                export interface Header {
+                  key: string;
+
+                  value: string;
+                }
+              }
+            }
+
+            /**
+             * Optional collapsible info block rendered after the category sections. Renders
+             * only when both title and body are non-empty. Use it for long-form text unrelated
+             * to any specific category (e.g. a third-party advertisers disclosure).
+             */
+            export interface AdditionalInfo {
+              /**
+               * Body text for the additional-info block. Supports the rich-text markdown subset
+               * used by section descriptions: line breaks, [text](url) links (https:// or
+               * relative paths), and **bold**. HTML is stripped.
+               */
+              body: string;
+
+              /**
+               * Heading for the additional-info block.
+               */
+              title: string;
+            }
+          }
+        }
+      }
+
+      /**
+       * Threshold config for autoShowDismissMode (page count or seconds).
+       */
+      export interface AutoShowDismissConfig {
+        /**
+         * Pages-viewed threshold when autoShowDismissMode = after_pages.
+         */
+        pageCount?: number | null;
+
+        /**
+         * Seconds-on-page threshold when autoShowDismissMode = after_seconds.
+         */
+        seconds?: number | null;
+      }
+
+      /**
+       * Visual options for the modals (layout/position/colors).
+       */
+      export interface GuiOptions {
+        /**
+         * Visual options for the initial consent modal.
+         */
+        consentModal?: GuiOptions.ConsentModal | null;
+
+        /**
+         * Global CSS variable overrides applied to both modals.
+         */
+        cssVariables?: GuiOptions.CssVariables | null;
+
+        /**
+         * Visual options for the per-category preferences modal.
+         */
+        preferencesModal?: GuiOptions.PreferencesModal | null;
+      }
+
+      export namespace GuiOptions {
+        /**
+         * Visual options for the initial consent modal.
+         */
+        export interface ConsentModal {
+          /**
+           * Which buttons to render in the consent modal and in what arrangement.
+           */
+          buttonLayout?:
+            | 'AcceptAllNecessaryPreferences'
+            | 'AcceptAllPreferences'
+            | 'AcceptOnly'
+            | 'InformationOnly'
+            | 'PreferencesOnly'
+            | null;
+
+          /**
+           * When true, accept and reject buttons share the same visual weight (no
+           * primary/secondary).
+           */
+          equalWeightButtons?: boolean | null;
+
+          /**
+           * When true, swap accept/reject button order.
+           */
+          flipButtons?: boolean | null;
+
+          /**
+           * Modal layout style (box, bar, cloud, etc.).
+           */
+          layout?: 'bar' | 'bar_inline' | 'box' | 'box_inline' | 'box_wide' | 'cloud' | 'cloud_inline' | null;
+
+          /**
+           * Where the modal anchors on the viewport (e.g. bottom_left, top_right,
+           * middle_center).
+           */
+          position?:
+            | 'bottom'
+            | 'bottom_center'
+            | 'bottom_left'
+            | 'bottom_right'
+            | 'middle'
+            | 'middle_center'
+            | 'middle_left'
+            | 'middle_right'
+            | 'top'
+            | 'top_center'
+            | 'top_left'
+            | 'top_right'
+            | null;
+
+          /**
+           * Show an X to dismiss the modal without choosing.
+           */
+          showCloseIcon?: boolean | null;
+        }
+
+        /**
+         * Global CSS variable overrides applied to both modals.
+         */
+        export interface CssVariables {
+          /**
+           * CSS length, e.g. "4px" or "0.25rem".
+           */
+          buttonBorderRadius?: string | null;
+
+          /**
+           * CSS color for the per-category block background in the preferences modal.
+           */
+          cookieCategoryBlockBg?: string | null;
+
+          /**
+           * CSS color for the per-category block background on hover.
+           */
+          cookieCategoryBlockHoverBg?: string | null;
+
+          /**
+           * CSS color for the modal footer background.
+           */
+          footerBg?: string | null;
+
+          /**
+           * CSS color for footer text.
+           */
+          footerColor?: string | null;
+
+          /**
+           * CSS color for footer links.
+           */
+          footerLinkColor?: string | null;
+
+          /**
+           * CSS color for footer links on hover.
+           */
+          footerLinkHoverColor?: string | null;
+
+          /**
+           * CSS color for the modal background.
+           */
+          modalBg?: string | null;
+
+          /**
+           * CSS length for modal corner radius.
+           */
+          modalBorderRadius?: string | null;
+
+          /**
+           * CSS color for the primary button background.
+           */
+          primaryButtonBg?: string | null;
+
+          /**
+           * CSS color for primary button text.
+           */
+          primaryButtonColor?: string | null;
+
+          /**
+           * CSS color for the primary button background on hover.
+           */
+          primaryButtonHoverBg?: string | null;
+
+          /**
+           * CSS color for primary button text on hover.
+           */
+          primaryButtonHoverColor?: string | null;
+
+          /**
+           * CSS color for primary text in the modal body.
+           */
+          primaryTextColor?: string | null;
+
+          /**
+           * CSS color for the secondary button background.
+           */
+          secondaryButtonBg?: string | null;
+
+          /**
+           * CSS color for secondary button text.
+           */
+          secondaryButtonColor?: string | null;
+
+          /**
+           * CSS color for secondary button background on hover.
+           */
+          secondaryButtonHoverBg?: string | null;
+
+          /**
+           * CSS color for secondary button text on hover.
+           */
+          secondaryButtonHoverColor?: string | null;
+
+          /**
+           * CSS color for secondary text in the modal body.
+           */
+          secondaryTextColor?: string | null;
+
+          /**
+           * CSS color for the "on" state of category toggles.
+           */
+          toggleOnBg?: string | null;
+        }
+
+        /**
+         * Visual options for the per-category preferences modal.
+         */
+        export interface PreferencesModal {
+          /**
+           * Button layout for the preferences modal.
+           */
+          buttonLayout?: 'AcceptAllRejectAllSave' | 'AcceptAllSave' | null;
+
+          /**
+           * When true, accept/reject share the same visual weight.
+           */
+          equalWeightButtons?: boolean | null;
+
+          /**
+           * When true, swap accept/reject button order.
+           */
+          flipButtons?: boolean | null;
+
+          /**
+           * Preferences modal layout (box, bar, bar_wide).
+           */
+          layout?: 'bar' | 'bar_wide' | 'box' | null;
+
+          /**
+           * Preferences modal anchor (left, right).
+           */
+          position?: 'left' | 'right' | null;
         }
       }
     }
@@ -2099,12 +5556,12 @@ export namespace ConsentSettingUpdateResponse {
     /**
      * Threshold config for autoShowDismissMode (page count or seconds).
      */
-    autoShowDismissConfig?: unknown | null;
+    autoShowDismissConfig?: Default.AutoShowDismissConfig | null;
 
     /**
      * How the modal is treated as dismissed (never, after_pages, after_seconds).
      */
-    autoShowDismissMode?: string | null;
+    autoShowDismissMode?: 'after_pages' | 'after_seconds' | 'never' | null;
 
     /**
      * When true, the rest of the page is locked behind a backdrop until the user
@@ -2115,7 +5572,7 @@ export namespace ConsentSettingUpdateResponse {
     /**
      * Visual options for the modals (layout/position/colors).
      */
-    guiOptions?: unknown | null;
+    guiOptions?: Default.GuiOptions | null;
 
     /**
      * When true, the modal is suppressed for known bot user agents.
@@ -2179,12 +5636,444 @@ export namespace ConsentSettingUpdateResponse {
         /**
          * Translated copy for the initial consent modal.
          */
-        consentModal?: unknown | null;
+        consentModal?: Value.ConsentModal | null;
 
         /**
          * Translated copy for the preferences modal.
          */
-        preferencesModal?: unknown | null;
+        preferencesModal?: Value.PreferencesModal | null;
+      }
+
+      export namespace Value {
+        /**
+         * Translated copy for the initial consent modal.
+         */
+        export interface ConsentModal {
+          /**
+           * Label for the "accept all" button.
+           */
+          acceptAllBtn: string;
+
+          /**
+           * Body text shown in the consent modal.
+           */
+          description: string;
+
+          /**
+           * Label for the "reject all" / "necessary only" button.
+           */
+          rejectAllBtn: string;
+
+          /**
+           * Label for the button that opens the preferences modal.
+           */
+          showPreferencesBtn: string;
+
+          /**
+           * Heading shown at the top of the consent modal.
+           */
+          title: string;
+
+          /**
+           * Accessibility label for the close (X) icon.
+           */
+          closeIconLabel?: string | null;
+
+          /**
+           * Optional footer HTML/text shown below the body.
+           */
+          footer?: string | null;
+
+          /**
+           * Optional text shown when the browser is sending Sec-GPC: 1.
+           */
+          gpcNotification?: string | null;
+
+          /**
+           * Link label for the privacy policy (defaults to "Privacy Policy").
+           */
+          privacyPolicyLabel?: string | null;
+
+          /**
+           * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
+           * (/legal/privacy) so one config can run across multiple domains. javascript:,
+           * data:, and vbscript: schemes are rejected.
+           */
+          privacyPolicyUrl?: string | null;
+
+          /**
+           * Optional message shown when the consent revision has bumped (re-prompt copy).
+           */
+          revisionMessage?: string | null;
+
+          /**
+           * Link label for terms of service (defaults to "Terms of Service").
+           */
+          termsOfServiceLabel?: string | null;
+
+          /**
+           * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
+           * relative path only.
+           */
+          termsOfServiceUrl?: string | null;
+        }
+
+        /**
+         * Translated copy for the preferences modal.
+         */
+        export interface PreferencesModal {
+          /**
+           * Label for the "accept all" button in the preferences modal.
+           */
+          acceptAllBtn: string;
+
+          /**
+           * Accessibility label for the close (X) icon.
+           */
+          closeIconLabel: string;
+
+          /**
+           * Label for the "reject all" / "necessary only" button.
+           */
+          rejectAllBtn: string;
+
+          /**
+           * Label for the "save my choices" button.
+           */
+          savePreferencesBtn: string;
+
+          /**
+           * Per-category sections plus a leading general section. The server backfills
+           * sections for each defined category if absent.
+           */
+          sections: Array<PreferencesModal.Section>;
+
+          /**
+           * Heading for the preferences modal.
+           */
+          title: string;
+
+          /**
+           * Optional collapsible info block rendered after the category sections. Renders
+           * only when both title and body are non-empty. Use it for long-form text unrelated
+           * to any specific category (e.g. a third-party advertisers disclosure).
+           */
+          additionalInfo?: PreferencesModal.AdditionalInfo | null;
+
+          /**
+           * Pluralizable label for the "N services" counter (e.g. "Service|Services").
+           */
+          serviceCounterLabel?: string | null;
+        }
+
+        export namespace PreferencesModal {
+          export interface Section {
+            /**
+             * Body text for this preferences-modal section.
+             */
+            description: string;
+
+            /**
+             * Heading for this preferences-modal section.
+             */
+            title: string;
+
+            /**
+             * Optional disclosure table listing cookies/services in this section.
+             */
+            cookieTable?: Section.CookieTable | null;
+
+            /**
+             * Category value this section configures. Use null/omit for the introductory
+             * section that applies to no specific category.
+             */
+            linkedCategory?: string | null;
+          }
+
+          export namespace Section {
+            /**
+             * Optional disclosure table listing cookies/services in this section.
+             */
+            export interface CookieTable {
+              /**
+               * Rows of the cookie table — each row is a {key,value} pair (e.g. cookie name →
+               * purpose).
+               */
+              body: Array<CookieTable.Body>;
+
+              /**
+               * Header cells. Same {key,value} shape as rows.
+               */
+              headers: Array<CookieTable.Header>;
+
+              /**
+               * Optional table caption.
+               */
+              caption?: string | null;
+            }
+
+            export namespace CookieTable {
+              export interface Body {
+                key: string;
+
+                value: string;
+              }
+
+              export interface Header {
+                key: string;
+
+                value: string;
+              }
+            }
+          }
+
+          /**
+           * Optional collapsible info block rendered after the category sections. Renders
+           * only when both title and body are non-empty. Use it for long-form text unrelated
+           * to any specific category (e.g. a third-party advertisers disclosure).
+           */
+          export interface AdditionalInfo {
+            /**
+             * Body text for the additional-info block. Supports the rich-text markdown subset
+             * used by section descriptions: line breaks, [text](url) links (https:// or
+             * relative paths), and **bold**. HTML is stripped.
+             */
+            body: string;
+
+            /**
+             * Heading for the additional-info block.
+             */
+            title: string;
+          }
+        }
+      }
+    }
+
+    /**
+     * Threshold config for autoShowDismissMode (page count or seconds).
+     */
+    export interface AutoShowDismissConfig {
+      /**
+       * Pages-viewed threshold when autoShowDismissMode = after_pages.
+       */
+      pageCount?: number | null;
+
+      /**
+       * Seconds-on-page threshold when autoShowDismissMode = after_seconds.
+       */
+      seconds?: number | null;
+    }
+
+    /**
+     * Visual options for the modals (layout/position/colors).
+     */
+    export interface GuiOptions {
+      /**
+       * Visual options for the initial consent modal.
+       */
+      consentModal?: GuiOptions.ConsentModal | null;
+
+      /**
+       * Global CSS variable overrides applied to both modals.
+       */
+      cssVariables?: GuiOptions.CssVariables | null;
+
+      /**
+       * Visual options for the per-category preferences modal.
+       */
+      preferencesModal?: GuiOptions.PreferencesModal | null;
+    }
+
+    export namespace GuiOptions {
+      /**
+       * Visual options for the initial consent modal.
+       */
+      export interface ConsentModal {
+        /**
+         * Which buttons to render in the consent modal and in what arrangement.
+         */
+        buttonLayout?:
+          | 'AcceptAllNecessaryPreferences'
+          | 'AcceptAllPreferences'
+          | 'AcceptOnly'
+          | 'InformationOnly'
+          | 'PreferencesOnly'
+          | null;
+
+        /**
+         * When true, accept and reject buttons share the same visual weight (no
+         * primary/secondary).
+         */
+        equalWeightButtons?: boolean | null;
+
+        /**
+         * When true, swap accept/reject button order.
+         */
+        flipButtons?: boolean | null;
+
+        /**
+         * Modal layout style (box, bar, cloud, etc.).
+         */
+        layout?: 'bar' | 'bar_inline' | 'box' | 'box_inline' | 'box_wide' | 'cloud' | 'cloud_inline' | null;
+
+        /**
+         * Where the modal anchors on the viewport (e.g. bottom_left, top_right,
+         * middle_center).
+         */
+        position?:
+          | 'bottom'
+          | 'bottom_center'
+          | 'bottom_left'
+          | 'bottom_right'
+          | 'middle'
+          | 'middle_center'
+          | 'middle_left'
+          | 'middle_right'
+          | 'top'
+          | 'top_center'
+          | 'top_left'
+          | 'top_right'
+          | null;
+
+        /**
+         * Show an X to dismiss the modal without choosing.
+         */
+        showCloseIcon?: boolean | null;
+      }
+
+      /**
+       * Global CSS variable overrides applied to both modals.
+       */
+      export interface CssVariables {
+        /**
+         * CSS length, e.g. "4px" or "0.25rem".
+         */
+        buttonBorderRadius?: string | null;
+
+        /**
+         * CSS color for the per-category block background in the preferences modal.
+         */
+        cookieCategoryBlockBg?: string | null;
+
+        /**
+         * CSS color for the per-category block background on hover.
+         */
+        cookieCategoryBlockHoverBg?: string | null;
+
+        /**
+         * CSS color for the modal footer background.
+         */
+        footerBg?: string | null;
+
+        /**
+         * CSS color for footer text.
+         */
+        footerColor?: string | null;
+
+        /**
+         * CSS color for footer links.
+         */
+        footerLinkColor?: string | null;
+
+        /**
+         * CSS color for footer links on hover.
+         */
+        footerLinkHoverColor?: string | null;
+
+        /**
+         * CSS color for the modal background.
+         */
+        modalBg?: string | null;
+
+        /**
+         * CSS length for modal corner radius.
+         */
+        modalBorderRadius?: string | null;
+
+        /**
+         * CSS color for the primary button background.
+         */
+        primaryButtonBg?: string | null;
+
+        /**
+         * CSS color for primary button text.
+         */
+        primaryButtonColor?: string | null;
+
+        /**
+         * CSS color for the primary button background on hover.
+         */
+        primaryButtonHoverBg?: string | null;
+
+        /**
+         * CSS color for primary button text on hover.
+         */
+        primaryButtonHoverColor?: string | null;
+
+        /**
+         * CSS color for primary text in the modal body.
+         */
+        primaryTextColor?: string | null;
+
+        /**
+         * CSS color for the secondary button background.
+         */
+        secondaryButtonBg?: string | null;
+
+        /**
+         * CSS color for secondary button text.
+         */
+        secondaryButtonColor?: string | null;
+
+        /**
+         * CSS color for secondary button background on hover.
+         */
+        secondaryButtonHoverBg?: string | null;
+
+        /**
+         * CSS color for secondary button text on hover.
+         */
+        secondaryButtonHoverColor?: string | null;
+
+        /**
+         * CSS color for secondary text in the modal body.
+         */
+        secondaryTextColor?: string | null;
+
+        /**
+         * CSS color for the "on" state of category toggles.
+         */
+        toggleOnBg?: string | null;
+      }
+
+      /**
+       * Visual options for the per-category preferences modal.
+       */
+      export interface PreferencesModal {
+        /**
+         * Button layout for the preferences modal.
+         */
+        buttonLayout?: 'AcceptAllRejectAllSave' | 'AcceptAllSave' | null;
+
+        /**
+         * When true, accept/reject share the same visual weight.
+         */
+        equalWeightButtons?: boolean | null;
+
+        /**
+         * When true, swap accept/reject button order.
+         */
+        flipButtons?: boolean | null;
+
+        /**
+         * Preferences modal layout (box, bar, bar_wide).
+         */
+        layout?: 'bar' | 'bar_wide' | 'box' | null;
+
+        /**
+         * Preferences modal anchor (left, right).
+         */
+        position?: 'left' | 'right' | null;
       }
     }
   }
@@ -2254,12 +6143,12 @@ export namespace ConsentSettingUpdateResponse {
       /**
        * Threshold config for autoShowDismissMode (page count or seconds).
        */
-      autoShowDismissConfig?: unknown | null;
+      autoShowDismissConfig?: Rule.AutoShowDismissConfig | null;
 
       /**
        * How the modal is treated as dismissed (never, after_pages, after_seconds).
        */
-      autoShowDismissMode?: string | null;
+      autoShowDismissMode?: 'after_pages' | 'after_seconds' | 'never' | null;
 
       /**
        * When true, the rest of the page is locked behind a backdrop until the user
@@ -2270,7 +6159,7 @@ export namespace ConsentSettingUpdateResponse {
       /**
        * Visual options for the modals (layout/position/colors).
        */
-      guiOptions?: unknown | null;
+      guiOptions?: Rule.GuiOptions | null;
 
       /**
        * When true, the modal is suppressed for known bot user agents.
@@ -2334,12 +6223,444 @@ export namespace ConsentSettingUpdateResponse {
           /**
            * Translated copy for the initial consent modal.
            */
-          consentModal?: unknown | null;
+          consentModal?: Value.ConsentModal | null;
 
           /**
            * Translated copy for the preferences modal.
            */
-          preferencesModal?: unknown | null;
+          preferencesModal?: Value.PreferencesModal | null;
+        }
+
+        export namespace Value {
+          /**
+           * Translated copy for the initial consent modal.
+           */
+          export interface ConsentModal {
+            /**
+             * Label for the "accept all" button.
+             */
+            acceptAllBtn: string;
+
+            /**
+             * Body text shown in the consent modal.
+             */
+            description: string;
+
+            /**
+             * Label for the "reject all" / "necessary only" button.
+             */
+            rejectAllBtn: string;
+
+            /**
+             * Label for the button that opens the preferences modal.
+             */
+            showPreferencesBtn: string;
+
+            /**
+             * Heading shown at the top of the consent modal.
+             */
+            title: string;
+
+            /**
+             * Accessibility label for the close (X) icon.
+             */
+            closeIconLabel?: string | null;
+
+            /**
+             * Optional footer HTML/text shown below the body.
+             */
+            footer?: string | null;
+
+            /**
+             * Optional text shown when the browser is sending Sec-GPC: 1.
+             */
+            gpcNotification?: string | null;
+
+            /**
+             * Link label for the privacy policy (defaults to "Privacy Policy").
+             */
+            privacyPolicyLabel?: string | null;
+
+            /**
+             * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
+             * (/legal/privacy) so one config can run across multiple domains. javascript:,
+             * data:, and vbscript: schemes are rejected.
+             */
+            privacyPolicyUrl?: string | null;
+
+            /**
+             * Optional message shown when the consent revision has bumped (re-prompt copy).
+             */
+            revisionMessage?: string | null;
+
+            /**
+             * Link label for terms of service (defaults to "Terms of Service").
+             */
+            termsOfServiceLabel?: string | null;
+
+            /**
+             * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
+             * relative path only.
+             */
+            termsOfServiceUrl?: string | null;
+          }
+
+          /**
+           * Translated copy for the preferences modal.
+           */
+          export interface PreferencesModal {
+            /**
+             * Label for the "accept all" button in the preferences modal.
+             */
+            acceptAllBtn: string;
+
+            /**
+             * Accessibility label for the close (X) icon.
+             */
+            closeIconLabel: string;
+
+            /**
+             * Label for the "reject all" / "necessary only" button.
+             */
+            rejectAllBtn: string;
+
+            /**
+             * Label for the "save my choices" button.
+             */
+            savePreferencesBtn: string;
+
+            /**
+             * Per-category sections plus a leading general section. The server backfills
+             * sections for each defined category if absent.
+             */
+            sections: Array<PreferencesModal.Section>;
+
+            /**
+             * Heading for the preferences modal.
+             */
+            title: string;
+
+            /**
+             * Optional collapsible info block rendered after the category sections. Renders
+             * only when both title and body are non-empty. Use it for long-form text unrelated
+             * to any specific category (e.g. a third-party advertisers disclosure).
+             */
+            additionalInfo?: PreferencesModal.AdditionalInfo | null;
+
+            /**
+             * Pluralizable label for the "N services" counter (e.g. "Service|Services").
+             */
+            serviceCounterLabel?: string | null;
+          }
+
+          export namespace PreferencesModal {
+            export interface Section {
+              /**
+               * Body text for this preferences-modal section.
+               */
+              description: string;
+
+              /**
+               * Heading for this preferences-modal section.
+               */
+              title: string;
+
+              /**
+               * Optional disclosure table listing cookies/services in this section.
+               */
+              cookieTable?: Section.CookieTable | null;
+
+              /**
+               * Category value this section configures. Use null/omit for the introductory
+               * section that applies to no specific category.
+               */
+              linkedCategory?: string | null;
+            }
+
+            export namespace Section {
+              /**
+               * Optional disclosure table listing cookies/services in this section.
+               */
+              export interface CookieTable {
+                /**
+                 * Rows of the cookie table — each row is a {key,value} pair (e.g. cookie name →
+                 * purpose).
+                 */
+                body: Array<CookieTable.Body>;
+
+                /**
+                 * Header cells. Same {key,value} shape as rows.
+                 */
+                headers: Array<CookieTable.Header>;
+
+                /**
+                 * Optional table caption.
+                 */
+                caption?: string | null;
+              }
+
+              export namespace CookieTable {
+                export interface Body {
+                  key: string;
+
+                  value: string;
+                }
+
+                export interface Header {
+                  key: string;
+
+                  value: string;
+                }
+              }
+            }
+
+            /**
+             * Optional collapsible info block rendered after the category sections. Renders
+             * only when both title and body are non-empty. Use it for long-form text unrelated
+             * to any specific category (e.g. a third-party advertisers disclosure).
+             */
+            export interface AdditionalInfo {
+              /**
+               * Body text for the additional-info block. Supports the rich-text markdown subset
+               * used by section descriptions: line breaks, [text](url) links (https:// or
+               * relative paths), and **bold**. HTML is stripped.
+               */
+              body: string;
+
+              /**
+               * Heading for the additional-info block.
+               */
+              title: string;
+            }
+          }
+        }
+      }
+
+      /**
+       * Threshold config for autoShowDismissMode (page count or seconds).
+       */
+      export interface AutoShowDismissConfig {
+        /**
+         * Pages-viewed threshold when autoShowDismissMode = after_pages.
+         */
+        pageCount?: number | null;
+
+        /**
+         * Seconds-on-page threshold when autoShowDismissMode = after_seconds.
+         */
+        seconds?: number | null;
+      }
+
+      /**
+       * Visual options for the modals (layout/position/colors).
+       */
+      export interface GuiOptions {
+        /**
+         * Visual options for the initial consent modal.
+         */
+        consentModal?: GuiOptions.ConsentModal | null;
+
+        /**
+         * Global CSS variable overrides applied to both modals.
+         */
+        cssVariables?: GuiOptions.CssVariables | null;
+
+        /**
+         * Visual options for the per-category preferences modal.
+         */
+        preferencesModal?: GuiOptions.PreferencesModal | null;
+      }
+
+      export namespace GuiOptions {
+        /**
+         * Visual options for the initial consent modal.
+         */
+        export interface ConsentModal {
+          /**
+           * Which buttons to render in the consent modal and in what arrangement.
+           */
+          buttonLayout?:
+            | 'AcceptAllNecessaryPreferences'
+            | 'AcceptAllPreferences'
+            | 'AcceptOnly'
+            | 'InformationOnly'
+            | 'PreferencesOnly'
+            | null;
+
+          /**
+           * When true, accept and reject buttons share the same visual weight (no
+           * primary/secondary).
+           */
+          equalWeightButtons?: boolean | null;
+
+          /**
+           * When true, swap accept/reject button order.
+           */
+          flipButtons?: boolean | null;
+
+          /**
+           * Modal layout style (box, bar, cloud, etc.).
+           */
+          layout?: 'bar' | 'bar_inline' | 'box' | 'box_inline' | 'box_wide' | 'cloud' | 'cloud_inline' | null;
+
+          /**
+           * Where the modal anchors on the viewport (e.g. bottom_left, top_right,
+           * middle_center).
+           */
+          position?:
+            | 'bottom'
+            | 'bottom_center'
+            | 'bottom_left'
+            | 'bottom_right'
+            | 'middle'
+            | 'middle_center'
+            | 'middle_left'
+            | 'middle_right'
+            | 'top'
+            | 'top_center'
+            | 'top_left'
+            | 'top_right'
+            | null;
+
+          /**
+           * Show an X to dismiss the modal without choosing.
+           */
+          showCloseIcon?: boolean | null;
+        }
+
+        /**
+         * Global CSS variable overrides applied to both modals.
+         */
+        export interface CssVariables {
+          /**
+           * CSS length, e.g. "4px" or "0.25rem".
+           */
+          buttonBorderRadius?: string | null;
+
+          /**
+           * CSS color for the per-category block background in the preferences modal.
+           */
+          cookieCategoryBlockBg?: string | null;
+
+          /**
+           * CSS color for the per-category block background on hover.
+           */
+          cookieCategoryBlockHoverBg?: string | null;
+
+          /**
+           * CSS color for the modal footer background.
+           */
+          footerBg?: string | null;
+
+          /**
+           * CSS color for footer text.
+           */
+          footerColor?: string | null;
+
+          /**
+           * CSS color for footer links.
+           */
+          footerLinkColor?: string | null;
+
+          /**
+           * CSS color for footer links on hover.
+           */
+          footerLinkHoverColor?: string | null;
+
+          /**
+           * CSS color for the modal background.
+           */
+          modalBg?: string | null;
+
+          /**
+           * CSS length for modal corner radius.
+           */
+          modalBorderRadius?: string | null;
+
+          /**
+           * CSS color for the primary button background.
+           */
+          primaryButtonBg?: string | null;
+
+          /**
+           * CSS color for primary button text.
+           */
+          primaryButtonColor?: string | null;
+
+          /**
+           * CSS color for the primary button background on hover.
+           */
+          primaryButtonHoverBg?: string | null;
+
+          /**
+           * CSS color for primary button text on hover.
+           */
+          primaryButtonHoverColor?: string | null;
+
+          /**
+           * CSS color for primary text in the modal body.
+           */
+          primaryTextColor?: string | null;
+
+          /**
+           * CSS color for the secondary button background.
+           */
+          secondaryButtonBg?: string | null;
+
+          /**
+           * CSS color for secondary button text.
+           */
+          secondaryButtonColor?: string | null;
+
+          /**
+           * CSS color for secondary button background on hover.
+           */
+          secondaryButtonHoverBg?: string | null;
+
+          /**
+           * CSS color for secondary button text on hover.
+           */
+          secondaryButtonHoverColor?: string | null;
+
+          /**
+           * CSS color for secondary text in the modal body.
+           */
+          secondaryTextColor?: string | null;
+
+          /**
+           * CSS color for the "on" state of category toggles.
+           */
+          toggleOnBg?: string | null;
+        }
+
+        /**
+         * Visual options for the per-category preferences modal.
+         */
+        export interface PreferencesModal {
+          /**
+           * Button layout for the preferences modal.
+           */
+          buttonLayout?: 'AcceptAllRejectAllSave' | 'AcceptAllSave' | null;
+
+          /**
+           * When true, accept/reject share the same visual weight.
+           */
+          equalWeightButtons?: boolean | null;
+
+          /**
+           * When true, swap accept/reject button order.
+           */
+          flipButtons?: boolean | null;
+
+          /**
+           * Preferences modal layout (box, bar, bar_wide).
+           */
+          layout?: 'bar' | 'bar_wide' | 'box' | null;
+
+          /**
+           * Preferences modal anchor (left, right).
+           */
+          position?: 'left' | 'right' | null;
         }
       }
     }
@@ -2539,12 +6860,12 @@ export namespace ConsentSettingDeleteResponse {
     /**
      * Threshold config for autoShowDismissMode (page count or seconds).
      */
-    autoShowDismissConfig?: unknown | null;
+    autoShowDismissConfig?: Default.AutoShowDismissConfig | null;
 
     /**
      * How the modal is treated as dismissed (never, after_pages, after_seconds).
      */
-    autoShowDismissMode?: string | null;
+    autoShowDismissMode?: 'after_pages' | 'after_seconds' | 'never' | null;
 
     /**
      * When true, the rest of the page is locked behind a backdrop until the user
@@ -2555,7 +6876,7 @@ export namespace ConsentSettingDeleteResponse {
     /**
      * Visual options for the modals (layout/position/colors).
      */
-    guiOptions?: unknown | null;
+    guiOptions?: Default.GuiOptions | null;
 
     /**
      * When true, the modal is suppressed for known bot user agents.
@@ -2619,12 +6940,444 @@ export namespace ConsentSettingDeleteResponse {
         /**
          * Translated copy for the initial consent modal.
          */
-        consentModal?: unknown | null;
+        consentModal?: Value.ConsentModal | null;
 
         /**
          * Translated copy for the preferences modal.
          */
-        preferencesModal?: unknown | null;
+        preferencesModal?: Value.PreferencesModal | null;
+      }
+
+      export namespace Value {
+        /**
+         * Translated copy for the initial consent modal.
+         */
+        export interface ConsentModal {
+          /**
+           * Label for the "accept all" button.
+           */
+          acceptAllBtn: string;
+
+          /**
+           * Body text shown in the consent modal.
+           */
+          description: string;
+
+          /**
+           * Label for the "reject all" / "necessary only" button.
+           */
+          rejectAllBtn: string;
+
+          /**
+           * Label for the button that opens the preferences modal.
+           */
+          showPreferencesBtn: string;
+
+          /**
+           * Heading shown at the top of the consent modal.
+           */
+          title: string;
+
+          /**
+           * Accessibility label for the close (X) icon.
+           */
+          closeIconLabel?: string | null;
+
+          /**
+           * Optional footer HTML/text shown below the body.
+           */
+          footer?: string | null;
+
+          /**
+           * Optional text shown when the browser is sending Sec-GPC: 1.
+           */
+          gpcNotification?: string | null;
+
+          /**
+           * Link label for the privacy policy (defaults to "Privacy Policy").
+           */
+          privacyPolicyLabel?: string | null;
+
+          /**
+           * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
+           * (/legal/privacy) so one config can run across multiple domains. javascript:,
+           * data:, and vbscript: schemes are rejected.
+           */
+          privacyPolicyUrl?: string | null;
+
+          /**
+           * Optional message shown when the consent revision has bumped (re-prompt copy).
+           */
+          revisionMessage?: string | null;
+
+          /**
+           * Link label for terms of service (defaults to "Terms of Service").
+           */
+          termsOfServiceLabel?: string | null;
+
+          /**
+           * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
+           * relative path only.
+           */
+          termsOfServiceUrl?: string | null;
+        }
+
+        /**
+         * Translated copy for the preferences modal.
+         */
+        export interface PreferencesModal {
+          /**
+           * Label for the "accept all" button in the preferences modal.
+           */
+          acceptAllBtn: string;
+
+          /**
+           * Accessibility label for the close (X) icon.
+           */
+          closeIconLabel: string;
+
+          /**
+           * Label for the "reject all" / "necessary only" button.
+           */
+          rejectAllBtn: string;
+
+          /**
+           * Label for the "save my choices" button.
+           */
+          savePreferencesBtn: string;
+
+          /**
+           * Per-category sections plus a leading general section. The server backfills
+           * sections for each defined category if absent.
+           */
+          sections: Array<PreferencesModal.Section>;
+
+          /**
+           * Heading for the preferences modal.
+           */
+          title: string;
+
+          /**
+           * Optional collapsible info block rendered after the category sections. Renders
+           * only when both title and body are non-empty. Use it for long-form text unrelated
+           * to any specific category (e.g. a third-party advertisers disclosure).
+           */
+          additionalInfo?: PreferencesModal.AdditionalInfo | null;
+
+          /**
+           * Pluralizable label for the "N services" counter (e.g. "Service|Services").
+           */
+          serviceCounterLabel?: string | null;
+        }
+
+        export namespace PreferencesModal {
+          export interface Section {
+            /**
+             * Body text for this preferences-modal section.
+             */
+            description: string;
+
+            /**
+             * Heading for this preferences-modal section.
+             */
+            title: string;
+
+            /**
+             * Optional disclosure table listing cookies/services in this section.
+             */
+            cookieTable?: Section.CookieTable | null;
+
+            /**
+             * Category value this section configures. Use null/omit for the introductory
+             * section that applies to no specific category.
+             */
+            linkedCategory?: string | null;
+          }
+
+          export namespace Section {
+            /**
+             * Optional disclosure table listing cookies/services in this section.
+             */
+            export interface CookieTable {
+              /**
+               * Rows of the cookie table — each row is a {key,value} pair (e.g. cookie name →
+               * purpose).
+               */
+              body: Array<CookieTable.Body>;
+
+              /**
+               * Header cells. Same {key,value} shape as rows.
+               */
+              headers: Array<CookieTable.Header>;
+
+              /**
+               * Optional table caption.
+               */
+              caption?: string | null;
+            }
+
+            export namespace CookieTable {
+              export interface Body {
+                key: string;
+
+                value: string;
+              }
+
+              export interface Header {
+                key: string;
+
+                value: string;
+              }
+            }
+          }
+
+          /**
+           * Optional collapsible info block rendered after the category sections. Renders
+           * only when both title and body are non-empty. Use it for long-form text unrelated
+           * to any specific category (e.g. a third-party advertisers disclosure).
+           */
+          export interface AdditionalInfo {
+            /**
+             * Body text for the additional-info block. Supports the rich-text markdown subset
+             * used by section descriptions: line breaks, [text](url) links (https:// or
+             * relative paths), and **bold**. HTML is stripped.
+             */
+            body: string;
+
+            /**
+             * Heading for the additional-info block.
+             */
+            title: string;
+          }
+        }
+      }
+    }
+
+    /**
+     * Threshold config for autoShowDismissMode (page count or seconds).
+     */
+    export interface AutoShowDismissConfig {
+      /**
+       * Pages-viewed threshold when autoShowDismissMode = after_pages.
+       */
+      pageCount?: number | null;
+
+      /**
+       * Seconds-on-page threshold when autoShowDismissMode = after_seconds.
+       */
+      seconds?: number | null;
+    }
+
+    /**
+     * Visual options for the modals (layout/position/colors).
+     */
+    export interface GuiOptions {
+      /**
+       * Visual options for the initial consent modal.
+       */
+      consentModal?: GuiOptions.ConsentModal | null;
+
+      /**
+       * Global CSS variable overrides applied to both modals.
+       */
+      cssVariables?: GuiOptions.CssVariables | null;
+
+      /**
+       * Visual options for the per-category preferences modal.
+       */
+      preferencesModal?: GuiOptions.PreferencesModal | null;
+    }
+
+    export namespace GuiOptions {
+      /**
+       * Visual options for the initial consent modal.
+       */
+      export interface ConsentModal {
+        /**
+         * Which buttons to render in the consent modal and in what arrangement.
+         */
+        buttonLayout?:
+          | 'AcceptAllNecessaryPreferences'
+          | 'AcceptAllPreferences'
+          | 'AcceptOnly'
+          | 'InformationOnly'
+          | 'PreferencesOnly'
+          | null;
+
+        /**
+         * When true, accept and reject buttons share the same visual weight (no
+         * primary/secondary).
+         */
+        equalWeightButtons?: boolean | null;
+
+        /**
+         * When true, swap accept/reject button order.
+         */
+        flipButtons?: boolean | null;
+
+        /**
+         * Modal layout style (box, bar, cloud, etc.).
+         */
+        layout?: 'bar' | 'bar_inline' | 'box' | 'box_inline' | 'box_wide' | 'cloud' | 'cloud_inline' | null;
+
+        /**
+         * Where the modal anchors on the viewport (e.g. bottom_left, top_right,
+         * middle_center).
+         */
+        position?:
+          | 'bottom'
+          | 'bottom_center'
+          | 'bottom_left'
+          | 'bottom_right'
+          | 'middle'
+          | 'middle_center'
+          | 'middle_left'
+          | 'middle_right'
+          | 'top'
+          | 'top_center'
+          | 'top_left'
+          | 'top_right'
+          | null;
+
+        /**
+         * Show an X to dismiss the modal without choosing.
+         */
+        showCloseIcon?: boolean | null;
+      }
+
+      /**
+       * Global CSS variable overrides applied to both modals.
+       */
+      export interface CssVariables {
+        /**
+         * CSS length, e.g. "4px" or "0.25rem".
+         */
+        buttonBorderRadius?: string | null;
+
+        /**
+         * CSS color for the per-category block background in the preferences modal.
+         */
+        cookieCategoryBlockBg?: string | null;
+
+        /**
+         * CSS color for the per-category block background on hover.
+         */
+        cookieCategoryBlockHoverBg?: string | null;
+
+        /**
+         * CSS color for the modal footer background.
+         */
+        footerBg?: string | null;
+
+        /**
+         * CSS color for footer text.
+         */
+        footerColor?: string | null;
+
+        /**
+         * CSS color for footer links.
+         */
+        footerLinkColor?: string | null;
+
+        /**
+         * CSS color for footer links on hover.
+         */
+        footerLinkHoverColor?: string | null;
+
+        /**
+         * CSS color for the modal background.
+         */
+        modalBg?: string | null;
+
+        /**
+         * CSS length for modal corner radius.
+         */
+        modalBorderRadius?: string | null;
+
+        /**
+         * CSS color for the primary button background.
+         */
+        primaryButtonBg?: string | null;
+
+        /**
+         * CSS color for primary button text.
+         */
+        primaryButtonColor?: string | null;
+
+        /**
+         * CSS color for the primary button background on hover.
+         */
+        primaryButtonHoverBg?: string | null;
+
+        /**
+         * CSS color for primary button text on hover.
+         */
+        primaryButtonHoverColor?: string | null;
+
+        /**
+         * CSS color for primary text in the modal body.
+         */
+        primaryTextColor?: string | null;
+
+        /**
+         * CSS color for the secondary button background.
+         */
+        secondaryButtonBg?: string | null;
+
+        /**
+         * CSS color for secondary button text.
+         */
+        secondaryButtonColor?: string | null;
+
+        /**
+         * CSS color for secondary button background on hover.
+         */
+        secondaryButtonHoverBg?: string | null;
+
+        /**
+         * CSS color for secondary button text on hover.
+         */
+        secondaryButtonHoverColor?: string | null;
+
+        /**
+         * CSS color for secondary text in the modal body.
+         */
+        secondaryTextColor?: string | null;
+
+        /**
+         * CSS color for the "on" state of category toggles.
+         */
+        toggleOnBg?: string | null;
+      }
+
+      /**
+       * Visual options for the per-category preferences modal.
+       */
+      export interface PreferencesModal {
+        /**
+         * Button layout for the preferences modal.
+         */
+        buttonLayout?: 'AcceptAllRejectAllSave' | 'AcceptAllSave' | null;
+
+        /**
+         * When true, accept/reject share the same visual weight.
+         */
+        equalWeightButtons?: boolean | null;
+
+        /**
+         * When true, swap accept/reject button order.
+         */
+        flipButtons?: boolean | null;
+
+        /**
+         * Preferences modal layout (box, bar, bar_wide).
+         */
+        layout?: 'bar' | 'bar_wide' | 'box' | null;
+
+        /**
+         * Preferences modal anchor (left, right).
+         */
+        position?: 'left' | 'right' | null;
       }
     }
   }
@@ -2694,12 +7447,12 @@ export namespace ConsentSettingDeleteResponse {
       /**
        * Threshold config for autoShowDismissMode (page count or seconds).
        */
-      autoShowDismissConfig?: unknown | null;
+      autoShowDismissConfig?: Rule.AutoShowDismissConfig | null;
 
       /**
        * How the modal is treated as dismissed (never, after_pages, after_seconds).
        */
-      autoShowDismissMode?: string | null;
+      autoShowDismissMode?: 'after_pages' | 'after_seconds' | 'never' | null;
 
       /**
        * When true, the rest of the page is locked behind a backdrop until the user
@@ -2710,7 +7463,7 @@ export namespace ConsentSettingDeleteResponse {
       /**
        * Visual options for the modals (layout/position/colors).
        */
-      guiOptions?: unknown | null;
+      guiOptions?: Rule.GuiOptions | null;
 
       /**
        * When true, the modal is suppressed for known bot user agents.
@@ -2774,12 +7527,444 @@ export namespace ConsentSettingDeleteResponse {
           /**
            * Translated copy for the initial consent modal.
            */
-          consentModal?: unknown | null;
+          consentModal?: Value.ConsentModal | null;
 
           /**
            * Translated copy for the preferences modal.
            */
-          preferencesModal?: unknown | null;
+          preferencesModal?: Value.PreferencesModal | null;
+        }
+
+        export namespace Value {
+          /**
+           * Translated copy for the initial consent modal.
+           */
+          export interface ConsentModal {
+            /**
+             * Label for the "accept all" button.
+             */
+            acceptAllBtn: string;
+
+            /**
+             * Body text shown in the consent modal.
+             */
+            description: string;
+
+            /**
+             * Label for the "reject all" / "necessary only" button.
+             */
+            rejectAllBtn: string;
+
+            /**
+             * Label for the button that opens the preferences modal.
+             */
+            showPreferencesBtn: string;
+
+            /**
+             * Heading shown at the top of the consent modal.
+             */
+            title: string;
+
+            /**
+             * Accessibility label for the close (X) icon.
+             */
+            closeIconLabel?: string | null;
+
+            /**
+             * Optional footer HTML/text shown below the body.
+             */
+            footer?: string | null;
+
+            /**
+             * Optional text shown when the browser is sending Sec-GPC: 1.
+             */
+            gpcNotification?: string | null;
+
+            /**
+             * Link label for the privacy policy (defaults to "Privacy Policy").
+             */
+            privacyPolicyLabel?: string | null;
+
+            /**
+             * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
+             * (/legal/privacy) so one config can run across multiple domains. javascript:,
+             * data:, and vbscript: schemes are rejected.
+             */
+            privacyPolicyUrl?: string | null;
+
+            /**
+             * Optional message shown when the consent revision has bumped (re-prompt copy).
+             */
+            revisionMessage?: string | null;
+
+            /**
+             * Link label for terms of service (defaults to "Terms of Service").
+             */
+            termsOfServiceLabel?: string | null;
+
+            /**
+             * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
+             * relative path only.
+             */
+            termsOfServiceUrl?: string | null;
+          }
+
+          /**
+           * Translated copy for the preferences modal.
+           */
+          export interface PreferencesModal {
+            /**
+             * Label for the "accept all" button in the preferences modal.
+             */
+            acceptAllBtn: string;
+
+            /**
+             * Accessibility label for the close (X) icon.
+             */
+            closeIconLabel: string;
+
+            /**
+             * Label for the "reject all" / "necessary only" button.
+             */
+            rejectAllBtn: string;
+
+            /**
+             * Label for the "save my choices" button.
+             */
+            savePreferencesBtn: string;
+
+            /**
+             * Per-category sections plus a leading general section. The server backfills
+             * sections for each defined category if absent.
+             */
+            sections: Array<PreferencesModal.Section>;
+
+            /**
+             * Heading for the preferences modal.
+             */
+            title: string;
+
+            /**
+             * Optional collapsible info block rendered after the category sections. Renders
+             * only when both title and body are non-empty. Use it for long-form text unrelated
+             * to any specific category (e.g. a third-party advertisers disclosure).
+             */
+            additionalInfo?: PreferencesModal.AdditionalInfo | null;
+
+            /**
+             * Pluralizable label for the "N services" counter (e.g. "Service|Services").
+             */
+            serviceCounterLabel?: string | null;
+          }
+
+          export namespace PreferencesModal {
+            export interface Section {
+              /**
+               * Body text for this preferences-modal section.
+               */
+              description: string;
+
+              /**
+               * Heading for this preferences-modal section.
+               */
+              title: string;
+
+              /**
+               * Optional disclosure table listing cookies/services in this section.
+               */
+              cookieTable?: Section.CookieTable | null;
+
+              /**
+               * Category value this section configures. Use null/omit for the introductory
+               * section that applies to no specific category.
+               */
+              linkedCategory?: string | null;
+            }
+
+            export namespace Section {
+              /**
+               * Optional disclosure table listing cookies/services in this section.
+               */
+              export interface CookieTable {
+                /**
+                 * Rows of the cookie table — each row is a {key,value} pair (e.g. cookie name →
+                 * purpose).
+                 */
+                body: Array<CookieTable.Body>;
+
+                /**
+                 * Header cells. Same {key,value} shape as rows.
+                 */
+                headers: Array<CookieTable.Header>;
+
+                /**
+                 * Optional table caption.
+                 */
+                caption?: string | null;
+              }
+
+              export namespace CookieTable {
+                export interface Body {
+                  key: string;
+
+                  value: string;
+                }
+
+                export interface Header {
+                  key: string;
+
+                  value: string;
+                }
+              }
+            }
+
+            /**
+             * Optional collapsible info block rendered after the category sections. Renders
+             * only when both title and body are non-empty. Use it for long-form text unrelated
+             * to any specific category (e.g. a third-party advertisers disclosure).
+             */
+            export interface AdditionalInfo {
+              /**
+               * Body text for the additional-info block. Supports the rich-text markdown subset
+               * used by section descriptions: line breaks, [text](url) links (https:// or
+               * relative paths), and **bold**. HTML is stripped.
+               */
+              body: string;
+
+              /**
+               * Heading for the additional-info block.
+               */
+              title: string;
+            }
+          }
+        }
+      }
+
+      /**
+       * Threshold config for autoShowDismissMode (page count or seconds).
+       */
+      export interface AutoShowDismissConfig {
+        /**
+         * Pages-viewed threshold when autoShowDismissMode = after_pages.
+         */
+        pageCount?: number | null;
+
+        /**
+         * Seconds-on-page threshold when autoShowDismissMode = after_seconds.
+         */
+        seconds?: number | null;
+      }
+
+      /**
+       * Visual options for the modals (layout/position/colors).
+       */
+      export interface GuiOptions {
+        /**
+         * Visual options for the initial consent modal.
+         */
+        consentModal?: GuiOptions.ConsentModal | null;
+
+        /**
+         * Global CSS variable overrides applied to both modals.
+         */
+        cssVariables?: GuiOptions.CssVariables | null;
+
+        /**
+         * Visual options for the per-category preferences modal.
+         */
+        preferencesModal?: GuiOptions.PreferencesModal | null;
+      }
+
+      export namespace GuiOptions {
+        /**
+         * Visual options for the initial consent modal.
+         */
+        export interface ConsentModal {
+          /**
+           * Which buttons to render in the consent modal and in what arrangement.
+           */
+          buttonLayout?:
+            | 'AcceptAllNecessaryPreferences'
+            | 'AcceptAllPreferences'
+            | 'AcceptOnly'
+            | 'InformationOnly'
+            | 'PreferencesOnly'
+            | null;
+
+          /**
+           * When true, accept and reject buttons share the same visual weight (no
+           * primary/secondary).
+           */
+          equalWeightButtons?: boolean | null;
+
+          /**
+           * When true, swap accept/reject button order.
+           */
+          flipButtons?: boolean | null;
+
+          /**
+           * Modal layout style (box, bar, cloud, etc.).
+           */
+          layout?: 'bar' | 'bar_inline' | 'box' | 'box_inline' | 'box_wide' | 'cloud' | 'cloud_inline' | null;
+
+          /**
+           * Where the modal anchors on the viewport (e.g. bottom_left, top_right,
+           * middle_center).
+           */
+          position?:
+            | 'bottom'
+            | 'bottom_center'
+            | 'bottom_left'
+            | 'bottom_right'
+            | 'middle'
+            | 'middle_center'
+            | 'middle_left'
+            | 'middle_right'
+            | 'top'
+            | 'top_center'
+            | 'top_left'
+            | 'top_right'
+            | null;
+
+          /**
+           * Show an X to dismiss the modal without choosing.
+           */
+          showCloseIcon?: boolean | null;
+        }
+
+        /**
+         * Global CSS variable overrides applied to both modals.
+         */
+        export interface CssVariables {
+          /**
+           * CSS length, e.g. "4px" or "0.25rem".
+           */
+          buttonBorderRadius?: string | null;
+
+          /**
+           * CSS color for the per-category block background in the preferences modal.
+           */
+          cookieCategoryBlockBg?: string | null;
+
+          /**
+           * CSS color for the per-category block background on hover.
+           */
+          cookieCategoryBlockHoverBg?: string | null;
+
+          /**
+           * CSS color for the modal footer background.
+           */
+          footerBg?: string | null;
+
+          /**
+           * CSS color for footer text.
+           */
+          footerColor?: string | null;
+
+          /**
+           * CSS color for footer links.
+           */
+          footerLinkColor?: string | null;
+
+          /**
+           * CSS color for footer links on hover.
+           */
+          footerLinkHoverColor?: string | null;
+
+          /**
+           * CSS color for the modal background.
+           */
+          modalBg?: string | null;
+
+          /**
+           * CSS length for modal corner radius.
+           */
+          modalBorderRadius?: string | null;
+
+          /**
+           * CSS color for the primary button background.
+           */
+          primaryButtonBg?: string | null;
+
+          /**
+           * CSS color for primary button text.
+           */
+          primaryButtonColor?: string | null;
+
+          /**
+           * CSS color for the primary button background on hover.
+           */
+          primaryButtonHoverBg?: string | null;
+
+          /**
+           * CSS color for primary button text on hover.
+           */
+          primaryButtonHoverColor?: string | null;
+
+          /**
+           * CSS color for primary text in the modal body.
+           */
+          primaryTextColor?: string | null;
+
+          /**
+           * CSS color for the secondary button background.
+           */
+          secondaryButtonBg?: string | null;
+
+          /**
+           * CSS color for secondary button text.
+           */
+          secondaryButtonColor?: string | null;
+
+          /**
+           * CSS color for secondary button background on hover.
+           */
+          secondaryButtonHoverBg?: string | null;
+
+          /**
+           * CSS color for secondary button text on hover.
+           */
+          secondaryButtonHoverColor?: string | null;
+
+          /**
+           * CSS color for secondary text in the modal body.
+           */
+          secondaryTextColor?: string | null;
+
+          /**
+           * CSS color for the "on" state of category toggles.
+           */
+          toggleOnBg?: string | null;
+        }
+
+        /**
+         * Visual options for the per-category preferences modal.
+         */
+        export interface PreferencesModal {
+          /**
+           * Button layout for the preferences modal.
+           */
+          buttonLayout?: 'AcceptAllRejectAllSave' | 'AcceptAllSave' | null;
+
+          /**
+           * When true, accept/reject share the same visual weight.
+           */
+          equalWeightButtons?: boolean | null;
+
+          /**
+           * When true, swap accept/reject button order.
+           */
+          flipButtons?: boolean | null;
+
+          /**
+           * Preferences modal layout (box, bar, bar_wide).
+           */
+          layout?: 'bar' | 'bar_wide' | 'box' | null;
+
+          /**
+           * Preferences modal anchor (left, right).
+           */
+          position?: 'left' | 'right' | null;
         }
       }
     }
@@ -3126,12 +8311,12 @@ export namespace ConsentSettingReplaceParams {
     /**
      * Threshold config for autoShowDismissMode (page count or seconds).
      */
-    autoShowDismissConfig?: unknown | null;
+    autoShowDismissConfig?: Default.AutoShowDismissConfig | null;
 
     /**
      * How the modal is treated as dismissed (never, after_pages, after_seconds).
      */
-    autoShowDismissMode?: string | null;
+    autoShowDismissMode?: 'after_pages' | 'after_seconds' | 'never' | null;
 
     /**
      * When true, the rest of the page is locked behind a backdrop until the user
@@ -3142,7 +8327,7 @@ export namespace ConsentSettingReplaceParams {
     /**
      * Visual options for the modals (layout/position/colors).
      */
-    guiOptions?: unknown | null;
+    guiOptions?: Default.GuiOptions | null;
 
     /**
      * When true, the modal is suppressed for known bot user agents.
@@ -3206,12 +8391,444 @@ export namespace ConsentSettingReplaceParams {
         /**
          * Translated copy for the initial consent modal.
          */
-        consentModal?: unknown | null;
+        consentModal?: Value.ConsentModal | null;
 
         /**
          * Translated copy for the preferences modal.
          */
-        preferencesModal?: unknown | null;
+        preferencesModal?: Value.PreferencesModal | null;
+      }
+
+      export namespace Value {
+        /**
+         * Translated copy for the initial consent modal.
+         */
+        export interface ConsentModal {
+          /**
+           * Label for the "accept all" button.
+           */
+          acceptAllBtn: string;
+
+          /**
+           * Body text shown in the consent modal.
+           */
+          description: string;
+
+          /**
+           * Label for the "reject all" / "necessary only" button.
+           */
+          rejectAllBtn: string;
+
+          /**
+           * Label for the button that opens the preferences modal.
+           */
+          showPreferencesBtn: string;
+
+          /**
+           * Heading shown at the top of the consent modal.
+           */
+          title: string;
+
+          /**
+           * Accessibility label for the close (X) icon.
+           */
+          closeIconLabel?: string | null;
+
+          /**
+           * Optional footer HTML/text shown below the body.
+           */
+          footer?: string | null;
+
+          /**
+           * Optional text shown when the browser is sending Sec-GPC: 1.
+           */
+          gpcNotification?: string | null;
+
+          /**
+           * Link label for the privacy policy (defaults to "Privacy Policy").
+           */
+          privacyPolicyLabel?: string | null;
+
+          /**
+           * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
+           * (/legal/privacy) so one config can run across multiple domains. javascript:,
+           * data:, and vbscript: schemes are rejected.
+           */
+          privacyPolicyUrl?: string | null;
+
+          /**
+           * Optional message shown when the consent revision has bumped (re-prompt copy).
+           */
+          revisionMessage?: string | null;
+
+          /**
+           * Link label for terms of service (defaults to "Terms of Service").
+           */
+          termsOfServiceLabel?: string | null;
+
+          /**
+           * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
+           * relative path only.
+           */
+          termsOfServiceUrl?: string | null;
+        }
+
+        /**
+         * Translated copy for the preferences modal.
+         */
+        export interface PreferencesModal {
+          /**
+           * Label for the "accept all" button in the preferences modal.
+           */
+          acceptAllBtn: string;
+
+          /**
+           * Accessibility label for the close (X) icon.
+           */
+          closeIconLabel: string;
+
+          /**
+           * Label for the "reject all" / "necessary only" button.
+           */
+          rejectAllBtn: string;
+
+          /**
+           * Label for the "save my choices" button.
+           */
+          savePreferencesBtn: string;
+
+          /**
+           * Per-category sections plus a leading general section. The server backfills
+           * sections for each defined category if absent.
+           */
+          sections: Array<PreferencesModal.Section>;
+
+          /**
+           * Heading for the preferences modal.
+           */
+          title: string;
+
+          /**
+           * Optional collapsible info block rendered after the category sections. Renders
+           * only when both title and body are non-empty. Use it for long-form text unrelated
+           * to any specific category (e.g. a third-party advertisers disclosure).
+           */
+          additionalInfo?: PreferencesModal.AdditionalInfo | null;
+
+          /**
+           * Pluralizable label for the "N services" counter (e.g. "Service|Services").
+           */
+          serviceCounterLabel?: string | null;
+        }
+
+        export namespace PreferencesModal {
+          export interface Section {
+            /**
+             * Body text for this preferences-modal section.
+             */
+            description: string;
+
+            /**
+             * Heading for this preferences-modal section.
+             */
+            title: string;
+
+            /**
+             * Optional disclosure table listing cookies/services in this section.
+             */
+            cookieTable?: Section.CookieTable | null;
+
+            /**
+             * Category value this section configures. Use null/omit for the introductory
+             * section that applies to no specific category.
+             */
+            linkedCategory?: string | null;
+          }
+
+          export namespace Section {
+            /**
+             * Optional disclosure table listing cookies/services in this section.
+             */
+            export interface CookieTable {
+              /**
+               * Rows of the cookie table — each row is a {key,value} pair (e.g. cookie name →
+               * purpose).
+               */
+              body: Array<CookieTable.Body>;
+
+              /**
+               * Header cells. Same {key,value} shape as rows.
+               */
+              headers: Array<CookieTable.Header>;
+
+              /**
+               * Optional table caption.
+               */
+              caption?: string | null;
+            }
+
+            export namespace CookieTable {
+              export interface Body {
+                key: string;
+
+                value: string;
+              }
+
+              export interface Header {
+                key: string;
+
+                value: string;
+              }
+            }
+          }
+
+          /**
+           * Optional collapsible info block rendered after the category sections. Renders
+           * only when both title and body are non-empty. Use it for long-form text unrelated
+           * to any specific category (e.g. a third-party advertisers disclosure).
+           */
+          export interface AdditionalInfo {
+            /**
+             * Body text for the additional-info block. Supports the rich-text markdown subset
+             * used by section descriptions: line breaks, [text](url) links (https:// or
+             * relative paths), and **bold**. HTML is stripped.
+             */
+            body: string;
+
+            /**
+             * Heading for the additional-info block.
+             */
+            title: string;
+          }
+        }
+      }
+    }
+
+    /**
+     * Threshold config for autoShowDismissMode (page count or seconds).
+     */
+    export interface AutoShowDismissConfig {
+      /**
+       * Pages-viewed threshold when autoShowDismissMode = after_pages.
+       */
+      pageCount?: number | null;
+
+      /**
+       * Seconds-on-page threshold when autoShowDismissMode = after_seconds.
+       */
+      seconds?: number | null;
+    }
+
+    /**
+     * Visual options for the modals (layout/position/colors).
+     */
+    export interface GuiOptions {
+      /**
+       * Visual options for the initial consent modal.
+       */
+      consentModal?: GuiOptions.ConsentModal | null;
+
+      /**
+       * Global CSS variable overrides applied to both modals.
+       */
+      cssVariables?: GuiOptions.CssVariables | null;
+
+      /**
+       * Visual options for the per-category preferences modal.
+       */
+      preferencesModal?: GuiOptions.PreferencesModal | null;
+    }
+
+    export namespace GuiOptions {
+      /**
+       * Visual options for the initial consent modal.
+       */
+      export interface ConsentModal {
+        /**
+         * Which buttons to render in the consent modal and in what arrangement.
+         */
+        buttonLayout?:
+          | 'AcceptAllNecessaryPreferences'
+          | 'AcceptAllPreferences'
+          | 'AcceptOnly'
+          | 'InformationOnly'
+          | 'PreferencesOnly'
+          | null;
+
+        /**
+         * When true, accept and reject buttons share the same visual weight (no
+         * primary/secondary).
+         */
+        equalWeightButtons?: boolean | null;
+
+        /**
+         * When true, swap accept/reject button order.
+         */
+        flipButtons?: boolean | null;
+
+        /**
+         * Modal layout style (box, bar, cloud, etc.).
+         */
+        layout?: 'bar' | 'bar_inline' | 'box' | 'box_inline' | 'box_wide' | 'cloud' | 'cloud_inline' | null;
+
+        /**
+         * Where the modal anchors on the viewport (e.g. bottom_left, top_right,
+         * middle_center).
+         */
+        position?:
+          | 'bottom'
+          | 'bottom_center'
+          | 'bottom_left'
+          | 'bottom_right'
+          | 'middle'
+          | 'middle_center'
+          | 'middle_left'
+          | 'middle_right'
+          | 'top'
+          | 'top_center'
+          | 'top_left'
+          | 'top_right'
+          | null;
+
+        /**
+         * Show an X to dismiss the modal without choosing.
+         */
+        showCloseIcon?: boolean | null;
+      }
+
+      /**
+       * Global CSS variable overrides applied to both modals.
+       */
+      export interface CssVariables {
+        /**
+         * CSS length, e.g. "4px" or "0.25rem".
+         */
+        buttonBorderRadius?: string | null;
+
+        /**
+         * CSS color for the per-category block background in the preferences modal.
+         */
+        cookieCategoryBlockBg?: string | null;
+
+        /**
+         * CSS color for the per-category block background on hover.
+         */
+        cookieCategoryBlockHoverBg?: string | null;
+
+        /**
+         * CSS color for the modal footer background.
+         */
+        footerBg?: string | null;
+
+        /**
+         * CSS color for footer text.
+         */
+        footerColor?: string | null;
+
+        /**
+         * CSS color for footer links.
+         */
+        footerLinkColor?: string | null;
+
+        /**
+         * CSS color for footer links on hover.
+         */
+        footerLinkHoverColor?: string | null;
+
+        /**
+         * CSS color for the modal background.
+         */
+        modalBg?: string | null;
+
+        /**
+         * CSS length for modal corner radius.
+         */
+        modalBorderRadius?: string | null;
+
+        /**
+         * CSS color for the primary button background.
+         */
+        primaryButtonBg?: string | null;
+
+        /**
+         * CSS color for primary button text.
+         */
+        primaryButtonColor?: string | null;
+
+        /**
+         * CSS color for the primary button background on hover.
+         */
+        primaryButtonHoverBg?: string | null;
+
+        /**
+         * CSS color for primary button text on hover.
+         */
+        primaryButtonHoverColor?: string | null;
+
+        /**
+         * CSS color for primary text in the modal body.
+         */
+        primaryTextColor?: string | null;
+
+        /**
+         * CSS color for the secondary button background.
+         */
+        secondaryButtonBg?: string | null;
+
+        /**
+         * CSS color for secondary button text.
+         */
+        secondaryButtonColor?: string | null;
+
+        /**
+         * CSS color for secondary button background on hover.
+         */
+        secondaryButtonHoverBg?: string | null;
+
+        /**
+         * CSS color for secondary button text on hover.
+         */
+        secondaryButtonHoverColor?: string | null;
+
+        /**
+         * CSS color for secondary text in the modal body.
+         */
+        secondaryTextColor?: string | null;
+
+        /**
+         * CSS color for the "on" state of category toggles.
+         */
+        toggleOnBg?: string | null;
+      }
+
+      /**
+       * Visual options for the per-category preferences modal.
+       */
+      export interface PreferencesModal {
+        /**
+         * Button layout for the preferences modal.
+         */
+        buttonLayout?: 'AcceptAllRejectAllSave' | 'AcceptAllSave' | null;
+
+        /**
+         * When true, accept/reject share the same visual weight.
+         */
+        equalWeightButtons?: boolean | null;
+
+        /**
+         * When true, swap accept/reject button order.
+         */
+        flipButtons?: boolean | null;
+
+        /**
+         * Preferences modal layout (box, bar, bar_wide).
+         */
+        layout?: 'bar' | 'bar_wide' | 'box' | null;
+
+        /**
+         * Preferences modal anchor (left, right).
+         */
+        position?: 'left' | 'right' | null;
       }
     }
   }
@@ -3281,12 +8898,12 @@ export namespace ConsentSettingReplaceParams {
       /**
        * Threshold config for autoShowDismissMode (page count or seconds).
        */
-      autoShowDismissConfig?: unknown | null;
+      autoShowDismissConfig?: Rule.AutoShowDismissConfig | null;
 
       /**
        * How the modal is treated as dismissed (never, after_pages, after_seconds).
        */
-      autoShowDismissMode?: string | null;
+      autoShowDismissMode?: 'after_pages' | 'after_seconds' | 'never' | null;
 
       /**
        * When true, the rest of the page is locked behind a backdrop until the user
@@ -3297,7 +8914,7 @@ export namespace ConsentSettingReplaceParams {
       /**
        * Visual options for the modals (layout/position/colors).
        */
-      guiOptions?: unknown | null;
+      guiOptions?: Rule.GuiOptions | null;
 
       /**
        * When true, the modal is suppressed for known bot user agents.
@@ -3361,12 +8978,444 @@ export namespace ConsentSettingReplaceParams {
           /**
            * Translated copy for the initial consent modal.
            */
-          consentModal?: unknown | null;
+          consentModal?: Value.ConsentModal | null;
 
           /**
            * Translated copy for the preferences modal.
            */
-          preferencesModal?: unknown | null;
+          preferencesModal?: Value.PreferencesModal | null;
+        }
+
+        export namespace Value {
+          /**
+           * Translated copy for the initial consent modal.
+           */
+          export interface ConsentModal {
+            /**
+             * Label for the "accept all" button.
+             */
+            acceptAllBtn: string;
+
+            /**
+             * Body text shown in the consent modal.
+             */
+            description: string;
+
+            /**
+             * Label for the "reject all" / "necessary only" button.
+             */
+            rejectAllBtn: string;
+
+            /**
+             * Label for the button that opens the preferences modal.
+             */
+            showPreferencesBtn: string;
+
+            /**
+             * Heading shown at the top of the consent modal.
+             */
+            title: string;
+
+            /**
+             * Accessibility label for the close (X) icon.
+             */
+            closeIconLabel?: string | null;
+
+            /**
+             * Optional footer HTML/text shown below the body.
+             */
+            footer?: string | null;
+
+            /**
+             * Optional text shown when the browser is sending Sec-GPC: 1.
+             */
+            gpcNotification?: string | null;
+
+            /**
+             * Link label for the privacy policy (defaults to "Privacy Policy").
+             */
+            privacyPolicyLabel?: string | null;
+
+            /**
+             * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
+             * (/legal/privacy) so one config can run across multiple domains. javascript:,
+             * data:, and vbscript: schemes are rejected.
+             */
+            privacyPolicyUrl?: string | null;
+
+            /**
+             * Optional message shown when the consent revision has bumped (re-prompt copy).
+             */
+            revisionMessage?: string | null;
+
+            /**
+             * Link label for terms of service (defaults to "Terms of Service").
+             */
+            termsOfServiceLabel?: string | null;
+
+            /**
+             * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
+             * relative path only.
+             */
+            termsOfServiceUrl?: string | null;
+          }
+
+          /**
+           * Translated copy for the preferences modal.
+           */
+          export interface PreferencesModal {
+            /**
+             * Label for the "accept all" button in the preferences modal.
+             */
+            acceptAllBtn: string;
+
+            /**
+             * Accessibility label for the close (X) icon.
+             */
+            closeIconLabel: string;
+
+            /**
+             * Label for the "reject all" / "necessary only" button.
+             */
+            rejectAllBtn: string;
+
+            /**
+             * Label for the "save my choices" button.
+             */
+            savePreferencesBtn: string;
+
+            /**
+             * Per-category sections plus a leading general section. The server backfills
+             * sections for each defined category if absent.
+             */
+            sections: Array<PreferencesModal.Section>;
+
+            /**
+             * Heading for the preferences modal.
+             */
+            title: string;
+
+            /**
+             * Optional collapsible info block rendered after the category sections. Renders
+             * only when both title and body are non-empty. Use it for long-form text unrelated
+             * to any specific category (e.g. a third-party advertisers disclosure).
+             */
+            additionalInfo?: PreferencesModal.AdditionalInfo | null;
+
+            /**
+             * Pluralizable label for the "N services" counter (e.g. "Service|Services").
+             */
+            serviceCounterLabel?: string | null;
+          }
+
+          export namespace PreferencesModal {
+            export interface Section {
+              /**
+               * Body text for this preferences-modal section.
+               */
+              description: string;
+
+              /**
+               * Heading for this preferences-modal section.
+               */
+              title: string;
+
+              /**
+               * Optional disclosure table listing cookies/services in this section.
+               */
+              cookieTable?: Section.CookieTable | null;
+
+              /**
+               * Category value this section configures. Use null/omit for the introductory
+               * section that applies to no specific category.
+               */
+              linkedCategory?: string | null;
+            }
+
+            export namespace Section {
+              /**
+               * Optional disclosure table listing cookies/services in this section.
+               */
+              export interface CookieTable {
+                /**
+                 * Rows of the cookie table — each row is a {key,value} pair (e.g. cookie name →
+                 * purpose).
+                 */
+                body: Array<CookieTable.Body>;
+
+                /**
+                 * Header cells. Same {key,value} shape as rows.
+                 */
+                headers: Array<CookieTable.Header>;
+
+                /**
+                 * Optional table caption.
+                 */
+                caption?: string | null;
+              }
+
+              export namespace CookieTable {
+                export interface Body {
+                  key: string;
+
+                  value: string;
+                }
+
+                export interface Header {
+                  key: string;
+
+                  value: string;
+                }
+              }
+            }
+
+            /**
+             * Optional collapsible info block rendered after the category sections. Renders
+             * only when both title and body are non-empty. Use it for long-form text unrelated
+             * to any specific category (e.g. a third-party advertisers disclosure).
+             */
+            export interface AdditionalInfo {
+              /**
+               * Body text for the additional-info block. Supports the rich-text markdown subset
+               * used by section descriptions: line breaks, [text](url) links (https:// or
+               * relative paths), and **bold**. HTML is stripped.
+               */
+              body: string;
+
+              /**
+               * Heading for the additional-info block.
+               */
+              title: string;
+            }
+          }
+        }
+      }
+
+      /**
+       * Threshold config for autoShowDismissMode (page count or seconds).
+       */
+      export interface AutoShowDismissConfig {
+        /**
+         * Pages-viewed threshold when autoShowDismissMode = after_pages.
+         */
+        pageCount?: number | null;
+
+        /**
+         * Seconds-on-page threshold when autoShowDismissMode = after_seconds.
+         */
+        seconds?: number | null;
+      }
+
+      /**
+       * Visual options for the modals (layout/position/colors).
+       */
+      export interface GuiOptions {
+        /**
+         * Visual options for the initial consent modal.
+         */
+        consentModal?: GuiOptions.ConsentModal | null;
+
+        /**
+         * Global CSS variable overrides applied to both modals.
+         */
+        cssVariables?: GuiOptions.CssVariables | null;
+
+        /**
+         * Visual options for the per-category preferences modal.
+         */
+        preferencesModal?: GuiOptions.PreferencesModal | null;
+      }
+
+      export namespace GuiOptions {
+        /**
+         * Visual options for the initial consent modal.
+         */
+        export interface ConsentModal {
+          /**
+           * Which buttons to render in the consent modal and in what arrangement.
+           */
+          buttonLayout?:
+            | 'AcceptAllNecessaryPreferences'
+            | 'AcceptAllPreferences'
+            | 'AcceptOnly'
+            | 'InformationOnly'
+            | 'PreferencesOnly'
+            | null;
+
+          /**
+           * When true, accept and reject buttons share the same visual weight (no
+           * primary/secondary).
+           */
+          equalWeightButtons?: boolean | null;
+
+          /**
+           * When true, swap accept/reject button order.
+           */
+          flipButtons?: boolean | null;
+
+          /**
+           * Modal layout style (box, bar, cloud, etc.).
+           */
+          layout?: 'bar' | 'bar_inline' | 'box' | 'box_inline' | 'box_wide' | 'cloud' | 'cloud_inline' | null;
+
+          /**
+           * Where the modal anchors on the viewport (e.g. bottom_left, top_right,
+           * middle_center).
+           */
+          position?:
+            | 'bottom'
+            | 'bottom_center'
+            | 'bottom_left'
+            | 'bottom_right'
+            | 'middle'
+            | 'middle_center'
+            | 'middle_left'
+            | 'middle_right'
+            | 'top'
+            | 'top_center'
+            | 'top_left'
+            | 'top_right'
+            | null;
+
+          /**
+           * Show an X to dismiss the modal without choosing.
+           */
+          showCloseIcon?: boolean | null;
+        }
+
+        /**
+         * Global CSS variable overrides applied to both modals.
+         */
+        export interface CssVariables {
+          /**
+           * CSS length, e.g. "4px" or "0.25rem".
+           */
+          buttonBorderRadius?: string | null;
+
+          /**
+           * CSS color for the per-category block background in the preferences modal.
+           */
+          cookieCategoryBlockBg?: string | null;
+
+          /**
+           * CSS color for the per-category block background on hover.
+           */
+          cookieCategoryBlockHoverBg?: string | null;
+
+          /**
+           * CSS color for the modal footer background.
+           */
+          footerBg?: string | null;
+
+          /**
+           * CSS color for footer text.
+           */
+          footerColor?: string | null;
+
+          /**
+           * CSS color for footer links.
+           */
+          footerLinkColor?: string | null;
+
+          /**
+           * CSS color for footer links on hover.
+           */
+          footerLinkHoverColor?: string | null;
+
+          /**
+           * CSS color for the modal background.
+           */
+          modalBg?: string | null;
+
+          /**
+           * CSS length for modal corner radius.
+           */
+          modalBorderRadius?: string | null;
+
+          /**
+           * CSS color for the primary button background.
+           */
+          primaryButtonBg?: string | null;
+
+          /**
+           * CSS color for primary button text.
+           */
+          primaryButtonColor?: string | null;
+
+          /**
+           * CSS color for the primary button background on hover.
+           */
+          primaryButtonHoverBg?: string | null;
+
+          /**
+           * CSS color for primary button text on hover.
+           */
+          primaryButtonHoverColor?: string | null;
+
+          /**
+           * CSS color for primary text in the modal body.
+           */
+          primaryTextColor?: string | null;
+
+          /**
+           * CSS color for the secondary button background.
+           */
+          secondaryButtonBg?: string | null;
+
+          /**
+           * CSS color for secondary button text.
+           */
+          secondaryButtonColor?: string | null;
+
+          /**
+           * CSS color for secondary button background on hover.
+           */
+          secondaryButtonHoverBg?: string | null;
+
+          /**
+           * CSS color for secondary button text on hover.
+           */
+          secondaryButtonHoverColor?: string | null;
+
+          /**
+           * CSS color for secondary text in the modal body.
+           */
+          secondaryTextColor?: string | null;
+
+          /**
+           * CSS color for the "on" state of category toggles.
+           */
+          toggleOnBg?: string | null;
+        }
+
+        /**
+         * Visual options for the per-category preferences modal.
+         */
+        export interface PreferencesModal {
+          /**
+           * Button layout for the preferences modal.
+           */
+          buttonLayout?: 'AcceptAllRejectAllSave' | 'AcceptAllSave' | null;
+
+          /**
+           * When true, accept/reject share the same visual weight.
+           */
+          equalWeightButtons?: boolean | null;
+
+          /**
+           * When true, swap accept/reject button order.
+           */
+          flipButtons?: boolean | null;
+
+          /**
+           * Preferences modal layout (box, bar, bar_wide).
+           */
+          layout?: 'bar' | 'bar_wide' | 'box' | null;
+
+          /**
+           * Preferences modal anchor (left, right).
+           */
+          position?: 'left' | 'right' | null;
         }
       }
     }
@@ -3539,12 +9588,12 @@ export namespace ConsentSettingUpdateParams {
     /**
      * Threshold config for autoShowDismissMode (page count or seconds).
      */
-    autoShowDismissConfig?: unknown | null;
+    autoShowDismissConfig?: Default.AutoShowDismissConfig | null;
 
     /**
      * How the modal is treated as dismissed (never, after_pages, after_seconds).
      */
-    autoShowDismissMode?: string | null;
+    autoShowDismissMode?: 'after_pages' | 'after_seconds' | 'never' | null;
 
     /**
      * When true, the rest of the page is locked behind a backdrop until the user
@@ -3555,7 +9604,7 @@ export namespace ConsentSettingUpdateParams {
     /**
      * Visual options for the modals (layout/position/colors).
      */
-    guiOptions?: unknown | null;
+    guiOptions?: Default.GuiOptions | null;
 
     /**
      * When true, the modal is suppressed for known bot user agents.
@@ -3619,12 +9668,444 @@ export namespace ConsentSettingUpdateParams {
         /**
          * Translated copy for the initial consent modal.
          */
-        consentModal?: unknown | null;
+        consentModal?: Value.ConsentModal | null;
 
         /**
          * Translated copy for the preferences modal.
          */
-        preferencesModal?: unknown | null;
+        preferencesModal?: Value.PreferencesModal | null;
+      }
+
+      export namespace Value {
+        /**
+         * Translated copy for the initial consent modal.
+         */
+        export interface ConsentModal {
+          /**
+           * Label for the "accept all" button.
+           */
+          acceptAllBtn: string;
+
+          /**
+           * Body text shown in the consent modal.
+           */
+          description: string;
+
+          /**
+           * Label for the "reject all" / "necessary only" button.
+           */
+          rejectAllBtn: string;
+
+          /**
+           * Label for the button that opens the preferences modal.
+           */
+          showPreferencesBtn: string;
+
+          /**
+           * Heading shown at the top of the consent modal.
+           */
+          title: string;
+
+          /**
+           * Accessibility label for the close (X) icon.
+           */
+          closeIconLabel?: string | null;
+
+          /**
+           * Optional footer HTML/text shown below the body.
+           */
+          footer?: string | null;
+
+          /**
+           * Optional text shown when the browser is sending Sec-GPC: 1.
+           */
+          gpcNotification?: string | null;
+
+          /**
+           * Link label for the privacy policy (defaults to "Privacy Policy").
+           */
+          privacyPolicyLabel?: string | null;
+
+          /**
+           * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
+           * (/legal/privacy) so one config can run across multiple domains. javascript:,
+           * data:, and vbscript: schemes are rejected.
+           */
+          privacyPolicyUrl?: string | null;
+
+          /**
+           * Optional message shown when the consent revision has bumped (re-prompt copy).
+           */
+          revisionMessage?: string | null;
+
+          /**
+           * Link label for terms of service (defaults to "Terms of Service").
+           */
+          termsOfServiceLabel?: string | null;
+
+          /**
+           * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
+           * relative path only.
+           */
+          termsOfServiceUrl?: string | null;
+        }
+
+        /**
+         * Translated copy for the preferences modal.
+         */
+        export interface PreferencesModal {
+          /**
+           * Label for the "accept all" button in the preferences modal.
+           */
+          acceptAllBtn: string;
+
+          /**
+           * Accessibility label for the close (X) icon.
+           */
+          closeIconLabel: string;
+
+          /**
+           * Label for the "reject all" / "necessary only" button.
+           */
+          rejectAllBtn: string;
+
+          /**
+           * Label for the "save my choices" button.
+           */
+          savePreferencesBtn: string;
+
+          /**
+           * Per-category sections plus a leading general section. The server backfills
+           * sections for each defined category if absent.
+           */
+          sections: Array<PreferencesModal.Section>;
+
+          /**
+           * Heading for the preferences modal.
+           */
+          title: string;
+
+          /**
+           * Optional collapsible info block rendered after the category sections. Renders
+           * only when both title and body are non-empty. Use it for long-form text unrelated
+           * to any specific category (e.g. a third-party advertisers disclosure).
+           */
+          additionalInfo?: PreferencesModal.AdditionalInfo | null;
+
+          /**
+           * Pluralizable label for the "N services" counter (e.g. "Service|Services").
+           */
+          serviceCounterLabel?: string | null;
+        }
+
+        export namespace PreferencesModal {
+          export interface Section {
+            /**
+             * Body text for this preferences-modal section.
+             */
+            description: string;
+
+            /**
+             * Heading for this preferences-modal section.
+             */
+            title: string;
+
+            /**
+             * Optional disclosure table listing cookies/services in this section.
+             */
+            cookieTable?: Section.CookieTable | null;
+
+            /**
+             * Category value this section configures. Use null/omit for the introductory
+             * section that applies to no specific category.
+             */
+            linkedCategory?: string | null;
+          }
+
+          export namespace Section {
+            /**
+             * Optional disclosure table listing cookies/services in this section.
+             */
+            export interface CookieTable {
+              /**
+               * Rows of the cookie table — each row is a {key,value} pair (e.g. cookie name →
+               * purpose).
+               */
+              body: Array<CookieTable.Body>;
+
+              /**
+               * Header cells. Same {key,value} shape as rows.
+               */
+              headers: Array<CookieTable.Header>;
+
+              /**
+               * Optional table caption.
+               */
+              caption?: string | null;
+            }
+
+            export namespace CookieTable {
+              export interface Body {
+                key: string;
+
+                value: string;
+              }
+
+              export interface Header {
+                key: string;
+
+                value: string;
+              }
+            }
+          }
+
+          /**
+           * Optional collapsible info block rendered after the category sections. Renders
+           * only when both title and body are non-empty. Use it for long-form text unrelated
+           * to any specific category (e.g. a third-party advertisers disclosure).
+           */
+          export interface AdditionalInfo {
+            /**
+             * Body text for the additional-info block. Supports the rich-text markdown subset
+             * used by section descriptions: line breaks, [text](url) links (https:// or
+             * relative paths), and **bold**. HTML is stripped.
+             */
+            body: string;
+
+            /**
+             * Heading for the additional-info block.
+             */
+            title: string;
+          }
+        }
+      }
+    }
+
+    /**
+     * Threshold config for autoShowDismissMode (page count or seconds).
+     */
+    export interface AutoShowDismissConfig {
+      /**
+       * Pages-viewed threshold when autoShowDismissMode = after_pages.
+       */
+      pageCount?: number | null;
+
+      /**
+       * Seconds-on-page threshold when autoShowDismissMode = after_seconds.
+       */
+      seconds?: number | null;
+    }
+
+    /**
+     * Visual options for the modals (layout/position/colors).
+     */
+    export interface GuiOptions {
+      /**
+       * Visual options for the initial consent modal.
+       */
+      consentModal?: GuiOptions.ConsentModal | null;
+
+      /**
+       * Global CSS variable overrides applied to both modals.
+       */
+      cssVariables?: GuiOptions.CssVariables | null;
+
+      /**
+       * Visual options for the per-category preferences modal.
+       */
+      preferencesModal?: GuiOptions.PreferencesModal | null;
+    }
+
+    export namespace GuiOptions {
+      /**
+       * Visual options for the initial consent modal.
+       */
+      export interface ConsentModal {
+        /**
+         * Which buttons to render in the consent modal and in what arrangement.
+         */
+        buttonLayout?:
+          | 'AcceptAllNecessaryPreferences'
+          | 'AcceptAllPreferences'
+          | 'AcceptOnly'
+          | 'InformationOnly'
+          | 'PreferencesOnly'
+          | null;
+
+        /**
+         * When true, accept and reject buttons share the same visual weight (no
+         * primary/secondary).
+         */
+        equalWeightButtons?: boolean | null;
+
+        /**
+         * When true, swap accept/reject button order.
+         */
+        flipButtons?: boolean | null;
+
+        /**
+         * Modal layout style (box, bar, cloud, etc.).
+         */
+        layout?: 'bar' | 'bar_inline' | 'box' | 'box_inline' | 'box_wide' | 'cloud' | 'cloud_inline' | null;
+
+        /**
+         * Where the modal anchors on the viewport (e.g. bottom_left, top_right,
+         * middle_center).
+         */
+        position?:
+          | 'bottom'
+          | 'bottom_center'
+          | 'bottom_left'
+          | 'bottom_right'
+          | 'middle'
+          | 'middle_center'
+          | 'middle_left'
+          | 'middle_right'
+          | 'top'
+          | 'top_center'
+          | 'top_left'
+          | 'top_right'
+          | null;
+
+        /**
+         * Show an X to dismiss the modal without choosing.
+         */
+        showCloseIcon?: boolean | null;
+      }
+
+      /**
+       * Global CSS variable overrides applied to both modals.
+       */
+      export interface CssVariables {
+        /**
+         * CSS length, e.g. "4px" or "0.25rem".
+         */
+        buttonBorderRadius?: string | null;
+
+        /**
+         * CSS color for the per-category block background in the preferences modal.
+         */
+        cookieCategoryBlockBg?: string | null;
+
+        /**
+         * CSS color for the per-category block background on hover.
+         */
+        cookieCategoryBlockHoverBg?: string | null;
+
+        /**
+         * CSS color for the modal footer background.
+         */
+        footerBg?: string | null;
+
+        /**
+         * CSS color for footer text.
+         */
+        footerColor?: string | null;
+
+        /**
+         * CSS color for footer links.
+         */
+        footerLinkColor?: string | null;
+
+        /**
+         * CSS color for footer links on hover.
+         */
+        footerLinkHoverColor?: string | null;
+
+        /**
+         * CSS color for the modal background.
+         */
+        modalBg?: string | null;
+
+        /**
+         * CSS length for modal corner radius.
+         */
+        modalBorderRadius?: string | null;
+
+        /**
+         * CSS color for the primary button background.
+         */
+        primaryButtonBg?: string | null;
+
+        /**
+         * CSS color for primary button text.
+         */
+        primaryButtonColor?: string | null;
+
+        /**
+         * CSS color for the primary button background on hover.
+         */
+        primaryButtonHoverBg?: string | null;
+
+        /**
+         * CSS color for primary button text on hover.
+         */
+        primaryButtonHoverColor?: string | null;
+
+        /**
+         * CSS color for primary text in the modal body.
+         */
+        primaryTextColor?: string | null;
+
+        /**
+         * CSS color for the secondary button background.
+         */
+        secondaryButtonBg?: string | null;
+
+        /**
+         * CSS color for secondary button text.
+         */
+        secondaryButtonColor?: string | null;
+
+        /**
+         * CSS color for secondary button background on hover.
+         */
+        secondaryButtonHoverBg?: string | null;
+
+        /**
+         * CSS color for secondary button text on hover.
+         */
+        secondaryButtonHoverColor?: string | null;
+
+        /**
+         * CSS color for secondary text in the modal body.
+         */
+        secondaryTextColor?: string | null;
+
+        /**
+         * CSS color for the "on" state of category toggles.
+         */
+        toggleOnBg?: string | null;
+      }
+
+      /**
+       * Visual options for the per-category preferences modal.
+       */
+      export interface PreferencesModal {
+        /**
+         * Button layout for the preferences modal.
+         */
+        buttonLayout?: 'AcceptAllRejectAllSave' | 'AcceptAllSave' | null;
+
+        /**
+         * When true, accept/reject share the same visual weight.
+         */
+        equalWeightButtons?: boolean | null;
+
+        /**
+         * When true, swap accept/reject button order.
+         */
+        flipButtons?: boolean | null;
+
+        /**
+         * Preferences modal layout (box, bar, bar_wide).
+         */
+        layout?: 'bar' | 'bar_wide' | 'box' | null;
+
+        /**
+         * Preferences modal anchor (left, right).
+         */
+        position?: 'left' | 'right' | null;
       }
     }
   }
@@ -3694,12 +10175,12 @@ export namespace ConsentSettingUpdateParams {
       /**
        * Threshold config for autoShowDismissMode (page count or seconds).
        */
-      autoShowDismissConfig?: unknown | null;
+      autoShowDismissConfig?: Rule.AutoShowDismissConfig | null;
 
       /**
        * How the modal is treated as dismissed (never, after_pages, after_seconds).
        */
-      autoShowDismissMode?: string | null;
+      autoShowDismissMode?: 'after_pages' | 'after_seconds' | 'never' | null;
 
       /**
        * When true, the rest of the page is locked behind a backdrop until the user
@@ -3710,7 +10191,7 @@ export namespace ConsentSettingUpdateParams {
       /**
        * Visual options for the modals (layout/position/colors).
        */
-      guiOptions?: unknown | null;
+      guiOptions?: Rule.GuiOptions | null;
 
       /**
        * When true, the modal is suppressed for known bot user agents.
@@ -3774,12 +10255,444 @@ export namespace ConsentSettingUpdateParams {
           /**
            * Translated copy for the initial consent modal.
            */
-          consentModal?: unknown | null;
+          consentModal?: Value.ConsentModal | null;
 
           /**
            * Translated copy for the preferences modal.
            */
-          preferencesModal?: unknown | null;
+          preferencesModal?: Value.PreferencesModal | null;
+        }
+
+        export namespace Value {
+          /**
+           * Translated copy for the initial consent modal.
+           */
+          export interface ConsentModal {
+            /**
+             * Label for the "accept all" button.
+             */
+            acceptAllBtn: string;
+
+            /**
+             * Body text shown in the consent modal.
+             */
+            description: string;
+
+            /**
+             * Label for the "reject all" / "necessary only" button.
+             */
+            rejectAllBtn: string;
+
+            /**
+             * Label for the button that opens the preferences modal.
+             */
+            showPreferencesBtn: string;
+
+            /**
+             * Heading shown at the top of the consent modal.
+             */
+            title: string;
+
+            /**
+             * Accessibility label for the close (X) icon.
+             */
+            closeIconLabel?: string | null;
+
+            /**
+             * Optional footer HTML/text shown below the body.
+             */
+            footer?: string | null;
+
+            /**
+             * Optional text shown when the browser is sending Sec-GPC: 1.
+             */
+            gpcNotification?: string | null;
+
+            /**
+             * Link label for the privacy policy (defaults to "Privacy Policy").
+             */
+            privacyPolicyLabel?: string | null;
+
+            /**
+             * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
+             * (/legal/privacy) so one config can run across multiple domains. javascript:,
+             * data:, and vbscript: schemes are rejected.
+             */
+            privacyPolicyUrl?: string | null;
+
+            /**
+             * Optional message shown when the consent revision has bumped (re-prompt copy).
+             */
+            revisionMessage?: string | null;
+
+            /**
+             * Link label for terms of service (defaults to "Terms of Service").
+             */
+            termsOfServiceLabel?: string | null;
+
+            /**
+             * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
+             * relative path only.
+             */
+            termsOfServiceUrl?: string | null;
+          }
+
+          /**
+           * Translated copy for the preferences modal.
+           */
+          export interface PreferencesModal {
+            /**
+             * Label for the "accept all" button in the preferences modal.
+             */
+            acceptAllBtn: string;
+
+            /**
+             * Accessibility label for the close (X) icon.
+             */
+            closeIconLabel: string;
+
+            /**
+             * Label for the "reject all" / "necessary only" button.
+             */
+            rejectAllBtn: string;
+
+            /**
+             * Label for the "save my choices" button.
+             */
+            savePreferencesBtn: string;
+
+            /**
+             * Per-category sections plus a leading general section. The server backfills
+             * sections for each defined category if absent.
+             */
+            sections: Array<PreferencesModal.Section>;
+
+            /**
+             * Heading for the preferences modal.
+             */
+            title: string;
+
+            /**
+             * Optional collapsible info block rendered after the category sections. Renders
+             * only when both title and body are non-empty. Use it for long-form text unrelated
+             * to any specific category (e.g. a third-party advertisers disclosure).
+             */
+            additionalInfo?: PreferencesModal.AdditionalInfo | null;
+
+            /**
+             * Pluralizable label for the "N services" counter (e.g. "Service|Services").
+             */
+            serviceCounterLabel?: string | null;
+          }
+
+          export namespace PreferencesModal {
+            export interface Section {
+              /**
+               * Body text for this preferences-modal section.
+               */
+              description: string;
+
+              /**
+               * Heading for this preferences-modal section.
+               */
+              title: string;
+
+              /**
+               * Optional disclosure table listing cookies/services in this section.
+               */
+              cookieTable?: Section.CookieTable | null;
+
+              /**
+               * Category value this section configures. Use null/omit for the introductory
+               * section that applies to no specific category.
+               */
+              linkedCategory?: string | null;
+            }
+
+            export namespace Section {
+              /**
+               * Optional disclosure table listing cookies/services in this section.
+               */
+              export interface CookieTable {
+                /**
+                 * Rows of the cookie table — each row is a {key,value} pair (e.g. cookie name →
+                 * purpose).
+                 */
+                body: Array<CookieTable.Body>;
+
+                /**
+                 * Header cells. Same {key,value} shape as rows.
+                 */
+                headers: Array<CookieTable.Header>;
+
+                /**
+                 * Optional table caption.
+                 */
+                caption?: string | null;
+              }
+
+              export namespace CookieTable {
+                export interface Body {
+                  key: string;
+
+                  value: string;
+                }
+
+                export interface Header {
+                  key: string;
+
+                  value: string;
+                }
+              }
+            }
+
+            /**
+             * Optional collapsible info block rendered after the category sections. Renders
+             * only when both title and body are non-empty. Use it for long-form text unrelated
+             * to any specific category (e.g. a third-party advertisers disclosure).
+             */
+            export interface AdditionalInfo {
+              /**
+               * Body text for the additional-info block. Supports the rich-text markdown subset
+               * used by section descriptions: line breaks, [text](url) links (https:// or
+               * relative paths), and **bold**. HTML is stripped.
+               */
+              body: string;
+
+              /**
+               * Heading for the additional-info block.
+               */
+              title: string;
+            }
+          }
+        }
+      }
+
+      /**
+       * Threshold config for autoShowDismissMode (page count or seconds).
+       */
+      export interface AutoShowDismissConfig {
+        /**
+         * Pages-viewed threshold when autoShowDismissMode = after_pages.
+         */
+        pageCount?: number | null;
+
+        /**
+         * Seconds-on-page threshold when autoShowDismissMode = after_seconds.
+         */
+        seconds?: number | null;
+      }
+
+      /**
+       * Visual options for the modals (layout/position/colors).
+       */
+      export interface GuiOptions {
+        /**
+         * Visual options for the initial consent modal.
+         */
+        consentModal?: GuiOptions.ConsentModal | null;
+
+        /**
+         * Global CSS variable overrides applied to both modals.
+         */
+        cssVariables?: GuiOptions.CssVariables | null;
+
+        /**
+         * Visual options for the per-category preferences modal.
+         */
+        preferencesModal?: GuiOptions.PreferencesModal | null;
+      }
+
+      export namespace GuiOptions {
+        /**
+         * Visual options for the initial consent modal.
+         */
+        export interface ConsentModal {
+          /**
+           * Which buttons to render in the consent modal and in what arrangement.
+           */
+          buttonLayout?:
+            | 'AcceptAllNecessaryPreferences'
+            | 'AcceptAllPreferences'
+            | 'AcceptOnly'
+            | 'InformationOnly'
+            | 'PreferencesOnly'
+            | null;
+
+          /**
+           * When true, accept and reject buttons share the same visual weight (no
+           * primary/secondary).
+           */
+          equalWeightButtons?: boolean | null;
+
+          /**
+           * When true, swap accept/reject button order.
+           */
+          flipButtons?: boolean | null;
+
+          /**
+           * Modal layout style (box, bar, cloud, etc.).
+           */
+          layout?: 'bar' | 'bar_inline' | 'box' | 'box_inline' | 'box_wide' | 'cloud' | 'cloud_inline' | null;
+
+          /**
+           * Where the modal anchors on the viewport (e.g. bottom_left, top_right,
+           * middle_center).
+           */
+          position?:
+            | 'bottom'
+            | 'bottom_center'
+            | 'bottom_left'
+            | 'bottom_right'
+            | 'middle'
+            | 'middle_center'
+            | 'middle_left'
+            | 'middle_right'
+            | 'top'
+            | 'top_center'
+            | 'top_left'
+            | 'top_right'
+            | null;
+
+          /**
+           * Show an X to dismiss the modal without choosing.
+           */
+          showCloseIcon?: boolean | null;
+        }
+
+        /**
+         * Global CSS variable overrides applied to both modals.
+         */
+        export interface CssVariables {
+          /**
+           * CSS length, e.g. "4px" or "0.25rem".
+           */
+          buttonBorderRadius?: string | null;
+
+          /**
+           * CSS color for the per-category block background in the preferences modal.
+           */
+          cookieCategoryBlockBg?: string | null;
+
+          /**
+           * CSS color for the per-category block background on hover.
+           */
+          cookieCategoryBlockHoverBg?: string | null;
+
+          /**
+           * CSS color for the modal footer background.
+           */
+          footerBg?: string | null;
+
+          /**
+           * CSS color for footer text.
+           */
+          footerColor?: string | null;
+
+          /**
+           * CSS color for footer links.
+           */
+          footerLinkColor?: string | null;
+
+          /**
+           * CSS color for footer links on hover.
+           */
+          footerLinkHoverColor?: string | null;
+
+          /**
+           * CSS color for the modal background.
+           */
+          modalBg?: string | null;
+
+          /**
+           * CSS length for modal corner radius.
+           */
+          modalBorderRadius?: string | null;
+
+          /**
+           * CSS color for the primary button background.
+           */
+          primaryButtonBg?: string | null;
+
+          /**
+           * CSS color for primary button text.
+           */
+          primaryButtonColor?: string | null;
+
+          /**
+           * CSS color for the primary button background on hover.
+           */
+          primaryButtonHoverBg?: string | null;
+
+          /**
+           * CSS color for primary button text on hover.
+           */
+          primaryButtonHoverColor?: string | null;
+
+          /**
+           * CSS color for primary text in the modal body.
+           */
+          primaryTextColor?: string | null;
+
+          /**
+           * CSS color for the secondary button background.
+           */
+          secondaryButtonBg?: string | null;
+
+          /**
+           * CSS color for secondary button text.
+           */
+          secondaryButtonColor?: string | null;
+
+          /**
+           * CSS color for secondary button background on hover.
+           */
+          secondaryButtonHoverBg?: string | null;
+
+          /**
+           * CSS color for secondary button text on hover.
+           */
+          secondaryButtonHoverColor?: string | null;
+
+          /**
+           * CSS color for secondary text in the modal body.
+           */
+          secondaryTextColor?: string | null;
+
+          /**
+           * CSS color for the "on" state of category toggles.
+           */
+          toggleOnBg?: string | null;
+        }
+
+        /**
+         * Visual options for the per-category preferences modal.
+         */
+        export interface PreferencesModal {
+          /**
+           * Button layout for the preferences modal.
+           */
+          buttonLayout?: 'AcceptAllRejectAllSave' | 'AcceptAllSave' | null;
+
+          /**
+           * When true, accept/reject share the same visual weight.
+           */
+          equalWeightButtons?: boolean | null;
+
+          /**
+           * When true, swap accept/reject button order.
+           */
+          flipButtons?: boolean | null;
+
+          /**
+           * Preferences modal layout (box, bar, bar_wide).
+           */
+          layout?: 'bar' | 'bar_wide' | 'box' | null;
+
+          /**
+           * Preferences modal anchor (left, right).
+           */
+          position?: 'left' | 'right' | null;
         }
       }
     }

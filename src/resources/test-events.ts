@@ -113,13 +113,19 @@ export interface TestEventListResponse {
 
   visitorId: string;
 
-  defaultProperties?: unknown | null;
+  defaultProperties?: {
+    [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+  } | null;
 
-  eventProperties?: unknown | null;
+  eventProperties?: {
+    [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+  } | null;
 
   rawData?: string | null;
 
-  requestContext?: unknown | null;
+  requestContext?: {
+    [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+  } | null;
 
   sourceId?: string | null;
 
@@ -127,7 +133,9 @@ export interface TestEventListResponse {
 
   sourceType?: string | null;
 
-  userProperties?: unknown | null;
+  userProperties?: {
+    [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+  } | null;
 }
 
 export interface TestEventCreateResponse {
@@ -167,13 +175,19 @@ export interface TestEventRetrieveResponse {
 
   visitorId: string;
 
-  defaultProperties?: unknown | null;
+  defaultProperties?: {
+    [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+  } | null;
 
-  eventProperties?: unknown | null;
+  eventProperties?: {
+    [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+  } | null;
 
   rawData?: string | null;
 
-  requestContext?: unknown | null;
+  requestContext?: {
+    [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+  } | null;
 
   sourceId?: string | null;
 
@@ -181,7 +195,9 @@ export interface TestEventRetrieveResponse {
 
   sourceType?: string | null;
 
-  userProperties?: unknown | null;
+  userProperties?: {
+    [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+  } | null;
 }
 
 export interface TestEventDispatchesResponse {
@@ -225,7 +241,9 @@ export namespace TestEventDispatchesResponse {
     /**
      * The mapped payload recorded for this dispatch.
      */
-    payload?: unknown | null;
+    payload?: {
+      [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+    } | null;
 
     /**
      * Whether this send succeeded. Null while the attempt is still in flight.
@@ -257,7 +275,9 @@ export interface TestEventCreateParams {
   /**
    * Event-level properties available to destination mappings.
    */
-  eventProperties?: unknown | null;
+  eventProperties?: {
+    [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+  } | null;
 
   /**
    * Source to attribute the event to. Defaults to the account's first enabled source
@@ -268,7 +288,9 @@ export interface TestEventCreateParams {
   /**
    * Person-level properties available to destination mappings.
    */
-  userProperties?: unknown | null;
+  userProperties?: {
+    [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+  } | null;
 
   /**
    * Visitor identity to send the event as. Generated when omitted. Letters, numbers,
@@ -459,6 +481,20 @@ export namespace TestEventCreateParams {
      * The Google Click ID. Ex: gclid123
      */
     gclid?: string | null;
+
+    /**
+     * The Gravity attribution ID, captured from the `graid` URL parameter on the
+     * landing page. Gravity resolves it to the campaign, publisher, and ad IDs
+     * server-side. Ex: graid-abc123
+     */
+    graid?: string | null;
+
+    /**
+     * The Gravity click ID, captured from the `grclid` URL parameter that Gravity
+     * (trygravity.com) appends to ad click-through URLs on the landing page. Ex:
+     * grclid-abc123
+     */
+    grclid?: string | null;
 
     /**
      * The host of the current page. Ex: example.com

@@ -200,20 +200,26 @@ export namespace DataGovernanceListResponse {
        * All child nodes must match. Each child is itself a logic node (leaf `condition`
        * or combinator).
        */
-      AND?: Array<unknown> | null;
+      AND?: Array<{
+        [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+      }> | null;
 
       condition?: Logic.Condition | null;
 
       /**
        * Negates a single child logic node.
        */
-      NOT?: unknown;
+      NOT?: {
+        [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+      } | null;
 
       /**
        * Any child node must match. Each child is itself a logic node (leaf `condition`
        * or combinator).
        */
-      OR?: Array<unknown> | null;
+      OR?: Array<{
+        [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+      }> | null;
     }
 
     export namespace Logic {
@@ -395,20 +401,26 @@ export namespace DataGovernanceCreateResponse {
        * All child nodes must match. Each child is itself a logic node (leaf `condition`
        * or combinator).
        */
-      AND?: Array<unknown> | null;
+      AND?: Array<{
+        [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+      }> | null;
 
       condition?: Logic.Condition | null;
 
       /**
        * Negates a single child logic node.
        */
-      NOT?: unknown;
+      NOT?: {
+        [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+      } | null;
 
       /**
        * Any child node must match. Each child is itself a logic node (leaf `condition`
        * or combinator).
        */
-      OR?: Array<unknown> | null;
+      OR?: Array<{
+        [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+      }> | null;
     }
 
     export namespace Logic {
@@ -590,20 +602,26 @@ export namespace DataGovernanceRetrieveResponse {
        * All child nodes must match. Each child is itself a logic node (leaf `condition`
        * or combinator).
        */
-      AND?: Array<unknown> | null;
+      AND?: Array<{
+        [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+      }> | null;
 
       condition?: Logic.Condition | null;
 
       /**
        * Negates a single child logic node.
        */
-      NOT?: unknown;
+      NOT?: {
+        [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+      } | null;
 
       /**
        * Any child node must match. Each child is itself a logic node (leaf `condition`
        * or combinator).
        */
-      OR?: Array<unknown> | null;
+      OR?: Array<{
+        [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+      }> | null;
     }
 
     export namespace Logic {
@@ -785,20 +803,26 @@ export namespace DataGovernanceUpdateResponse {
        * All child nodes must match. Each child is itself a logic node (leaf `condition`
        * or combinator).
        */
-      AND?: Array<unknown> | null;
+      AND?: Array<{
+        [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+      }> | null;
 
       condition?: Logic.Condition | null;
 
       /**
        * Negates a single child logic node.
        */
-      NOT?: unknown;
+      NOT?: {
+        [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+      } | null;
 
       /**
        * Any child node must match. Each child is itself a logic node (leaf `condition`
        * or combinator).
        */
-      OR?: Array<unknown> | null;
+      OR?: Array<{
+        [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+      }> | null;
     }
 
     export namespace Logic {
@@ -997,20 +1021,26 @@ export namespace DataGovernanceUpdateParams {
        * All child nodes must match. Each child is itself a logic node (leaf `condition`
        * or combinator).
        */
-      AND?: Array<unknown> | null;
+      AND?: Array<{
+        [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+      }> | null;
 
       condition?: Logic.Condition | null;
 
       /**
        * Negates a single child logic node.
        */
-      NOT?: unknown;
+      NOT?: {
+        [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+      } | null;
 
       /**
        * Any child node must match. Each child is itself a logic node (leaf `condition`
        * or combinator).
        */
-      OR?: Array<unknown> | null;
+      OR?: Array<{
+        [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+      }> | null;
     }
 
     export namespace Logic {

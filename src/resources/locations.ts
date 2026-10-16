@@ -70,7 +70,7 @@ export namespace LocationListResponse {
 
     additionalAddresses?: Array<Entity.AdditionalAddress> | null;
 
-    center?: unknown | null;
+    center?: Entity.Center | null;
 
     city?: string | null;
 
@@ -131,6 +131,12 @@ export namespace LocationListResponse {
 
       zip?: string | null;
     }
+
+    export interface Center {
+      latitude: number;
+
+      longitude: number;
+    }
   }
 }
 
@@ -141,7 +147,7 @@ export interface LocationCreateResponse {
 
   additionalAddresses?: Array<LocationCreateResponse.AdditionalAddress> | null;
 
-  center?: unknown | null;
+  center?: LocationCreateResponse.Center | null;
 
   city?: string | null;
 
@@ -202,6 +208,12 @@ export namespace LocationCreateResponse {
 
     zip?: string | null;
   }
+
+  export interface Center {
+    latitude: number;
+
+    longitude: number;
+  }
 }
 
 export interface LocationUpdateResponse {
@@ -211,7 +223,7 @@ export interface LocationUpdateResponse {
 
   additionalAddresses?: Array<LocationUpdateResponse.AdditionalAddress> | null;
 
-  center?: unknown | null;
+  center?: LocationUpdateResponse.Center | null;
 
   city?: string | null;
 
@@ -272,6 +284,12 @@ export namespace LocationUpdateResponse {
 
     zip?: string | null;
   }
+
+  export interface Center {
+    latitude: number;
+
+    longitude: number;
+  }
 }
 
 export interface LocationEmbedCodeResponse {
@@ -286,7 +304,7 @@ export interface LocationEmbedCodeResponse {
 export interface LocationCreateParams {
   additionalAddresses?: Array<LocationCreateParams.AdditionalAddress> | null;
 
-  center?: unknown | null;
+  center?: LocationCreateParams.Center | null;
 
   city?: string | null;
 
@@ -343,12 +361,18 @@ export namespace LocationCreateParams {
 
     zip?: string | null;
   }
+
+  export interface Center {
+    latitude: number;
+
+    longitude: number;
+  }
 }
 
 export interface LocationUpdateParams {
   additionalAddresses?: Array<LocationUpdateParams.AdditionalAddress> | null;
 
-  center?: unknown | null;
+  center?: LocationUpdateParams.Center | null;
 
   city?: string | null;
 
@@ -404,6 +428,12 @@ export namespace LocationUpdateParams {
     websiteUrl?: string | null;
 
     zip?: string | null;
+  }
+
+  export interface Center {
+    latitude: number;
+
+    longitude: number;
   }
 }
 

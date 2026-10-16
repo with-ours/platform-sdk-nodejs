@@ -110,7 +110,13 @@ export interface TagManagerVariableListResponse {
    * Default value returned when no rule matches. JSON value — type depends on
    * `type`.
    */
-  defaultValue?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+  defaultValue?:
+    | string
+    | null
+    | number
+    | boolean
+    | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+    | { [key: string]: unknown };
 
   enabled?: boolean | null;
 
@@ -123,7 +129,13 @@ export interface TagManagerVariableListResponse {
   /**
    * Optional lookup table for `LookUpTable`-style variables. JSON value.
    */
-  lookUpTable?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+  lookUpTable?:
+    | string
+    | null
+    | number
+    | boolean
+    | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+    | { [key: string]: unknown };
 
   updatedAt?: string | null;
 }
@@ -155,7 +167,13 @@ export interface TagManagerVariableCreateResponse {
    * Default value returned when no rule matches. JSON value — type depends on
    * `type`.
    */
-  defaultValue?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+  defaultValue?:
+    | string
+    | null
+    | number
+    | boolean
+    | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+    | { [key: string]: unknown };
 
   enabled?: boolean | null;
 
@@ -168,7 +186,13 @@ export interface TagManagerVariableCreateResponse {
   /**
    * Optional lookup table for `LookUpTable`-style variables. JSON value.
    */
-  lookUpTable?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+  lookUpTable?:
+    | string
+    | null
+    | number
+    | boolean
+    | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+    | { [key: string]: unknown };
 
   updatedAt?: string | null;
 }
@@ -200,7 +224,13 @@ export interface TagManagerVariableRetrieveResponse {
    * Default value returned when no rule matches. JSON value — type depends on
    * `type`.
    */
-  defaultValue?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+  defaultValue?:
+    | string
+    | null
+    | number
+    | boolean
+    | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+    | { [key: string]: unknown };
 
   enabled?: boolean | null;
 
@@ -213,7 +243,13 @@ export interface TagManagerVariableRetrieveResponse {
   /**
    * Optional lookup table for `LookUpTable`-style variables. JSON value.
    */
-  lookUpTable?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+  lookUpTable?:
+    | string
+    | null
+    | number
+    | boolean
+    | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+    | { [key: string]: unknown };
 
   updatedAt?: string | null;
 }
@@ -245,7 +281,13 @@ export interface TagManagerVariableUpdateResponse {
    * Default value returned when no rule matches. JSON value — type depends on
    * `type`.
    */
-  defaultValue?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+  defaultValue?:
+    | string
+    | null
+    | number
+    | boolean
+    | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+    | { [key: string]: unknown };
 
   enabled?: boolean | null;
 
@@ -258,7 +300,13 @@ export interface TagManagerVariableUpdateResponse {
   /**
    * Optional lookup table for `LookUpTable`-style variables. JSON value.
    */
-  lookUpTable?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+  lookUpTable?:
+    | string
+    | null
+    | number
+    | boolean
+    | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+    | { [key: string]: unknown };
 
   updatedAt?: string | null;
 }
@@ -332,7 +380,13 @@ export namespace TagManagerVariableTypesResponse {
       /**
        * Default value when the caller omits the parameter on create.
        */
-      default?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+      default?:
+        | string
+        | null
+        | number
+        | boolean
+        | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+        | { [key: string]: unknown };
 
       description?: string | null;
 
@@ -395,21 +449,39 @@ export interface TagManagerVariableCreateParams {
   /**
    * Optional default value. JSON value of any type.
    */
-  defaultValue?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+  defaultValue?:
+    | string
+    | null
+    | number
+    | boolean
+    | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+    | { [key: string]: unknown };
 
   enabled?: boolean | null;
 
   /**
    * Optional lookup table for `LookUpTable` variables.
    */
-  lookUpTable?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+  lookUpTable?:
+    | string
+    | null
+    | number
+    | boolean
+    | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+    | { [key: string]: unknown };
 }
 
 export interface TagManagerVariableUpdateParams {
   /**
    * Updated default value. JSON value of any type.
    */
-  defaultValue?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+  defaultValue?:
+    | string
+    | null
+    | number
+    | boolean
+    | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+    | { [key: string]: unknown };
 
   /**
    * Pause/resume the variable without changing other fields.
@@ -419,7 +491,13 @@ export interface TagManagerVariableUpdateParams {
   /**
    * Updated lookup table payload.
    */
-  lookUpTable?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+  lookUpTable?:
+    | string
+    | null
+    | number
+    | boolean
+    | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+    | { [key: string]: unknown };
 
   /**
    * Updated variable name.

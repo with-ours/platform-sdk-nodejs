@@ -112,7 +112,7 @@ export namespace FunnelListResponse {
     /**
      * Versioned funnel definition with typed steps and filters.
      */
-    queryDefinition: unknown;
+    queryDefinition: Entity.QueryDefinition;
 
     status: 'READY' | 'PROCESSING';
 
@@ -126,6 +126,198 @@ export namespace FunnelListResponse {
   }
 
   export namespace Entity {
+    /**
+     * Versioned funnel definition with typed steps and filters.
+     */
+    export interface QueryDefinition {
+      counting: 'unique' | 'events' | 'sessions';
+
+      identity: 'session' | 'visitor';
+
+      kind: 'funnel';
+
+      order: 'ordered' | 'any';
+
+      reentry: 'first' | 'best';
+
+      steps: Array<QueryDefinition.Step>;
+
+      version: 1;
+
+      windowMs: number;
+
+      entryFilter?: QueryDefinition.EntryFilter;
+
+      filter?: QueryDefinition.Filter;
+    }
+
+    export namespace QueryDefinition {
+      export interface Step {
+        id: string;
+
+        eventName: string;
+
+        name: string;
+
+        filter?: Step.Filter;
+      }
+
+      export namespace Step {
+        export interface Filter {
+          filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+          version: 1;
+        }
+
+        export namespace Filter {
+          export interface UnionMember0 {
+            children: Array<unknown>;
+
+            kind: 'and' | 'or';
+          }
+
+          export interface UnionMember1 {
+            child: unknown;
+
+            kind: 'not';
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
+        }
+      }
+
+      export interface EntryFilter {
+        filter: EntryFilter.UnionMember0 | EntryFilter.UnionMember1 | EntryFilter.UnionMember2;
+
+        version: 1;
+      }
+
+      export namespace EntryFilter {
+        export interface UnionMember0 {
+          children: Array<unknown>;
+
+          kind: 'and' | 'or';
+        }
+
+        export interface UnionMember1 {
+          child: unknown;
+
+          kind: 'not';
+        }
+
+        export interface UnionMember2 {
+          kind: 'predicate';
+
+          operator:
+            | 'eq'
+            | 'neq'
+            | 'gt'
+            | 'gte'
+            | 'lt'
+            | 'lte'
+            | 'contains'
+            | 'not_contains'
+            | 'contains_ci'
+            | 'not_contains_ci'
+            | 'starts_with'
+            | 'ends_with'
+            | 'in'
+            | 'not_in'
+            | 'exists'
+            | 'missing'
+            | 'is_null';
+
+          property: string;
+
+          path?: Array<string>;
+
+          type?: 'string' | 'number' | 'boolean';
+
+          value?: string | number | boolean | Array<string | number | boolean>;
+        }
+      }
+
+      export interface Filter {
+        filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+        version: 1;
+      }
+
+      export namespace Filter {
+        export interface UnionMember0 {
+          children: Array<unknown>;
+
+          kind: 'and' | 'or';
+        }
+
+        export interface UnionMember1 {
+          child: unknown;
+
+          kind: 'not';
+        }
+
+        export interface UnionMember2 {
+          kind: 'predicate';
+
+          operator:
+            | 'eq'
+            | 'neq'
+            | 'gt'
+            | 'gte'
+            | 'lt'
+            | 'lte'
+            | 'contains'
+            | 'not_contains'
+            | 'contains_ci'
+            | 'not_contains_ci'
+            | 'starts_with'
+            | 'ends_with'
+            | 'in'
+            | 'not_in'
+            | 'exists'
+            | 'missing'
+            | 'is_null';
+
+          property: string;
+
+          path?: Array<string>;
+
+          type?: 'string' | 'number' | 'boolean';
+
+          value?: string | number | boolean | Array<string | number | boolean>;
+        }
+      }
+    }
+
     export interface ReportDateRange {
       from: string;
 
@@ -144,7 +336,7 @@ export interface FunnelCreateResponse {
   /**
    * Versioned funnel definition with typed steps and filters.
    */
-  queryDefinition: unknown;
+  queryDefinition: FunnelCreateResponse.QueryDefinition;
 
   status: 'READY' | 'PROCESSING';
 
@@ -158,6 +350,198 @@ export interface FunnelCreateResponse {
 }
 
 export namespace FunnelCreateResponse {
+  /**
+   * Versioned funnel definition with typed steps and filters.
+   */
+  export interface QueryDefinition {
+    counting: 'unique' | 'events' | 'sessions';
+
+    identity: 'session' | 'visitor';
+
+    kind: 'funnel';
+
+    order: 'ordered' | 'any';
+
+    reentry: 'first' | 'best';
+
+    steps: Array<QueryDefinition.Step>;
+
+    version: 1;
+
+    windowMs: number;
+
+    entryFilter?: QueryDefinition.EntryFilter;
+
+    filter?: QueryDefinition.Filter;
+  }
+
+  export namespace QueryDefinition {
+    export interface Step {
+      id: string;
+
+      eventName: string;
+
+      name: string;
+
+      filter?: Step.Filter;
+    }
+
+    export namespace Step {
+      export interface Filter {
+        filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+        version: 1;
+      }
+
+      export namespace Filter {
+        export interface UnionMember0 {
+          children: Array<unknown>;
+
+          kind: 'and' | 'or';
+        }
+
+        export interface UnionMember1 {
+          child: unknown;
+
+          kind: 'not';
+        }
+
+        export interface UnionMember2 {
+          kind: 'predicate';
+
+          operator:
+            | 'eq'
+            | 'neq'
+            | 'gt'
+            | 'gte'
+            | 'lt'
+            | 'lte'
+            | 'contains'
+            | 'not_contains'
+            | 'contains_ci'
+            | 'not_contains_ci'
+            | 'starts_with'
+            | 'ends_with'
+            | 'in'
+            | 'not_in'
+            | 'exists'
+            | 'missing'
+            | 'is_null';
+
+          property: string;
+
+          path?: Array<string>;
+
+          type?: 'string' | 'number' | 'boolean';
+
+          value?: string | number | boolean | Array<string | number | boolean>;
+        }
+      }
+    }
+
+    export interface EntryFilter {
+      filter: EntryFilter.UnionMember0 | EntryFilter.UnionMember1 | EntryFilter.UnionMember2;
+
+      version: 1;
+    }
+
+    export namespace EntryFilter {
+      export interface UnionMember0 {
+        children: Array<unknown>;
+
+        kind: 'and' | 'or';
+      }
+
+      export interface UnionMember1 {
+        child: unknown;
+
+        kind: 'not';
+      }
+
+      export interface UnionMember2 {
+        kind: 'predicate';
+
+        operator:
+          | 'eq'
+          | 'neq'
+          | 'gt'
+          | 'gte'
+          | 'lt'
+          | 'lte'
+          | 'contains'
+          | 'not_contains'
+          | 'contains_ci'
+          | 'not_contains_ci'
+          | 'starts_with'
+          | 'ends_with'
+          | 'in'
+          | 'not_in'
+          | 'exists'
+          | 'missing'
+          | 'is_null';
+
+        property: string;
+
+        path?: Array<string>;
+
+        type?: 'string' | 'number' | 'boolean';
+
+        value?: string | number | boolean | Array<string | number | boolean>;
+      }
+    }
+
+    export interface Filter {
+      filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+      version: 1;
+    }
+
+    export namespace Filter {
+      export interface UnionMember0 {
+        children: Array<unknown>;
+
+        kind: 'and' | 'or';
+      }
+
+      export interface UnionMember1 {
+        child: unknown;
+
+        kind: 'not';
+      }
+
+      export interface UnionMember2 {
+        kind: 'predicate';
+
+        operator:
+          | 'eq'
+          | 'neq'
+          | 'gt'
+          | 'gte'
+          | 'lt'
+          | 'lte'
+          | 'contains'
+          | 'not_contains'
+          | 'contains_ci'
+          | 'not_contains_ci'
+          | 'starts_with'
+          | 'ends_with'
+          | 'in'
+          | 'not_in'
+          | 'exists'
+          | 'missing'
+          | 'is_null';
+
+        property: string;
+
+        path?: Array<string>;
+
+        type?: 'string' | 'number' | 'boolean';
+
+        value?: string | number | boolean | Array<string | number | boolean>;
+      }
+    }
+  }
+
   export interface ReportDateRange {
     from: string;
 
@@ -178,7 +562,7 @@ export interface FunnelRetrieveResponse {
   /**
    * Versioned funnel definition with typed steps and filters.
    */
-  queryDefinition: unknown;
+  queryDefinition: FunnelRetrieveResponse.QueryDefinition;
 
   status: 'READY' | 'PROCESSING';
 
@@ -192,6 +576,198 @@ export interface FunnelRetrieveResponse {
 }
 
 export namespace FunnelRetrieveResponse {
+  /**
+   * Versioned funnel definition with typed steps and filters.
+   */
+  export interface QueryDefinition {
+    counting: 'unique' | 'events' | 'sessions';
+
+    identity: 'session' | 'visitor';
+
+    kind: 'funnel';
+
+    order: 'ordered' | 'any';
+
+    reentry: 'first' | 'best';
+
+    steps: Array<QueryDefinition.Step>;
+
+    version: 1;
+
+    windowMs: number;
+
+    entryFilter?: QueryDefinition.EntryFilter;
+
+    filter?: QueryDefinition.Filter;
+  }
+
+  export namespace QueryDefinition {
+    export interface Step {
+      id: string;
+
+      eventName: string;
+
+      name: string;
+
+      filter?: Step.Filter;
+    }
+
+    export namespace Step {
+      export interface Filter {
+        filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+        version: 1;
+      }
+
+      export namespace Filter {
+        export interface UnionMember0 {
+          children: Array<unknown>;
+
+          kind: 'and' | 'or';
+        }
+
+        export interface UnionMember1 {
+          child: unknown;
+
+          kind: 'not';
+        }
+
+        export interface UnionMember2 {
+          kind: 'predicate';
+
+          operator:
+            | 'eq'
+            | 'neq'
+            | 'gt'
+            | 'gte'
+            | 'lt'
+            | 'lte'
+            | 'contains'
+            | 'not_contains'
+            | 'contains_ci'
+            | 'not_contains_ci'
+            | 'starts_with'
+            | 'ends_with'
+            | 'in'
+            | 'not_in'
+            | 'exists'
+            | 'missing'
+            | 'is_null';
+
+          property: string;
+
+          path?: Array<string>;
+
+          type?: 'string' | 'number' | 'boolean';
+
+          value?: string | number | boolean | Array<string | number | boolean>;
+        }
+      }
+    }
+
+    export interface EntryFilter {
+      filter: EntryFilter.UnionMember0 | EntryFilter.UnionMember1 | EntryFilter.UnionMember2;
+
+      version: 1;
+    }
+
+    export namespace EntryFilter {
+      export interface UnionMember0 {
+        children: Array<unknown>;
+
+        kind: 'and' | 'or';
+      }
+
+      export interface UnionMember1 {
+        child: unknown;
+
+        kind: 'not';
+      }
+
+      export interface UnionMember2 {
+        kind: 'predicate';
+
+        operator:
+          | 'eq'
+          | 'neq'
+          | 'gt'
+          | 'gte'
+          | 'lt'
+          | 'lte'
+          | 'contains'
+          | 'not_contains'
+          | 'contains_ci'
+          | 'not_contains_ci'
+          | 'starts_with'
+          | 'ends_with'
+          | 'in'
+          | 'not_in'
+          | 'exists'
+          | 'missing'
+          | 'is_null';
+
+        property: string;
+
+        path?: Array<string>;
+
+        type?: 'string' | 'number' | 'boolean';
+
+        value?: string | number | boolean | Array<string | number | boolean>;
+      }
+    }
+
+    export interface Filter {
+      filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+      version: 1;
+    }
+
+    export namespace Filter {
+      export interface UnionMember0 {
+        children: Array<unknown>;
+
+        kind: 'and' | 'or';
+      }
+
+      export interface UnionMember1 {
+        child: unknown;
+
+        kind: 'not';
+      }
+
+      export interface UnionMember2 {
+        kind: 'predicate';
+
+        operator:
+          | 'eq'
+          | 'neq'
+          | 'gt'
+          | 'gte'
+          | 'lt'
+          | 'lte'
+          | 'contains'
+          | 'not_contains'
+          | 'contains_ci'
+          | 'not_contains_ci'
+          | 'starts_with'
+          | 'ends_with'
+          | 'in'
+          | 'not_in'
+          | 'exists'
+          | 'missing'
+          | 'is_null';
+
+        property: string;
+
+        path?: Array<string>;
+
+        type?: 'string' | 'number' | 'boolean';
+
+        value?: string | number | boolean | Array<string | number | boolean>;
+      }
+    }
+  }
+
   export interface ReportDateRange {
     from: string;
 
@@ -209,7 +785,7 @@ export interface FunnelUpdateResponse {
   /**
    * Versioned funnel definition with typed steps and filters.
    */
-  queryDefinition: unknown;
+  queryDefinition: FunnelUpdateResponse.QueryDefinition;
 
   status: 'READY' | 'PROCESSING';
 
@@ -223,6 +799,198 @@ export interface FunnelUpdateResponse {
 }
 
 export namespace FunnelUpdateResponse {
+  /**
+   * Versioned funnel definition with typed steps and filters.
+   */
+  export interface QueryDefinition {
+    counting: 'unique' | 'events' | 'sessions';
+
+    identity: 'session' | 'visitor';
+
+    kind: 'funnel';
+
+    order: 'ordered' | 'any';
+
+    reentry: 'first' | 'best';
+
+    steps: Array<QueryDefinition.Step>;
+
+    version: 1;
+
+    windowMs: number;
+
+    entryFilter?: QueryDefinition.EntryFilter;
+
+    filter?: QueryDefinition.Filter;
+  }
+
+  export namespace QueryDefinition {
+    export interface Step {
+      id: string;
+
+      eventName: string;
+
+      name: string;
+
+      filter?: Step.Filter;
+    }
+
+    export namespace Step {
+      export interface Filter {
+        filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+        version: 1;
+      }
+
+      export namespace Filter {
+        export interface UnionMember0 {
+          children: Array<unknown>;
+
+          kind: 'and' | 'or';
+        }
+
+        export interface UnionMember1 {
+          child: unknown;
+
+          kind: 'not';
+        }
+
+        export interface UnionMember2 {
+          kind: 'predicate';
+
+          operator:
+            | 'eq'
+            | 'neq'
+            | 'gt'
+            | 'gte'
+            | 'lt'
+            | 'lte'
+            | 'contains'
+            | 'not_contains'
+            | 'contains_ci'
+            | 'not_contains_ci'
+            | 'starts_with'
+            | 'ends_with'
+            | 'in'
+            | 'not_in'
+            | 'exists'
+            | 'missing'
+            | 'is_null';
+
+          property: string;
+
+          path?: Array<string>;
+
+          type?: 'string' | 'number' | 'boolean';
+
+          value?: string | number | boolean | Array<string | number | boolean>;
+        }
+      }
+    }
+
+    export interface EntryFilter {
+      filter: EntryFilter.UnionMember0 | EntryFilter.UnionMember1 | EntryFilter.UnionMember2;
+
+      version: 1;
+    }
+
+    export namespace EntryFilter {
+      export interface UnionMember0 {
+        children: Array<unknown>;
+
+        kind: 'and' | 'or';
+      }
+
+      export interface UnionMember1 {
+        child: unknown;
+
+        kind: 'not';
+      }
+
+      export interface UnionMember2 {
+        kind: 'predicate';
+
+        operator:
+          | 'eq'
+          | 'neq'
+          | 'gt'
+          | 'gte'
+          | 'lt'
+          | 'lte'
+          | 'contains'
+          | 'not_contains'
+          | 'contains_ci'
+          | 'not_contains_ci'
+          | 'starts_with'
+          | 'ends_with'
+          | 'in'
+          | 'not_in'
+          | 'exists'
+          | 'missing'
+          | 'is_null';
+
+        property: string;
+
+        path?: Array<string>;
+
+        type?: 'string' | 'number' | 'boolean';
+
+        value?: string | number | boolean | Array<string | number | boolean>;
+      }
+    }
+
+    export interface Filter {
+      filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+      version: 1;
+    }
+
+    export namespace Filter {
+      export interface UnionMember0 {
+        children: Array<unknown>;
+
+        kind: 'and' | 'or';
+      }
+
+      export interface UnionMember1 {
+        child: unknown;
+
+        kind: 'not';
+      }
+
+      export interface UnionMember2 {
+        kind: 'predicate';
+
+        operator:
+          | 'eq'
+          | 'neq'
+          | 'gt'
+          | 'gte'
+          | 'lt'
+          | 'lte'
+          | 'contains'
+          | 'not_contains'
+          | 'contains_ci'
+          | 'not_contains_ci'
+          | 'starts_with'
+          | 'ends_with'
+          | 'in'
+          | 'not_in'
+          | 'exists'
+          | 'missing'
+          | 'is_null';
+
+        property: string;
+
+        path?: Array<string>;
+
+        type?: 'string' | 'number' | 'boolean';
+
+        value?: string | number | boolean | Array<string | number | boolean>;
+      }
+    }
+  }
+
   export interface ReportDateRange {
     from: string;
 
@@ -246,7 +1014,7 @@ export interface FunnelDuplicateResponse {
   /**
    * Versioned funnel definition with typed steps and filters.
    */
-  queryDefinition: unknown;
+  queryDefinition: FunnelDuplicateResponse.QueryDefinition;
 
   status: 'READY' | 'PROCESSING';
 
@@ -260,6 +1028,198 @@ export interface FunnelDuplicateResponse {
 }
 
 export namespace FunnelDuplicateResponse {
+  /**
+   * Versioned funnel definition with typed steps and filters.
+   */
+  export interface QueryDefinition {
+    counting: 'unique' | 'events' | 'sessions';
+
+    identity: 'session' | 'visitor';
+
+    kind: 'funnel';
+
+    order: 'ordered' | 'any';
+
+    reentry: 'first' | 'best';
+
+    steps: Array<QueryDefinition.Step>;
+
+    version: 1;
+
+    windowMs: number;
+
+    entryFilter?: QueryDefinition.EntryFilter;
+
+    filter?: QueryDefinition.Filter;
+  }
+
+  export namespace QueryDefinition {
+    export interface Step {
+      id: string;
+
+      eventName: string;
+
+      name: string;
+
+      filter?: Step.Filter;
+    }
+
+    export namespace Step {
+      export interface Filter {
+        filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+        version: 1;
+      }
+
+      export namespace Filter {
+        export interface UnionMember0 {
+          children: Array<unknown>;
+
+          kind: 'and' | 'or';
+        }
+
+        export interface UnionMember1 {
+          child: unknown;
+
+          kind: 'not';
+        }
+
+        export interface UnionMember2 {
+          kind: 'predicate';
+
+          operator:
+            | 'eq'
+            | 'neq'
+            | 'gt'
+            | 'gte'
+            | 'lt'
+            | 'lte'
+            | 'contains'
+            | 'not_contains'
+            | 'contains_ci'
+            | 'not_contains_ci'
+            | 'starts_with'
+            | 'ends_with'
+            | 'in'
+            | 'not_in'
+            | 'exists'
+            | 'missing'
+            | 'is_null';
+
+          property: string;
+
+          path?: Array<string>;
+
+          type?: 'string' | 'number' | 'boolean';
+
+          value?: string | number | boolean | Array<string | number | boolean>;
+        }
+      }
+    }
+
+    export interface EntryFilter {
+      filter: EntryFilter.UnionMember0 | EntryFilter.UnionMember1 | EntryFilter.UnionMember2;
+
+      version: 1;
+    }
+
+    export namespace EntryFilter {
+      export interface UnionMember0 {
+        children: Array<unknown>;
+
+        kind: 'and' | 'or';
+      }
+
+      export interface UnionMember1 {
+        child: unknown;
+
+        kind: 'not';
+      }
+
+      export interface UnionMember2 {
+        kind: 'predicate';
+
+        operator:
+          | 'eq'
+          | 'neq'
+          | 'gt'
+          | 'gte'
+          | 'lt'
+          | 'lte'
+          | 'contains'
+          | 'not_contains'
+          | 'contains_ci'
+          | 'not_contains_ci'
+          | 'starts_with'
+          | 'ends_with'
+          | 'in'
+          | 'not_in'
+          | 'exists'
+          | 'missing'
+          | 'is_null';
+
+        property: string;
+
+        path?: Array<string>;
+
+        type?: 'string' | 'number' | 'boolean';
+
+        value?: string | number | boolean | Array<string | number | boolean>;
+      }
+    }
+
+    export interface Filter {
+      filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+      version: 1;
+    }
+
+    export namespace Filter {
+      export interface UnionMember0 {
+        children: Array<unknown>;
+
+        kind: 'and' | 'or';
+      }
+
+      export interface UnionMember1 {
+        child: unknown;
+
+        kind: 'not';
+      }
+
+      export interface UnionMember2 {
+        kind: 'predicate';
+
+        operator:
+          | 'eq'
+          | 'neq'
+          | 'gt'
+          | 'gte'
+          | 'lt'
+          | 'lte'
+          | 'contains'
+          | 'not_contains'
+          | 'contains_ci'
+          | 'not_contains_ci'
+          | 'starts_with'
+          | 'ends_with'
+          | 'in'
+          | 'not_in'
+          | 'exists'
+          | 'missing'
+          | 'is_null';
+
+        property: string;
+
+        path?: Array<string>;
+
+        type?: 'string' | 'number' | 'boolean';
+
+        value?: string | number | boolean | Array<string | number | boolean>;
+      }
+    }
+  }
+
   export interface ReportDateRange {
     from: string;
 
@@ -361,11 +1321,205 @@ export interface FunnelCreateParams {
   /**
    * Versioned funnel definition with typed steps and filters.
    */
-  queryDefinition: unknown;
+  queryDefinition: FunnelCreateParams.QueryDefinition;
 
   description?: string | null;
 
   watched?: boolean | null;
+}
+
+export namespace FunnelCreateParams {
+  /**
+   * Versioned funnel definition with typed steps and filters.
+   */
+  export interface QueryDefinition {
+    counting: 'unique' | 'events' | 'sessions';
+
+    identity: 'session' | 'visitor';
+
+    kind: 'funnel';
+
+    order: 'ordered' | 'any';
+
+    reentry: 'first' | 'best';
+
+    steps: Array<QueryDefinition.Step>;
+
+    version: 1;
+
+    windowMs: number;
+
+    entryFilter?: QueryDefinition.EntryFilter;
+
+    filter?: QueryDefinition.Filter;
+  }
+
+  export namespace QueryDefinition {
+    export interface Step {
+      id: string;
+
+      eventName: string;
+
+      name: string;
+
+      filter?: Step.Filter;
+    }
+
+    export namespace Step {
+      export interface Filter {
+        filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+        version: 1;
+      }
+
+      export namespace Filter {
+        export interface UnionMember0 {
+          children: Array<unknown>;
+
+          kind: 'and' | 'or';
+        }
+
+        export interface UnionMember1 {
+          child: unknown;
+
+          kind: 'not';
+        }
+
+        export interface UnionMember2 {
+          kind: 'predicate';
+
+          operator:
+            | 'eq'
+            | 'neq'
+            | 'gt'
+            | 'gte'
+            | 'lt'
+            | 'lte'
+            | 'contains'
+            | 'not_contains'
+            | 'contains_ci'
+            | 'not_contains_ci'
+            | 'starts_with'
+            | 'ends_with'
+            | 'in'
+            | 'not_in'
+            | 'exists'
+            | 'missing'
+            | 'is_null';
+
+          property: string;
+
+          path?: Array<string>;
+
+          type?: 'string' | 'number' | 'boolean';
+
+          value?: string | number | boolean | Array<string | number | boolean>;
+        }
+      }
+    }
+
+    export interface EntryFilter {
+      filter: EntryFilter.UnionMember0 | EntryFilter.UnionMember1 | EntryFilter.UnionMember2;
+
+      version: 1;
+    }
+
+    export namespace EntryFilter {
+      export interface UnionMember0 {
+        children: Array<unknown>;
+
+        kind: 'and' | 'or';
+      }
+
+      export interface UnionMember1 {
+        child: unknown;
+
+        kind: 'not';
+      }
+
+      export interface UnionMember2 {
+        kind: 'predicate';
+
+        operator:
+          | 'eq'
+          | 'neq'
+          | 'gt'
+          | 'gte'
+          | 'lt'
+          | 'lte'
+          | 'contains'
+          | 'not_contains'
+          | 'contains_ci'
+          | 'not_contains_ci'
+          | 'starts_with'
+          | 'ends_with'
+          | 'in'
+          | 'not_in'
+          | 'exists'
+          | 'missing'
+          | 'is_null';
+
+        property: string;
+
+        path?: Array<string>;
+
+        type?: 'string' | 'number' | 'boolean';
+
+        value?: string | number | boolean | Array<string | number | boolean>;
+      }
+    }
+
+    export interface Filter {
+      filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+      version: 1;
+    }
+
+    export namespace Filter {
+      export interface UnionMember0 {
+        children: Array<unknown>;
+
+        kind: 'and' | 'or';
+      }
+
+      export interface UnionMember1 {
+        child: unknown;
+
+        kind: 'not';
+      }
+
+      export interface UnionMember2 {
+        kind: 'predicate';
+
+        operator:
+          | 'eq'
+          | 'neq'
+          | 'gt'
+          | 'gte'
+          | 'lt'
+          | 'lte'
+          | 'contains'
+          | 'not_contains'
+          | 'contains_ci'
+          | 'not_contains_ci'
+          | 'starts_with'
+          | 'ends_with'
+          | 'in'
+          | 'not_in'
+          | 'exists'
+          | 'missing'
+          | 'is_null';
+
+        property: string;
+
+        path?: Array<string>;
+
+        type?: 'string' | 'number' | 'boolean';
+
+        value?: string | number | boolean | Array<string | number | boolean>;
+      }
+    }
+  }
 }
 
 export interface FunnelUpdateParams {
@@ -376,9 +1530,203 @@ export interface FunnelUpdateParams {
   /**
    * Versioned funnel definition with typed steps and filters.
    */
-  queryDefinition?: unknown;
+  queryDefinition?: FunnelUpdateParams.QueryDefinition;
 
   watched?: boolean | null;
+}
+
+export namespace FunnelUpdateParams {
+  /**
+   * Versioned funnel definition with typed steps and filters.
+   */
+  export interface QueryDefinition {
+    counting: 'unique' | 'events' | 'sessions';
+
+    identity: 'session' | 'visitor';
+
+    kind: 'funnel';
+
+    order: 'ordered' | 'any';
+
+    reentry: 'first' | 'best';
+
+    steps: Array<QueryDefinition.Step>;
+
+    version: 1;
+
+    windowMs: number;
+
+    entryFilter?: QueryDefinition.EntryFilter;
+
+    filter?: QueryDefinition.Filter;
+  }
+
+  export namespace QueryDefinition {
+    export interface Step {
+      id: string;
+
+      eventName: string;
+
+      name: string;
+
+      filter?: Step.Filter;
+    }
+
+    export namespace Step {
+      export interface Filter {
+        filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+        version: 1;
+      }
+
+      export namespace Filter {
+        export interface UnionMember0 {
+          children: Array<unknown>;
+
+          kind: 'and' | 'or';
+        }
+
+        export interface UnionMember1 {
+          child: unknown;
+
+          kind: 'not';
+        }
+
+        export interface UnionMember2 {
+          kind: 'predicate';
+
+          operator:
+            | 'eq'
+            | 'neq'
+            | 'gt'
+            | 'gte'
+            | 'lt'
+            | 'lte'
+            | 'contains'
+            | 'not_contains'
+            | 'contains_ci'
+            | 'not_contains_ci'
+            | 'starts_with'
+            | 'ends_with'
+            | 'in'
+            | 'not_in'
+            | 'exists'
+            | 'missing'
+            | 'is_null';
+
+          property: string;
+
+          path?: Array<string>;
+
+          type?: 'string' | 'number' | 'boolean';
+
+          value?: string | number | boolean | Array<string | number | boolean>;
+        }
+      }
+    }
+
+    export interface EntryFilter {
+      filter: EntryFilter.UnionMember0 | EntryFilter.UnionMember1 | EntryFilter.UnionMember2;
+
+      version: 1;
+    }
+
+    export namespace EntryFilter {
+      export interface UnionMember0 {
+        children: Array<unknown>;
+
+        kind: 'and' | 'or';
+      }
+
+      export interface UnionMember1 {
+        child: unknown;
+
+        kind: 'not';
+      }
+
+      export interface UnionMember2 {
+        kind: 'predicate';
+
+        operator:
+          | 'eq'
+          | 'neq'
+          | 'gt'
+          | 'gte'
+          | 'lt'
+          | 'lte'
+          | 'contains'
+          | 'not_contains'
+          | 'contains_ci'
+          | 'not_contains_ci'
+          | 'starts_with'
+          | 'ends_with'
+          | 'in'
+          | 'not_in'
+          | 'exists'
+          | 'missing'
+          | 'is_null';
+
+        property: string;
+
+        path?: Array<string>;
+
+        type?: 'string' | 'number' | 'boolean';
+
+        value?: string | number | boolean | Array<string | number | boolean>;
+      }
+    }
+
+    export interface Filter {
+      filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+      version: 1;
+    }
+
+    export namespace Filter {
+      export interface UnionMember0 {
+        children: Array<unknown>;
+
+        kind: 'and' | 'or';
+      }
+
+      export interface UnionMember1 {
+        child: unknown;
+
+        kind: 'not';
+      }
+
+      export interface UnionMember2 {
+        kind: 'predicate';
+
+        operator:
+          | 'eq'
+          | 'neq'
+          | 'gt'
+          | 'gte'
+          | 'lt'
+          | 'lte'
+          | 'contains'
+          | 'not_contains'
+          | 'contains_ci'
+          | 'not_contains_ci'
+          | 'starts_with'
+          | 'ends_with'
+          | 'in'
+          | 'not_in'
+          | 'exists'
+          | 'missing'
+          | 'is_null';
+
+        property: string;
+
+        path?: Array<string>;
+
+        type?: 'string' | 'number' | 'boolean';
+
+        value?: string | number | boolean | Array<string | number | boolean>;
+      }
+    }
+  }
 }
 
 export interface FunnelResultsParams {

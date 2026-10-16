@@ -22,7 +22,27 @@ describe('resource funnels', () => {
   test('create: only required params', async () => {
     const responsePromise = client.funnels.create({
       name: 'x',
-      queryDefinition: {},
+      queryDefinition: {
+        counting: 'unique',
+        identity: 'session',
+        kind: 'funnel',
+        order: 'ordered',
+        reentry: 'first',
+        steps: [
+          {
+            id: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+            eventName: 'x',
+            name: 'x',
+          },
+          {
+            id: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+            eventName: 'x',
+            name: 'x',
+          },
+        ],
+        version: 1,
+        windowMs: 1,
+      },
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -36,7 +56,43 @@ describe('resource funnels', () => {
   test('create: required and optional params', async () => {
     const response = await client.funnels.create({
       name: 'x',
-      queryDefinition: {},
+      queryDefinition: {
+        counting: 'unique',
+        identity: 'session',
+        kind: 'funnel',
+        order: 'ordered',
+        reentry: 'first',
+        steps: [
+          {
+            id: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+            eventName: 'x',
+            name: 'x',
+            filter: {
+              filter: { children: [], kind: 'and' },
+              version: 1,
+            },
+          },
+          {
+            id: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+            eventName: 'x',
+            name: 'x',
+            filter: {
+              filter: { children: [], kind: 'and' },
+              version: 1,
+            },
+          },
+        ],
+        version: 1,
+        windowMs: 1,
+        entryFilter: {
+          filter: { children: [], kind: 'and' },
+          version: 1,
+        },
+        filter: {
+          filter: { children: [], kind: 'and' },
+          version: 1,
+        },
+      },
       description: 'description',
       watched: true,
     });

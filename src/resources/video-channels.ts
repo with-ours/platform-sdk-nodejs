@@ -192,9 +192,19 @@ export interface VideoChannelRetrieveResponse {
 
   logoMediaId?: string | null;
 
-  resolvedValues?: unknown | null;
+  resolvedValues?: VideoChannelRetrieveResponse.ResolvedValues | null;
 
   updatedAt?: string | null;
+}
+
+export namespace VideoChannelRetrieveResponse {
+  export interface ResolvedValues {
+    embedCode: string;
+
+    embedUrl: string;
+
+    mediaCount: number;
+  }
 }
 
 export interface VideoChannelUpdateResponse {
@@ -216,9 +226,19 @@ export interface VideoChannelUpdateResponse {
 
   logoMediaId?: string | null;
 
-  resolvedValues?: unknown | null;
+  resolvedValues?: VideoChannelUpdateResponse.ResolvedValues | null;
 
   updatedAt?: string | null;
+}
+
+export namespace VideoChannelUpdateResponse {
+  export interface ResolvedValues {
+    embedCode: string;
+
+    embedUrl: string;
+
+    mediaCount: number;
+  }
 }
 
 export interface VideoChannelDeleteResponse {
@@ -318,9 +338,19 @@ export interface VideoChannelRemoveMediaResponse {
 
   logoMediaId?: string | null;
 
-  resolvedValues?: unknown | null;
+  resolvedValues?: VideoChannelRemoveMediaResponse.ResolvedValues | null;
 
   updatedAt?: string | null;
+}
+
+export namespace VideoChannelRemoveMediaResponse {
+  export interface ResolvedValues {
+    embedCode: string;
+
+    embedUrl: string;
+
+    mediaCount: number;
+  }
 }
 
 export interface VideoChannelReorderResponse {
@@ -342,9 +372,19 @@ export interface VideoChannelReorderResponse {
 
   logoMediaId?: string | null;
 
-  resolvedValues?: unknown | null;
+  resolvedValues?: VideoChannelReorderResponse.ResolvedValues | null;
 
   updatedAt?: string | null;
+}
+
+export namespace VideoChannelReorderResponse {
+  export interface ResolvedValues {
+    embedCode: string;
+
+    embedUrl: string;
+
+    mediaCount: number;
+  }
 }
 
 export interface VideoChannelListParams extends CursorParams {}

@@ -303,6 +303,8 @@ Types:
 - <code><a href="./src/resources/mappings.ts">MappingRetrieveResponse</a></code>
 - <code><a href="./src/resources/mappings.ts">MappingUpdateResponse</a></code>
 - <code><a href="./src/resources/mappings.ts">MappingDeleteResponse</a></code>
+- <code><a href="./src/resources/mappings.ts">MappingRenamePreviewResponse</a></code>
+- <code><a href="./src/resources/mappings.ts">MappingRenameResponse</a></code>
 - <code><a href="./src/resources/mappings.ts">MappingReorderResponse</a></code>
 - <code><a href="./src/resources/mappings.ts">MappingTemplatesResponse</a></code>
 - <code><a href="./src/resources/mappings.ts">MappingDefaultVariablesResponse</a></code>
@@ -316,6 +318,8 @@ Methods:
 - <code title="get /rest/v1/mappings/{id}">client.mappings.<a href="./src/resources/mappings.ts">retrieve</a>(id) -> MappingRetrieveResponse</code>
 - <code title="patch /rest/v1/mappings/{id}">client.mappings.<a href="./src/resources/mappings.ts">update</a>(id, { ...params }) -> MappingUpdateResponse</code>
 - <code title="delete /rest/v1/mappings/{id}">client.mappings.<a href="./src/resources/mappings.ts">delete</a>(id) -> MappingDeleteResponse</code>
+- <code title="get /rest/v1/mappings/rename-preview">client.mappings.<a href="./src/resources/mappings.ts">renamePreview</a>({ ...params }) -> MappingRenamePreviewResponse</code>
+- <code title="put /rest/v1/mappings/rename">client.mappings.<a href="./src/resources/mappings.ts">rename</a>({ ...params }) -> MappingRenameResponse | null</code>
 - <code title="post /rest/v1/mappings/reorder">client.mappings.<a href="./src/resources/mappings.ts">reorder</a>({ ...params }) -> MappingReorderResponse</code>
 - <code title="get /rest/v1/mappings/templates">client.mappings.<a href="./src/resources/mappings.ts">templates</a>({ ...params }) -> MappingTemplatesResponse</code>
 - <code title="get /rest/v1/mappings/default-variables">client.mappings.<a href="./src/resources/mappings.ts">defaultVariables</a>() -> MappingDefaultVariablesResponse</code>
@@ -398,6 +402,7 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/tag-managers.ts">TagManagerPreviewResponse</a></code>
 - <code><a href="./src/resources/tag-managers.ts">TagManagerListResponse</a></code>
 - <code><a href="./src/resources/tag-managers.ts">TagManagerCreateResponse</a></code>
 - <code><a href="./src/resources/tag-managers.ts">TagManagerRetrieveResponse</a></code>
@@ -406,6 +411,7 @@ Types:
 
 Methods:
 
+- <code title="post /rest/v1/tag-managers/{id}/preview">client.tagManagers.<a href="./src/resources/tag-managers.ts">preview</a>(id, { ...params }) -> TagManagerPreviewResponse</code>
 - <code title="get /rest/v1/tag-managers">client.tagManagers.<a href="./src/resources/tag-managers.ts">list</a>() -> TagManagerListResponse</code>
 - <code title="post /rest/v1/tag-managers">client.tagManagers.<a href="./src/resources/tag-managers.ts">create</a>({ ...params }) -> TagManagerCreateResponse</code>
 - <code title="get /rest/v1/tag-managers/{id}">client.tagManagers.<a href="./src/resources/tag-managers.ts">retrieve</a>(id) -> TagManagerRetrieveResponse</code>
@@ -680,6 +686,16 @@ Methods:
 - <code title="get /rest/v1/web-scanners/{id}/decision-queue">client.webScanners.<a href="./src/resources/web-scanners.ts">decisionQueue</a>(id, { ...params }) -> WebScannerDecisionQueueResponse</code>
 - <code title="post /rest/v1/web-scanners/{id}/resolve-coverage-gap">client.webScanners.<a href="./src/resources/web-scanners.ts">resolveCoverageGap</a>(id, { ...params }) -> WebScannerResolveCoverageGapResponse</code>
 
+# Me
+
+Types:
+
+- <code><a href="./src/resources/me.ts">MeRetrieveResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/me">client.me.<a href="./src/resources/me.ts">retrieve</a>() -> MeRetrieveResponse</code>
+
 # PersonalizationProperties
 
 Types:
@@ -697,6 +713,22 @@ Methods:
 - <code title="get /rest/v1/personalization-properties/{id}">client.personalizationProperties.<a href="./src/resources/personalization-properties.ts">retrieve</a>(id) -> PersonalizationPropertyRetrieveResponse</code>
 - <code title="patch /rest/v1/personalization-properties/{id}">client.personalizationProperties.<a href="./src/resources/personalization-properties.ts">update</a>(id, { ...params }) -> PersonalizationPropertyUpdateResponse</code>
 - <code title="delete /rest/v1/personalization-properties/{id}">client.personalizationProperties.<a href="./src/resources/personalization-properties.ts">delete</a>(id) -> PersonalizationPropertyDeleteResponse</code>
+
+# CustomDomains
+
+Types:
+
+- <code><a href="./src/resources/custom-domains.ts">CustomDomainStatusResponse</a></code>
+- <code><a href="./src/resources/custom-domains.ts">CustomDomainCreateResponse</a></code>
+- <code><a href="./src/resources/custom-domains.ts">CustomDomainReplaceResponse</a></code>
+- <code><a href="./src/resources/custom-domains.ts">CustomDomainReconcileCertificateResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/custom-domains/setup">client.customDomains.<a href="./src/resources/custom-domains.ts">status</a>() -> CustomDomainStatusResponse</code>
+- <code title="post /rest/v1/custom-domains">client.customDomains.<a href="./src/resources/custom-domains.ts">create</a>() -> CustomDomainCreateResponse</code>
+- <code title="put /rest/v1/custom-domains/{id}">client.customDomains.<a href="./src/resources/custom-domains.ts">replace</a>(id, { ...params }) -> CustomDomainReplaceResponse</code>
+- <code title="post /rest/v1/custom-domains/{id}/certificate-validation">client.customDomains.<a href="./src/resources/custom-domains.ts">reconcileCertificate</a>(id) -> CustomDomainReconcileCertificateResponse</code>
 
 # Analytics
 
