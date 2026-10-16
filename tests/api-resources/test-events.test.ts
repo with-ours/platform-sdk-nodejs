@@ -75,6 +75,8 @@ describe('resource testEvents', () => {
         gad_source: 'gad_source',
         gbraid: 'gbraid',
         gclid: 'gclid',
+        graid: 'graid',
+        grclid: 'grclid',
         host: 'host',
         iframe: true,
         im_ref: 'im_ref',
@@ -122,7 +124,7 @@ describe('resource testEvents', () => {
       },
       distinctId: 'distinctId',
       eventProperties: { revenue: 42.5, currency: 'USD' },
-      sourceId: 'sourceId',
+      sourceId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
       userProperties: { email: 'test@example.com' },
       visitorId: 'visitorId',
     });

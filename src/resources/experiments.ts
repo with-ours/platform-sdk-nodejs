@@ -401,12 +401,12 @@ export interface ExperimentListResponse {
    * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
    * analysis in GraphQL.
    */
-  analysisConfig?: unknown | null;
+  analysisConfig?: ExperimentListResponse.AnalysisConfig | null;
 
   /**
    * Primary metric definition frozen with the analysis plan at start time.
    */
-  analysisMetricSnapshot?: unknown | null;
+  analysisMetricSnapshot?: ExperimentListResponse.AnalysisMetricSnapshot | null;
 
   /**
    * ISO-8601 timestamp when the analysis plan was locked at experiment start.
@@ -520,7 +520,7 @@ export namespace ExperimentListResponse {
      * How this variant changes the user experience. `dom_modifications` for on-page
      * changes or `redirect` for redirect tests.
      */
-    variantType?: string | null;
+    variantType?: 'dom_modifications' | 'redirect' | null;
   }
 
   export namespace Variant {
@@ -560,7 +560,7 @@ export namespace ExperimentListResponse {
        * Customers may also send this field instead of a JSON-stringified `value` on
        * write — see `domModificationInputSchema`.
        */
-      attribute?: unknown | null;
+      attribute?: DomModification.Attribute | null;
 
       /**
        * Populated on read for `setStyle` modifications, parsed from `value`. Customers
@@ -571,6 +571,23 @@ export namespace ExperimentListResponse {
     }
 
     export namespace DomModification {
+      /**
+       * Populated on read for `setAttribute` modifications, parsed from `value`.
+       * Customers may also send this field instead of a JSON-stringified `value` on
+       * write — see `domModificationInputSchema`.
+       */
+      export interface Attribute {
+        /**
+         * HTML attribute name.
+         */
+        name: string;
+
+        /**
+         * Attribute value to assign.
+         */
+        value: string;
+      }
+
       export interface Style {
         /**
          * CSS property name in camelCase or kebab-case.
@@ -586,6 +603,241 @@ export namespace ExperimentListResponse {
   }
 
   /**
+   * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
+   * analysis in GraphQL.
+   */
+  export interface AnalysisConfig {
+    confidenceLevel: number;
+
+    method: 'BAYESIAN' | 'FREQUENTIST' | 'SEQUENTIAL';
+
+    version: number;
+
+    boundary?: string | null;
+
+    cuped?: AnalysisConfig.Cuped | null;
+
+    outcomeWindowDays?: number | null;
+
+    planning?: AnalysisConfig.Planning | null;
+
+    sidedness?: 'GREATER_THAN_CONTROL' | 'TWO_SIDED' | null;
+  }
+
+  export namespace AnalysisConfig {
+    export interface Cuped {
+      covariate: string;
+
+      enabled: boolean;
+
+      prePeriodDays: number;
+    }
+
+    export interface Planning {
+      mode: 'MANUAL_TARGET' | 'POWER';
+
+      targetVisitorsByVariant: Array<Planning.TargetVisitorsByVariant>;
+
+      baseline?: number | null;
+
+      minimumDetectableEffect?: number | null;
+
+      power?: number | null;
+    }
+
+    export namespace Planning {
+      export interface TargetVisitorsByVariant {
+        /**
+         * Variant identifier covered by this fixed-horizon target.
+         */
+        variantId: string;
+
+        /**
+         * Unique exposed visitors required for this variant.
+         */
+        visitors: number;
+      }
+    }
+  }
+
+  /**
+   * Primary metric definition frozen with the analysis plan at start time.
+   */
+  export interface AnalysisMetricSnapshot {
+    eventMatchers: Array<AnalysisMetricSnapshot.EventMatcher>;
+
+    eventName: string;
+
+    goalId: string;
+
+    metricType: 'CONVERSION' | 'VALUE';
+
+    winsorize: boolean;
+
+    winsorizePercentile: number;
+  }
+
+  export namespace AnalysisMetricSnapshot {
+    export interface EventMatcher {
+      /**
+       * Event name required by this OR branch.
+       */
+      eventName: string;
+
+      /**
+       * Versioned analytics filter using catalog property IDs and operators.
+       */
+      filter?: EventMatcher.Filter;
+    }
+
+    export namespace EventMatcher {
+      /**
+       * Versioned analytics filter using catalog property IDs and operators.
+       */
+      export interface Filter {
+        filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+        version: 1;
+      }
+
+      export namespace Filter {
+        export interface UnionMember0 {
+          children: Array<UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2>;
+
+          kind: 'and' | 'or';
+        }
+
+        export namespace UnionMember0 {
+          export interface UnionMember0 {
+            children: Array<unknown>;
+
+            kind: 'and' | 'or';
+          }
+
+          export interface UnionMember1 {
+            child: unknown;
+
+            kind: 'not';
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
+        }
+
+        export interface UnionMember1 {
+          child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+          kind: 'not';
+        }
+
+        export namespace UnionMember1 {
+          export interface UnionMember0 {
+            children: Array<unknown>;
+
+            kind: 'and' | 'or';
+          }
+
+          export interface UnionMember1 {
+            child: unknown;
+
+            kind: 'not';
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
+        }
+
+        export interface UnionMember2 {
+          kind: 'predicate';
+
+          operator:
+            | 'eq'
+            | 'neq'
+            | 'gt'
+            | 'gte'
+            | 'lt'
+            | 'lte'
+            | 'contains'
+            | 'not_contains'
+            | 'contains_ci'
+            | 'not_contains_ci'
+            | 'starts_with'
+            | 'ends_with'
+            | 'in'
+            | 'not_in'
+            | 'exists'
+            | 'missing'
+            | 'is_null';
+
+          property: string;
+
+          path?: Array<string>;
+
+          type?: 'string' | 'number' | 'boolean';
+
+          value?: string | number | boolean | Array<string | number | boolean>;
+        }
+      }
+    }
+  }
+
+  /**
    * Configured success metrics. The read shape mirrors the write shape — `metrics`
    * from a GET response can be PATCHed back without modification.
    */
@@ -593,7 +845,7 @@ export namespace ExperimentListResponse {
     /**
      * Primary success metric used in the results report.
      */
-    primary?: unknown | null;
+    primary?: Metrics.Primary | null;
 
     /**
      * Optional secondary metrics tracked alongside the primary goal.
@@ -602,6 +854,201 @@ export namespace ExperimentListResponse {
   }
 
   export namespace Metrics {
+    /**
+     * Primary success metric used in the results report.
+     */
+    export interface Primary {
+      /**
+       * Stable identifier for selecting this saved goal in experiment results queries.
+       */
+      goalId: string;
+
+      /**
+       * Complete OR-list of event matchers. Each matcher is an event name plus an
+       * optional analytics filter.
+       */
+      eventMatchers?: Array<Primary.EventMatcher> | null;
+
+      /**
+       * Name of the event used to measure success for this metric.
+       */
+      eventName?: string | null;
+
+      /**
+       * Optional funnel identifier when the metric is derived from an existing funnel
+       * definition.
+       */
+      funnelId?: string | null;
+
+      valueMode?: boolean | null;
+
+      winsorize?: boolean | null;
+
+      winsorizePercentile?: number | null;
+    }
+
+    export namespace Primary {
+      export interface EventMatcher {
+        /**
+         * Event name required by this OR branch.
+         */
+        eventName: string;
+
+        /**
+         * Versioned analytics filter using catalog property IDs and operators.
+         */
+        filter?: EventMatcher.Filter;
+      }
+
+      export namespace EventMatcher {
+        /**
+         * Versioned analytics filter using catalog property IDs and operators.
+         */
+        export interface Filter {
+          filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+          version: 1;
+        }
+
+        export namespace Filter {
+          export interface UnionMember0 {
+            children: Array<
+              UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+            >;
+
+            kind: 'and' | 'or';
+          }
+
+          export namespace UnionMember0 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember1 {
+            child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+            kind: 'not';
+          }
+
+          export namespace UnionMember1 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
+        }
+      }
+    }
+
     export interface Secondary {
       /**
        * Stable identifier for selecting this saved goal in experiment results queries.
@@ -640,23 +1087,156 @@ export namespace ExperimentListResponse {
         eventName: string;
 
         /**
-         * Optional analytics filter evaluated against the same event row as `eventName`.
+         * Versioned analytics filter using catalog property IDs and operators.
          */
         filter?: EventMatcher.Filter;
       }
 
       export namespace EventMatcher {
         /**
-         * Optional analytics filter evaluated against the same event row as `eventName`.
+         * Versioned analytics filter using catalog property IDs and operators.
          */
         export interface Filter {
-          /**
-           * Analytics predicate or and/or/not tree. Use the analytics query catalog for
-           * supported properties and operators.
-           */
-          filter: unknown;
+          filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
 
           version: 1;
+        }
+
+        export namespace Filter {
+          export interface UnionMember0 {
+            children: Array<
+              UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+            >;
+
+            kind: 'and' | 'or';
+          }
+
+          export namespace UnionMember0 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember1 {
+            child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+            kind: 'not';
+          }
+
+          export namespace UnionMember1 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
         }
       }
     }
@@ -710,7 +1290,7 @@ export namespace ExperimentListResponse {
      * Whether the experiment should target new visitors, returning visitors, or any
      * visitor.
      */
-    visitorStatus?: string | null;
+    visitorStatus?: 'any' | 'new' | 'returning' | null;
   }
 
   export namespace TargetingRules {
@@ -784,12 +1364,12 @@ export interface ExperimentCreateResponse {
    * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
    * analysis in GraphQL.
    */
-  analysisConfig?: unknown | null;
+  analysisConfig?: ExperimentCreateResponse.AnalysisConfig | null;
 
   /**
    * Primary metric definition frozen with the analysis plan at start time.
    */
-  analysisMetricSnapshot?: unknown | null;
+  analysisMetricSnapshot?: ExperimentCreateResponse.AnalysisMetricSnapshot | null;
 
   /**
    * ISO-8601 timestamp when the analysis plan was locked at experiment start.
@@ -903,7 +1483,7 @@ export namespace ExperimentCreateResponse {
      * How this variant changes the user experience. `dom_modifications` for on-page
      * changes or `redirect` for redirect tests.
      */
-    variantType?: string | null;
+    variantType?: 'dom_modifications' | 'redirect' | null;
   }
 
   export namespace Variant {
@@ -943,7 +1523,7 @@ export namespace ExperimentCreateResponse {
        * Customers may also send this field instead of a JSON-stringified `value` on
        * write — see `domModificationInputSchema`.
        */
-      attribute?: unknown | null;
+      attribute?: DomModification.Attribute | null;
 
       /**
        * Populated on read for `setStyle` modifications, parsed from `value`. Customers
@@ -954,6 +1534,23 @@ export namespace ExperimentCreateResponse {
     }
 
     export namespace DomModification {
+      /**
+       * Populated on read for `setAttribute` modifications, parsed from `value`.
+       * Customers may also send this field instead of a JSON-stringified `value` on
+       * write — see `domModificationInputSchema`.
+       */
+      export interface Attribute {
+        /**
+         * HTML attribute name.
+         */
+        name: string;
+
+        /**
+         * Attribute value to assign.
+         */
+        value: string;
+      }
+
       export interface Style {
         /**
          * CSS property name in camelCase or kebab-case.
@@ -969,6 +1566,241 @@ export namespace ExperimentCreateResponse {
   }
 
   /**
+   * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
+   * analysis in GraphQL.
+   */
+  export interface AnalysisConfig {
+    confidenceLevel: number;
+
+    method: 'BAYESIAN' | 'FREQUENTIST' | 'SEQUENTIAL';
+
+    version: number;
+
+    boundary?: string | null;
+
+    cuped?: AnalysisConfig.Cuped | null;
+
+    outcomeWindowDays?: number | null;
+
+    planning?: AnalysisConfig.Planning | null;
+
+    sidedness?: 'GREATER_THAN_CONTROL' | 'TWO_SIDED' | null;
+  }
+
+  export namespace AnalysisConfig {
+    export interface Cuped {
+      covariate: string;
+
+      enabled: boolean;
+
+      prePeriodDays: number;
+    }
+
+    export interface Planning {
+      mode: 'MANUAL_TARGET' | 'POWER';
+
+      targetVisitorsByVariant: Array<Planning.TargetVisitorsByVariant>;
+
+      baseline?: number | null;
+
+      minimumDetectableEffect?: number | null;
+
+      power?: number | null;
+    }
+
+    export namespace Planning {
+      export interface TargetVisitorsByVariant {
+        /**
+         * Variant identifier covered by this fixed-horizon target.
+         */
+        variantId: string;
+
+        /**
+         * Unique exposed visitors required for this variant.
+         */
+        visitors: number;
+      }
+    }
+  }
+
+  /**
+   * Primary metric definition frozen with the analysis plan at start time.
+   */
+  export interface AnalysisMetricSnapshot {
+    eventMatchers: Array<AnalysisMetricSnapshot.EventMatcher>;
+
+    eventName: string;
+
+    goalId: string;
+
+    metricType: 'CONVERSION' | 'VALUE';
+
+    winsorize: boolean;
+
+    winsorizePercentile: number;
+  }
+
+  export namespace AnalysisMetricSnapshot {
+    export interface EventMatcher {
+      /**
+       * Event name required by this OR branch.
+       */
+      eventName: string;
+
+      /**
+       * Versioned analytics filter using catalog property IDs and operators.
+       */
+      filter?: EventMatcher.Filter;
+    }
+
+    export namespace EventMatcher {
+      /**
+       * Versioned analytics filter using catalog property IDs and operators.
+       */
+      export interface Filter {
+        filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+        version: 1;
+      }
+
+      export namespace Filter {
+        export interface UnionMember0 {
+          children: Array<UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2>;
+
+          kind: 'and' | 'or';
+        }
+
+        export namespace UnionMember0 {
+          export interface UnionMember0 {
+            children: Array<unknown>;
+
+            kind: 'and' | 'or';
+          }
+
+          export interface UnionMember1 {
+            child: unknown;
+
+            kind: 'not';
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
+        }
+
+        export interface UnionMember1 {
+          child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+          kind: 'not';
+        }
+
+        export namespace UnionMember1 {
+          export interface UnionMember0 {
+            children: Array<unknown>;
+
+            kind: 'and' | 'or';
+          }
+
+          export interface UnionMember1 {
+            child: unknown;
+
+            kind: 'not';
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
+        }
+
+        export interface UnionMember2 {
+          kind: 'predicate';
+
+          operator:
+            | 'eq'
+            | 'neq'
+            | 'gt'
+            | 'gte'
+            | 'lt'
+            | 'lte'
+            | 'contains'
+            | 'not_contains'
+            | 'contains_ci'
+            | 'not_contains_ci'
+            | 'starts_with'
+            | 'ends_with'
+            | 'in'
+            | 'not_in'
+            | 'exists'
+            | 'missing'
+            | 'is_null';
+
+          property: string;
+
+          path?: Array<string>;
+
+          type?: 'string' | 'number' | 'boolean';
+
+          value?: string | number | boolean | Array<string | number | boolean>;
+        }
+      }
+    }
+  }
+
+  /**
    * Configured success metrics. The read shape mirrors the write shape — `metrics`
    * from a GET response can be PATCHed back without modification.
    */
@@ -976,7 +1808,7 @@ export namespace ExperimentCreateResponse {
     /**
      * Primary success metric used in the results report.
      */
-    primary?: unknown | null;
+    primary?: Metrics.Primary | null;
 
     /**
      * Optional secondary metrics tracked alongside the primary goal.
@@ -985,6 +1817,201 @@ export namespace ExperimentCreateResponse {
   }
 
   export namespace Metrics {
+    /**
+     * Primary success metric used in the results report.
+     */
+    export interface Primary {
+      /**
+       * Stable identifier for selecting this saved goal in experiment results queries.
+       */
+      goalId: string;
+
+      /**
+       * Complete OR-list of event matchers. Each matcher is an event name plus an
+       * optional analytics filter.
+       */
+      eventMatchers?: Array<Primary.EventMatcher> | null;
+
+      /**
+       * Name of the event used to measure success for this metric.
+       */
+      eventName?: string | null;
+
+      /**
+       * Optional funnel identifier when the metric is derived from an existing funnel
+       * definition.
+       */
+      funnelId?: string | null;
+
+      valueMode?: boolean | null;
+
+      winsorize?: boolean | null;
+
+      winsorizePercentile?: number | null;
+    }
+
+    export namespace Primary {
+      export interface EventMatcher {
+        /**
+         * Event name required by this OR branch.
+         */
+        eventName: string;
+
+        /**
+         * Versioned analytics filter using catalog property IDs and operators.
+         */
+        filter?: EventMatcher.Filter;
+      }
+
+      export namespace EventMatcher {
+        /**
+         * Versioned analytics filter using catalog property IDs and operators.
+         */
+        export interface Filter {
+          filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+          version: 1;
+        }
+
+        export namespace Filter {
+          export interface UnionMember0 {
+            children: Array<
+              UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+            >;
+
+            kind: 'and' | 'or';
+          }
+
+          export namespace UnionMember0 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember1 {
+            child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+            kind: 'not';
+          }
+
+          export namespace UnionMember1 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
+        }
+      }
+    }
+
     export interface Secondary {
       /**
        * Stable identifier for selecting this saved goal in experiment results queries.
@@ -1023,23 +2050,156 @@ export namespace ExperimentCreateResponse {
         eventName: string;
 
         /**
-         * Optional analytics filter evaluated against the same event row as `eventName`.
+         * Versioned analytics filter using catalog property IDs and operators.
          */
         filter?: EventMatcher.Filter;
       }
 
       export namespace EventMatcher {
         /**
-         * Optional analytics filter evaluated against the same event row as `eventName`.
+         * Versioned analytics filter using catalog property IDs and operators.
          */
         export interface Filter {
-          /**
-           * Analytics predicate or and/or/not tree. Use the analytics query catalog for
-           * supported properties and operators.
-           */
-          filter: unknown;
+          filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
 
           version: 1;
+        }
+
+        export namespace Filter {
+          export interface UnionMember0 {
+            children: Array<
+              UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+            >;
+
+            kind: 'and' | 'or';
+          }
+
+          export namespace UnionMember0 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember1 {
+            child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+            kind: 'not';
+          }
+
+          export namespace UnionMember1 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
         }
       }
     }
@@ -1093,7 +2253,7 @@ export namespace ExperimentCreateResponse {
      * Whether the experiment should target new visitors, returning visitors, or any
      * visitor.
      */
-    visitorStatus?: string | null;
+    visitorStatus?: 'any' | 'new' | 'returning' | null;
   }
 
   export namespace TargetingRules {
@@ -1167,12 +2327,12 @@ export interface ExperimentRetrieveResponse {
    * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
    * analysis in GraphQL.
    */
-  analysisConfig?: unknown | null;
+  analysisConfig?: ExperimentRetrieveResponse.AnalysisConfig | null;
 
   /**
    * Primary metric definition frozen with the analysis plan at start time.
    */
-  analysisMetricSnapshot?: unknown | null;
+  analysisMetricSnapshot?: ExperimentRetrieveResponse.AnalysisMetricSnapshot | null;
 
   /**
    * ISO-8601 timestamp when the analysis plan was locked at experiment start.
@@ -1286,7 +2446,7 @@ export namespace ExperimentRetrieveResponse {
      * How this variant changes the user experience. `dom_modifications` for on-page
      * changes or `redirect` for redirect tests.
      */
-    variantType?: string | null;
+    variantType?: 'dom_modifications' | 'redirect' | null;
   }
 
   export namespace Variant {
@@ -1326,7 +2486,7 @@ export namespace ExperimentRetrieveResponse {
        * Customers may also send this field instead of a JSON-stringified `value` on
        * write — see `domModificationInputSchema`.
        */
-      attribute?: unknown | null;
+      attribute?: DomModification.Attribute | null;
 
       /**
        * Populated on read for `setStyle` modifications, parsed from `value`. Customers
@@ -1337,6 +2497,23 @@ export namespace ExperimentRetrieveResponse {
     }
 
     export namespace DomModification {
+      /**
+       * Populated on read for `setAttribute` modifications, parsed from `value`.
+       * Customers may also send this field instead of a JSON-stringified `value` on
+       * write — see `domModificationInputSchema`.
+       */
+      export interface Attribute {
+        /**
+         * HTML attribute name.
+         */
+        name: string;
+
+        /**
+         * Attribute value to assign.
+         */
+        value: string;
+      }
+
       export interface Style {
         /**
          * CSS property name in camelCase or kebab-case.
@@ -1352,6 +2529,241 @@ export namespace ExperimentRetrieveResponse {
   }
 
   /**
+   * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
+   * analysis in GraphQL.
+   */
+  export interface AnalysisConfig {
+    confidenceLevel: number;
+
+    method: 'BAYESIAN' | 'FREQUENTIST' | 'SEQUENTIAL';
+
+    version: number;
+
+    boundary?: string | null;
+
+    cuped?: AnalysisConfig.Cuped | null;
+
+    outcomeWindowDays?: number | null;
+
+    planning?: AnalysisConfig.Planning | null;
+
+    sidedness?: 'GREATER_THAN_CONTROL' | 'TWO_SIDED' | null;
+  }
+
+  export namespace AnalysisConfig {
+    export interface Cuped {
+      covariate: string;
+
+      enabled: boolean;
+
+      prePeriodDays: number;
+    }
+
+    export interface Planning {
+      mode: 'MANUAL_TARGET' | 'POWER';
+
+      targetVisitorsByVariant: Array<Planning.TargetVisitorsByVariant>;
+
+      baseline?: number | null;
+
+      minimumDetectableEffect?: number | null;
+
+      power?: number | null;
+    }
+
+    export namespace Planning {
+      export interface TargetVisitorsByVariant {
+        /**
+         * Variant identifier covered by this fixed-horizon target.
+         */
+        variantId: string;
+
+        /**
+         * Unique exposed visitors required for this variant.
+         */
+        visitors: number;
+      }
+    }
+  }
+
+  /**
+   * Primary metric definition frozen with the analysis plan at start time.
+   */
+  export interface AnalysisMetricSnapshot {
+    eventMatchers: Array<AnalysisMetricSnapshot.EventMatcher>;
+
+    eventName: string;
+
+    goalId: string;
+
+    metricType: 'CONVERSION' | 'VALUE';
+
+    winsorize: boolean;
+
+    winsorizePercentile: number;
+  }
+
+  export namespace AnalysisMetricSnapshot {
+    export interface EventMatcher {
+      /**
+       * Event name required by this OR branch.
+       */
+      eventName: string;
+
+      /**
+       * Versioned analytics filter using catalog property IDs and operators.
+       */
+      filter?: EventMatcher.Filter;
+    }
+
+    export namespace EventMatcher {
+      /**
+       * Versioned analytics filter using catalog property IDs and operators.
+       */
+      export interface Filter {
+        filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+        version: 1;
+      }
+
+      export namespace Filter {
+        export interface UnionMember0 {
+          children: Array<UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2>;
+
+          kind: 'and' | 'or';
+        }
+
+        export namespace UnionMember0 {
+          export interface UnionMember0 {
+            children: Array<unknown>;
+
+            kind: 'and' | 'or';
+          }
+
+          export interface UnionMember1 {
+            child: unknown;
+
+            kind: 'not';
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
+        }
+
+        export interface UnionMember1 {
+          child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+          kind: 'not';
+        }
+
+        export namespace UnionMember1 {
+          export interface UnionMember0 {
+            children: Array<unknown>;
+
+            kind: 'and' | 'or';
+          }
+
+          export interface UnionMember1 {
+            child: unknown;
+
+            kind: 'not';
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
+        }
+
+        export interface UnionMember2 {
+          kind: 'predicate';
+
+          operator:
+            | 'eq'
+            | 'neq'
+            | 'gt'
+            | 'gte'
+            | 'lt'
+            | 'lte'
+            | 'contains'
+            | 'not_contains'
+            | 'contains_ci'
+            | 'not_contains_ci'
+            | 'starts_with'
+            | 'ends_with'
+            | 'in'
+            | 'not_in'
+            | 'exists'
+            | 'missing'
+            | 'is_null';
+
+          property: string;
+
+          path?: Array<string>;
+
+          type?: 'string' | 'number' | 'boolean';
+
+          value?: string | number | boolean | Array<string | number | boolean>;
+        }
+      }
+    }
+  }
+
+  /**
    * Configured success metrics. The read shape mirrors the write shape — `metrics`
    * from a GET response can be PATCHed back without modification.
    */
@@ -1359,7 +2771,7 @@ export namespace ExperimentRetrieveResponse {
     /**
      * Primary success metric used in the results report.
      */
-    primary?: unknown | null;
+    primary?: Metrics.Primary | null;
 
     /**
      * Optional secondary metrics tracked alongside the primary goal.
@@ -1368,6 +2780,201 @@ export namespace ExperimentRetrieveResponse {
   }
 
   export namespace Metrics {
+    /**
+     * Primary success metric used in the results report.
+     */
+    export interface Primary {
+      /**
+       * Stable identifier for selecting this saved goal in experiment results queries.
+       */
+      goalId: string;
+
+      /**
+       * Complete OR-list of event matchers. Each matcher is an event name plus an
+       * optional analytics filter.
+       */
+      eventMatchers?: Array<Primary.EventMatcher> | null;
+
+      /**
+       * Name of the event used to measure success for this metric.
+       */
+      eventName?: string | null;
+
+      /**
+       * Optional funnel identifier when the metric is derived from an existing funnel
+       * definition.
+       */
+      funnelId?: string | null;
+
+      valueMode?: boolean | null;
+
+      winsorize?: boolean | null;
+
+      winsorizePercentile?: number | null;
+    }
+
+    export namespace Primary {
+      export interface EventMatcher {
+        /**
+         * Event name required by this OR branch.
+         */
+        eventName: string;
+
+        /**
+         * Versioned analytics filter using catalog property IDs and operators.
+         */
+        filter?: EventMatcher.Filter;
+      }
+
+      export namespace EventMatcher {
+        /**
+         * Versioned analytics filter using catalog property IDs and operators.
+         */
+        export interface Filter {
+          filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+          version: 1;
+        }
+
+        export namespace Filter {
+          export interface UnionMember0 {
+            children: Array<
+              UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+            >;
+
+            kind: 'and' | 'or';
+          }
+
+          export namespace UnionMember0 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember1 {
+            child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+            kind: 'not';
+          }
+
+          export namespace UnionMember1 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
+        }
+      }
+    }
+
     export interface Secondary {
       /**
        * Stable identifier for selecting this saved goal in experiment results queries.
@@ -1406,23 +3013,156 @@ export namespace ExperimentRetrieveResponse {
         eventName: string;
 
         /**
-         * Optional analytics filter evaluated against the same event row as `eventName`.
+         * Versioned analytics filter using catalog property IDs and operators.
          */
         filter?: EventMatcher.Filter;
       }
 
       export namespace EventMatcher {
         /**
-         * Optional analytics filter evaluated against the same event row as `eventName`.
+         * Versioned analytics filter using catalog property IDs and operators.
          */
         export interface Filter {
-          /**
-           * Analytics predicate or and/or/not tree. Use the analytics query catalog for
-           * supported properties and operators.
-           */
-          filter: unknown;
+          filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
 
           version: 1;
+        }
+
+        export namespace Filter {
+          export interface UnionMember0 {
+            children: Array<
+              UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+            >;
+
+            kind: 'and' | 'or';
+          }
+
+          export namespace UnionMember0 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember1 {
+            child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+            kind: 'not';
+          }
+
+          export namespace UnionMember1 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
         }
       }
     }
@@ -1476,7 +3216,7 @@ export namespace ExperimentRetrieveResponse {
      * Whether the experiment should target new visitors, returning visitors, or any
      * visitor.
      */
-    visitorStatus?: string | null;
+    visitorStatus?: 'any' | 'new' | 'returning' | null;
   }
 
   export namespace TargetingRules {
@@ -1550,12 +3290,12 @@ export interface ExperimentUpdateResponse {
    * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
    * analysis in GraphQL.
    */
-  analysisConfig?: unknown | null;
+  analysisConfig?: ExperimentUpdateResponse.AnalysisConfig | null;
 
   /**
    * Primary metric definition frozen with the analysis plan at start time.
    */
-  analysisMetricSnapshot?: unknown | null;
+  analysisMetricSnapshot?: ExperimentUpdateResponse.AnalysisMetricSnapshot | null;
 
   /**
    * ISO-8601 timestamp when the analysis plan was locked at experiment start.
@@ -1669,7 +3409,7 @@ export namespace ExperimentUpdateResponse {
      * How this variant changes the user experience. `dom_modifications` for on-page
      * changes or `redirect` for redirect tests.
      */
-    variantType?: string | null;
+    variantType?: 'dom_modifications' | 'redirect' | null;
   }
 
   export namespace Variant {
@@ -1709,7 +3449,7 @@ export namespace ExperimentUpdateResponse {
        * Customers may also send this field instead of a JSON-stringified `value` on
        * write — see `domModificationInputSchema`.
        */
-      attribute?: unknown | null;
+      attribute?: DomModification.Attribute | null;
 
       /**
        * Populated on read for `setStyle` modifications, parsed from `value`. Customers
@@ -1720,6 +3460,23 @@ export namespace ExperimentUpdateResponse {
     }
 
     export namespace DomModification {
+      /**
+       * Populated on read for `setAttribute` modifications, parsed from `value`.
+       * Customers may also send this field instead of a JSON-stringified `value` on
+       * write — see `domModificationInputSchema`.
+       */
+      export interface Attribute {
+        /**
+         * HTML attribute name.
+         */
+        name: string;
+
+        /**
+         * Attribute value to assign.
+         */
+        value: string;
+      }
+
       export interface Style {
         /**
          * CSS property name in camelCase or kebab-case.
@@ -1735,6 +3492,241 @@ export namespace ExperimentUpdateResponse {
   }
 
   /**
+   * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
+   * analysis in GraphQL.
+   */
+  export interface AnalysisConfig {
+    confidenceLevel: number;
+
+    method: 'BAYESIAN' | 'FREQUENTIST' | 'SEQUENTIAL';
+
+    version: number;
+
+    boundary?: string | null;
+
+    cuped?: AnalysisConfig.Cuped | null;
+
+    outcomeWindowDays?: number | null;
+
+    planning?: AnalysisConfig.Planning | null;
+
+    sidedness?: 'GREATER_THAN_CONTROL' | 'TWO_SIDED' | null;
+  }
+
+  export namespace AnalysisConfig {
+    export interface Cuped {
+      covariate: string;
+
+      enabled: boolean;
+
+      prePeriodDays: number;
+    }
+
+    export interface Planning {
+      mode: 'MANUAL_TARGET' | 'POWER';
+
+      targetVisitorsByVariant: Array<Planning.TargetVisitorsByVariant>;
+
+      baseline?: number | null;
+
+      minimumDetectableEffect?: number | null;
+
+      power?: number | null;
+    }
+
+    export namespace Planning {
+      export interface TargetVisitorsByVariant {
+        /**
+         * Variant identifier covered by this fixed-horizon target.
+         */
+        variantId: string;
+
+        /**
+         * Unique exposed visitors required for this variant.
+         */
+        visitors: number;
+      }
+    }
+  }
+
+  /**
+   * Primary metric definition frozen with the analysis plan at start time.
+   */
+  export interface AnalysisMetricSnapshot {
+    eventMatchers: Array<AnalysisMetricSnapshot.EventMatcher>;
+
+    eventName: string;
+
+    goalId: string;
+
+    metricType: 'CONVERSION' | 'VALUE';
+
+    winsorize: boolean;
+
+    winsorizePercentile: number;
+  }
+
+  export namespace AnalysisMetricSnapshot {
+    export interface EventMatcher {
+      /**
+       * Event name required by this OR branch.
+       */
+      eventName: string;
+
+      /**
+       * Versioned analytics filter using catalog property IDs and operators.
+       */
+      filter?: EventMatcher.Filter;
+    }
+
+    export namespace EventMatcher {
+      /**
+       * Versioned analytics filter using catalog property IDs and operators.
+       */
+      export interface Filter {
+        filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+        version: 1;
+      }
+
+      export namespace Filter {
+        export interface UnionMember0 {
+          children: Array<UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2>;
+
+          kind: 'and' | 'or';
+        }
+
+        export namespace UnionMember0 {
+          export interface UnionMember0 {
+            children: Array<unknown>;
+
+            kind: 'and' | 'or';
+          }
+
+          export interface UnionMember1 {
+            child: unknown;
+
+            kind: 'not';
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
+        }
+
+        export interface UnionMember1 {
+          child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+          kind: 'not';
+        }
+
+        export namespace UnionMember1 {
+          export interface UnionMember0 {
+            children: Array<unknown>;
+
+            kind: 'and' | 'or';
+          }
+
+          export interface UnionMember1 {
+            child: unknown;
+
+            kind: 'not';
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
+        }
+
+        export interface UnionMember2 {
+          kind: 'predicate';
+
+          operator:
+            | 'eq'
+            | 'neq'
+            | 'gt'
+            | 'gte'
+            | 'lt'
+            | 'lte'
+            | 'contains'
+            | 'not_contains'
+            | 'contains_ci'
+            | 'not_contains_ci'
+            | 'starts_with'
+            | 'ends_with'
+            | 'in'
+            | 'not_in'
+            | 'exists'
+            | 'missing'
+            | 'is_null';
+
+          property: string;
+
+          path?: Array<string>;
+
+          type?: 'string' | 'number' | 'boolean';
+
+          value?: string | number | boolean | Array<string | number | boolean>;
+        }
+      }
+    }
+  }
+
+  /**
    * Configured success metrics. The read shape mirrors the write shape — `metrics`
    * from a GET response can be PATCHed back without modification.
    */
@@ -1742,7 +3734,7 @@ export namespace ExperimentUpdateResponse {
     /**
      * Primary success metric used in the results report.
      */
-    primary?: unknown | null;
+    primary?: Metrics.Primary | null;
 
     /**
      * Optional secondary metrics tracked alongside the primary goal.
@@ -1751,6 +3743,201 @@ export namespace ExperimentUpdateResponse {
   }
 
   export namespace Metrics {
+    /**
+     * Primary success metric used in the results report.
+     */
+    export interface Primary {
+      /**
+       * Stable identifier for selecting this saved goal in experiment results queries.
+       */
+      goalId: string;
+
+      /**
+       * Complete OR-list of event matchers. Each matcher is an event name plus an
+       * optional analytics filter.
+       */
+      eventMatchers?: Array<Primary.EventMatcher> | null;
+
+      /**
+       * Name of the event used to measure success for this metric.
+       */
+      eventName?: string | null;
+
+      /**
+       * Optional funnel identifier when the metric is derived from an existing funnel
+       * definition.
+       */
+      funnelId?: string | null;
+
+      valueMode?: boolean | null;
+
+      winsorize?: boolean | null;
+
+      winsorizePercentile?: number | null;
+    }
+
+    export namespace Primary {
+      export interface EventMatcher {
+        /**
+         * Event name required by this OR branch.
+         */
+        eventName: string;
+
+        /**
+         * Versioned analytics filter using catalog property IDs and operators.
+         */
+        filter?: EventMatcher.Filter;
+      }
+
+      export namespace EventMatcher {
+        /**
+         * Versioned analytics filter using catalog property IDs and operators.
+         */
+        export interface Filter {
+          filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+          version: 1;
+        }
+
+        export namespace Filter {
+          export interface UnionMember0 {
+            children: Array<
+              UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+            >;
+
+            kind: 'and' | 'or';
+          }
+
+          export namespace UnionMember0 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember1 {
+            child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+            kind: 'not';
+          }
+
+          export namespace UnionMember1 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
+        }
+      }
+    }
+
     export interface Secondary {
       /**
        * Stable identifier for selecting this saved goal in experiment results queries.
@@ -1789,23 +3976,156 @@ export namespace ExperimentUpdateResponse {
         eventName: string;
 
         /**
-         * Optional analytics filter evaluated against the same event row as `eventName`.
+         * Versioned analytics filter using catalog property IDs and operators.
          */
         filter?: EventMatcher.Filter;
       }
 
       export namespace EventMatcher {
         /**
-         * Optional analytics filter evaluated against the same event row as `eventName`.
+         * Versioned analytics filter using catalog property IDs and operators.
          */
         export interface Filter {
-          /**
-           * Analytics predicate or and/or/not tree. Use the analytics query catalog for
-           * supported properties and operators.
-           */
-          filter: unknown;
+          filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
 
           version: 1;
+        }
+
+        export namespace Filter {
+          export interface UnionMember0 {
+            children: Array<
+              UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+            >;
+
+            kind: 'and' | 'or';
+          }
+
+          export namespace UnionMember0 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember1 {
+            child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+            kind: 'not';
+          }
+
+          export namespace UnionMember1 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
         }
       }
     }
@@ -1859,7 +4179,7 @@ export namespace ExperimentUpdateResponse {
      * Whether the experiment should target new visitors, returning visitors, or any
      * visitor.
      */
-    visitorStatus?: string | null;
+    visitorStatus?: 'any' | 'new' | 'returning' | null;
   }
 
   export namespace TargetingRules {
@@ -1938,12 +4258,12 @@ export interface ExperimentDuplicateResponse {
    * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
    * analysis in GraphQL.
    */
-  analysisConfig?: unknown | null;
+  analysisConfig?: ExperimentDuplicateResponse.AnalysisConfig | null;
 
   /**
    * Primary metric definition frozen with the analysis plan at start time.
    */
-  analysisMetricSnapshot?: unknown | null;
+  analysisMetricSnapshot?: ExperimentDuplicateResponse.AnalysisMetricSnapshot | null;
 
   /**
    * ISO-8601 timestamp when the analysis plan was locked at experiment start.
@@ -2057,7 +4377,7 @@ export namespace ExperimentDuplicateResponse {
      * How this variant changes the user experience. `dom_modifications` for on-page
      * changes or `redirect` for redirect tests.
      */
-    variantType?: string | null;
+    variantType?: 'dom_modifications' | 'redirect' | null;
   }
 
   export namespace Variant {
@@ -2097,7 +4417,7 @@ export namespace ExperimentDuplicateResponse {
        * Customers may also send this field instead of a JSON-stringified `value` on
        * write — see `domModificationInputSchema`.
        */
-      attribute?: unknown | null;
+      attribute?: DomModification.Attribute | null;
 
       /**
        * Populated on read for `setStyle` modifications, parsed from `value`. Customers
@@ -2108,6 +4428,23 @@ export namespace ExperimentDuplicateResponse {
     }
 
     export namespace DomModification {
+      /**
+       * Populated on read for `setAttribute` modifications, parsed from `value`.
+       * Customers may also send this field instead of a JSON-stringified `value` on
+       * write — see `domModificationInputSchema`.
+       */
+      export interface Attribute {
+        /**
+         * HTML attribute name.
+         */
+        name: string;
+
+        /**
+         * Attribute value to assign.
+         */
+        value: string;
+      }
+
       export interface Style {
         /**
          * CSS property name in camelCase or kebab-case.
@@ -2123,6 +4460,241 @@ export namespace ExperimentDuplicateResponse {
   }
 
   /**
+   * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
+   * analysis in GraphQL.
+   */
+  export interface AnalysisConfig {
+    confidenceLevel: number;
+
+    method: 'BAYESIAN' | 'FREQUENTIST' | 'SEQUENTIAL';
+
+    version: number;
+
+    boundary?: string | null;
+
+    cuped?: AnalysisConfig.Cuped | null;
+
+    outcomeWindowDays?: number | null;
+
+    planning?: AnalysisConfig.Planning | null;
+
+    sidedness?: 'GREATER_THAN_CONTROL' | 'TWO_SIDED' | null;
+  }
+
+  export namespace AnalysisConfig {
+    export interface Cuped {
+      covariate: string;
+
+      enabled: boolean;
+
+      prePeriodDays: number;
+    }
+
+    export interface Planning {
+      mode: 'MANUAL_TARGET' | 'POWER';
+
+      targetVisitorsByVariant: Array<Planning.TargetVisitorsByVariant>;
+
+      baseline?: number | null;
+
+      minimumDetectableEffect?: number | null;
+
+      power?: number | null;
+    }
+
+    export namespace Planning {
+      export interface TargetVisitorsByVariant {
+        /**
+         * Variant identifier covered by this fixed-horizon target.
+         */
+        variantId: string;
+
+        /**
+         * Unique exposed visitors required for this variant.
+         */
+        visitors: number;
+      }
+    }
+  }
+
+  /**
+   * Primary metric definition frozen with the analysis plan at start time.
+   */
+  export interface AnalysisMetricSnapshot {
+    eventMatchers: Array<AnalysisMetricSnapshot.EventMatcher>;
+
+    eventName: string;
+
+    goalId: string;
+
+    metricType: 'CONVERSION' | 'VALUE';
+
+    winsorize: boolean;
+
+    winsorizePercentile: number;
+  }
+
+  export namespace AnalysisMetricSnapshot {
+    export interface EventMatcher {
+      /**
+       * Event name required by this OR branch.
+       */
+      eventName: string;
+
+      /**
+       * Versioned analytics filter using catalog property IDs and operators.
+       */
+      filter?: EventMatcher.Filter;
+    }
+
+    export namespace EventMatcher {
+      /**
+       * Versioned analytics filter using catalog property IDs and operators.
+       */
+      export interface Filter {
+        filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+        version: 1;
+      }
+
+      export namespace Filter {
+        export interface UnionMember0 {
+          children: Array<UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2>;
+
+          kind: 'and' | 'or';
+        }
+
+        export namespace UnionMember0 {
+          export interface UnionMember0 {
+            children: Array<unknown>;
+
+            kind: 'and' | 'or';
+          }
+
+          export interface UnionMember1 {
+            child: unknown;
+
+            kind: 'not';
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
+        }
+
+        export interface UnionMember1 {
+          child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+          kind: 'not';
+        }
+
+        export namespace UnionMember1 {
+          export interface UnionMember0 {
+            children: Array<unknown>;
+
+            kind: 'and' | 'or';
+          }
+
+          export interface UnionMember1 {
+            child: unknown;
+
+            kind: 'not';
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
+        }
+
+        export interface UnionMember2 {
+          kind: 'predicate';
+
+          operator:
+            | 'eq'
+            | 'neq'
+            | 'gt'
+            | 'gte'
+            | 'lt'
+            | 'lte'
+            | 'contains'
+            | 'not_contains'
+            | 'contains_ci'
+            | 'not_contains_ci'
+            | 'starts_with'
+            | 'ends_with'
+            | 'in'
+            | 'not_in'
+            | 'exists'
+            | 'missing'
+            | 'is_null';
+
+          property: string;
+
+          path?: Array<string>;
+
+          type?: 'string' | 'number' | 'boolean';
+
+          value?: string | number | boolean | Array<string | number | boolean>;
+        }
+      }
+    }
+  }
+
+  /**
    * Configured success metrics. The read shape mirrors the write shape — `metrics`
    * from a GET response can be PATCHed back without modification.
    */
@@ -2130,7 +4702,7 @@ export namespace ExperimentDuplicateResponse {
     /**
      * Primary success metric used in the results report.
      */
-    primary?: unknown | null;
+    primary?: Metrics.Primary | null;
 
     /**
      * Optional secondary metrics tracked alongside the primary goal.
@@ -2139,6 +4711,201 @@ export namespace ExperimentDuplicateResponse {
   }
 
   export namespace Metrics {
+    /**
+     * Primary success metric used in the results report.
+     */
+    export interface Primary {
+      /**
+       * Stable identifier for selecting this saved goal in experiment results queries.
+       */
+      goalId: string;
+
+      /**
+       * Complete OR-list of event matchers. Each matcher is an event name plus an
+       * optional analytics filter.
+       */
+      eventMatchers?: Array<Primary.EventMatcher> | null;
+
+      /**
+       * Name of the event used to measure success for this metric.
+       */
+      eventName?: string | null;
+
+      /**
+       * Optional funnel identifier when the metric is derived from an existing funnel
+       * definition.
+       */
+      funnelId?: string | null;
+
+      valueMode?: boolean | null;
+
+      winsorize?: boolean | null;
+
+      winsorizePercentile?: number | null;
+    }
+
+    export namespace Primary {
+      export interface EventMatcher {
+        /**
+         * Event name required by this OR branch.
+         */
+        eventName: string;
+
+        /**
+         * Versioned analytics filter using catalog property IDs and operators.
+         */
+        filter?: EventMatcher.Filter;
+      }
+
+      export namespace EventMatcher {
+        /**
+         * Versioned analytics filter using catalog property IDs and operators.
+         */
+        export interface Filter {
+          filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+          version: 1;
+        }
+
+        export namespace Filter {
+          export interface UnionMember0 {
+            children: Array<
+              UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+            >;
+
+            kind: 'and' | 'or';
+          }
+
+          export namespace UnionMember0 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember1 {
+            child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+            kind: 'not';
+          }
+
+          export namespace UnionMember1 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
+        }
+      }
+    }
+
     export interface Secondary {
       /**
        * Stable identifier for selecting this saved goal in experiment results queries.
@@ -2177,23 +4944,156 @@ export namespace ExperimentDuplicateResponse {
         eventName: string;
 
         /**
-         * Optional analytics filter evaluated against the same event row as `eventName`.
+         * Versioned analytics filter using catalog property IDs and operators.
          */
         filter?: EventMatcher.Filter;
       }
 
       export namespace EventMatcher {
         /**
-         * Optional analytics filter evaluated against the same event row as `eventName`.
+         * Versioned analytics filter using catalog property IDs and operators.
          */
         export interface Filter {
-          /**
-           * Analytics predicate or and/or/not tree. Use the analytics query catalog for
-           * supported properties and operators.
-           */
-          filter: unknown;
+          filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
 
           version: 1;
+        }
+
+        export namespace Filter {
+          export interface UnionMember0 {
+            children: Array<
+              UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+            >;
+
+            kind: 'and' | 'or';
+          }
+
+          export namespace UnionMember0 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember1 {
+            child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+            kind: 'not';
+          }
+
+          export namespace UnionMember1 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
         }
       }
     }
@@ -2247,7 +5147,7 @@ export namespace ExperimentDuplicateResponse {
      * Whether the experiment should target new visitors, returning visitors, or any
      * visitor.
      */
-    visitorStatus?: string | null;
+    visitorStatus?: 'any' | 'new' | 'returning' | null;
   }
 
   export namespace TargetingRules {
@@ -2272,13 +5172,6 @@ export namespace ExperimentDuplicateResponse {
 }
 
 export interface ExperimentStartResponse {
-  /**
-   * Number of unpublished version changes detected at the time of the lifecycle
-   * action. Values greater than 1 mean other unpublished work exists besides this
-   * experiment state change.
-   */
-  concurrentVersionChanges: number;
-
   experiment: ExperimentStartResponse.Experiment;
 
   /**
@@ -2286,6 +5179,14 @@ export interface ExperimentStartResponse {
    * immediately.
    */
   publishStatus: 'pending_publish' | 'published';
+
+  /**
+   * Number of unpublished version changes detected at the time of the lifecycle
+   * action. Null when publishing was not requested or changes could not be
+   * inspected. Values greater than 1 mean other unpublished work exists besides this
+   * experiment state change.
+   */
+  concurrentVersionChanges?: number | null;
 }
 
 export namespace ExperimentStartResponse {
@@ -2328,12 +5229,12 @@ export namespace ExperimentStartResponse {
      * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
      * analysis in GraphQL.
      */
-    analysisConfig?: unknown | null;
+    analysisConfig?: Experiment.AnalysisConfig | null;
 
     /**
      * Primary metric definition frozen with the analysis plan at start time.
      */
-    analysisMetricSnapshot?: unknown | null;
+    analysisMetricSnapshot?: Experiment.AnalysisMetricSnapshot | null;
 
     /**
      * ISO-8601 timestamp when the analysis plan was locked at experiment start.
@@ -2405,6 +5306,243 @@ export namespace ExperimentStartResponse {
 
   export namespace Experiment {
     /**
+     * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
+     * analysis in GraphQL.
+     */
+    export interface AnalysisConfig {
+      confidenceLevel: number;
+
+      method: 'BAYESIAN' | 'FREQUENTIST' | 'SEQUENTIAL';
+
+      version: number;
+
+      boundary?: string | null;
+
+      cuped?: AnalysisConfig.Cuped | null;
+
+      outcomeWindowDays?: number | null;
+
+      planning?: AnalysisConfig.Planning | null;
+
+      sidedness?: 'GREATER_THAN_CONTROL' | 'TWO_SIDED' | null;
+    }
+
+    export namespace AnalysisConfig {
+      export interface Cuped {
+        covariate: string;
+
+        enabled: boolean;
+
+        prePeriodDays: number;
+      }
+
+      export interface Planning {
+        mode: 'MANUAL_TARGET' | 'POWER';
+
+        targetVisitorsByVariant: Array<Planning.TargetVisitorsByVariant>;
+
+        baseline?: number | null;
+
+        minimumDetectableEffect?: number | null;
+
+        power?: number | null;
+      }
+
+      export namespace Planning {
+        export interface TargetVisitorsByVariant {
+          /**
+           * Variant identifier covered by this fixed-horizon target.
+           */
+          variantId: string;
+
+          /**
+           * Unique exposed visitors required for this variant.
+           */
+          visitors: number;
+        }
+      }
+    }
+
+    /**
+     * Primary metric definition frozen with the analysis plan at start time.
+     */
+    export interface AnalysisMetricSnapshot {
+      eventMatchers: Array<AnalysisMetricSnapshot.EventMatcher>;
+
+      eventName: string;
+
+      goalId: string;
+
+      metricType: 'CONVERSION' | 'VALUE';
+
+      winsorize: boolean;
+
+      winsorizePercentile: number;
+    }
+
+    export namespace AnalysisMetricSnapshot {
+      export interface EventMatcher {
+        /**
+         * Event name required by this OR branch.
+         */
+        eventName: string;
+
+        /**
+         * Versioned analytics filter using catalog property IDs and operators.
+         */
+        filter?: EventMatcher.Filter;
+      }
+
+      export namespace EventMatcher {
+        /**
+         * Versioned analytics filter using catalog property IDs and operators.
+         */
+        export interface Filter {
+          filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+          version: 1;
+        }
+
+        export namespace Filter {
+          export interface UnionMember0 {
+            children: Array<
+              UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+            >;
+
+            kind: 'and' | 'or';
+          }
+
+          export namespace UnionMember0 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember1 {
+            child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+            kind: 'not';
+          }
+
+          export namespace UnionMember1 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
+        }
+      }
+    }
+
+    /**
      * Configured success metrics. The read shape mirrors the write shape — `metrics`
      * from a GET response can be PATCHed back without modification.
      */
@@ -2412,7 +5550,7 @@ export namespace ExperimentStartResponse {
       /**
        * Primary success metric used in the results report.
        */
-      primary?: unknown | null;
+      primary?: Metrics.Primary | null;
 
       /**
        * Optional secondary metrics tracked alongside the primary goal.
@@ -2421,6 +5559,201 @@ export namespace ExperimentStartResponse {
     }
 
     export namespace Metrics {
+      /**
+       * Primary success metric used in the results report.
+       */
+      export interface Primary {
+        /**
+         * Stable identifier for selecting this saved goal in experiment results queries.
+         */
+        goalId: string;
+
+        /**
+         * Complete OR-list of event matchers. Each matcher is an event name plus an
+         * optional analytics filter.
+         */
+        eventMatchers?: Array<Primary.EventMatcher> | null;
+
+        /**
+         * Name of the event used to measure success for this metric.
+         */
+        eventName?: string | null;
+
+        /**
+         * Optional funnel identifier when the metric is derived from an existing funnel
+         * definition.
+         */
+        funnelId?: string | null;
+
+        valueMode?: boolean | null;
+
+        winsorize?: boolean | null;
+
+        winsorizePercentile?: number | null;
+      }
+
+      export namespace Primary {
+        export interface EventMatcher {
+          /**
+           * Event name required by this OR branch.
+           */
+          eventName: string;
+
+          /**
+           * Versioned analytics filter using catalog property IDs and operators.
+           */
+          filter?: EventMatcher.Filter;
+        }
+
+        export namespace EventMatcher {
+          /**
+           * Versioned analytics filter using catalog property IDs and operators.
+           */
+          export interface Filter {
+            filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+            version: 1;
+          }
+
+          export namespace Filter {
+            export interface UnionMember0 {
+              children: Array<
+                UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+              >;
+
+              kind: 'and' | 'or';
+            }
+
+            export namespace UnionMember0 {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+
+            export interface UnionMember1 {
+              child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+              kind: 'not';
+            }
+
+            export namespace UnionMember1 {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+        }
+      }
+
       export interface Secondary {
         /**
          * Stable identifier for selecting this saved goal in experiment results queries.
@@ -2459,23 +5792,156 @@ export namespace ExperimentStartResponse {
           eventName: string;
 
           /**
-           * Optional analytics filter evaluated against the same event row as `eventName`.
+           * Versioned analytics filter using catalog property IDs and operators.
            */
           filter?: EventMatcher.Filter;
         }
 
         export namespace EventMatcher {
           /**
-           * Optional analytics filter evaluated against the same event row as `eventName`.
+           * Versioned analytics filter using catalog property IDs and operators.
            */
           export interface Filter {
-            /**
-             * Analytics predicate or and/or/not tree. Use the analytics query catalog for
-             * supported properties and operators.
-             */
-            filter: unknown;
+            filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
 
             version: 1;
+          }
+
+          export namespace Filter {
+            export interface UnionMember0 {
+              children: Array<
+                UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+              >;
+
+              kind: 'and' | 'or';
+            }
+
+            export namespace UnionMember0 {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+
+            export interface UnionMember1 {
+              child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+              kind: 'not';
+            }
+
+            export namespace UnionMember1 {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
           }
         }
       }
@@ -2529,7 +5995,7 @@ export namespace ExperimentStartResponse {
        * Whether the experiment should target new visitors, returning visitors, or any
        * visitor.
        */
-      visitorStatus?: string | null;
+      visitorStatus?: 'any' | 'new' | 'returning' | null;
     }
 
     export namespace TargetingRules {
@@ -2555,13 +6021,6 @@ export namespace ExperimentStartResponse {
 }
 
 export interface ExperimentStopResponse {
-  /**
-   * Number of unpublished version changes detected at the time of the lifecycle
-   * action. Values greater than 1 mean other unpublished work exists besides this
-   * experiment state change.
-   */
-  concurrentVersionChanges: number;
-
   experiment: ExperimentStopResponse.Experiment;
 
   /**
@@ -2569,6 +6028,14 @@ export interface ExperimentStopResponse {
    * immediately.
    */
   publishStatus: 'pending_publish' | 'published';
+
+  /**
+   * Number of unpublished version changes detected at the time of the lifecycle
+   * action. Null when publishing was not requested or changes could not be
+   * inspected. Values greater than 1 mean other unpublished work exists besides this
+   * experiment state change.
+   */
+  concurrentVersionChanges?: number | null;
 }
 
 export namespace ExperimentStopResponse {
@@ -2611,12 +6078,12 @@ export namespace ExperimentStopResponse {
      * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
      * analysis in GraphQL.
      */
-    analysisConfig?: unknown | null;
+    analysisConfig?: Experiment.AnalysisConfig | null;
 
     /**
      * Primary metric definition frozen with the analysis plan at start time.
      */
-    analysisMetricSnapshot?: unknown | null;
+    analysisMetricSnapshot?: Experiment.AnalysisMetricSnapshot | null;
 
     /**
      * ISO-8601 timestamp when the analysis plan was locked at experiment start.
@@ -2688,6 +6155,243 @@ export namespace ExperimentStopResponse {
 
   export namespace Experiment {
     /**
+     * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
+     * analysis in GraphQL.
+     */
+    export interface AnalysisConfig {
+      confidenceLevel: number;
+
+      method: 'BAYESIAN' | 'FREQUENTIST' | 'SEQUENTIAL';
+
+      version: number;
+
+      boundary?: string | null;
+
+      cuped?: AnalysisConfig.Cuped | null;
+
+      outcomeWindowDays?: number | null;
+
+      planning?: AnalysisConfig.Planning | null;
+
+      sidedness?: 'GREATER_THAN_CONTROL' | 'TWO_SIDED' | null;
+    }
+
+    export namespace AnalysisConfig {
+      export interface Cuped {
+        covariate: string;
+
+        enabled: boolean;
+
+        prePeriodDays: number;
+      }
+
+      export interface Planning {
+        mode: 'MANUAL_TARGET' | 'POWER';
+
+        targetVisitorsByVariant: Array<Planning.TargetVisitorsByVariant>;
+
+        baseline?: number | null;
+
+        minimumDetectableEffect?: number | null;
+
+        power?: number | null;
+      }
+
+      export namespace Planning {
+        export interface TargetVisitorsByVariant {
+          /**
+           * Variant identifier covered by this fixed-horizon target.
+           */
+          variantId: string;
+
+          /**
+           * Unique exposed visitors required for this variant.
+           */
+          visitors: number;
+        }
+      }
+    }
+
+    /**
+     * Primary metric definition frozen with the analysis plan at start time.
+     */
+    export interface AnalysisMetricSnapshot {
+      eventMatchers: Array<AnalysisMetricSnapshot.EventMatcher>;
+
+      eventName: string;
+
+      goalId: string;
+
+      metricType: 'CONVERSION' | 'VALUE';
+
+      winsorize: boolean;
+
+      winsorizePercentile: number;
+    }
+
+    export namespace AnalysisMetricSnapshot {
+      export interface EventMatcher {
+        /**
+         * Event name required by this OR branch.
+         */
+        eventName: string;
+
+        /**
+         * Versioned analytics filter using catalog property IDs and operators.
+         */
+        filter?: EventMatcher.Filter;
+      }
+
+      export namespace EventMatcher {
+        /**
+         * Versioned analytics filter using catalog property IDs and operators.
+         */
+        export interface Filter {
+          filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+          version: 1;
+        }
+
+        export namespace Filter {
+          export interface UnionMember0 {
+            children: Array<
+              UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+            >;
+
+            kind: 'and' | 'or';
+          }
+
+          export namespace UnionMember0 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember1 {
+            child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+            kind: 'not';
+          }
+
+          export namespace UnionMember1 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
+        }
+      }
+    }
+
+    /**
      * Configured success metrics. The read shape mirrors the write shape — `metrics`
      * from a GET response can be PATCHed back without modification.
      */
@@ -2695,7 +6399,7 @@ export namespace ExperimentStopResponse {
       /**
        * Primary success metric used in the results report.
        */
-      primary?: unknown | null;
+      primary?: Metrics.Primary | null;
 
       /**
        * Optional secondary metrics tracked alongside the primary goal.
@@ -2704,6 +6408,201 @@ export namespace ExperimentStopResponse {
     }
 
     export namespace Metrics {
+      /**
+       * Primary success metric used in the results report.
+       */
+      export interface Primary {
+        /**
+         * Stable identifier for selecting this saved goal in experiment results queries.
+         */
+        goalId: string;
+
+        /**
+         * Complete OR-list of event matchers. Each matcher is an event name plus an
+         * optional analytics filter.
+         */
+        eventMatchers?: Array<Primary.EventMatcher> | null;
+
+        /**
+         * Name of the event used to measure success for this metric.
+         */
+        eventName?: string | null;
+
+        /**
+         * Optional funnel identifier when the metric is derived from an existing funnel
+         * definition.
+         */
+        funnelId?: string | null;
+
+        valueMode?: boolean | null;
+
+        winsorize?: boolean | null;
+
+        winsorizePercentile?: number | null;
+      }
+
+      export namespace Primary {
+        export interface EventMatcher {
+          /**
+           * Event name required by this OR branch.
+           */
+          eventName: string;
+
+          /**
+           * Versioned analytics filter using catalog property IDs and operators.
+           */
+          filter?: EventMatcher.Filter;
+        }
+
+        export namespace EventMatcher {
+          /**
+           * Versioned analytics filter using catalog property IDs and operators.
+           */
+          export interface Filter {
+            filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+            version: 1;
+          }
+
+          export namespace Filter {
+            export interface UnionMember0 {
+              children: Array<
+                UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+              >;
+
+              kind: 'and' | 'or';
+            }
+
+            export namespace UnionMember0 {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+
+            export interface UnionMember1 {
+              child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+              kind: 'not';
+            }
+
+            export namespace UnionMember1 {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+        }
+      }
+
       export interface Secondary {
         /**
          * Stable identifier for selecting this saved goal in experiment results queries.
@@ -2742,23 +6641,156 @@ export namespace ExperimentStopResponse {
           eventName: string;
 
           /**
-           * Optional analytics filter evaluated against the same event row as `eventName`.
+           * Versioned analytics filter using catalog property IDs and operators.
            */
           filter?: EventMatcher.Filter;
         }
 
         export namespace EventMatcher {
           /**
-           * Optional analytics filter evaluated against the same event row as `eventName`.
+           * Versioned analytics filter using catalog property IDs and operators.
            */
           export interface Filter {
-            /**
-             * Analytics predicate or and/or/not tree. Use the analytics query catalog for
-             * supported properties and operators.
-             */
-            filter: unknown;
+            filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
 
             version: 1;
+          }
+
+          export namespace Filter {
+            export interface UnionMember0 {
+              children: Array<
+                UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+              >;
+
+              kind: 'and' | 'or';
+            }
+
+            export namespace UnionMember0 {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+
+            export interface UnionMember1 {
+              child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+              kind: 'not';
+            }
+
+            export namespace UnionMember1 {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
           }
         }
       }
@@ -2812,7 +6844,7 @@ export namespace ExperimentStopResponse {
        * Whether the experiment should target new visitors, returning visitors, or any
        * visitor.
        */
-      visitorStatus?: string | null;
+      visitorStatus?: 'any' | 'new' | 'returning' | null;
     }
 
     export namespace TargetingRules {
@@ -2838,13 +6870,6 @@ export namespace ExperimentStopResponse {
 }
 
 export interface ExperimentRolloutResponse {
-  /**
-   * Number of unpublished version changes detected at the time of the lifecycle
-   * action. Values greater than 1 mean other unpublished work exists besides this
-   * experiment state change.
-   */
-  concurrentVersionChanges: number;
-
   experiment: ExperimentRolloutResponse.Experiment;
 
   /**
@@ -2852,6 +6877,14 @@ export interface ExperimentRolloutResponse {
    * immediately.
    */
   publishStatus: 'pending_publish' | 'published';
+
+  /**
+   * Number of unpublished version changes detected at the time of the lifecycle
+   * action. Null when publishing was not requested or changes could not be
+   * inspected. Values greater than 1 mean other unpublished work exists besides this
+   * experiment state change.
+   */
+  concurrentVersionChanges?: number | null;
 }
 
 export namespace ExperimentRolloutResponse {
@@ -2894,12 +6927,12 @@ export namespace ExperimentRolloutResponse {
      * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
      * analysis in GraphQL.
      */
-    analysisConfig?: unknown | null;
+    analysisConfig?: Experiment.AnalysisConfig | null;
 
     /**
      * Primary metric definition frozen with the analysis plan at start time.
      */
-    analysisMetricSnapshot?: unknown | null;
+    analysisMetricSnapshot?: Experiment.AnalysisMetricSnapshot | null;
 
     /**
      * ISO-8601 timestamp when the analysis plan was locked at experiment start.
@@ -2971,6 +7004,243 @@ export namespace ExperimentRolloutResponse {
 
   export namespace Experiment {
     /**
+     * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
+     * analysis in GraphQL.
+     */
+    export interface AnalysisConfig {
+      confidenceLevel: number;
+
+      method: 'BAYESIAN' | 'FREQUENTIST' | 'SEQUENTIAL';
+
+      version: number;
+
+      boundary?: string | null;
+
+      cuped?: AnalysisConfig.Cuped | null;
+
+      outcomeWindowDays?: number | null;
+
+      planning?: AnalysisConfig.Planning | null;
+
+      sidedness?: 'GREATER_THAN_CONTROL' | 'TWO_SIDED' | null;
+    }
+
+    export namespace AnalysisConfig {
+      export interface Cuped {
+        covariate: string;
+
+        enabled: boolean;
+
+        prePeriodDays: number;
+      }
+
+      export interface Planning {
+        mode: 'MANUAL_TARGET' | 'POWER';
+
+        targetVisitorsByVariant: Array<Planning.TargetVisitorsByVariant>;
+
+        baseline?: number | null;
+
+        minimumDetectableEffect?: number | null;
+
+        power?: number | null;
+      }
+
+      export namespace Planning {
+        export interface TargetVisitorsByVariant {
+          /**
+           * Variant identifier covered by this fixed-horizon target.
+           */
+          variantId: string;
+
+          /**
+           * Unique exposed visitors required for this variant.
+           */
+          visitors: number;
+        }
+      }
+    }
+
+    /**
+     * Primary metric definition frozen with the analysis plan at start time.
+     */
+    export interface AnalysisMetricSnapshot {
+      eventMatchers: Array<AnalysisMetricSnapshot.EventMatcher>;
+
+      eventName: string;
+
+      goalId: string;
+
+      metricType: 'CONVERSION' | 'VALUE';
+
+      winsorize: boolean;
+
+      winsorizePercentile: number;
+    }
+
+    export namespace AnalysisMetricSnapshot {
+      export interface EventMatcher {
+        /**
+         * Event name required by this OR branch.
+         */
+        eventName: string;
+
+        /**
+         * Versioned analytics filter using catalog property IDs and operators.
+         */
+        filter?: EventMatcher.Filter;
+      }
+
+      export namespace EventMatcher {
+        /**
+         * Versioned analytics filter using catalog property IDs and operators.
+         */
+        export interface Filter {
+          filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+          version: 1;
+        }
+
+        export namespace Filter {
+          export interface UnionMember0 {
+            children: Array<
+              UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+            >;
+
+            kind: 'and' | 'or';
+          }
+
+          export namespace UnionMember0 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember1 {
+            child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+            kind: 'not';
+          }
+
+          export namespace UnionMember1 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
+        }
+      }
+    }
+
+    /**
      * Configured success metrics. The read shape mirrors the write shape — `metrics`
      * from a GET response can be PATCHed back without modification.
      */
@@ -2978,7 +7248,7 @@ export namespace ExperimentRolloutResponse {
       /**
        * Primary success metric used in the results report.
        */
-      primary?: unknown | null;
+      primary?: Metrics.Primary | null;
 
       /**
        * Optional secondary metrics tracked alongside the primary goal.
@@ -2987,6 +7257,201 @@ export namespace ExperimentRolloutResponse {
     }
 
     export namespace Metrics {
+      /**
+       * Primary success metric used in the results report.
+       */
+      export interface Primary {
+        /**
+         * Stable identifier for selecting this saved goal in experiment results queries.
+         */
+        goalId: string;
+
+        /**
+         * Complete OR-list of event matchers. Each matcher is an event name plus an
+         * optional analytics filter.
+         */
+        eventMatchers?: Array<Primary.EventMatcher> | null;
+
+        /**
+         * Name of the event used to measure success for this metric.
+         */
+        eventName?: string | null;
+
+        /**
+         * Optional funnel identifier when the metric is derived from an existing funnel
+         * definition.
+         */
+        funnelId?: string | null;
+
+        valueMode?: boolean | null;
+
+        winsorize?: boolean | null;
+
+        winsorizePercentile?: number | null;
+      }
+
+      export namespace Primary {
+        export interface EventMatcher {
+          /**
+           * Event name required by this OR branch.
+           */
+          eventName: string;
+
+          /**
+           * Versioned analytics filter using catalog property IDs and operators.
+           */
+          filter?: EventMatcher.Filter;
+        }
+
+        export namespace EventMatcher {
+          /**
+           * Versioned analytics filter using catalog property IDs and operators.
+           */
+          export interface Filter {
+            filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+            version: 1;
+          }
+
+          export namespace Filter {
+            export interface UnionMember0 {
+              children: Array<
+                UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+              >;
+
+              kind: 'and' | 'or';
+            }
+
+            export namespace UnionMember0 {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+
+            export interface UnionMember1 {
+              child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+              kind: 'not';
+            }
+
+            export namespace UnionMember1 {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+        }
+      }
+
       export interface Secondary {
         /**
          * Stable identifier for selecting this saved goal in experiment results queries.
@@ -3025,23 +7490,156 @@ export namespace ExperimentRolloutResponse {
           eventName: string;
 
           /**
-           * Optional analytics filter evaluated against the same event row as `eventName`.
+           * Versioned analytics filter using catalog property IDs and operators.
            */
           filter?: EventMatcher.Filter;
         }
 
         export namespace EventMatcher {
           /**
-           * Optional analytics filter evaluated against the same event row as `eventName`.
+           * Versioned analytics filter using catalog property IDs and operators.
            */
           export interface Filter {
-            /**
-             * Analytics predicate or and/or/not tree. Use the analytics query catalog for
-             * supported properties and operators.
-             */
-            filter: unknown;
+            filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
 
             version: 1;
+          }
+
+          export namespace Filter {
+            export interface UnionMember0 {
+              children: Array<
+                UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+              >;
+
+              kind: 'and' | 'or';
+            }
+
+            export namespace UnionMember0 {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+
+            export interface UnionMember1 {
+              child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+              kind: 'not';
+            }
+
+            export namespace UnionMember1 {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
           }
         }
       }
@@ -3095,7 +7693,7 @@ export namespace ExperimentRolloutResponse {
        * Whether the experiment should target new visitors, returning visitors, or any
        * visitor.
        */
-      visitorStatus?: string | null;
+      visitorStatus?: 'any' | 'new' | 'returning' | null;
     }
 
     export namespace TargetingRules {
@@ -3121,13 +7719,6 @@ export namespace ExperimentRolloutResponse {
 }
 
 export interface ExperimentEndRolloutResponse {
-  /**
-   * Number of unpublished version changes detected at the time of the lifecycle
-   * action. Values greater than 1 mean other unpublished work exists besides this
-   * experiment state change.
-   */
-  concurrentVersionChanges: number;
-
   experiment: ExperimentEndRolloutResponse.Experiment;
 
   /**
@@ -3135,6 +7726,14 @@ export interface ExperimentEndRolloutResponse {
    * immediately.
    */
   publishStatus: 'pending_publish' | 'published';
+
+  /**
+   * Number of unpublished version changes detected at the time of the lifecycle
+   * action. Null when publishing was not requested or changes could not be
+   * inspected. Values greater than 1 mean other unpublished work exists besides this
+   * experiment state change.
+   */
+  concurrentVersionChanges?: number | null;
 }
 
 export namespace ExperimentEndRolloutResponse {
@@ -3177,12 +7776,12 @@ export namespace ExperimentEndRolloutResponse {
      * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
      * analysis in GraphQL.
      */
-    analysisConfig?: unknown | null;
+    analysisConfig?: Experiment.AnalysisConfig | null;
 
     /**
      * Primary metric definition frozen with the analysis plan at start time.
      */
-    analysisMetricSnapshot?: unknown | null;
+    analysisMetricSnapshot?: Experiment.AnalysisMetricSnapshot | null;
 
     /**
      * ISO-8601 timestamp when the analysis plan was locked at experiment start.
@@ -3254,6 +7853,243 @@ export namespace ExperimentEndRolloutResponse {
 
   export namespace Experiment {
     /**
+     * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
+     * analysis in GraphQL.
+     */
+    export interface AnalysisConfig {
+      confidenceLevel: number;
+
+      method: 'BAYESIAN' | 'FREQUENTIST' | 'SEQUENTIAL';
+
+      version: number;
+
+      boundary?: string | null;
+
+      cuped?: AnalysisConfig.Cuped | null;
+
+      outcomeWindowDays?: number | null;
+
+      planning?: AnalysisConfig.Planning | null;
+
+      sidedness?: 'GREATER_THAN_CONTROL' | 'TWO_SIDED' | null;
+    }
+
+    export namespace AnalysisConfig {
+      export interface Cuped {
+        covariate: string;
+
+        enabled: boolean;
+
+        prePeriodDays: number;
+      }
+
+      export interface Planning {
+        mode: 'MANUAL_TARGET' | 'POWER';
+
+        targetVisitorsByVariant: Array<Planning.TargetVisitorsByVariant>;
+
+        baseline?: number | null;
+
+        minimumDetectableEffect?: number | null;
+
+        power?: number | null;
+      }
+
+      export namespace Planning {
+        export interface TargetVisitorsByVariant {
+          /**
+           * Variant identifier covered by this fixed-horizon target.
+           */
+          variantId: string;
+
+          /**
+           * Unique exposed visitors required for this variant.
+           */
+          visitors: number;
+        }
+      }
+    }
+
+    /**
+     * Primary metric definition frozen with the analysis plan at start time.
+     */
+    export interface AnalysisMetricSnapshot {
+      eventMatchers: Array<AnalysisMetricSnapshot.EventMatcher>;
+
+      eventName: string;
+
+      goalId: string;
+
+      metricType: 'CONVERSION' | 'VALUE';
+
+      winsorize: boolean;
+
+      winsorizePercentile: number;
+    }
+
+    export namespace AnalysisMetricSnapshot {
+      export interface EventMatcher {
+        /**
+         * Event name required by this OR branch.
+         */
+        eventName: string;
+
+        /**
+         * Versioned analytics filter using catalog property IDs and operators.
+         */
+        filter?: EventMatcher.Filter;
+      }
+
+      export namespace EventMatcher {
+        /**
+         * Versioned analytics filter using catalog property IDs and operators.
+         */
+        export interface Filter {
+          filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+          version: 1;
+        }
+
+        export namespace Filter {
+          export interface UnionMember0 {
+            children: Array<
+              UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+            >;
+
+            kind: 'and' | 'or';
+          }
+
+          export namespace UnionMember0 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember1 {
+            child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+            kind: 'not';
+          }
+
+          export namespace UnionMember1 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
+        }
+      }
+    }
+
+    /**
      * Configured success metrics. The read shape mirrors the write shape — `metrics`
      * from a GET response can be PATCHed back without modification.
      */
@@ -3261,7 +8097,7 @@ export namespace ExperimentEndRolloutResponse {
       /**
        * Primary success metric used in the results report.
        */
-      primary?: unknown | null;
+      primary?: Metrics.Primary | null;
 
       /**
        * Optional secondary metrics tracked alongside the primary goal.
@@ -3270,6 +8106,201 @@ export namespace ExperimentEndRolloutResponse {
     }
 
     export namespace Metrics {
+      /**
+       * Primary success metric used in the results report.
+       */
+      export interface Primary {
+        /**
+         * Stable identifier for selecting this saved goal in experiment results queries.
+         */
+        goalId: string;
+
+        /**
+         * Complete OR-list of event matchers. Each matcher is an event name plus an
+         * optional analytics filter.
+         */
+        eventMatchers?: Array<Primary.EventMatcher> | null;
+
+        /**
+         * Name of the event used to measure success for this metric.
+         */
+        eventName?: string | null;
+
+        /**
+         * Optional funnel identifier when the metric is derived from an existing funnel
+         * definition.
+         */
+        funnelId?: string | null;
+
+        valueMode?: boolean | null;
+
+        winsorize?: boolean | null;
+
+        winsorizePercentile?: number | null;
+      }
+
+      export namespace Primary {
+        export interface EventMatcher {
+          /**
+           * Event name required by this OR branch.
+           */
+          eventName: string;
+
+          /**
+           * Versioned analytics filter using catalog property IDs and operators.
+           */
+          filter?: EventMatcher.Filter;
+        }
+
+        export namespace EventMatcher {
+          /**
+           * Versioned analytics filter using catalog property IDs and operators.
+           */
+          export interface Filter {
+            filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+            version: 1;
+          }
+
+          export namespace Filter {
+            export interface UnionMember0 {
+              children: Array<
+                UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+              >;
+
+              kind: 'and' | 'or';
+            }
+
+            export namespace UnionMember0 {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+
+            export interface UnionMember1 {
+              child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+              kind: 'not';
+            }
+
+            export namespace UnionMember1 {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+        }
+      }
+
       export interface Secondary {
         /**
          * Stable identifier for selecting this saved goal in experiment results queries.
@@ -3308,23 +8339,156 @@ export namespace ExperimentEndRolloutResponse {
           eventName: string;
 
           /**
-           * Optional analytics filter evaluated against the same event row as `eventName`.
+           * Versioned analytics filter using catalog property IDs and operators.
            */
           filter?: EventMatcher.Filter;
         }
 
         export namespace EventMatcher {
           /**
-           * Optional analytics filter evaluated against the same event row as `eventName`.
+           * Versioned analytics filter using catalog property IDs and operators.
            */
           export interface Filter {
-            /**
-             * Analytics predicate or and/or/not tree. Use the analytics query catalog for
-             * supported properties and operators.
-             */
-            filter: unknown;
+            filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
 
             version: 1;
+          }
+
+          export namespace Filter {
+            export interface UnionMember0 {
+              children: Array<
+                UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+              >;
+
+              kind: 'and' | 'or';
+            }
+
+            export namespace UnionMember0 {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+
+            export interface UnionMember1 {
+              child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+              kind: 'not';
+            }
+
+            export namespace UnionMember1 {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
           }
         }
       }
@@ -3378,7 +8542,7 @@ export namespace ExperimentEndRolloutResponse {
        * Whether the experiment should target new visitors, returning visitors, or any
        * visitor.
        */
-      visitorStatus?: string | null;
+      visitorStatus?: 'any' | 'new' | 'returning' | null;
     }
 
     export namespace TargetingRules {
@@ -3442,12 +8606,12 @@ export interface ExperimentWinnerResponse {
    * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
    * analysis in GraphQL.
    */
-  analysisConfig?: unknown | null;
+  analysisConfig?: ExperimentWinnerResponse.AnalysisConfig | null;
 
   /**
    * Primary metric definition frozen with the analysis plan at start time.
    */
-  analysisMetricSnapshot?: unknown | null;
+  analysisMetricSnapshot?: ExperimentWinnerResponse.AnalysisMetricSnapshot | null;
 
   /**
    * ISO-8601 timestamp when the analysis plan was locked at experiment start.
@@ -3519,6 +8683,241 @@ export interface ExperimentWinnerResponse {
 
 export namespace ExperimentWinnerResponse {
   /**
+   * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
+   * analysis in GraphQL.
+   */
+  export interface AnalysisConfig {
+    confidenceLevel: number;
+
+    method: 'BAYESIAN' | 'FREQUENTIST' | 'SEQUENTIAL';
+
+    version: number;
+
+    boundary?: string | null;
+
+    cuped?: AnalysisConfig.Cuped | null;
+
+    outcomeWindowDays?: number | null;
+
+    planning?: AnalysisConfig.Planning | null;
+
+    sidedness?: 'GREATER_THAN_CONTROL' | 'TWO_SIDED' | null;
+  }
+
+  export namespace AnalysisConfig {
+    export interface Cuped {
+      covariate: string;
+
+      enabled: boolean;
+
+      prePeriodDays: number;
+    }
+
+    export interface Planning {
+      mode: 'MANUAL_TARGET' | 'POWER';
+
+      targetVisitorsByVariant: Array<Planning.TargetVisitorsByVariant>;
+
+      baseline?: number | null;
+
+      minimumDetectableEffect?: number | null;
+
+      power?: number | null;
+    }
+
+    export namespace Planning {
+      export interface TargetVisitorsByVariant {
+        /**
+         * Variant identifier covered by this fixed-horizon target.
+         */
+        variantId: string;
+
+        /**
+         * Unique exposed visitors required for this variant.
+         */
+        visitors: number;
+      }
+    }
+  }
+
+  /**
+   * Primary metric definition frozen with the analysis plan at start time.
+   */
+  export interface AnalysisMetricSnapshot {
+    eventMatchers: Array<AnalysisMetricSnapshot.EventMatcher>;
+
+    eventName: string;
+
+    goalId: string;
+
+    metricType: 'CONVERSION' | 'VALUE';
+
+    winsorize: boolean;
+
+    winsorizePercentile: number;
+  }
+
+  export namespace AnalysisMetricSnapshot {
+    export interface EventMatcher {
+      /**
+       * Event name required by this OR branch.
+       */
+      eventName: string;
+
+      /**
+       * Versioned analytics filter using catalog property IDs and operators.
+       */
+      filter?: EventMatcher.Filter;
+    }
+
+    export namespace EventMatcher {
+      /**
+       * Versioned analytics filter using catalog property IDs and operators.
+       */
+      export interface Filter {
+        filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+        version: 1;
+      }
+
+      export namespace Filter {
+        export interface UnionMember0 {
+          children: Array<UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2>;
+
+          kind: 'and' | 'or';
+        }
+
+        export namespace UnionMember0 {
+          export interface UnionMember0 {
+            children: Array<unknown>;
+
+            kind: 'and' | 'or';
+          }
+
+          export interface UnionMember1 {
+            child: unknown;
+
+            kind: 'not';
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
+        }
+
+        export interface UnionMember1 {
+          child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+          kind: 'not';
+        }
+
+        export namespace UnionMember1 {
+          export interface UnionMember0 {
+            children: Array<unknown>;
+
+            kind: 'and' | 'or';
+          }
+
+          export interface UnionMember1 {
+            child: unknown;
+
+            kind: 'not';
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
+        }
+
+        export interface UnionMember2 {
+          kind: 'predicate';
+
+          operator:
+            | 'eq'
+            | 'neq'
+            | 'gt'
+            | 'gte'
+            | 'lt'
+            | 'lte'
+            | 'contains'
+            | 'not_contains'
+            | 'contains_ci'
+            | 'not_contains_ci'
+            | 'starts_with'
+            | 'ends_with'
+            | 'in'
+            | 'not_in'
+            | 'exists'
+            | 'missing'
+            | 'is_null';
+
+          property: string;
+
+          path?: Array<string>;
+
+          type?: 'string' | 'number' | 'boolean';
+
+          value?: string | number | boolean | Array<string | number | boolean>;
+        }
+      }
+    }
+  }
+
+  /**
    * Configured success metrics. The read shape mirrors the write shape — `metrics`
    * from a GET response can be PATCHed back without modification.
    */
@@ -3526,7 +8925,7 @@ export namespace ExperimentWinnerResponse {
     /**
      * Primary success metric used in the results report.
      */
-    primary?: unknown | null;
+    primary?: Metrics.Primary | null;
 
     /**
      * Optional secondary metrics tracked alongside the primary goal.
@@ -3535,6 +8934,201 @@ export namespace ExperimentWinnerResponse {
   }
 
   export namespace Metrics {
+    /**
+     * Primary success metric used in the results report.
+     */
+    export interface Primary {
+      /**
+       * Stable identifier for selecting this saved goal in experiment results queries.
+       */
+      goalId: string;
+
+      /**
+       * Complete OR-list of event matchers. Each matcher is an event name plus an
+       * optional analytics filter.
+       */
+      eventMatchers?: Array<Primary.EventMatcher> | null;
+
+      /**
+       * Name of the event used to measure success for this metric.
+       */
+      eventName?: string | null;
+
+      /**
+       * Optional funnel identifier when the metric is derived from an existing funnel
+       * definition.
+       */
+      funnelId?: string | null;
+
+      valueMode?: boolean | null;
+
+      winsorize?: boolean | null;
+
+      winsorizePercentile?: number | null;
+    }
+
+    export namespace Primary {
+      export interface EventMatcher {
+        /**
+         * Event name required by this OR branch.
+         */
+        eventName: string;
+
+        /**
+         * Versioned analytics filter using catalog property IDs and operators.
+         */
+        filter?: EventMatcher.Filter;
+      }
+
+      export namespace EventMatcher {
+        /**
+         * Versioned analytics filter using catalog property IDs and operators.
+         */
+        export interface Filter {
+          filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+          version: 1;
+        }
+
+        export namespace Filter {
+          export interface UnionMember0 {
+            children: Array<
+              UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+            >;
+
+            kind: 'and' | 'or';
+          }
+
+          export namespace UnionMember0 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember1 {
+            child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+            kind: 'not';
+          }
+
+          export namespace UnionMember1 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
+        }
+      }
+    }
+
     export interface Secondary {
       /**
        * Stable identifier for selecting this saved goal in experiment results queries.
@@ -3573,23 +9167,156 @@ export namespace ExperimentWinnerResponse {
         eventName: string;
 
         /**
-         * Optional analytics filter evaluated against the same event row as `eventName`.
+         * Versioned analytics filter using catalog property IDs and operators.
          */
         filter?: EventMatcher.Filter;
       }
 
       export namespace EventMatcher {
         /**
-         * Optional analytics filter evaluated against the same event row as `eventName`.
+         * Versioned analytics filter using catalog property IDs and operators.
          */
         export interface Filter {
-          /**
-           * Analytics predicate or and/or/not tree. Use the analytics query catalog for
-           * supported properties and operators.
-           */
-          filter: unknown;
+          filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
 
           version: 1;
+        }
+
+        export namespace Filter {
+          export interface UnionMember0 {
+            children: Array<
+              UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+            >;
+
+            kind: 'and' | 'or';
+          }
+
+          export namespace UnionMember0 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember1 {
+            child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+            kind: 'not';
+          }
+
+          export namespace UnionMember1 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
         }
       }
     }
@@ -3643,7 +9370,7 @@ export namespace ExperimentWinnerResponse {
      * Whether the experiment should target new visitors, returning visitors, or any
      * visitor.
      */
-    visitorStatus?: string | null;
+    visitorStatus?: 'any' | 'new' | 'returning' | null;
   }
 
   export namespace TargetingRules {
@@ -3668,13 +9395,6 @@ export namespace ExperimentWinnerResponse {
 }
 
 export interface ExperimentPauseResponse {
-  /**
-   * Number of unpublished version changes detected at the time of the lifecycle
-   * action. Values greater than 1 mean other unpublished work exists besides this
-   * experiment state change.
-   */
-  concurrentVersionChanges: number;
-
   experiment: ExperimentPauseResponse.Experiment;
 
   /**
@@ -3682,6 +9402,14 @@ export interface ExperimentPauseResponse {
    * immediately.
    */
   publishStatus: 'pending_publish' | 'published';
+
+  /**
+   * Number of unpublished version changes detected at the time of the lifecycle
+   * action. Null when publishing was not requested or changes could not be
+   * inspected. Values greater than 1 mean other unpublished work exists besides this
+   * experiment state change.
+   */
+  concurrentVersionChanges?: number | null;
 }
 
 export namespace ExperimentPauseResponse {
@@ -3724,12 +9452,12 @@ export namespace ExperimentPauseResponse {
      * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
      * analysis in GraphQL.
      */
-    analysisConfig?: unknown | null;
+    analysisConfig?: Experiment.AnalysisConfig | null;
 
     /**
      * Primary metric definition frozen with the analysis plan at start time.
      */
-    analysisMetricSnapshot?: unknown | null;
+    analysisMetricSnapshot?: Experiment.AnalysisMetricSnapshot | null;
 
     /**
      * ISO-8601 timestamp when the analysis plan was locked at experiment start.
@@ -3801,6 +9529,243 @@ export namespace ExperimentPauseResponse {
 
   export namespace Experiment {
     /**
+     * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
+     * analysis in GraphQL.
+     */
+    export interface AnalysisConfig {
+      confidenceLevel: number;
+
+      method: 'BAYESIAN' | 'FREQUENTIST' | 'SEQUENTIAL';
+
+      version: number;
+
+      boundary?: string | null;
+
+      cuped?: AnalysisConfig.Cuped | null;
+
+      outcomeWindowDays?: number | null;
+
+      planning?: AnalysisConfig.Planning | null;
+
+      sidedness?: 'GREATER_THAN_CONTROL' | 'TWO_SIDED' | null;
+    }
+
+    export namespace AnalysisConfig {
+      export interface Cuped {
+        covariate: string;
+
+        enabled: boolean;
+
+        prePeriodDays: number;
+      }
+
+      export interface Planning {
+        mode: 'MANUAL_TARGET' | 'POWER';
+
+        targetVisitorsByVariant: Array<Planning.TargetVisitorsByVariant>;
+
+        baseline?: number | null;
+
+        minimumDetectableEffect?: number | null;
+
+        power?: number | null;
+      }
+
+      export namespace Planning {
+        export interface TargetVisitorsByVariant {
+          /**
+           * Variant identifier covered by this fixed-horizon target.
+           */
+          variantId: string;
+
+          /**
+           * Unique exposed visitors required for this variant.
+           */
+          visitors: number;
+        }
+      }
+    }
+
+    /**
+     * Primary metric definition frozen with the analysis plan at start time.
+     */
+    export interface AnalysisMetricSnapshot {
+      eventMatchers: Array<AnalysisMetricSnapshot.EventMatcher>;
+
+      eventName: string;
+
+      goalId: string;
+
+      metricType: 'CONVERSION' | 'VALUE';
+
+      winsorize: boolean;
+
+      winsorizePercentile: number;
+    }
+
+    export namespace AnalysisMetricSnapshot {
+      export interface EventMatcher {
+        /**
+         * Event name required by this OR branch.
+         */
+        eventName: string;
+
+        /**
+         * Versioned analytics filter using catalog property IDs and operators.
+         */
+        filter?: EventMatcher.Filter;
+      }
+
+      export namespace EventMatcher {
+        /**
+         * Versioned analytics filter using catalog property IDs and operators.
+         */
+        export interface Filter {
+          filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+          version: 1;
+        }
+
+        export namespace Filter {
+          export interface UnionMember0 {
+            children: Array<
+              UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+            >;
+
+            kind: 'and' | 'or';
+          }
+
+          export namespace UnionMember0 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember1 {
+            child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+            kind: 'not';
+          }
+
+          export namespace UnionMember1 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
+        }
+      }
+    }
+
+    /**
      * Configured success metrics. The read shape mirrors the write shape — `metrics`
      * from a GET response can be PATCHed back without modification.
      */
@@ -3808,7 +9773,7 @@ export namespace ExperimentPauseResponse {
       /**
        * Primary success metric used in the results report.
        */
-      primary?: unknown | null;
+      primary?: Metrics.Primary | null;
 
       /**
        * Optional secondary metrics tracked alongside the primary goal.
@@ -3817,6 +9782,201 @@ export namespace ExperimentPauseResponse {
     }
 
     export namespace Metrics {
+      /**
+       * Primary success metric used in the results report.
+       */
+      export interface Primary {
+        /**
+         * Stable identifier for selecting this saved goal in experiment results queries.
+         */
+        goalId: string;
+
+        /**
+         * Complete OR-list of event matchers. Each matcher is an event name plus an
+         * optional analytics filter.
+         */
+        eventMatchers?: Array<Primary.EventMatcher> | null;
+
+        /**
+         * Name of the event used to measure success for this metric.
+         */
+        eventName?: string | null;
+
+        /**
+         * Optional funnel identifier when the metric is derived from an existing funnel
+         * definition.
+         */
+        funnelId?: string | null;
+
+        valueMode?: boolean | null;
+
+        winsorize?: boolean | null;
+
+        winsorizePercentile?: number | null;
+      }
+
+      export namespace Primary {
+        export interface EventMatcher {
+          /**
+           * Event name required by this OR branch.
+           */
+          eventName: string;
+
+          /**
+           * Versioned analytics filter using catalog property IDs and operators.
+           */
+          filter?: EventMatcher.Filter;
+        }
+
+        export namespace EventMatcher {
+          /**
+           * Versioned analytics filter using catalog property IDs and operators.
+           */
+          export interface Filter {
+            filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+            version: 1;
+          }
+
+          export namespace Filter {
+            export interface UnionMember0 {
+              children: Array<
+                UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+              >;
+
+              kind: 'and' | 'or';
+            }
+
+            export namespace UnionMember0 {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+
+            export interface UnionMember1 {
+              child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+              kind: 'not';
+            }
+
+            export namespace UnionMember1 {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+        }
+      }
+
       export interface Secondary {
         /**
          * Stable identifier for selecting this saved goal in experiment results queries.
@@ -3855,23 +10015,156 @@ export namespace ExperimentPauseResponse {
           eventName: string;
 
           /**
-           * Optional analytics filter evaluated against the same event row as `eventName`.
+           * Versioned analytics filter using catalog property IDs and operators.
            */
           filter?: EventMatcher.Filter;
         }
 
         export namespace EventMatcher {
           /**
-           * Optional analytics filter evaluated against the same event row as `eventName`.
+           * Versioned analytics filter using catalog property IDs and operators.
            */
           export interface Filter {
-            /**
-             * Analytics predicate or and/or/not tree. Use the analytics query catalog for
-             * supported properties and operators.
-             */
-            filter: unknown;
+            filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
 
             version: 1;
+          }
+
+          export namespace Filter {
+            export interface UnionMember0 {
+              children: Array<
+                UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+              >;
+
+              kind: 'and' | 'or';
+            }
+
+            export namespace UnionMember0 {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+
+            export interface UnionMember1 {
+              child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+              kind: 'not';
+            }
+
+            export namespace UnionMember1 {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
           }
         }
       }
@@ -3925,7 +10218,7 @@ export namespace ExperimentPauseResponse {
        * Whether the experiment should target new visitors, returning visitors, or any
        * visitor.
        */
-      visitorStatus?: string | null;
+      visitorStatus?: 'any' | 'new' | 'returning' | null;
     }
 
     export namespace TargetingRules {
@@ -3951,13 +10244,6 @@ export namespace ExperimentPauseResponse {
 }
 
 export interface ExperimentResumeResponse {
-  /**
-   * Number of unpublished version changes detected at the time of the lifecycle
-   * action. Values greater than 1 mean other unpublished work exists besides this
-   * experiment state change.
-   */
-  concurrentVersionChanges: number;
-
   experiment: ExperimentResumeResponse.Experiment;
 
   /**
@@ -3965,6 +10251,14 @@ export interface ExperimentResumeResponse {
    * immediately.
    */
   publishStatus: 'pending_publish' | 'published';
+
+  /**
+   * Number of unpublished version changes detected at the time of the lifecycle
+   * action. Null when publishing was not requested or changes could not be
+   * inspected. Values greater than 1 mean other unpublished work exists besides this
+   * experiment state change.
+   */
+  concurrentVersionChanges?: number | null;
 }
 
 export namespace ExperimentResumeResponse {
@@ -4007,12 +10301,12 @@ export namespace ExperimentResumeResponse {
      * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
      * analysis in GraphQL.
      */
-    analysisConfig?: unknown | null;
+    analysisConfig?: Experiment.AnalysisConfig | null;
 
     /**
      * Primary metric definition frozen with the analysis plan at start time.
      */
-    analysisMetricSnapshot?: unknown | null;
+    analysisMetricSnapshot?: Experiment.AnalysisMetricSnapshot | null;
 
     /**
      * ISO-8601 timestamp when the analysis plan was locked at experiment start.
@@ -4084,6 +10378,243 @@ export namespace ExperimentResumeResponse {
 
   export namespace Experiment {
     /**
+     * Normalized statistical analysis plan. Missing legacy rows resolve to Bayesian
+     * analysis in GraphQL.
+     */
+    export interface AnalysisConfig {
+      confidenceLevel: number;
+
+      method: 'BAYESIAN' | 'FREQUENTIST' | 'SEQUENTIAL';
+
+      version: number;
+
+      boundary?: string | null;
+
+      cuped?: AnalysisConfig.Cuped | null;
+
+      outcomeWindowDays?: number | null;
+
+      planning?: AnalysisConfig.Planning | null;
+
+      sidedness?: 'GREATER_THAN_CONTROL' | 'TWO_SIDED' | null;
+    }
+
+    export namespace AnalysisConfig {
+      export interface Cuped {
+        covariate: string;
+
+        enabled: boolean;
+
+        prePeriodDays: number;
+      }
+
+      export interface Planning {
+        mode: 'MANUAL_TARGET' | 'POWER';
+
+        targetVisitorsByVariant: Array<Planning.TargetVisitorsByVariant>;
+
+        baseline?: number | null;
+
+        minimumDetectableEffect?: number | null;
+
+        power?: number | null;
+      }
+
+      export namespace Planning {
+        export interface TargetVisitorsByVariant {
+          /**
+           * Variant identifier covered by this fixed-horizon target.
+           */
+          variantId: string;
+
+          /**
+           * Unique exposed visitors required for this variant.
+           */
+          visitors: number;
+        }
+      }
+    }
+
+    /**
+     * Primary metric definition frozen with the analysis plan at start time.
+     */
+    export interface AnalysisMetricSnapshot {
+      eventMatchers: Array<AnalysisMetricSnapshot.EventMatcher>;
+
+      eventName: string;
+
+      goalId: string;
+
+      metricType: 'CONVERSION' | 'VALUE';
+
+      winsorize: boolean;
+
+      winsorizePercentile: number;
+    }
+
+    export namespace AnalysisMetricSnapshot {
+      export interface EventMatcher {
+        /**
+         * Event name required by this OR branch.
+         */
+        eventName: string;
+
+        /**
+         * Versioned analytics filter using catalog property IDs and operators.
+         */
+        filter?: EventMatcher.Filter;
+      }
+
+      export namespace EventMatcher {
+        /**
+         * Versioned analytics filter using catalog property IDs and operators.
+         */
+        export interface Filter {
+          filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+          version: 1;
+        }
+
+        export namespace Filter {
+          export interface UnionMember0 {
+            children: Array<
+              UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+            >;
+
+            kind: 'and' | 'or';
+          }
+
+          export namespace UnionMember0 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember1 {
+            child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+            kind: 'not';
+          }
+
+          export namespace UnionMember1 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
+        }
+      }
+    }
+
+    /**
      * Configured success metrics. The read shape mirrors the write shape — `metrics`
      * from a GET response can be PATCHed back without modification.
      */
@@ -4091,7 +10622,7 @@ export namespace ExperimentResumeResponse {
       /**
        * Primary success metric used in the results report.
        */
-      primary?: unknown | null;
+      primary?: Metrics.Primary | null;
 
       /**
        * Optional secondary metrics tracked alongside the primary goal.
@@ -4100,6 +10631,201 @@ export namespace ExperimentResumeResponse {
     }
 
     export namespace Metrics {
+      /**
+       * Primary success metric used in the results report.
+       */
+      export interface Primary {
+        /**
+         * Stable identifier for selecting this saved goal in experiment results queries.
+         */
+        goalId: string;
+
+        /**
+         * Complete OR-list of event matchers. Each matcher is an event name plus an
+         * optional analytics filter.
+         */
+        eventMatchers?: Array<Primary.EventMatcher> | null;
+
+        /**
+         * Name of the event used to measure success for this metric.
+         */
+        eventName?: string | null;
+
+        /**
+         * Optional funnel identifier when the metric is derived from an existing funnel
+         * definition.
+         */
+        funnelId?: string | null;
+
+        valueMode?: boolean | null;
+
+        winsorize?: boolean | null;
+
+        winsorizePercentile?: number | null;
+      }
+
+      export namespace Primary {
+        export interface EventMatcher {
+          /**
+           * Event name required by this OR branch.
+           */
+          eventName: string;
+
+          /**
+           * Versioned analytics filter using catalog property IDs and operators.
+           */
+          filter?: EventMatcher.Filter;
+        }
+
+        export namespace EventMatcher {
+          /**
+           * Versioned analytics filter using catalog property IDs and operators.
+           */
+          export interface Filter {
+            filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+            version: 1;
+          }
+
+          export namespace Filter {
+            export interface UnionMember0 {
+              children: Array<
+                UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+              >;
+
+              kind: 'and' | 'or';
+            }
+
+            export namespace UnionMember0 {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+
+            export interface UnionMember1 {
+              child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+              kind: 'not';
+            }
+
+            export namespace UnionMember1 {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+        }
+      }
+
       export interface Secondary {
         /**
          * Stable identifier for selecting this saved goal in experiment results queries.
@@ -4138,23 +10864,156 @@ export namespace ExperimentResumeResponse {
           eventName: string;
 
           /**
-           * Optional analytics filter evaluated against the same event row as `eventName`.
+           * Versioned analytics filter using catalog property IDs and operators.
            */
           filter?: EventMatcher.Filter;
         }
 
         export namespace EventMatcher {
           /**
-           * Optional analytics filter evaluated against the same event row as `eventName`.
+           * Versioned analytics filter using catalog property IDs and operators.
            */
           export interface Filter {
-            /**
-             * Analytics predicate or and/or/not tree. Use the analytics query catalog for
-             * supported properties and operators.
-             */
-            filter: unknown;
+            filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
 
             version: 1;
+          }
+
+          export namespace Filter {
+            export interface UnionMember0 {
+              children: Array<
+                UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+              >;
+
+              kind: 'and' | 'or';
+            }
+
+            export namespace UnionMember0 {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+
+            export interface UnionMember1 {
+              child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+              kind: 'not';
+            }
+
+            export namespace UnionMember1 {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
           }
         }
       }
@@ -4208,7 +11067,7 @@ export namespace ExperimentResumeResponse {
        * Whether the experiment should target new visitors, returning visitors, or any
        * visitor.
        */
-      visitorStatus?: string | null;
+      visitorStatus?: 'any' | 'new' | 'returning' | null;
     }
 
     export namespace TargetingRules {
@@ -4306,13 +11165,13 @@ export interface ExperimentAnalysisResponse {
 
   variants: Array<ExperimentAnalysisResponse.Variant>;
 
-  bayesian?: unknown | null;
+  bayesian?: ExperimentAnalysisResponse.Bayesian | null;
 
   evidenceState?: 'EVIDENCE_OF_HARM' | 'EVIDENCE_OF_IMPROVEMENT' | 'NO_CONCLUSION' | null;
 
-  frequentist?: unknown | null;
+  frequentist?: ExperimentAnalysisResponse.Frequentist | null;
 
-  sequential?: unknown | null;
+  sequential?: ExperimentAnalysisResponse.Sequential | null;
 }
 
 export namespace ExperimentAnalysisResponse {
@@ -4344,6 +11203,118 @@ export namespace ExperimentAnalysisResponse {
     visitors: number;
 
     meanValue?: number | null;
+  }
+
+  export interface Bayesian {
+    variants: Array<Bayesian.Variant>;
+  }
+
+  export namespace Bayesian {
+    export interface Variant {
+      id: string;
+
+      credibleInterval: Variant.CredibleInterval;
+
+      expectedLoss: number;
+
+      probabilityToBeBest: number;
+    }
+
+    export namespace Variant {
+      export interface CredibleInterval {
+        lower: number;
+
+        upper?: number | null;
+      }
+    }
+  }
+
+  export interface Frequentist {
+    comparisonAlpha: number;
+
+    comparisons: Array<Frequentist.Comparison>;
+
+    familywiseAlpha: number;
+
+    cuped?: Frequentist.Cuped | null;
+  }
+
+  export namespace Frequentist {
+    export interface Comparison {
+      adjustedPValue: number;
+
+      confidenceInterval: Comparison.ConfidenceInterval;
+
+      controlId: string;
+
+      degreesOfFreedom: number;
+
+      effect: number;
+
+      evidence: 'EVIDENCE_OF_HARM' | 'EVIDENCE_OF_IMPROVEMENT' | 'NO_CONCLUSION';
+
+      pValue: number;
+
+      standardError: number;
+
+      treatmentId: string;
+
+      relativeLift?: number | null;
+    }
+
+    export namespace Comparison {
+      export interface ConfidenceInterval {
+        lower: number;
+
+        upper?: number | null;
+      }
+    }
+
+    export interface Cuped {
+      adjustedVariance: number;
+
+      coverage: number;
+
+      rawVariance: number;
+
+      status: 'APPLIED' | 'FALLBACK_MISSING_COVARIATE' | 'FALLBACK_ZERO_VARIANCE';
+
+      correlation?: number | null;
+
+      theta?: number | null;
+
+      varianceReduction?: number | null;
+    }
+  }
+
+  export interface Sequential {
+    comparisonAlpha: number;
+
+    comparisons: Array<Sequential.Comparison>;
+
+    estimatorVersion: string;
+
+    familywiseAlpha: number;
+  }
+
+  export namespace Sequential {
+    export interface Comparison {
+      controlId: string;
+
+      controlVisitors: number;
+
+      effect: number;
+
+      evidence: 'EVIDENCE_OF_HARM' | 'EVIDENCE_OF_IMPROVEMENT' | 'NO_CONCLUSION';
+
+      lowerBound: number;
+
+      treatmentId: string;
+
+      treatmentVisitors: number;
+
+      upperBound?: number | null;
+    }
   }
 }
 
@@ -4449,14 +11420,14 @@ export interface ExperimentListParams extends CursorParams {
   search?: string;
 
   /**
-   * Optional lifecycle-state filter.
+   * Optional lifecycle-state filter. Empty values apply no filter.
    */
-  status?: 'completed' | 'draft' | 'paused' | 'running';
+  status?: 'completed' | 'draft' | 'paused' | 'running' | '';
 
   /**
-   * Optional experiment-type filter.
+   * Optional experiment-type filter. Empty values apply no filter.
    */
-  type?: 'ab' | 'multivariate' | 'personalization';
+  type?: 'ab' | 'multivariate' | 'personalization' | '';
 }
 
 export interface ExperimentCreateParams {
@@ -4476,7 +11447,7 @@ export interface ExperimentCreateParams {
    * Optional draft analysis method. Server-owned statistical constants are
    * normalized before storage.
    */
-  analysisConfig?: unknown | null;
+  analysisConfig?: ExperimentCreateParams.AnalysisConfig | null;
 
   /**
    * Weight of the auto-created control variant, as a percentage (1–100). Defaults to
@@ -4532,6 +11503,44 @@ export interface ExperimentCreateParams {
 
 export namespace ExperimentCreateParams {
   /**
+   * Optional draft analysis method. Server-owned statistical constants are
+   * normalized before storage.
+   */
+  export interface AnalysisConfig {
+    cupedEnabled?: boolean | null;
+
+    method?: 'BAYESIAN' | 'FREQUENTIST' | 'SEQUENTIAL' | null;
+
+    outcomeWindowDays?: number | null;
+
+    planning?: AnalysisConfig.Planning | null;
+
+    sidedness?: 'GREATER_THAN_CONTROL' | 'TWO_SIDED' | null;
+  }
+
+  export namespace AnalysisConfig {
+    export interface Planning {
+      mode: 'MANUAL_TARGET' | 'POWER';
+
+      targetVisitorsByVariant: Array<Planning.TargetVisitorsByVariant>;
+
+      baseline?: number | null;
+
+      minimumDetectableEffect?: number | null;
+
+      power?: number | null;
+    }
+
+    export namespace Planning {
+      export interface TargetVisitorsByVariant {
+        variantId: string;
+
+        visitors: number;
+      }
+    }
+  }
+
+  /**
    * Goal events. If you send `metrics.primary`, `metrics.primary.eventName` must be
    * a non-blank string. A primary event is required to start `ab` and `multivariate`
    * experiments, but not always-on `personalization`.
@@ -4593,23 +11602,156 @@ export namespace ExperimentCreateParams {
         eventName: string;
 
         /**
-         * Optional analytics filter evaluated against the same event row as `eventName`.
+         * Versioned analytics filter using catalog property IDs and operators.
          */
         filter?: EventMatcher.Filter;
       }
 
       export namespace EventMatcher {
         /**
-         * Optional analytics filter evaluated against the same event row as `eventName`.
+         * Versioned analytics filter using catalog property IDs and operators.
          */
         export interface Filter {
-          /**
-           * Analytics predicate or and/or/not tree. Use the analytics query catalog for
-           * supported properties and operators.
-           */
-          filter: unknown;
+          filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
 
           version: 1;
+        }
+
+        export namespace Filter {
+          export interface UnionMember0 {
+            children: Array<
+              UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+            >;
+
+            kind: 'and' | 'or';
+          }
+
+          export namespace UnionMember0 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember1 {
+            child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+            kind: 'not';
+          }
+
+          export namespace UnionMember1 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
         }
       }
     }
@@ -4653,23 +11795,156 @@ export namespace ExperimentCreateParams {
         eventName: string;
 
         /**
-         * Optional analytics filter evaluated against the same event row as `eventName`.
+         * Versioned analytics filter using catalog property IDs and operators.
          */
         filter?: EventMatcher.Filter;
       }
 
       export namespace EventMatcher {
         /**
-         * Optional analytics filter evaluated against the same event row as `eventName`.
+         * Versioned analytics filter using catalog property IDs and operators.
          */
         export interface Filter {
-          /**
-           * Analytics predicate or and/or/not tree. Use the analytics query catalog for
-           * supported properties and operators.
-           */
-          filter: unknown;
+          filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
 
           version: 1;
+        }
+
+        export namespace Filter {
+          export interface UnionMember0 {
+            children: Array<
+              UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+            >;
+
+            kind: 'and' | 'or';
+          }
+
+          export namespace UnionMember0 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember1 {
+            child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+            kind: 'not';
+          }
+
+          export namespace UnionMember1 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
         }
       }
     }
@@ -4722,7 +11997,7 @@ export namespace ExperimentCreateParams {
      * Whether the experiment should target new visitors, returning visitors, or any
      * visitor.
      */
-    visitorStatus?: string | null;
+    visitorStatus?: 'any' | 'new' | 'returning' | null;
   }
 
   export namespace TargetingRules {
@@ -4750,7 +12025,7 @@ export interface ExperimentUpdateParams {
   /**
    * Updated draft analysis method. This field is locked once an experiment starts.
    */
-  analysisConfig?: unknown | null;
+  analysisConfig?: ExperimentUpdateParams.AnalysisConfig | null;
 
   /**
    * Updated experiment hypothesis or operator note.
@@ -4794,6 +12069,43 @@ export interface ExperimentUpdateParams {
 }
 
 export namespace ExperimentUpdateParams {
+  /**
+   * Updated draft analysis method. This field is locked once an experiment starts.
+   */
+  export interface AnalysisConfig {
+    cupedEnabled?: boolean | null;
+
+    method?: 'BAYESIAN' | 'FREQUENTIST' | 'SEQUENTIAL' | null;
+
+    outcomeWindowDays?: number | null;
+
+    planning?: AnalysisConfig.Planning | null;
+
+    sidedness?: 'GREATER_THAN_CONTROL' | 'TWO_SIDED' | null;
+  }
+
+  export namespace AnalysisConfig {
+    export interface Planning {
+      mode: 'MANUAL_TARGET' | 'POWER';
+
+      targetVisitorsByVariant: Array<Planning.TargetVisitorsByVariant>;
+
+      baseline?: number | null;
+
+      minimumDetectableEffect?: number | null;
+
+      power?: number | null;
+    }
+
+    export namespace Planning {
+      export interface TargetVisitorsByVariant {
+        variantId: string;
+
+        visitors: number;
+      }
+    }
+  }
+
   /**
    * Updated goal metrics. Send the full nested object — replaces the previous value,
    * not merged. Preserve every filtered matcher and filter returned by GET or the
@@ -4856,23 +12168,156 @@ export namespace ExperimentUpdateParams {
         eventName: string;
 
         /**
-         * Optional analytics filter evaluated against the same event row as `eventName`.
+         * Versioned analytics filter using catalog property IDs and operators.
          */
         filter?: EventMatcher.Filter;
       }
 
       export namespace EventMatcher {
         /**
-         * Optional analytics filter evaluated against the same event row as `eventName`.
+         * Versioned analytics filter using catalog property IDs and operators.
          */
         export interface Filter {
-          /**
-           * Analytics predicate or and/or/not tree. Use the analytics query catalog for
-           * supported properties and operators.
-           */
-          filter: unknown;
+          filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
 
           version: 1;
+        }
+
+        export namespace Filter {
+          export interface UnionMember0 {
+            children: Array<
+              UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+            >;
+
+            kind: 'and' | 'or';
+          }
+
+          export namespace UnionMember0 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember1 {
+            child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+            kind: 'not';
+          }
+
+          export namespace UnionMember1 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
         }
       }
     }
@@ -4916,23 +12361,156 @@ export namespace ExperimentUpdateParams {
         eventName: string;
 
         /**
-         * Optional analytics filter evaluated against the same event row as `eventName`.
+         * Versioned analytics filter using catalog property IDs and operators.
          */
         filter?: EventMatcher.Filter;
       }
 
       export namespace EventMatcher {
         /**
-         * Optional analytics filter evaluated against the same event row as `eventName`.
+         * Versioned analytics filter using catalog property IDs and operators.
          */
         export interface Filter {
-          /**
-           * Analytics predicate or and/or/not tree. Use the analytics query catalog for
-           * supported properties and operators.
-           */
-          filter: unknown;
+          filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
 
           version: 1;
+        }
+
+        export namespace Filter {
+          export interface UnionMember0 {
+            children: Array<
+              UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+            >;
+
+            kind: 'and' | 'or';
+          }
+
+          export namespace UnionMember0 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember1 {
+            child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+            kind: 'not';
+          }
+
+          export namespace UnionMember1 {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+
+          export interface UnionMember2 {
+            kind: 'predicate';
+
+            operator:
+              | 'eq'
+              | 'neq'
+              | 'gt'
+              | 'gte'
+              | 'lt'
+              | 'lte'
+              | 'contains'
+              | 'not_contains'
+              | 'contains_ci'
+              | 'not_contains_ci'
+              | 'starts_with'
+              | 'ends_with'
+              | 'in'
+              | 'not_in'
+              | 'exists'
+              | 'missing'
+              | 'is_null';
+
+            property: string;
+
+            path?: Array<string>;
+
+            type?: 'string' | 'number' | 'boolean';
+
+            value?: string | number | boolean | Array<string | number | boolean>;
+          }
         }
       }
     }
@@ -4985,7 +12563,7 @@ export namespace ExperimentUpdateParams {
      * Whether the experiment should target new visitors, returning visitors, or any
      * visitor.
      */
-    visitorStatus?: string | null;
+    visitorStatus?: 'any' | 'new' | 'returning' | null;
   }
 
   export namespace TargetingRules {

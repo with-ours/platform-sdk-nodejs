@@ -139,6 +139,7 @@ export interface DestinationListResponse {
     | 'GoogleDataManagerEventIngest'
     | 'GooglePubSub'
     | 'GoogleStorage'
+    | 'GravityCAPI'
     | 'HTTPCustomRequest'
     | 'HTTPDestination'
     | 'Hubspot'
@@ -197,7 +198,9 @@ export interface DestinationListResponse {
 
   name?: string | null;
 
-  settings?: unknown | null;
+  settings?: {
+    [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+  } | null;
 
   updatedAt?: string | null;
 }
@@ -257,6 +260,7 @@ export interface DestinationCreateResponse {
     | 'GoogleDataManagerEventIngest'
     | 'GooglePubSub'
     | 'GoogleStorage'
+    | 'GravityCAPI'
     | 'HTTPCustomRequest'
     | 'HTTPDestination'
     | 'Hubspot'
@@ -315,7 +319,9 @@ export interface DestinationCreateResponse {
 
   name?: string | null;
 
-  settings?: unknown | null;
+  settings?: {
+    [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+  } | null;
 
   updatedAt?: string | null;
 }
@@ -375,6 +381,7 @@ export interface DestinationRetrieveResponse {
     | 'GoogleDataManagerEventIngest'
     | 'GooglePubSub'
     | 'GoogleStorage'
+    | 'GravityCAPI'
     | 'HTTPCustomRequest'
     | 'HTTPDestination'
     | 'Hubspot'
@@ -433,7 +440,9 @@ export interface DestinationRetrieveResponse {
 
   name?: string | null;
 
-  settings?: unknown | null;
+  settings?: {
+    [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+  } | null;
 
   updatedAt?: string | null;
 }
@@ -493,6 +502,7 @@ export interface DestinationUpdateResponse {
     | 'GoogleDataManagerEventIngest'
     | 'GooglePubSub'
     | 'GoogleStorage'
+    | 'GravityCAPI'
     | 'HTTPCustomRequest'
     | 'HTTPDestination'
     | 'Hubspot'
@@ -551,7 +561,9 @@ export interface DestinationUpdateResponse {
 
   name?: string | null;
 
-  settings?: unknown | null;
+  settings?: {
+    [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+  } | null;
 
   updatedAt?: string | null;
 }
@@ -644,7 +656,8 @@ export namespace DestinationTypesResponse {
       | 'MNTN'
       | 'ZohoCRM'
       | 'Rokt'
-      | 'Fullstory';
+      | 'Fullstory'
+      | 'GravityCAPI';
 
     capabilities: Entity.Capabilities;
 
@@ -847,6 +860,7 @@ export interface DestinationListParams extends CursorParams {
     | 'GoogleDataManagerEventIngest'
     | 'GooglePubSub'
     | 'GoogleStorage'
+    | 'GravityCAPI'
     | 'HTTPCustomRequest'
     | 'HTTPDestination'
     | 'Hubspot'
@@ -987,7 +1001,8 @@ export interface DestinationCreateParams {
     | 'MNTN'
     | 'ZohoCRM'
     | 'Rokt'
-    | 'Fullstory';
+    | 'Fullstory'
+    | 'GravityCAPI';
 
   name?: string | null;
 
@@ -995,7 +1010,7 @@ export interface DestinationCreateParams {
    * Per-type configuration keys and values. Call GET /rest/v1/destinations/types to
    * get the valid keys for your destination type.
    */
-  settings?: unknown | null;
+  settings?: { [key: string]: string | null | number | boolean } | null;
 }
 
 export interface DestinationUpdateParams {
@@ -1009,7 +1024,7 @@ export interface DestinationUpdateParams {
    * Per-type configuration keys and values. Call GET /rest/v1/destinations/types to
    * get the valid keys for your destination type.
    */
-  settings?: unknown | null;
+  settings?: { [key: string]: string | null | number | boolean } | null;
 
   status?: 'Disabled' | 'Enabled' | null;
 }

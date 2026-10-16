@@ -49,7 +49,7 @@ describe('resource destinations', () => {
     const response = await client.destinations.create({
       type: 'Audiohook',
       name: 'name',
-      settings: {},
+      settings: { foo: 'string' },
     });
   });
 

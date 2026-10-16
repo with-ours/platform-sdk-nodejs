@@ -32,11 +32,11 @@ export class Versions extends APIResource {
    * To re-publish an existing version, use POST /rest/v1/versions/{id}/publish
    * instead.
    *
-   * Supports cherry-picking via the `include*` body fields. Each `include*` field is
-   * an entity-id allowlist for one collection — omit (or send `[]`) to include every
-   * draft change in that collection, or send a non-empty array to whitelist only
-   * those ids. Unlisted collections inherit wholesale from the latest published
-   * version. Requires API-key scope or current OAuth user permission:
+   * Supports cherry-picking via the `include*` body fields, each an entity-id
+   * allowlist for one collection. Omit every `include*` field (or send each as `[]`)
+   * to publish all draft changes. Once any `include*` field lists ids, only the
+   * listed changes publish, and every collection you omit or send as `[]` keeps its
+   * published state. Requires API-key scope or current OAuth user permission:
    * version:publish
    */
   create(body: VersionCreateParams, options?: RequestOptions): APIPromise<VersionCreateResponse> {
@@ -349,7 +349,7 @@ export interface VersionSnapshotResponse {
    * entities as they existed at publish time. Sensitive fields (API keys, tokens,
    * secrets) are redacted. Returns null when the version snapshot has been pruned.
    */
-  jsonContent: { [key: string]: unknown };
+  jsonContent: { [key: string]: unknown } | null;
 
   versionNumber: number;
 }
@@ -3226,97 +3226,143 @@ export interface VersionCreateParams {
 
   /**
    * Cherry-pick: allowed event ids (slug-like strings) to include from the draft.
-   * Omit or send `[]` to include all draft changes in this collection.
+   * Omit every `include*` field (or send each as `[]`) to publish all draft changes.
+   * Once any `include*` field lists ids, only the listed changes publish, and every
+   * collection you omit or send as `[]` keeps its published state.
    */
   includeAllowedEvents?: Array<string> | null;
 
   /**
-   * Cherry-pick: consent settings ids to include from the draft. Omit or send `[]`
-   * to include all draft changes in this collection.
+   * Cherry-pick: consent settings ids to include from the draft. Omit every
+   * `include*` field (or send each as `[]`) to publish all draft changes. Once any
+   * `include*` field lists ids, only the listed changes publish, and every
+   * collection you omit or send as `[]` keeps its published state.
    */
   includeConsentSettings?: Array<string> | null;
 
   /**
-   * Cherry-pick: data governance event UUIDs to include from the draft. Omit or send
-   * `[]` to include all draft changes in this collection.
+   * Cherry-pick: data governance event UUIDs to include from the draft. Omit every
+   * `include*` field (or send each as `[]`) to publish all draft changes. Once any
+   * `include*` field lists ids, only the listed changes publish, and every
+   * collection you omit or send as `[]` keeps its published state.
    */
   includeDataGovernanceEvents?: Array<string> | null;
 
   /**
-   * Cherry-pick: data governance rule UUIDs to include from the draft. Omit or send
-   * `[]` to include all draft changes in this collection.
+   * Cherry-pick: data governance rule UUIDs to include from the draft. Omit every
+   * `include*` field (or send each as `[]`) to publish all draft changes. Once any
+   * `include*` field lists ids, only the listed changes publish, and every
+   * collection you omit or send as `[]` keeps its published state.
    */
   includeDataGovernanceRules?: Array<string> | null;
 
   /**
-   * Cherry-pick: destination UUIDs to include from the draft. Omit or send `[]` to
-   * include all draft changes in this collection.
+   * Cherry-pick: destination UUIDs to include from the draft. Omit every `include*`
+   * field (or send each as `[]`) to publish all draft changes. Once any `include*`
+   * field lists ids, only the listed changes publish, and every collection you omit
+   * or send as `[]` keeps its published state.
    */
   includeDestinations?: Array<string> | null;
 
   /**
-   * Cherry-pick: experiment UUIDs to include from the draft. Omit or send `[]` to
-   * include all draft changes in this collection.
+   * Cherry-pick: experiment UUIDs to include from the draft. Omit every `include*`
+   * field (or send each as `[]`) to publish all draft changes. Once any `include*`
+   * field lists ids, only the listed changes publish, and every collection you omit
+   * or send as `[]` keeps its published state.
    */
   includeExperiments?: Array<string> | null;
 
   /**
-   * Cherry-pick: experiment settings UUIDs to include from the draft. Omit or send
-   * `[]` to include all draft changes in this collection.
+   * Cherry-pick: experiment settings UUIDs to include from the draft. Omit every
+   * `include*` field (or send each as `[]`) to publish all draft changes. Once any
+   * `include*` field lists ids, only the listed changes publish, and every
+   * collection you omit or send as `[]` keeps its published state.
    */
   includeExperimentSettings?: Array<string> | null;
 
   /**
-   * Cherry-pick: experiment variant UUIDs to include from the draft. Omit or send
-   * `[]` to include all draft changes in this collection.
+   * Cherry-pick: experiment variant UUIDs to include from the draft. Omit every
+   * `include*` field (or send each as `[]`) to publish all draft changes. Once any
+   * `include*` field lists ids, only the listed changes publish, and every
+   * collection you omit or send as `[]` keeps its published state.
    */
   includeExperimentVariants?: Array<string> | null;
 
   /**
-   * Cherry-pick: external allowed event data ids to include from the draft. Omit or
-   * send `[]` to include all draft changes in this collection.
+   * Cherry-pick: external allowed event data ids to include from the draft. Omit
+   * every `include*` field (or send each as `[]`) to publish all draft changes. Once
+   * any `include*` field lists ids, only the listed changes publish, and every
+   * collection you omit or send as `[]` keeps its published state.
    */
   includeExternalAllowedEventData?: Array<string> | null;
 
   /**
-   * Cherry-pick: global dispatch center ids to include from the draft. Omit or send
-   * `[]` to include all draft changes in this collection.
+   * Cherry-pick: global dispatch center ids to include from the draft. Omit every
+   * `include*` field (or send each as `[]`) to publish all draft changes. Once any
+   * `include*` field lists ids, only the listed changes publish, and every
+   * collection you omit or send as `[]` keeps its published state.
    */
   includeGlobalDispatchCenters?: Array<string> | null;
 
   /**
-   * Cherry-pick: mapping ids to include from the draft. Omit or send `[]` to include
-   * all draft changes in this collection.
+   * Cherry-pick: mapping ids to include from the draft. Omit every `include*` field
+   * (or send each as `[]`) to publish all draft changes. Once any `include*` field
+   * lists ids, only the listed changes publish, and every collection you omit or
+   * send as `[]` keeps its published state.
    */
   includeMappings?: Array<string> | null;
 
   /**
-   * Cherry-pick: replay settings ids to include from the draft. Omit or send `[]` to
-   * include all draft changes in this collection.
+   * Cherry-pick: replay settings ids to include from the draft. Omit every
+   * `include*` field (or send each as `[]`) to publish all draft changes. Once any
+   * `include*` field lists ids, only the listed changes publish, and every
+   * collection you omit or send as `[]` keeps its published state.
    */
   includeReplaySettings?: Array<string> | null;
 
   /**
-   * Cherry-pick: source UUIDs to include from the draft. Omit or send `[]` to
-   * include all draft changes in this collection.
+   * Cherry-pick: source UUIDs to include from the draft. Omit every `include*` field
+   * (or send each as `[]`) to publish all draft changes. Once any `include*` field
+   * lists ids, only the listed changes publish, and every collection you omit or
+   * send as `[]` keeps its published state.
    */
   includeSources?: Array<string> | null;
 
   /**
-   * Cherry-pick: tag manager tag UUIDs to include from the draft. Omit or send `[]`
-   * to include all draft changes in this collection.
+   * Cherry-pick: tag manager container UUIDs to include from the draft. Selecting a
+   * container publishes its own settings only; list its tags, triggers, and
+   * variables to publish their changes. Selecting a container deleted from the draft
+   * also removes its tags, triggers, and variables. Omit every `include*` field (or
+   * send each as `[]`) to publish all draft changes. Once any `include*` field lists
+   * ids, only the listed changes publish, and every collection you omit or send as
+   * `[]` keeps its published state.
+   */
+  includeTagManagers?: Array<string> | null;
+
+  /**
+   * Cherry-pick: tag manager tag UUIDs to include from the draft. If the item's
+   * container has never been published, the container publishes with it. Omit every
+   * `include*` field (or send each as `[]`) to publish all draft changes. Once any
+   * `include*` field lists ids, only the listed changes publish, and every
+   * collection you omit or send as `[]` keeps its published state.
    */
   includeTagManagerTags?: Array<string> | null;
 
   /**
-   * Cherry-pick: tag manager trigger UUIDs to include from the draft. Omit or send
-   * `[]` to include all draft changes in this collection.
+   * Cherry-pick: tag manager trigger UUIDs to include from the draft. If the item's
+   * container has never been published, the container publishes with it. Omit every
+   * `include*` field (or send each as `[]`) to publish all draft changes. Once any
+   * `include*` field lists ids, only the listed changes publish, and every
+   * collection you omit or send as `[]` keeps its published state.
    */
   includeTagManagerTriggers?: Array<string> | null;
 
   /**
-   * Cherry-pick: tag manager variable UUIDs to include from the draft. Omit or send
-   * `[]` to include all draft changes in this collection.
+   * Cherry-pick: tag manager variable UUIDs to include from the draft. If the item's
+   * container has never been published, the container publishes with it. Omit every
+   * `include*` field (or send each as `[]`) to publish all draft changes. Once any
+   * `include*` field lists ids, only the listed changes publish, and every
+   * collection you omit or send as `[]` keeps its published state.
    */
   includeTagManagerVariables?: Array<string> | null;
 

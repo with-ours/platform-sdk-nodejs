@@ -80,6 +80,14 @@ export {
   type ConversionJourneySummaryListResponsesCursor,
 } from './conversion-journey-summaries';
 export {
+  CustomDomains,
+  type CustomDomainStatusResponse,
+  type CustomDomainCreateResponse,
+  type CustomDomainReplaceResponse,
+  type CustomDomainReconcileCertificateResponse,
+  type CustomDomainReplaceParams,
+} from './custom-domains';
+export {
   DataGovernance,
   type DataGovernanceListResponse,
   type DataGovernanceCreateResponse,
@@ -226,6 +234,8 @@ export {
   type MappingRetrieveResponse,
   type MappingUpdateResponse,
   type MappingDeleteResponse,
+  type MappingRenamePreviewResponse,
+  type MappingRenameResponse,
   type MappingReorderResponse,
   type MappingTemplatesResponse,
   type MappingDefaultVariablesResponse,
@@ -234,10 +244,13 @@ export {
   type MappingListParams,
   type MappingCreateParams,
   type MappingUpdateParams,
+  type MappingRenamePreviewParams,
+  type MappingRenameParams,
   type MappingReorderParams,
   type MappingTemplatesParams,
   type MappingListResponsesCursor,
 } from './mappings';
+export { Me, type MeRetrieveResponse } from './me';
 export {
   PersonalizationProperties,
   type PersonalizationPropertyListResponse,
@@ -355,11 +368,13 @@ export {
 } from './tag-manager-variables';
 export {
   TagManagers,
+  type TagManagerPreviewResponse,
   type TagManagerListResponse,
   type TagManagerCreateResponse,
   type TagManagerRetrieveResponse,
   type TagManagerUpdateResponse,
   type TagManagerDeleteResponse,
+  type TagManagerPreviewParams,
   type TagManagerCreateParams,
   type TagManagerUpdateParams,
 } from './tag-managers';

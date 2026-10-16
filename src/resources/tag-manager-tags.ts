@@ -399,7 +399,13 @@ export namespace TagManagerTagTypesResponse {
       /**
        * Default value when the caller omits the parameter on create.
        */
-      default?: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+      default?:
+        | string
+        | null
+        | number
+        | boolean
+        | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+        | { [key: string]: unknown };
 
       description?: string | null;
 
