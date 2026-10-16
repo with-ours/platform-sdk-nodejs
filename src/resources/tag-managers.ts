@@ -7,6 +7,19 @@ import { path } from '../internal/utils/path';
 
 export class TagManagers extends APIResource {
   /**
+   * Create a one-hour link to preview this container’s unpublished tags on your
+   * website. Requires permission to view the tag manager. Requires API-key scope or
+   * current OAuth user permission: tagManagers:find
+   */
+  preview(
+    id: string,
+    body: TagManagerPreviewParams,
+    options?: RequestOptions,
+  ): APIPromise<TagManagerPreviewResponse> {
+    return this._client.post(path`/rest/v1/tag-managers/${id}/preview`, { body, ...options });
+  }
+
+  /**
    * List every tag manager on this account. Each tag manager is a pixel-scoped
    * container of tags, triggers, variables, and folders. Not paginated — accounts
    * are capped at a small number of tag managers in practice, so the response fits
@@ -62,6 +75,12 @@ export class TagManagers extends APIResource {
   delete(id: string, options?: RequestOptions): APIPromise<TagManagerDeleteResponse> {
     return this._client.delete(path`/rest/v1/tag-managers/${id}`, options);
   }
+}
+
+export interface TagManagerPreviewResponse {
+  expiresAt: string;
+
+  url: string;
 }
 
 export interface TagManagerListResponse {
@@ -242,6 +261,10 @@ export interface TagManagerDeleteResponse {
   deleted: boolean;
 }
 
+export interface TagManagerPreviewParams {
+  url: string;
+}
+
 export interface TagManagerCreateParams {
   /**
    * Human-readable name for the new tag manager.
@@ -268,11 +291,13 @@ export interface TagManagerUpdateParams {
 
 export declare namespace TagManagers {
   export {
+    type TagManagerPreviewResponse as TagManagerPreviewResponse,
     type TagManagerListResponse as TagManagerListResponse,
     type TagManagerCreateResponse as TagManagerCreateResponse,
     type TagManagerRetrieveResponse as TagManagerRetrieveResponse,
     type TagManagerUpdateResponse as TagManagerUpdateResponse,
     type TagManagerDeleteResponse as TagManagerDeleteResponse,
+    type TagManagerPreviewParams as TagManagerPreviewParams,
     type TagManagerCreateParams as TagManagerCreateParams,
     type TagManagerUpdateParams as TagManagerUpdateParams,
   };

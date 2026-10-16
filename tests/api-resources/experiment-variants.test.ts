@@ -53,7 +53,7 @@ describe('resource experimentVariants', () => {
         {
           action: 'customCss',
           selector: '#hero-headline',
-          attribute: {},
+          attribute: { name: 'class', value: 'cta-active' },
           styles: [{ property: 'background-color', value: '#10B981' }],
           value: 'Start your free trial',
         },

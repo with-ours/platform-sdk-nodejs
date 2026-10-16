@@ -197,7 +197,7 @@ export interface ShortLinkListResponse {
    * QR styling + campaign tags. New links include an empty design; legacy redirects
    * may return null.
    */
-  shortLinkDesign?: unknown | null;
+  shortLinkDesign?: ShortLinkListResponse.ShortLinkDesign | null;
 
   /**
    * The public short-link URL that the QR encodes and callers share. New links use
@@ -205,6 +205,132 @@ export interface ShortLinkListResponse {
    * resolves on branded custom domains configured for the account.
    */
   shortUrl?: string | null;
+}
+
+export namespace ShortLinkListResponse {
+  /**
+   * QR styling + campaign tags. New links include an empty design; legacy redirects
+   * may return null.
+   */
+  export interface ShortLinkDesign {
+    qr?: ShortLinkDesign.Qr | null;
+
+    utm?: ShortLinkDesign.Utm | null;
+  }
+
+  export namespace ShortLinkDesign {
+    export interface Qr {
+      /**
+       * Background color.
+       */
+      bgColor?: string | null;
+
+      /**
+       * Finder (corner) dot shape: `square` or `dot`.
+       */
+      cornerDotStyle?: string | null;
+
+      /**
+       * Finder (corner) square shape: `square`, `dot`, or `extra-rounded`.
+       */
+      cornerSquareStyle?: string | null;
+
+      /**
+       * Module shape: `square`, `rounded`, `dots`, `classy`, `classy-rounded`, or
+       * `extra-rounded`.
+       */
+      dotStyle?: string | null;
+
+      /**
+       * Foreground (module) color.
+       */
+      fgColor?: string | null;
+
+      /**
+       * Download frame: `square`, `rounded`, or `circle`.
+       */
+      frameShape?: string | null;
+
+      /**
+       * A two-stop gradient fill for the QR modules.
+       */
+      gradient?: Qr.Gradient | null;
+
+      /**
+       * Base64 data URL of a centered logo overlay.
+       */
+      logo?: string | null;
+
+      /**
+       * Logo size as a fraction of the QR (0–0.4).
+       */
+      logoSizeRatio?: number | null;
+
+      /**
+       * The selected preset theme id, for re-highlighting it in a UI.
+       */
+      theme?: string | null;
+
+      /**
+       * When true, the background is exported transparent.
+       */
+      transparentBackground?: boolean | null;
+    }
+
+    export namespace Qr {
+      /**
+       * A two-stop gradient fill for the QR modules.
+       */
+      export interface Gradient {
+        /**
+         * Gradient end color.
+         */
+        endColor: string;
+
+        /**
+         * Gradient start color.
+         */
+        startColor: string;
+
+        /**
+         * Gradient type: `linear` or `radial`.
+         */
+        type: string;
+
+        /**
+         * Rotation in radians (linear gradients only).
+         */
+        rotation?: number | null;
+      }
+    }
+
+    export interface Utm {
+      /**
+       * The `utm_campaign` value appended to the tracked short-link URL.
+       */
+      campaign?: string | null;
+
+      /**
+       * The `utm_content` value.
+       */
+      content?: string | null;
+
+      /**
+       * The `utm_medium` value.
+       */
+      medium?: string | null;
+
+      /**
+       * The `utm_source` value.
+       */
+      source?: string | null;
+
+      /**
+       * The `utm_term` value.
+       */
+      term?: string | null;
+    }
+  }
 }
 
 export interface ShortLinkCreateResponse {
@@ -259,7 +385,7 @@ export interface ShortLinkCreateResponse {
    * QR styling + campaign tags. New links include an empty design; legacy redirects
    * may return null.
    */
-  shortLinkDesign?: unknown | null;
+  shortLinkDesign?: ShortLinkCreateResponse.ShortLinkDesign | null;
 
   /**
    * The public short-link URL that the QR encodes and callers share. New links use
@@ -267,6 +393,132 @@ export interface ShortLinkCreateResponse {
    * resolves on branded custom domains configured for the account.
    */
   shortUrl?: string | null;
+}
+
+export namespace ShortLinkCreateResponse {
+  /**
+   * QR styling + campaign tags. New links include an empty design; legacy redirects
+   * may return null.
+   */
+  export interface ShortLinkDesign {
+    qr?: ShortLinkDesign.Qr | null;
+
+    utm?: ShortLinkDesign.Utm | null;
+  }
+
+  export namespace ShortLinkDesign {
+    export interface Qr {
+      /**
+       * Background color.
+       */
+      bgColor?: string | null;
+
+      /**
+       * Finder (corner) dot shape: `square` or `dot`.
+       */
+      cornerDotStyle?: string | null;
+
+      /**
+       * Finder (corner) square shape: `square`, `dot`, or `extra-rounded`.
+       */
+      cornerSquareStyle?: string | null;
+
+      /**
+       * Module shape: `square`, `rounded`, `dots`, `classy`, `classy-rounded`, or
+       * `extra-rounded`.
+       */
+      dotStyle?: string | null;
+
+      /**
+       * Foreground (module) color.
+       */
+      fgColor?: string | null;
+
+      /**
+       * Download frame: `square`, `rounded`, or `circle`.
+       */
+      frameShape?: string | null;
+
+      /**
+       * A two-stop gradient fill for the QR modules.
+       */
+      gradient?: Qr.Gradient | null;
+
+      /**
+       * Base64 data URL of a centered logo overlay.
+       */
+      logo?: string | null;
+
+      /**
+       * Logo size as a fraction of the QR (0–0.4).
+       */
+      logoSizeRatio?: number | null;
+
+      /**
+       * The selected preset theme id, for re-highlighting it in a UI.
+       */
+      theme?: string | null;
+
+      /**
+       * When true, the background is exported transparent.
+       */
+      transparentBackground?: boolean | null;
+    }
+
+    export namespace Qr {
+      /**
+       * A two-stop gradient fill for the QR modules.
+       */
+      export interface Gradient {
+        /**
+         * Gradient end color.
+         */
+        endColor: string;
+
+        /**
+         * Gradient start color.
+         */
+        startColor: string;
+
+        /**
+         * Gradient type: `linear` or `radial`.
+         */
+        type: string;
+
+        /**
+         * Rotation in radians (linear gradients only).
+         */
+        rotation?: number | null;
+      }
+    }
+
+    export interface Utm {
+      /**
+       * The `utm_campaign` value appended to the tracked short-link URL.
+       */
+      campaign?: string | null;
+
+      /**
+       * The `utm_content` value.
+       */
+      content?: string | null;
+
+      /**
+       * The `utm_medium` value.
+       */
+      medium?: string | null;
+
+      /**
+       * The `utm_source` value.
+       */
+      source?: string | null;
+
+      /**
+       * The `utm_term` value.
+       */
+      term?: string | null;
+    }
+  }
 }
 
 export interface ShortLinkRetrieveResponse {
@@ -321,7 +573,7 @@ export interface ShortLinkRetrieveResponse {
    * QR styling + campaign tags. New links include an empty design; legacy redirects
    * may return null.
    */
-  shortLinkDesign?: unknown | null;
+  shortLinkDesign?: ShortLinkRetrieveResponse.ShortLinkDesign | null;
 
   /**
    * The public short-link URL that the QR encodes and callers share. New links use
@@ -329,6 +581,132 @@ export interface ShortLinkRetrieveResponse {
    * resolves on branded custom domains configured for the account.
    */
   shortUrl?: string | null;
+}
+
+export namespace ShortLinkRetrieveResponse {
+  /**
+   * QR styling + campaign tags. New links include an empty design; legacy redirects
+   * may return null.
+   */
+  export interface ShortLinkDesign {
+    qr?: ShortLinkDesign.Qr | null;
+
+    utm?: ShortLinkDesign.Utm | null;
+  }
+
+  export namespace ShortLinkDesign {
+    export interface Qr {
+      /**
+       * Background color.
+       */
+      bgColor?: string | null;
+
+      /**
+       * Finder (corner) dot shape: `square` or `dot`.
+       */
+      cornerDotStyle?: string | null;
+
+      /**
+       * Finder (corner) square shape: `square`, `dot`, or `extra-rounded`.
+       */
+      cornerSquareStyle?: string | null;
+
+      /**
+       * Module shape: `square`, `rounded`, `dots`, `classy`, `classy-rounded`, or
+       * `extra-rounded`.
+       */
+      dotStyle?: string | null;
+
+      /**
+       * Foreground (module) color.
+       */
+      fgColor?: string | null;
+
+      /**
+       * Download frame: `square`, `rounded`, or `circle`.
+       */
+      frameShape?: string | null;
+
+      /**
+       * A two-stop gradient fill for the QR modules.
+       */
+      gradient?: Qr.Gradient | null;
+
+      /**
+       * Base64 data URL of a centered logo overlay.
+       */
+      logo?: string | null;
+
+      /**
+       * Logo size as a fraction of the QR (0–0.4).
+       */
+      logoSizeRatio?: number | null;
+
+      /**
+       * The selected preset theme id, for re-highlighting it in a UI.
+       */
+      theme?: string | null;
+
+      /**
+       * When true, the background is exported transparent.
+       */
+      transparentBackground?: boolean | null;
+    }
+
+    export namespace Qr {
+      /**
+       * A two-stop gradient fill for the QR modules.
+       */
+      export interface Gradient {
+        /**
+         * Gradient end color.
+         */
+        endColor: string;
+
+        /**
+         * Gradient start color.
+         */
+        startColor: string;
+
+        /**
+         * Gradient type: `linear` or `radial`.
+         */
+        type: string;
+
+        /**
+         * Rotation in radians (linear gradients only).
+         */
+        rotation?: number | null;
+      }
+    }
+
+    export interface Utm {
+      /**
+       * The `utm_campaign` value appended to the tracked short-link URL.
+       */
+      campaign?: string | null;
+
+      /**
+       * The `utm_content` value.
+       */
+      content?: string | null;
+
+      /**
+       * The `utm_medium` value.
+       */
+      medium?: string | null;
+
+      /**
+       * The `utm_source` value.
+       */
+      source?: string | null;
+
+      /**
+       * The `utm_term` value.
+       */
+      term?: string | null;
+    }
+  }
 }
 
 export interface ShortLinkUpdateResponse {
@@ -383,7 +761,7 @@ export interface ShortLinkUpdateResponse {
    * QR styling + campaign tags. New links include an empty design; legacy redirects
    * may return null.
    */
-  shortLinkDesign?: unknown | null;
+  shortLinkDesign?: ShortLinkUpdateResponse.ShortLinkDesign | null;
 
   /**
    * The public short-link URL that the QR encodes and callers share. New links use
@@ -391,6 +769,132 @@ export interface ShortLinkUpdateResponse {
    * resolves on branded custom domains configured for the account.
    */
   shortUrl?: string | null;
+}
+
+export namespace ShortLinkUpdateResponse {
+  /**
+   * QR styling + campaign tags. New links include an empty design; legacy redirects
+   * may return null.
+   */
+  export interface ShortLinkDesign {
+    qr?: ShortLinkDesign.Qr | null;
+
+    utm?: ShortLinkDesign.Utm | null;
+  }
+
+  export namespace ShortLinkDesign {
+    export interface Qr {
+      /**
+       * Background color.
+       */
+      bgColor?: string | null;
+
+      /**
+       * Finder (corner) dot shape: `square` or `dot`.
+       */
+      cornerDotStyle?: string | null;
+
+      /**
+       * Finder (corner) square shape: `square`, `dot`, or `extra-rounded`.
+       */
+      cornerSquareStyle?: string | null;
+
+      /**
+       * Module shape: `square`, `rounded`, `dots`, `classy`, `classy-rounded`, or
+       * `extra-rounded`.
+       */
+      dotStyle?: string | null;
+
+      /**
+       * Foreground (module) color.
+       */
+      fgColor?: string | null;
+
+      /**
+       * Download frame: `square`, `rounded`, or `circle`.
+       */
+      frameShape?: string | null;
+
+      /**
+       * A two-stop gradient fill for the QR modules.
+       */
+      gradient?: Qr.Gradient | null;
+
+      /**
+       * Base64 data URL of a centered logo overlay.
+       */
+      logo?: string | null;
+
+      /**
+       * Logo size as a fraction of the QR (0–0.4).
+       */
+      logoSizeRatio?: number | null;
+
+      /**
+       * The selected preset theme id, for re-highlighting it in a UI.
+       */
+      theme?: string | null;
+
+      /**
+       * When true, the background is exported transparent.
+       */
+      transparentBackground?: boolean | null;
+    }
+
+    export namespace Qr {
+      /**
+       * A two-stop gradient fill for the QR modules.
+       */
+      export interface Gradient {
+        /**
+         * Gradient end color.
+         */
+        endColor: string;
+
+        /**
+         * Gradient start color.
+         */
+        startColor: string;
+
+        /**
+         * Gradient type: `linear` or `radial`.
+         */
+        type: string;
+
+        /**
+         * Rotation in radians (linear gradients only).
+         */
+        rotation?: number | null;
+      }
+    }
+
+    export interface Utm {
+      /**
+       * The `utm_campaign` value appended to the tracked short-link URL.
+       */
+      campaign?: string | null;
+
+      /**
+       * The `utm_content` value.
+       */
+      content?: string | null;
+
+      /**
+       * The `utm_medium` value.
+       */
+      medium?: string | null;
+
+      /**
+       * The `utm_source` value.
+       */
+      source?: string | null;
+
+      /**
+       * The `utm_term` value.
+       */
+      term?: string | null;
+    }
+  }
 }
 
 export interface ShortLinkDeleteResponse {
@@ -449,7 +953,7 @@ export interface ShortLinkCloneResponse {
    * QR styling + campaign tags. New links include an empty design; legacy redirects
    * may return null.
    */
-  shortLinkDesign?: unknown | null;
+  shortLinkDesign?: ShortLinkCloneResponse.ShortLinkDesign | null;
 
   /**
    * The public short-link URL that the QR encodes and callers share. New links use
@@ -457,6 +961,132 @@ export interface ShortLinkCloneResponse {
    * resolves on branded custom domains configured for the account.
    */
   shortUrl?: string | null;
+}
+
+export namespace ShortLinkCloneResponse {
+  /**
+   * QR styling + campaign tags. New links include an empty design; legacy redirects
+   * may return null.
+   */
+  export interface ShortLinkDesign {
+    qr?: ShortLinkDesign.Qr | null;
+
+    utm?: ShortLinkDesign.Utm | null;
+  }
+
+  export namespace ShortLinkDesign {
+    export interface Qr {
+      /**
+       * Background color.
+       */
+      bgColor?: string | null;
+
+      /**
+       * Finder (corner) dot shape: `square` or `dot`.
+       */
+      cornerDotStyle?: string | null;
+
+      /**
+       * Finder (corner) square shape: `square`, `dot`, or `extra-rounded`.
+       */
+      cornerSquareStyle?: string | null;
+
+      /**
+       * Module shape: `square`, `rounded`, `dots`, `classy`, `classy-rounded`, or
+       * `extra-rounded`.
+       */
+      dotStyle?: string | null;
+
+      /**
+       * Foreground (module) color.
+       */
+      fgColor?: string | null;
+
+      /**
+       * Download frame: `square`, `rounded`, or `circle`.
+       */
+      frameShape?: string | null;
+
+      /**
+       * A two-stop gradient fill for the QR modules.
+       */
+      gradient?: Qr.Gradient | null;
+
+      /**
+       * Base64 data URL of a centered logo overlay.
+       */
+      logo?: string | null;
+
+      /**
+       * Logo size as a fraction of the QR (0–0.4).
+       */
+      logoSizeRatio?: number | null;
+
+      /**
+       * The selected preset theme id, for re-highlighting it in a UI.
+       */
+      theme?: string | null;
+
+      /**
+       * When true, the background is exported transparent.
+       */
+      transparentBackground?: boolean | null;
+    }
+
+    export namespace Qr {
+      /**
+       * A two-stop gradient fill for the QR modules.
+       */
+      export interface Gradient {
+        /**
+         * Gradient end color.
+         */
+        endColor: string;
+
+        /**
+         * Gradient start color.
+         */
+        startColor: string;
+
+        /**
+         * Gradient type: `linear` or `radial`.
+         */
+        type: string;
+
+        /**
+         * Rotation in radians (linear gradients only).
+         */
+        rotation?: number | null;
+      }
+    }
+
+    export interface Utm {
+      /**
+       * The `utm_campaign` value appended to the tracked short-link URL.
+       */
+      campaign?: string | null;
+
+      /**
+       * The `utm_content` value.
+       */
+      content?: string | null;
+
+      /**
+       * The `utm_medium` value.
+       */
+      medium?: string | null;
+
+      /**
+       * The `utm_source` value.
+       */
+      source?: string | null;
+
+      /**
+       * The `utm_term` value.
+       */
+      term?: string | null;
+    }
+  }
 }
 
 export interface ShortLinkResultsResponse {
@@ -544,7 +1174,7 @@ export interface ShortLinkCreateParams {
   /**
    * QR code visual styling.
    */
-  qr?: unknown | null;
+  qr?: ShortLinkCreateParams.Qr | null;
 
   /**
    * Destination URL the short link redirects to. Must be a valid URL.
@@ -554,7 +1184,126 @@ export interface ShortLinkCreateParams {
   /**
    * Campaign / UTM tags appended to the tracked short-link URL.
    */
-  utm?: unknown | null;
+  utm?: ShortLinkCreateParams.Utm | null;
+}
+
+export namespace ShortLinkCreateParams {
+  /**
+   * QR code visual styling.
+   */
+  export interface Qr {
+    /**
+     * Background color.
+     */
+    bgColor?: string | null;
+
+    /**
+     * Finder (corner) dot shape.
+     */
+    cornerDotStyle?: 'square' | 'dot' | null;
+
+    /**
+     * Finder (corner) square shape.
+     */
+    cornerSquareStyle?: 'square' | 'dot' | 'extra-rounded' | null;
+
+    /**
+     * Module shape.
+     */
+    dotStyle?: 'square' | 'rounded' | 'dots' | 'classy' | 'classy-rounded' | 'extra-rounded' | null;
+
+    /**
+     * Foreground (module) color.
+     */
+    fgColor?: string | null;
+
+    /**
+     * Download frame.
+     */
+    frameShape?: 'square' | 'rounded' | 'circle' | null;
+
+    /**
+     * A two-stop gradient fill for the QR modules.
+     */
+    gradient?: Qr.Gradient | null;
+
+    /**
+     * Base64 data URL of a centered logo overlay.
+     */
+    logo?: string | null;
+
+    /**
+     * Logo size as a fraction of the QR.
+     */
+    logoSizeRatio?: number | null;
+
+    /**
+     * The selected preset theme id, for re-highlighting it in a UI.
+     */
+    theme?: string | null;
+
+    /**
+     * When true, the background is exported transparent.
+     */
+    transparentBackground?: boolean | null;
+  }
+
+  export namespace Qr {
+    /**
+     * A two-stop gradient fill for the QR modules.
+     */
+    export interface Gradient {
+      /**
+       * Gradient end color.
+       */
+      endColor: string;
+
+      /**
+       * Gradient start color.
+       */
+      startColor: string;
+
+      /**
+       * Gradient type.
+       */
+      type: 'linear' | 'radial';
+
+      /**
+       * Rotation in radians (linear gradients only).
+       */
+      rotation?: number | null;
+    }
+  }
+
+  /**
+   * Campaign / UTM tags appended to the tracked short-link URL.
+   */
+  export interface Utm {
+    /**
+     * The `utm_campaign` value appended to the tracked short-link URL.
+     */
+    campaign?: string | null;
+
+    /**
+     * The `utm_content` value.
+     */
+    content?: string | null;
+
+    /**
+     * The `utm_medium` value.
+     */
+    medium?: string | null;
+
+    /**
+     * The `utm_source` value.
+     */
+    source?: string | null;
+
+    /**
+     * The `utm_term` value.
+     */
+    term?: string | null;
+  }
 }
 
 export interface ShortLinkUpdateParams {
@@ -568,7 +1317,7 @@ export interface ShortLinkUpdateParams {
 
   name?: string | null;
 
-  qr?: unknown | null;
+  qr?: ShortLinkUpdateParams.Qr | null;
 
   /**
    * Destination URL the short link redirects to. Must be a valid URL. Send `null` to
@@ -580,9 +1329,122 @@ export interface ShortLinkUpdateParams {
    * Whether the short link resolves at the edge. Send `Enabled` or `Disabled`;
    * `null` is rejected since storage cannot represent it.
    */
-  status?: string | null;
+  status?: 'Disabled' | 'Enabled' | null;
 
-  utm?: unknown | null;
+  utm?: ShortLinkUpdateParams.Utm | null;
+}
+
+export namespace ShortLinkUpdateParams {
+  export interface Qr {
+    /**
+     * Background color.
+     */
+    bgColor?: string | null;
+
+    /**
+     * Finder (corner) dot shape.
+     */
+    cornerDotStyle?: 'square' | 'dot' | null;
+
+    /**
+     * Finder (corner) square shape.
+     */
+    cornerSquareStyle?: 'square' | 'dot' | 'extra-rounded' | null;
+
+    /**
+     * Module shape.
+     */
+    dotStyle?: 'square' | 'rounded' | 'dots' | 'classy' | 'classy-rounded' | 'extra-rounded' | null;
+
+    /**
+     * Foreground (module) color.
+     */
+    fgColor?: string | null;
+
+    /**
+     * Download frame.
+     */
+    frameShape?: 'square' | 'rounded' | 'circle' | null;
+
+    /**
+     * A two-stop gradient fill for the QR modules.
+     */
+    gradient?: Qr.Gradient | null;
+
+    /**
+     * Base64 data URL of a centered logo overlay.
+     */
+    logo?: string | null;
+
+    /**
+     * Logo size as a fraction of the QR.
+     */
+    logoSizeRatio?: number | null;
+
+    /**
+     * The selected preset theme id, for re-highlighting it in a UI.
+     */
+    theme?: string | null;
+
+    /**
+     * When true, the background is exported transparent.
+     */
+    transparentBackground?: boolean | null;
+  }
+
+  export namespace Qr {
+    /**
+     * A two-stop gradient fill for the QR modules.
+     */
+    export interface Gradient {
+      /**
+       * Gradient end color.
+       */
+      endColor: string;
+
+      /**
+       * Gradient start color.
+       */
+      startColor: string;
+
+      /**
+       * Gradient type.
+       */
+      type: 'linear' | 'radial';
+
+      /**
+       * Rotation in radians (linear gradients only).
+       */
+      rotation?: number | null;
+    }
+  }
+
+  export interface Utm {
+    /**
+     * The `utm_campaign` value appended to the tracked short-link URL.
+     */
+    campaign?: string | null;
+
+    /**
+     * The `utm_content` value.
+     */
+    content?: string | null;
+
+    /**
+     * The `utm_medium` value.
+     */
+    medium?: string | null;
+
+    /**
+     * The `utm_source` value.
+     */
+    source?: string | null;
+
+    /**
+     * The `utm_term` value.
+     */
+    term?: string | null;
+  }
 }
 
 export interface ShortLinkResultsParams {

@@ -5083,11 +5083,167 @@ export namespace JourneyFlowResultsResponse {
 
       label: string;
 
-      dateRange?: unknown | null;
+      dateRange?: Comparison.DateRange | null;
 
-      entryFilter?: unknown | null;
+      entryFilter?: Comparison.EntryFilter | null;
 
-      sessionFilter?: unknown | null;
+      sessionFilter?: Comparison.SessionFilter | null;
+    }
+
+    export namespace Comparison {
+      export interface DateRange {
+        from: string;
+
+        timeZone: string;
+
+        to: string;
+      }
+
+      export interface EntryFilter {
+        filter: EntryFilter.Filter;
+
+        version: number;
+      }
+
+      export namespace EntryFilter {
+        export interface Filter {
+          kind: 'AND' | 'OR' | 'NOT' | 'PREDICATE';
+
+          child?: Filter.Child | null;
+
+          children?: Array<Filter.Child> | null;
+
+          predicate?: Filter.Predicate | null;
+        }
+
+        export namespace Filter {
+          export interface Child {
+            kind: 'AND' | 'OR' | 'NOT' | 'PREDICATE';
+          }
+
+          export interface Child {
+            kind: 'AND' | 'OR' | 'NOT' | 'PREDICATE';
+          }
+
+          export interface Predicate {
+            operator:
+              | 'EQ'
+              | 'NEQ'
+              | 'GT'
+              | 'GTE'
+              | 'LT'
+              | 'LTE'
+              | 'CONTAINS'
+              | 'NOT_CONTAINS'
+              | 'CONTAINS_CI'
+              | 'NOT_CONTAINS_CI'
+              | 'STARTS_WITH'
+              | 'ENDS_WITH'
+              | 'IN'
+              | 'NOT_IN'
+              | 'EXISTS'
+              | 'MISSING'
+              | 'IS_NULL';
+
+            property: string;
+
+            path?: Array<string> | null;
+
+            type?: 'STRING' | 'NUMBER' | 'BOOLEAN' | null;
+
+            value?: Predicate.Value | null;
+          }
+
+          export namespace Predicate {
+            export interface Value {
+              booleanValue?: boolean | null;
+
+              booleanValues?: Array<boolean> | null;
+
+              numberValue?: number | null;
+
+              numberValues?: Array<number> | null;
+
+              stringValue?: string | null;
+
+              stringValues?: Array<string> | null;
+            }
+          }
+        }
+      }
+
+      export interface SessionFilter {
+        filter: SessionFilter.Filter;
+
+        version: number;
+      }
+
+      export namespace SessionFilter {
+        export interface Filter {
+          kind: 'AND' | 'OR' | 'NOT' | 'PREDICATE';
+
+          child?: Filter.Child | null;
+
+          children?: Array<Filter.Child> | null;
+
+          predicate?: Filter.Predicate | null;
+        }
+
+        export namespace Filter {
+          export interface Child {
+            kind: 'AND' | 'OR' | 'NOT' | 'PREDICATE';
+          }
+
+          export interface Child {
+            kind: 'AND' | 'OR' | 'NOT' | 'PREDICATE';
+          }
+
+          export interface Predicate {
+            operator:
+              | 'EQ'
+              | 'NEQ'
+              | 'GT'
+              | 'GTE'
+              | 'LT'
+              | 'LTE'
+              | 'CONTAINS'
+              | 'NOT_CONTAINS'
+              | 'CONTAINS_CI'
+              | 'NOT_CONTAINS_CI'
+              | 'STARTS_WITH'
+              | 'ENDS_WITH'
+              | 'IN'
+              | 'NOT_IN'
+              | 'EXISTS'
+              | 'MISSING'
+              | 'IS_NULL';
+
+            property: string;
+
+            path?: Array<string> | null;
+
+            type?: 'STRING' | 'NUMBER' | 'BOOLEAN' | null;
+
+            value?: Predicate.Value | null;
+          }
+
+          export namespace Predicate {
+            export interface Value {
+              booleanValue?: boolean | null;
+
+              booleanValues?: Array<boolean> | null;
+
+              numberValue?: number | null;
+
+              numberValues?: Array<number> | null;
+
+              stringValue?: string | null;
+
+              stringValues?: Array<string> | null;
+            }
+          }
+        }
+      }
     }
 
     export interface DateRange {
@@ -5260,11 +5416,19 @@ export namespace JourneyFlowResultsResponse {
 
         targetNodeId: string;
 
-        shareOfNext?: unknown | null;
+        shareOfNext?: Edge.ShareOfNext | null;
       }
 
       export namespace Edge {
         export interface ShareOfPrevious {
+          denominator: string;
+
+          numerator: string;
+
+          value?: number | null;
+        }
+
+        export interface ShareOfNext {
           denominator: string;
 
           numerator: string;
@@ -5286,7 +5450,7 @@ export namespace JourneyFlowResultsResponse {
 
         kind: 'ANCHOR' | 'EVENT' | 'PAGE' | 'TERMINAL' | 'OMITTED_STEPS' | 'OTHER_EVENTS';
 
-        matcher: unknown | null;
+        matcher: Node.UnionMember0 | null | Node.UnionMember1;
 
         position: Node.Position;
 
@@ -5294,9 +5458,9 @@ export namespace JourneyFlowResultsResponse {
 
         value: string;
 
-        shareOfNext?: unknown | null;
+        shareOfNext?: Node.ShareOfNext | null;
 
-        shareOfPrevious?: unknown | null;
+        shareOfPrevious?: Node.ShareOfPrevious | null;
 
         source?: string | null;
 
@@ -5304,6 +5468,218 @@ export namespace JourneyFlowResultsResponse {
       }
 
       export namespace Node {
+        export interface UnionMember0 {
+          eventName: string;
+
+          kind: 'event';
+
+          filter?: UnionMember0.Filter;
+        }
+
+        export namespace UnionMember0 {
+          export interface Filter {
+            filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+            version: 1;
+          }
+
+          export namespace Filter {
+            export interface UnionMember0 {
+              children: Array<
+                UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+              >;
+
+              kind: 'and' | 'or';
+            }
+
+            export namespace UnionMember0 {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+
+            export interface UnionMember1 {
+              child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+              kind: 'not';
+            }
+
+            export namespace UnionMember1 {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+        }
+
+        export interface UnionMember1 {
+          kind: 'page';
+
+          filter?: UnionMember1.Filter;
+        }
+
+        export namespace UnionMember1 {
+          export interface Filter {
+            filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+            version: 1;
+          }
+
+          export namespace Filter {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+        }
+
         export interface Position {
           anchorId: string | null;
 
@@ -5317,6 +5693,22 @@ export namespace JourneyFlowResultsResponse {
         }
 
         export interface ShareOfEntries {
+          denominator: string;
+
+          numerator: string;
+
+          value?: number | null;
+        }
+
+        export interface ShareOfNext {
+          denominator: string;
+
+          numerator: string;
+
+          value?: number | null;
+        }
+
+        export interface ShareOfPrevious {
           denominator: string;
 
           numerator: string;
@@ -5355,7 +5747,7 @@ export namespace JourneyFlowResultsResponse {
 
           kind: 'ANCHOR' | 'EVENT' | 'PAGE' | 'TERMINAL' | 'OMITTED_STEPS' | 'OTHER_EVENTS';
 
-          matcher: unknown | null;
+          matcher: Step.UnionMember0 | null | Step.UnionMember1;
 
           position: Step.Position;
 
@@ -5367,6 +5759,218 @@ export namespace JourneyFlowResultsResponse {
         }
 
         export namespace Step {
+          export interface UnionMember0 {
+            eventName: string;
+
+            kind: 'event';
+
+            filter?: UnionMember0.Filter;
+          }
+
+          export namespace UnionMember0 {
+            export interface Filter {
+              filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+              version: 1;
+            }
+
+            export namespace Filter {
+              export interface UnionMember0 {
+                children: Array<
+                  UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+                >;
+
+                kind: 'and' | 'or';
+              }
+
+              export namespace UnionMember0 {
+                export interface UnionMember0 {
+                  children: Array<unknown>;
+
+                  kind: 'and' | 'or';
+                }
+
+                export interface UnionMember1 {
+                  child: unknown;
+
+                  kind: 'not';
+                }
+
+                export interface UnionMember2 {
+                  kind: 'predicate';
+
+                  operator:
+                    | 'eq'
+                    | 'neq'
+                    | 'gt'
+                    | 'gte'
+                    | 'lt'
+                    | 'lte'
+                    | 'contains'
+                    | 'not_contains'
+                    | 'contains_ci'
+                    | 'not_contains_ci'
+                    | 'starts_with'
+                    | 'ends_with'
+                    | 'in'
+                    | 'not_in'
+                    | 'exists'
+                    | 'missing'
+                    | 'is_null';
+
+                  property: string;
+
+                  path?: Array<string>;
+
+                  type?: 'string' | 'number' | 'boolean';
+
+                  value?: string | number | boolean | Array<string | number | boolean>;
+                }
+              }
+
+              export interface UnionMember1 {
+                child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+                kind: 'not';
+              }
+
+              export namespace UnionMember1 {
+                export interface UnionMember0 {
+                  children: Array<unknown>;
+
+                  kind: 'and' | 'or';
+                }
+
+                export interface UnionMember1 {
+                  child: unknown;
+
+                  kind: 'not';
+                }
+
+                export interface UnionMember2 {
+                  kind: 'predicate';
+
+                  operator:
+                    | 'eq'
+                    | 'neq'
+                    | 'gt'
+                    | 'gte'
+                    | 'lt'
+                    | 'lte'
+                    | 'contains'
+                    | 'not_contains'
+                    | 'contains_ci'
+                    | 'not_contains_ci'
+                    | 'starts_with'
+                    | 'ends_with'
+                    | 'in'
+                    | 'not_in'
+                    | 'exists'
+                    | 'missing'
+                    | 'is_null';
+
+                  property: string;
+
+                  path?: Array<string>;
+
+                  type?: 'string' | 'number' | 'boolean';
+
+                  value?: string | number | boolean | Array<string | number | boolean>;
+                }
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+          }
+
+          export interface UnionMember1 {
+            kind: 'page';
+
+            filter?: UnionMember1.Filter;
+          }
+
+          export namespace UnionMember1 {
+            export interface Filter {
+              filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+              version: 1;
+            }
+
+            export namespace Filter {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+          }
+
           export interface Position {
             anchorId: string | null;
 
@@ -5471,11 +6075,167 @@ export namespace JourneyFlowPreviewResponse {
 
       label: string;
 
-      dateRange?: unknown | null;
+      dateRange?: Comparison.DateRange | null;
 
-      entryFilter?: unknown | null;
+      entryFilter?: Comparison.EntryFilter | null;
 
-      sessionFilter?: unknown | null;
+      sessionFilter?: Comparison.SessionFilter | null;
+    }
+
+    export namespace Comparison {
+      export interface DateRange {
+        from: string;
+
+        timeZone: string;
+
+        to: string;
+      }
+
+      export interface EntryFilter {
+        filter: EntryFilter.Filter;
+
+        version: number;
+      }
+
+      export namespace EntryFilter {
+        export interface Filter {
+          kind: 'AND' | 'OR' | 'NOT' | 'PREDICATE';
+
+          child?: Filter.Child | null;
+
+          children?: Array<Filter.Child> | null;
+
+          predicate?: Filter.Predicate | null;
+        }
+
+        export namespace Filter {
+          export interface Child {
+            kind: 'AND' | 'OR' | 'NOT' | 'PREDICATE';
+          }
+
+          export interface Child {
+            kind: 'AND' | 'OR' | 'NOT' | 'PREDICATE';
+          }
+
+          export interface Predicate {
+            operator:
+              | 'EQ'
+              | 'NEQ'
+              | 'GT'
+              | 'GTE'
+              | 'LT'
+              | 'LTE'
+              | 'CONTAINS'
+              | 'NOT_CONTAINS'
+              | 'CONTAINS_CI'
+              | 'NOT_CONTAINS_CI'
+              | 'STARTS_WITH'
+              | 'ENDS_WITH'
+              | 'IN'
+              | 'NOT_IN'
+              | 'EXISTS'
+              | 'MISSING'
+              | 'IS_NULL';
+
+            property: string;
+
+            path?: Array<string> | null;
+
+            type?: 'STRING' | 'NUMBER' | 'BOOLEAN' | null;
+
+            value?: Predicate.Value | null;
+          }
+
+          export namespace Predicate {
+            export interface Value {
+              booleanValue?: boolean | null;
+
+              booleanValues?: Array<boolean> | null;
+
+              numberValue?: number | null;
+
+              numberValues?: Array<number> | null;
+
+              stringValue?: string | null;
+
+              stringValues?: Array<string> | null;
+            }
+          }
+        }
+      }
+
+      export interface SessionFilter {
+        filter: SessionFilter.Filter;
+
+        version: number;
+      }
+
+      export namespace SessionFilter {
+        export interface Filter {
+          kind: 'AND' | 'OR' | 'NOT' | 'PREDICATE';
+
+          child?: Filter.Child | null;
+
+          children?: Array<Filter.Child> | null;
+
+          predicate?: Filter.Predicate | null;
+        }
+
+        export namespace Filter {
+          export interface Child {
+            kind: 'AND' | 'OR' | 'NOT' | 'PREDICATE';
+          }
+
+          export interface Child {
+            kind: 'AND' | 'OR' | 'NOT' | 'PREDICATE';
+          }
+
+          export interface Predicate {
+            operator:
+              | 'EQ'
+              | 'NEQ'
+              | 'GT'
+              | 'GTE'
+              | 'LT'
+              | 'LTE'
+              | 'CONTAINS'
+              | 'NOT_CONTAINS'
+              | 'CONTAINS_CI'
+              | 'NOT_CONTAINS_CI'
+              | 'STARTS_WITH'
+              | 'ENDS_WITH'
+              | 'IN'
+              | 'NOT_IN'
+              | 'EXISTS'
+              | 'MISSING'
+              | 'IS_NULL';
+
+            property: string;
+
+            path?: Array<string> | null;
+
+            type?: 'STRING' | 'NUMBER' | 'BOOLEAN' | null;
+
+            value?: Predicate.Value | null;
+          }
+
+          export namespace Predicate {
+            export interface Value {
+              booleanValue?: boolean | null;
+
+              booleanValues?: Array<boolean> | null;
+
+              numberValue?: number | null;
+
+              numberValues?: Array<number> | null;
+
+              stringValue?: string | null;
+
+              stringValues?: Array<string> | null;
+            }
+          }
+        }
+      }
     }
 
     export interface DateRange {
@@ -5648,11 +6408,19 @@ export namespace JourneyFlowPreviewResponse {
 
         targetNodeId: string;
 
-        shareOfNext?: unknown | null;
+        shareOfNext?: Edge.ShareOfNext | null;
       }
 
       export namespace Edge {
         export interface ShareOfPrevious {
+          denominator: string;
+
+          numerator: string;
+
+          value?: number | null;
+        }
+
+        export interface ShareOfNext {
           denominator: string;
 
           numerator: string;
@@ -5674,7 +6442,7 @@ export namespace JourneyFlowPreviewResponse {
 
         kind: 'ANCHOR' | 'EVENT' | 'PAGE' | 'TERMINAL' | 'OMITTED_STEPS' | 'OTHER_EVENTS';
 
-        matcher: unknown | null;
+        matcher: Node.UnionMember0 | null | Node.UnionMember1;
 
         position: Node.Position;
 
@@ -5682,9 +6450,9 @@ export namespace JourneyFlowPreviewResponse {
 
         value: string;
 
-        shareOfNext?: unknown | null;
+        shareOfNext?: Node.ShareOfNext | null;
 
-        shareOfPrevious?: unknown | null;
+        shareOfPrevious?: Node.ShareOfPrevious | null;
 
         source?: string | null;
 
@@ -5692,6 +6460,218 @@ export namespace JourneyFlowPreviewResponse {
       }
 
       export namespace Node {
+        export interface UnionMember0 {
+          eventName: string;
+
+          kind: 'event';
+
+          filter?: UnionMember0.Filter;
+        }
+
+        export namespace UnionMember0 {
+          export interface Filter {
+            filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+            version: 1;
+          }
+
+          export namespace Filter {
+            export interface UnionMember0 {
+              children: Array<
+                UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+              >;
+
+              kind: 'and' | 'or';
+            }
+
+            export namespace UnionMember0 {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+
+            export interface UnionMember1 {
+              child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+              kind: 'not';
+            }
+
+            export namespace UnionMember1 {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+        }
+
+        export interface UnionMember1 {
+          kind: 'page';
+
+          filter?: UnionMember1.Filter;
+        }
+
+        export namespace UnionMember1 {
+          export interface Filter {
+            filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+            version: 1;
+          }
+
+          export namespace Filter {
+            export interface UnionMember0 {
+              children: Array<unknown>;
+
+              kind: 'and' | 'or';
+            }
+
+            export interface UnionMember1 {
+              child: unknown;
+
+              kind: 'not';
+            }
+
+            export interface UnionMember2 {
+              kind: 'predicate';
+
+              operator:
+                | 'eq'
+                | 'neq'
+                | 'gt'
+                | 'gte'
+                | 'lt'
+                | 'lte'
+                | 'contains'
+                | 'not_contains'
+                | 'contains_ci'
+                | 'not_contains_ci'
+                | 'starts_with'
+                | 'ends_with'
+                | 'in'
+                | 'not_in'
+                | 'exists'
+                | 'missing'
+                | 'is_null';
+
+              property: string;
+
+              path?: Array<string>;
+
+              type?: 'string' | 'number' | 'boolean';
+
+              value?: string | number | boolean | Array<string | number | boolean>;
+            }
+          }
+        }
+
         export interface Position {
           anchorId: string | null;
 
@@ -5705,6 +6685,22 @@ export namespace JourneyFlowPreviewResponse {
         }
 
         export interface ShareOfEntries {
+          denominator: string;
+
+          numerator: string;
+
+          value?: number | null;
+        }
+
+        export interface ShareOfNext {
+          denominator: string;
+
+          numerator: string;
+
+          value?: number | null;
+        }
+
+        export interface ShareOfPrevious {
           denominator: string;
 
           numerator: string;
@@ -5743,7 +6739,7 @@ export namespace JourneyFlowPreviewResponse {
 
           kind: 'ANCHOR' | 'EVENT' | 'PAGE' | 'TERMINAL' | 'OMITTED_STEPS' | 'OTHER_EVENTS';
 
-          matcher: unknown | null;
+          matcher: Step.UnionMember0 | null | Step.UnionMember1;
 
           position: Step.Position;
 
@@ -5755,6 +6751,218 @@ export namespace JourneyFlowPreviewResponse {
         }
 
         export namespace Step {
+          export interface UnionMember0 {
+            eventName: string;
+
+            kind: 'event';
+
+            filter?: UnionMember0.Filter;
+          }
+
+          export namespace UnionMember0 {
+            export interface Filter {
+              filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+              version: 1;
+            }
+
+            export namespace Filter {
+              export interface UnionMember0 {
+                children: Array<
+                  UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2
+                >;
+
+                kind: 'and' | 'or';
+              }
+
+              export namespace UnionMember0 {
+                export interface UnionMember0 {
+                  children: Array<unknown>;
+
+                  kind: 'and' | 'or';
+                }
+
+                export interface UnionMember1 {
+                  child: unknown;
+
+                  kind: 'not';
+                }
+
+                export interface UnionMember2 {
+                  kind: 'predicate';
+
+                  operator:
+                    | 'eq'
+                    | 'neq'
+                    | 'gt'
+                    | 'gte'
+                    | 'lt'
+                    | 'lte'
+                    | 'contains'
+                    | 'not_contains'
+                    | 'contains_ci'
+                    | 'not_contains_ci'
+                    | 'starts_with'
+                    | 'ends_with'
+                    | 'in'
+                    | 'not_in'
+                    | 'exists'
+                    | 'missing'
+                    | 'is_null';
+
+                  property: string;
+
+                  path?: Array<string>;
+
+                  type?: 'string' | 'number' | 'boolean';
+
+                  value?: string | number | boolean | Array<string | number | boolean>;
+                }
+              }
+
+              export interface UnionMember1 {
+                child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
+
+                kind: 'not';
+              }
+
+              export namespace UnionMember1 {
+                export interface UnionMember0 {
+                  children: Array<unknown>;
+
+                  kind: 'and' | 'or';
+                }
+
+                export interface UnionMember1 {
+                  child: unknown;
+
+                  kind: 'not';
+                }
+
+                export interface UnionMember2 {
+                  kind: 'predicate';
+
+                  operator:
+                    | 'eq'
+                    | 'neq'
+                    | 'gt'
+                    | 'gte'
+                    | 'lt'
+                    | 'lte'
+                    | 'contains'
+                    | 'not_contains'
+                    | 'contains_ci'
+                    | 'not_contains_ci'
+                    | 'starts_with'
+                    | 'ends_with'
+                    | 'in'
+                    | 'not_in'
+                    | 'exists'
+                    | 'missing'
+                    | 'is_null';
+
+                  property: string;
+
+                  path?: Array<string>;
+
+                  type?: 'string' | 'number' | 'boolean';
+
+                  value?: string | number | boolean | Array<string | number | boolean>;
+                }
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+          }
+
+          export interface UnionMember1 {
+            kind: 'page';
+
+            filter?: UnionMember1.Filter;
+          }
+
+          export namespace UnionMember1 {
+            export interface Filter {
+              filter: Filter.UnionMember0 | Filter.UnionMember1 | Filter.UnionMember2;
+
+              version: 1;
+            }
+
+            export namespace Filter {
+              export interface UnionMember0 {
+                children: Array<unknown>;
+
+                kind: 'and' | 'or';
+              }
+
+              export interface UnionMember1 {
+                child: unknown;
+
+                kind: 'not';
+              }
+
+              export interface UnionMember2 {
+                kind: 'predicate';
+
+                operator:
+                  | 'eq'
+                  | 'neq'
+                  | 'gt'
+                  | 'gte'
+                  | 'lt'
+                  | 'lte'
+                  | 'contains'
+                  | 'not_contains'
+                  | 'contains_ci'
+                  | 'not_contains_ci'
+                  | 'starts_with'
+                  | 'ends_with'
+                  | 'in'
+                  | 'not_in'
+                  | 'exists'
+                  | 'missing'
+                  | 'is_null';
+
+                property: string;
+
+                path?: Array<string>;
+
+                type?: 'string' | 'number' | 'boolean';
+
+                value?: string | number | boolean | Array<string | number | boolean>;
+              }
+            }
+          }
+
           export interface Position {
             anchorId: string | null;
 

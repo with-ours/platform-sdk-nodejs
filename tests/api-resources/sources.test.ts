@@ -51,7 +51,7 @@ describe('resource sources', () => {
     const response = await client.sources.create({
       type: 'AlchemerWebhook',
       name: 'name',
-      redirectUrl: 'redirectUrl',
+      redirectUrl: 'https://example.com',
     });
   });
 

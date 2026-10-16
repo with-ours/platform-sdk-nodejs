@@ -99,6 +99,14 @@ import {
   ConversionJourneySummaryUpdateResponse,
 } from './resources/conversion-journey-summaries';
 import {
+  CustomDomainCreateResponse,
+  CustomDomainReconcileCertificateResponse,
+  CustomDomainReplaceParams,
+  CustomDomainReplaceResponse,
+  CustomDomainStatusResponse,
+  CustomDomains,
+} from './resources/custom-domains';
+import {
   DataGovernance,
   DataGovernanceCreateParams,
   DataGovernanceCreateResponse,
@@ -248,6 +256,10 @@ import {
   MappingListResponse,
   MappingListResponsesCursor,
   MappingModificationsResponse,
+  MappingRenameParams,
+  MappingRenamePreviewParams,
+  MappingRenamePreviewResponse,
+  MappingRenameResponse,
   MappingReorderParams,
   MappingReorderResponse,
   MappingRetrieveResponse,
@@ -257,6 +269,7 @@ import {
   MappingUpdateResponse,
   Mappings,
 } from './resources/mappings';
+import { Me, MeRetrieveResponse } from './resources/me';
 import {
   PersonalizationProperties,
   PersonalizationPropertyCreateParams,
@@ -377,6 +390,8 @@ import {
   TagManagerCreateResponse,
   TagManagerDeleteResponse,
   TagManagerListResponse,
+  TagManagerPreviewParams,
+  TagManagerPreviewResponse,
   TagManagerRetrieveResponse,
   TagManagerUpdateParams,
   TagManagerUpdateResponse,
@@ -1300,7 +1315,9 @@ export class OursPrivacyPlatform {
   webAnalytics: API.WebAnalytics = new API.WebAnalytics(this);
   webScannerRules: API.WebScannerRules = new API.WebScannerRules(this);
   webScanners: API.WebScanners = new API.WebScanners(this);
+  me: API.Me = new API.Me(this);
   personalizationProperties: API.PersonalizationProperties = new API.PersonalizationProperties(this);
+  customDomains: API.CustomDomains = new API.CustomDomains(this);
   analytics: API.Analytics = new API.Analytics(this);
   journeyFlows: API.JourneyFlows = new API.JourneyFlows(this);
   testEvents: API.TestEvents = new API.TestEvents(this);
@@ -1339,7 +1356,9 @@ OursPrivacyPlatform.VideoChannels = VideoChannels;
 OursPrivacyPlatform.WebAnalytics = WebAnalytics;
 OursPrivacyPlatform.WebScannerRules = WebScannerRules;
 OursPrivacyPlatform.WebScanners = WebScanners;
+OursPrivacyPlatform.Me = Me;
 OursPrivacyPlatform.PersonalizationProperties = PersonalizationProperties;
+OursPrivacyPlatform.CustomDomains = CustomDomains;
 OursPrivacyPlatform.Analytics = Analytics;
 OursPrivacyPlatform.JourneyFlows = JourneyFlows;
 OursPrivacyPlatform.TestEvents = TestEvents;
@@ -1565,6 +1584,8 @@ export declare namespace OursPrivacyPlatform {
     type MappingRetrieveResponse as MappingRetrieveResponse,
     type MappingUpdateResponse as MappingUpdateResponse,
     type MappingDeleteResponse as MappingDeleteResponse,
+    type MappingRenamePreviewResponse as MappingRenamePreviewResponse,
+    type MappingRenameResponse as MappingRenameResponse,
     type MappingReorderResponse as MappingReorderResponse,
     type MappingTemplatesResponse as MappingTemplatesResponse,
     type MappingDefaultVariablesResponse as MappingDefaultVariablesResponse,
@@ -1574,6 +1595,8 @@ export declare namespace OursPrivacyPlatform {
     type MappingListParams as MappingListParams,
     type MappingCreateParams as MappingCreateParams,
     type MappingUpdateParams as MappingUpdateParams,
+    type MappingRenamePreviewParams as MappingRenamePreviewParams,
+    type MappingRenameParams as MappingRenameParams,
     type MappingReorderParams as MappingReorderParams,
     type MappingTemplatesParams as MappingTemplatesParams,
   };
@@ -1631,11 +1654,13 @@ export declare namespace OursPrivacyPlatform {
 
   export {
     TagManagers as TagManagers,
+    type TagManagerPreviewResponse as TagManagerPreviewResponse,
     type TagManagerListResponse as TagManagerListResponse,
     type TagManagerCreateResponse as TagManagerCreateResponse,
     type TagManagerRetrieveResponse as TagManagerRetrieveResponse,
     type TagManagerUpdateResponse as TagManagerUpdateResponse,
     type TagManagerDeleteResponse as TagManagerDeleteResponse,
+    type TagManagerPreviewParams as TagManagerPreviewParams,
     type TagManagerCreateParams as TagManagerCreateParams,
     type TagManagerUpdateParams as TagManagerUpdateParams,
   };
@@ -1839,6 +1864,8 @@ export declare namespace OursPrivacyPlatform {
     type WebScannerResolveCoverageGapParams as WebScannerResolveCoverageGapParams,
   };
 
+  export { Me as Me, type MeRetrieveResponse as MeRetrieveResponse };
+
   export {
     PersonalizationProperties as PersonalizationProperties,
     type PersonalizationPropertyListResponse as PersonalizationPropertyListResponse,
@@ -1850,6 +1877,15 @@ export declare namespace OursPrivacyPlatform {
     type PersonalizationPropertyListParams as PersonalizationPropertyListParams,
     type PersonalizationPropertyCreateParams as PersonalizationPropertyCreateParams,
     type PersonalizationPropertyUpdateParams as PersonalizationPropertyUpdateParams,
+  };
+
+  export {
+    CustomDomains as CustomDomains,
+    type CustomDomainStatusResponse as CustomDomainStatusResponse,
+    type CustomDomainCreateResponse as CustomDomainCreateResponse,
+    type CustomDomainReplaceResponse as CustomDomainReplaceResponse,
+    type CustomDomainReconcileCertificateResponse as CustomDomainReconcileCertificateResponse,
+    type CustomDomainReplaceParams as CustomDomainReplaceParams,
   };
 
   export {

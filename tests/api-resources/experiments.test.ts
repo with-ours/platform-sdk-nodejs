@@ -53,7 +53,19 @@ describe('resource experiments', () => {
     const response = await client.experiments.create({
       experimentSettingsId: 'settings_01HZX9BB73EY2Q37VGK5A0VW7A',
       name: 'Homepage Hero Headline Test',
-      analysisConfig: {},
+      analysisConfig: {
+        cupedEnabled: true,
+        method: 'BAYESIAN',
+        outcomeWindowDays: 0,
+        planning: {
+          mode: 'MANUAL_TARGET',
+          targetVisitorsByVariant: [{ variantId: 'variantId', visitors: 1 }],
+          baseline: 0,
+          minimumDetectableEffect: 0,
+          power: 0,
+        },
+        sidedness: 'GREATER_THAN_CONTROL',
+      },
       controlWeight: 34,
       description: 'description',
       includeQueryString: true,
@@ -64,7 +76,7 @@ describe('resource experiments', () => {
             {
               eventName: 'x',
               filter: {
-                filter: {},
+                filter: { children: [{ children: [], kind: 'and' }], kind: 'and' },
                 version: 1,
               },
             },
@@ -82,7 +94,7 @@ describe('resource experiments', () => {
               {
                 eventName: 'x',
                 filter: {
-                  filter: {},
+                  filter: { children: [{ children: [], kind: 'and' }], kind: 'and' },
                   version: 1,
                 },
               },
@@ -107,7 +119,7 @@ describe('resource experiments', () => {
           },
         ],
         visitorProperties: {},
-        visitorStatus: 'visitorStatus',
+        visitorStatus: 'any',
       },
       trafficAllocation: 100,
       type: 'ab',

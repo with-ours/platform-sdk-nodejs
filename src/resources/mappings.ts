@@ -66,6 +66,33 @@ export class Mappings extends APIResource {
   }
 
   /**
+   * Preview a destination-specific event rename before setting or clearing it. Check
+   * `supportsRenamedEvents` in `GET /rest/v1/destinations/types` first. If
+   * `willCascade` is true, review all `affectedEventNames` before calling
+   * `PUT /rest/v1/mappings/rename` with `confirmCascade: true`. Requires API-key
+   * scope or current OAuth user permission: mapping:find
+   */
+  renamePreview(
+    query: MappingRenamePreviewParams,
+    options?: RequestOptions,
+  ): APIPromise<MappingRenamePreviewResponse> {
+    return this._client.get('/rest/v1/mappings/rename-preview', { query, ...options });
+  }
+
+  /**
+   * Set or clear a destination-specific allowed-event rename. Send
+   * `renamedEventName: null` to clear it; clearing an existing mapper also requires
+   * the `mapping:delete` scope. Preview first with
+   * `GET /rest/v1/mappings/rename-preview`; a shared mapper requires
+   * `confirmCascade: true`, and all affected events will change. Publish a new
+   * version to activate the change. Requires API-key scope or current OAuth user
+   * permission: mapping:update
+   */
+  rename(body: MappingRenameParams, options?: RequestOptions): APIPromise<MappingRenameResponse | null> {
+    return this._client.put('/rest/v1/mappings/rename', { body, ...options });
+  }
+
+  /**
    * Reassign `priority` for a set of mappings. Pass `{ uuids: [...] }` with the
    * mapping ids in their new order — index 0 becomes the highest-priority mapping.
    * All ids must belong to the same parent entity (source or destination); mixing
@@ -147,7 +174,7 @@ export interface MappingListResponse {
    *
    * Example combinator: `{ "AND": [{ "condition": ... }, { "OR": [...] }] }`.
    */
-  logic?: unknown;
+  logic?: MappingListResponse.Logic | null;
 
   name?: string | null;
 
@@ -212,6 +239,106 @@ export namespace MappingListResponse {
       | 'UpperCase'
       | null;
   }
+
+  /**
+   * Condition tree gating when this mapping fires. A node is either a leaf
+   * `condition` or a combinator (`AND`, `OR`, `NOT`). Combinator children are
+   * themselves logic nodes, so trees nest arbitrarily.
+   *
+   * Example leaf:
+   * `{ "condition": { "property": "$event.event", "operator": "Is", "value": "page_view" } }`.
+   *
+   * Example combinator: `{ "AND": [{ "condition": ... }, { "OR": [...] }] }`.
+   */
+  export interface Logic {
+    /**
+     * All child nodes must match. Each child is itself a logic node (leaf `condition`
+     * or combinator).
+     */
+    AND?: Array<{
+      [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+    }> | null;
+
+    condition?: Logic.Condition | null;
+
+    /**
+     * Negates a single child logic node.
+     */
+    NOT?: {
+      [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+    } | null;
+
+    /**
+     * Any child node must match. Each child is itself a logic node (leaf `condition`
+     * or combinator).
+     */
+    OR?: Array<{
+      [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+    }> | null;
+  }
+
+  export namespace Logic {
+    export interface Condition {
+      /**
+       * Comparison verb in PascalCase. Equality/text: `Is`, `IsNot`, `Contains`,
+       * `DoesNotContain`, `StartsWith`, `EndsWith`. Truthiness/nullability: `IsFalsy`,
+       * `IsTruthy`, `IsNull`, `IsNotNull`, `IsUndefined`, `IsNotUndefined`, `IsTrue`,
+       * `IsFalse`. Numeric: `IsGreaterThan`, `IsGreaterThanOrEqual`, `IsLessThan`,
+       * `IsLessThanOrEqual`. Set membership: `IsIn`, `IsNotIn`, `IsFoundIn`,
+       * `IsNotFoundIn`. Date: `IsBefore`, `IsAfter`, `IsBetween`, `IsOnOrBefore`,
+       * `IsOnOrAfter`. Regex: `MatchesRegex`, `MatchesRegexIgnoreCase`,
+       * `DoesNotMatchRegex`, `DoesNotMatchRegexIgnoreCase`.
+       */
+      operator:
+        | 'Is'
+        | 'IsNot'
+        | 'Contains'
+        | 'DoesNotContain'
+        | 'StartsWith'
+        | 'EndsWith'
+        | 'IsFalsy'
+        | 'IsTruthy'
+        | 'IsNull'
+        | 'IsNotNull'
+        | 'IsUndefined'
+        | 'IsNotUndefined'
+        | 'IsGreaterThan'
+        | 'IsGreaterThanOrEqual'
+        | 'IsLessThan'
+        | 'IsLessThanOrEqual'
+        | 'IsIn'
+        | 'IsNotIn'
+        | 'IsFoundIn'
+        | 'IsNotFoundIn'
+        | 'IsTrue'
+        | 'IsFalse'
+        | 'IsBefore'
+        | 'IsAfter'
+        | 'IsBetween'
+        | 'IsOnOrBefore'
+        | 'IsOnOrAfter'
+        | 'MatchesRegex'
+        | 'MatchesRegexIgnoreCase'
+        | 'DoesNotMatchRegex'
+        | 'DoesNotMatchRegexIgnoreCase';
+
+      /**
+       * Bare dotted path into the event/visitor record. Examples: `$event.event`,
+       * `$event.event_properties.value`, `visitor.consent.marketing`. The leading `$` is
+       * optional and stripped before lookup. Do **not** use `{{...}}` here — that
+       * template syntax is for mapping values (`mappings[].map`), not logic conditions,
+       * and would be compared as a literal string.
+       */
+      property: string;
+
+      /**
+       * String compared against the resolved property. Operators that take no value
+       * (`IsFalsy`, `IsTruthy`, `IsNull`, `IsNotNull`, `IsUndefined`, `IsNotUndefined`,
+       * `IsTrue`, `IsFalse`) ignore this field — send `""`.
+       */
+      value: string;
+    }
+  }
 }
 
 export interface MappingCreateResponse {
@@ -235,7 +362,7 @@ export interface MappingCreateResponse {
    *
    * Example combinator: `{ "AND": [{ "condition": ... }, { "OR": [...] }] }`.
    */
-  logic?: unknown;
+  logic?: MappingCreateResponse.Logic | null;
 
   name?: string | null;
 
@@ -300,6 +427,106 @@ export namespace MappingCreateResponse {
       | 'UpperCase'
       | null;
   }
+
+  /**
+   * Condition tree gating when this mapping fires. A node is either a leaf
+   * `condition` or a combinator (`AND`, `OR`, `NOT`). Combinator children are
+   * themselves logic nodes, so trees nest arbitrarily.
+   *
+   * Example leaf:
+   * `{ "condition": { "property": "$event.event", "operator": "Is", "value": "page_view" } }`.
+   *
+   * Example combinator: `{ "AND": [{ "condition": ... }, { "OR": [...] }] }`.
+   */
+  export interface Logic {
+    /**
+     * All child nodes must match. Each child is itself a logic node (leaf `condition`
+     * or combinator).
+     */
+    AND?: Array<{
+      [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+    }> | null;
+
+    condition?: Logic.Condition | null;
+
+    /**
+     * Negates a single child logic node.
+     */
+    NOT?: {
+      [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+    } | null;
+
+    /**
+     * Any child node must match. Each child is itself a logic node (leaf `condition`
+     * or combinator).
+     */
+    OR?: Array<{
+      [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+    }> | null;
+  }
+
+  export namespace Logic {
+    export interface Condition {
+      /**
+       * Comparison verb in PascalCase. Equality/text: `Is`, `IsNot`, `Contains`,
+       * `DoesNotContain`, `StartsWith`, `EndsWith`. Truthiness/nullability: `IsFalsy`,
+       * `IsTruthy`, `IsNull`, `IsNotNull`, `IsUndefined`, `IsNotUndefined`, `IsTrue`,
+       * `IsFalse`. Numeric: `IsGreaterThan`, `IsGreaterThanOrEqual`, `IsLessThan`,
+       * `IsLessThanOrEqual`. Set membership: `IsIn`, `IsNotIn`, `IsFoundIn`,
+       * `IsNotFoundIn`. Date: `IsBefore`, `IsAfter`, `IsBetween`, `IsOnOrBefore`,
+       * `IsOnOrAfter`. Regex: `MatchesRegex`, `MatchesRegexIgnoreCase`,
+       * `DoesNotMatchRegex`, `DoesNotMatchRegexIgnoreCase`.
+       */
+      operator:
+        | 'Is'
+        | 'IsNot'
+        | 'Contains'
+        | 'DoesNotContain'
+        | 'StartsWith'
+        | 'EndsWith'
+        | 'IsFalsy'
+        | 'IsTruthy'
+        | 'IsNull'
+        | 'IsNotNull'
+        | 'IsUndefined'
+        | 'IsNotUndefined'
+        | 'IsGreaterThan'
+        | 'IsGreaterThanOrEqual'
+        | 'IsLessThan'
+        | 'IsLessThanOrEqual'
+        | 'IsIn'
+        | 'IsNotIn'
+        | 'IsFoundIn'
+        | 'IsNotFoundIn'
+        | 'IsTrue'
+        | 'IsFalse'
+        | 'IsBefore'
+        | 'IsAfter'
+        | 'IsBetween'
+        | 'IsOnOrBefore'
+        | 'IsOnOrAfter'
+        | 'MatchesRegex'
+        | 'MatchesRegexIgnoreCase'
+        | 'DoesNotMatchRegex'
+        | 'DoesNotMatchRegexIgnoreCase';
+
+      /**
+       * Bare dotted path into the event/visitor record. Examples: `$event.event`,
+       * `$event.event_properties.value`, `visitor.consent.marketing`. The leading `$` is
+       * optional and stripped before lookup. Do **not** use `{{...}}` here — that
+       * template syntax is for mapping values (`mappings[].map`), not logic conditions,
+       * and would be compared as a literal string.
+       */
+      property: string;
+
+      /**
+       * String compared against the resolved property. Operators that take no value
+       * (`IsFalsy`, `IsTruthy`, `IsNull`, `IsNotNull`, `IsUndefined`, `IsNotUndefined`,
+       * `IsTrue`, `IsFalse`) ignore this field — send `""`.
+       */
+      value: string;
+    }
+  }
 }
 
 export interface MappingRetrieveResponse {
@@ -323,7 +550,7 @@ export interface MappingRetrieveResponse {
    *
    * Example combinator: `{ "AND": [{ "condition": ... }, { "OR": [...] }] }`.
    */
-  logic?: unknown;
+  logic?: MappingRetrieveResponse.Logic | null;
 
   name?: string | null;
 
@@ -388,6 +615,106 @@ export namespace MappingRetrieveResponse {
       | 'UpperCase'
       | null;
   }
+
+  /**
+   * Condition tree gating when this mapping fires. A node is either a leaf
+   * `condition` or a combinator (`AND`, `OR`, `NOT`). Combinator children are
+   * themselves logic nodes, so trees nest arbitrarily.
+   *
+   * Example leaf:
+   * `{ "condition": { "property": "$event.event", "operator": "Is", "value": "page_view" } }`.
+   *
+   * Example combinator: `{ "AND": [{ "condition": ... }, { "OR": [...] }] }`.
+   */
+  export interface Logic {
+    /**
+     * All child nodes must match. Each child is itself a logic node (leaf `condition`
+     * or combinator).
+     */
+    AND?: Array<{
+      [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+    }> | null;
+
+    condition?: Logic.Condition | null;
+
+    /**
+     * Negates a single child logic node.
+     */
+    NOT?: {
+      [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+    } | null;
+
+    /**
+     * Any child node must match. Each child is itself a logic node (leaf `condition`
+     * or combinator).
+     */
+    OR?: Array<{
+      [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+    }> | null;
+  }
+
+  export namespace Logic {
+    export interface Condition {
+      /**
+       * Comparison verb in PascalCase. Equality/text: `Is`, `IsNot`, `Contains`,
+       * `DoesNotContain`, `StartsWith`, `EndsWith`. Truthiness/nullability: `IsFalsy`,
+       * `IsTruthy`, `IsNull`, `IsNotNull`, `IsUndefined`, `IsNotUndefined`, `IsTrue`,
+       * `IsFalse`. Numeric: `IsGreaterThan`, `IsGreaterThanOrEqual`, `IsLessThan`,
+       * `IsLessThanOrEqual`. Set membership: `IsIn`, `IsNotIn`, `IsFoundIn`,
+       * `IsNotFoundIn`. Date: `IsBefore`, `IsAfter`, `IsBetween`, `IsOnOrBefore`,
+       * `IsOnOrAfter`. Regex: `MatchesRegex`, `MatchesRegexIgnoreCase`,
+       * `DoesNotMatchRegex`, `DoesNotMatchRegexIgnoreCase`.
+       */
+      operator:
+        | 'Is'
+        | 'IsNot'
+        | 'Contains'
+        | 'DoesNotContain'
+        | 'StartsWith'
+        | 'EndsWith'
+        | 'IsFalsy'
+        | 'IsTruthy'
+        | 'IsNull'
+        | 'IsNotNull'
+        | 'IsUndefined'
+        | 'IsNotUndefined'
+        | 'IsGreaterThan'
+        | 'IsGreaterThanOrEqual'
+        | 'IsLessThan'
+        | 'IsLessThanOrEqual'
+        | 'IsIn'
+        | 'IsNotIn'
+        | 'IsFoundIn'
+        | 'IsNotFoundIn'
+        | 'IsTrue'
+        | 'IsFalse'
+        | 'IsBefore'
+        | 'IsAfter'
+        | 'IsBetween'
+        | 'IsOnOrBefore'
+        | 'IsOnOrAfter'
+        | 'MatchesRegex'
+        | 'MatchesRegexIgnoreCase'
+        | 'DoesNotMatchRegex'
+        | 'DoesNotMatchRegexIgnoreCase';
+
+      /**
+       * Bare dotted path into the event/visitor record. Examples: `$event.event`,
+       * `$event.event_properties.value`, `visitor.consent.marketing`. The leading `$` is
+       * optional and stripped before lookup. Do **not** use `{{...}}` here — that
+       * template syntax is for mapping values (`mappings[].map`), not logic conditions,
+       * and would be compared as a literal string.
+       */
+      property: string;
+
+      /**
+       * String compared against the resolved property. Operators that take no value
+       * (`IsFalsy`, `IsTruthy`, `IsNull`, `IsNotNull`, `IsUndefined`, `IsNotUndefined`,
+       * `IsTrue`, `IsFalse`) ignore this field — send `""`.
+       */
+      value: string;
+    }
+  }
 }
 
 export interface MappingUpdateResponse {
@@ -411,7 +738,7 @@ export interface MappingUpdateResponse {
    *
    * Example combinator: `{ "AND": [{ "condition": ... }, { "OR": [...] }] }`.
    */
-  logic?: unknown;
+  logic?: MappingUpdateResponse.Logic | null;
 
   name?: string | null;
 
@@ -476,9 +803,305 @@ export namespace MappingUpdateResponse {
       | 'UpperCase'
       | null;
   }
+
+  /**
+   * Condition tree gating when this mapping fires. A node is either a leaf
+   * `condition` or a combinator (`AND`, `OR`, `NOT`). Combinator children are
+   * themselves logic nodes, so trees nest arbitrarily.
+   *
+   * Example leaf:
+   * `{ "condition": { "property": "$event.event", "operator": "Is", "value": "page_view" } }`.
+   *
+   * Example combinator: `{ "AND": [{ "condition": ... }, { "OR": [...] }] }`.
+   */
+  export interface Logic {
+    /**
+     * All child nodes must match. Each child is itself a logic node (leaf `condition`
+     * or combinator).
+     */
+    AND?: Array<{
+      [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+    }> | null;
+
+    condition?: Logic.Condition | null;
+
+    /**
+     * Negates a single child logic node.
+     */
+    NOT?: {
+      [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+    } | null;
+
+    /**
+     * Any child node must match. Each child is itself a logic node (leaf `condition`
+     * or combinator).
+     */
+    OR?: Array<{
+      [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+    }> | null;
+  }
+
+  export namespace Logic {
+    export interface Condition {
+      /**
+       * Comparison verb in PascalCase. Equality/text: `Is`, `IsNot`, `Contains`,
+       * `DoesNotContain`, `StartsWith`, `EndsWith`. Truthiness/nullability: `IsFalsy`,
+       * `IsTruthy`, `IsNull`, `IsNotNull`, `IsUndefined`, `IsNotUndefined`, `IsTrue`,
+       * `IsFalse`. Numeric: `IsGreaterThan`, `IsGreaterThanOrEqual`, `IsLessThan`,
+       * `IsLessThanOrEqual`. Set membership: `IsIn`, `IsNotIn`, `IsFoundIn`,
+       * `IsNotFoundIn`. Date: `IsBefore`, `IsAfter`, `IsBetween`, `IsOnOrBefore`,
+       * `IsOnOrAfter`. Regex: `MatchesRegex`, `MatchesRegexIgnoreCase`,
+       * `DoesNotMatchRegex`, `DoesNotMatchRegexIgnoreCase`.
+       */
+      operator:
+        | 'Is'
+        | 'IsNot'
+        | 'Contains'
+        | 'DoesNotContain'
+        | 'StartsWith'
+        | 'EndsWith'
+        | 'IsFalsy'
+        | 'IsTruthy'
+        | 'IsNull'
+        | 'IsNotNull'
+        | 'IsUndefined'
+        | 'IsNotUndefined'
+        | 'IsGreaterThan'
+        | 'IsGreaterThanOrEqual'
+        | 'IsLessThan'
+        | 'IsLessThanOrEqual'
+        | 'IsIn'
+        | 'IsNotIn'
+        | 'IsFoundIn'
+        | 'IsNotFoundIn'
+        | 'IsTrue'
+        | 'IsFalse'
+        | 'IsBefore'
+        | 'IsAfter'
+        | 'IsBetween'
+        | 'IsOnOrBefore'
+        | 'IsOnOrAfter'
+        | 'MatchesRegex'
+        | 'MatchesRegexIgnoreCase'
+        | 'DoesNotMatchRegex'
+        | 'DoesNotMatchRegexIgnoreCase';
+
+      /**
+       * Bare dotted path into the event/visitor record. Examples: `$event.event`,
+       * `$event.event_properties.value`, `visitor.consent.marketing`. The leading `$` is
+       * optional and stripped before lookup. Do **not** use `{{...}}` here — that
+       * template syntax is for mapping values (`mappings[].map`), not logic conditions,
+       * and would be compared as a literal string.
+       */
+      property: string;
+
+      /**
+       * String compared against the resolved property. Operators that take no value
+       * (`IsFalsy`, `IsTruthy`, `IsNull`, `IsNotNull`, `IsUndefined`, `IsNotUndefined`,
+       * `IsTrue`, `IsFalse`) ignore this field — send `""`.
+       */
+      value: string;
+    }
+  }
 }
 
 export type MappingDeleteResponse = boolean;
+
+export interface MappingRenamePreviewResponse {
+  affectedEventNames: Array<string>;
+
+  willCascade: boolean;
+
+  mapperName?: string | null;
+}
+
+export interface MappingRenameResponse {
+  id: string;
+
+  isEnabled: boolean;
+
+  mappings: Array<MappingRenameResponse.Mapping>;
+
+  destinationId?: string | null;
+
+  isDefaultMapping?: boolean | null;
+
+  /**
+   * Condition tree gating when this mapping fires. A node is either a leaf
+   * `condition` or a combinator (`AND`, `OR`, `NOT`). Combinator children are
+   * themselves logic nodes, so trees nest arbitrarily.
+   *
+   * Example leaf:
+   * `{ "condition": { "property": "$event.event", "operator": "Is", "value": "page_view" } }`.
+   *
+   * Example combinator: `{ "AND": [{ "condition": ... }, { "OR": [...] }] }`.
+   */
+  logic?: MappingRenameResponse.Logic | null;
+
+  name?: string | null;
+
+  priority?: number | null;
+
+  sourceId?: string | null;
+
+  templateId?: string | null;
+
+  templateName?: string | null;
+
+  updatedAt?: string | null;
+}
+
+export namespace MappingRenameResponse {
+  export interface Mapping {
+    /**
+     * Source expression sent to the destination for this `property`. Use `{{...}}`
+     * template syntax to substitute values from the event/visitor record:
+     * `{{event.event}}`, `{{event.event_properties.value}}`, `{{visitor.email}}`. Bare
+     * strings (no `{{}}`) are sent verbatim. Note: `{{...}}` template syntax belongs
+     * HERE, NOT in `logic.condition.property` — logic conditions use bare dotted paths
+     * like `$event.event_properties.value`.
+     */
+    map: string;
+
+    /**
+     * Destination-side field name. Comes from the destination template — discover the
+     * valid set via `GET /rest/v1/mapping-templates?entityId=...`.
+     */
+    property: string;
+
+    modification?:
+      | 'CamelCase'
+      | 'DmaIP'
+      | 'DomainOnly'
+      | 'DomainPathOnly'
+      | 'DomainPathUTMs'
+      | 'DomainUTMs'
+      | 'FakeDomain'
+      | 'FakeDomainRealPath'
+      | 'FakeIP'
+      | 'FullUrl'
+      | 'Hash'
+      | 'HashMD5'
+      | 'HashedCountry'
+      | 'HashedDateOfBirth'
+      | 'HashedGender'
+      | 'HashedNormalized'
+      | 'HashedNormalizedNoSpecialChars'
+      | 'HashedPhone'
+      | 'HashedState'
+      | 'HashedZip'
+      | 'KebabCase'
+      | 'LowerCase'
+      | 'None'
+      | 'Null'
+      | 'Redacted'
+      | 'RegionalIP'
+      | 'SnakeCase'
+      | 'StartCase'
+      | 'UpperCase'
+      | null;
+  }
+
+  /**
+   * Condition tree gating when this mapping fires. A node is either a leaf
+   * `condition` or a combinator (`AND`, `OR`, `NOT`). Combinator children are
+   * themselves logic nodes, so trees nest arbitrarily.
+   *
+   * Example leaf:
+   * `{ "condition": { "property": "$event.event", "operator": "Is", "value": "page_view" } }`.
+   *
+   * Example combinator: `{ "AND": [{ "condition": ... }, { "OR": [...] }] }`.
+   */
+  export interface Logic {
+    /**
+     * All child nodes must match. Each child is itself a logic node (leaf `condition`
+     * or combinator).
+     */
+    AND?: Array<{
+      [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+    }> | null;
+
+    condition?: Logic.Condition | null;
+
+    /**
+     * Negates a single child logic node.
+     */
+    NOT?: {
+      [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+    } | null;
+
+    /**
+     * Any child node must match. Each child is itself a logic node (leaf `condition`
+     * or combinator).
+     */
+    OR?: Array<{
+      [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+    }> | null;
+  }
+
+  export namespace Logic {
+    export interface Condition {
+      /**
+       * Comparison verb in PascalCase. Equality/text: `Is`, `IsNot`, `Contains`,
+       * `DoesNotContain`, `StartsWith`, `EndsWith`. Truthiness/nullability: `IsFalsy`,
+       * `IsTruthy`, `IsNull`, `IsNotNull`, `IsUndefined`, `IsNotUndefined`, `IsTrue`,
+       * `IsFalse`. Numeric: `IsGreaterThan`, `IsGreaterThanOrEqual`, `IsLessThan`,
+       * `IsLessThanOrEqual`. Set membership: `IsIn`, `IsNotIn`, `IsFoundIn`,
+       * `IsNotFoundIn`. Date: `IsBefore`, `IsAfter`, `IsBetween`, `IsOnOrBefore`,
+       * `IsOnOrAfter`. Regex: `MatchesRegex`, `MatchesRegexIgnoreCase`,
+       * `DoesNotMatchRegex`, `DoesNotMatchRegexIgnoreCase`.
+       */
+      operator:
+        | 'Is'
+        | 'IsNot'
+        | 'Contains'
+        | 'DoesNotContain'
+        | 'StartsWith'
+        | 'EndsWith'
+        | 'IsFalsy'
+        | 'IsTruthy'
+        | 'IsNull'
+        | 'IsNotNull'
+        | 'IsUndefined'
+        | 'IsNotUndefined'
+        | 'IsGreaterThan'
+        | 'IsGreaterThanOrEqual'
+        | 'IsLessThan'
+        | 'IsLessThanOrEqual'
+        | 'IsIn'
+        | 'IsNotIn'
+        | 'IsFoundIn'
+        | 'IsNotFoundIn'
+        | 'IsTrue'
+        | 'IsFalse'
+        | 'IsBefore'
+        | 'IsAfter'
+        | 'IsBetween'
+        | 'IsOnOrBefore'
+        | 'IsOnOrAfter'
+        | 'MatchesRegex'
+        | 'MatchesRegexIgnoreCase'
+        | 'DoesNotMatchRegex'
+        | 'DoesNotMatchRegexIgnoreCase';
+
+      /**
+       * Bare dotted path into the event/visitor record. Examples: `$event.event`,
+       * `$event.event_properties.value`, `visitor.consent.marketing`. The leading `$` is
+       * optional and stripped before lookup. Do **not** use `{{...}}` here — that
+       * template syntax is for mapping values (`mappings[].map`), not logic conditions,
+       * and would be compared as a literal string.
+       */
+      property: string;
+
+      /**
+       * String compared against the resolved property. Operators that take no value
+       * (`IsFalsy`, `IsTruthy`, `IsNull`, `IsNotNull`, `IsUndefined`, `IsNotUndefined`,
+       * `IsTrue`, `IsFalse`) ignore this field — send `""`.
+       */
+      value: string;
+    }
+  }
+}
 
 export interface MappingReorderResponse {
   entities: Array<MappingReorderResponse.Entity>;
@@ -506,7 +1129,7 @@ export namespace MappingReorderResponse {
      *
      * Example combinator: `{ "AND": [{ "condition": ... }, { "OR": [...] }] }`.
      */
-    logic?: unknown;
+    logic?: Entity.Logic | null;
 
     name?: string | null;
 
@@ -570,6 +1193,106 @@ export namespace MappingReorderResponse {
         | 'StartCase'
         | 'UpperCase'
         | null;
+    }
+
+    /**
+     * Condition tree gating when this mapping fires. A node is either a leaf
+     * `condition` or a combinator (`AND`, `OR`, `NOT`). Combinator children are
+     * themselves logic nodes, so trees nest arbitrarily.
+     *
+     * Example leaf:
+     * `{ "condition": { "property": "$event.event", "operator": "Is", "value": "page_view" } }`.
+     *
+     * Example combinator: `{ "AND": [{ "condition": ... }, { "OR": [...] }] }`.
+     */
+    export interface Logic {
+      /**
+       * All child nodes must match. Each child is itself a logic node (leaf `condition`
+       * or combinator).
+       */
+      AND?: Array<{
+        [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+      }> | null;
+
+      condition?: Logic.Condition | null;
+
+      /**
+       * Negates a single child logic node.
+       */
+      NOT?: {
+        [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+      } | null;
+
+      /**
+       * Any child node must match. Each child is itself a logic node (leaf `condition`
+       * or combinator).
+       */
+      OR?: Array<{
+        [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+      }> | null;
+    }
+
+    export namespace Logic {
+      export interface Condition {
+        /**
+         * Comparison verb in PascalCase. Equality/text: `Is`, `IsNot`, `Contains`,
+         * `DoesNotContain`, `StartsWith`, `EndsWith`. Truthiness/nullability: `IsFalsy`,
+         * `IsTruthy`, `IsNull`, `IsNotNull`, `IsUndefined`, `IsNotUndefined`, `IsTrue`,
+         * `IsFalse`. Numeric: `IsGreaterThan`, `IsGreaterThanOrEqual`, `IsLessThan`,
+         * `IsLessThanOrEqual`. Set membership: `IsIn`, `IsNotIn`, `IsFoundIn`,
+         * `IsNotFoundIn`. Date: `IsBefore`, `IsAfter`, `IsBetween`, `IsOnOrBefore`,
+         * `IsOnOrAfter`. Regex: `MatchesRegex`, `MatchesRegexIgnoreCase`,
+         * `DoesNotMatchRegex`, `DoesNotMatchRegexIgnoreCase`.
+         */
+        operator:
+          | 'Is'
+          | 'IsNot'
+          | 'Contains'
+          | 'DoesNotContain'
+          | 'StartsWith'
+          | 'EndsWith'
+          | 'IsFalsy'
+          | 'IsTruthy'
+          | 'IsNull'
+          | 'IsNotNull'
+          | 'IsUndefined'
+          | 'IsNotUndefined'
+          | 'IsGreaterThan'
+          | 'IsGreaterThanOrEqual'
+          | 'IsLessThan'
+          | 'IsLessThanOrEqual'
+          | 'IsIn'
+          | 'IsNotIn'
+          | 'IsFoundIn'
+          | 'IsNotFoundIn'
+          | 'IsTrue'
+          | 'IsFalse'
+          | 'IsBefore'
+          | 'IsAfter'
+          | 'IsBetween'
+          | 'IsOnOrBefore'
+          | 'IsOnOrAfter'
+          | 'MatchesRegex'
+          | 'MatchesRegexIgnoreCase'
+          | 'DoesNotMatchRegex'
+          | 'DoesNotMatchRegexIgnoreCase';
+
+        /**
+         * Bare dotted path into the event/visitor record. Examples: `$event.event`,
+         * `$event.event_properties.value`, `visitor.consent.marketing`. The leading `$` is
+         * optional and stripped before lookup. Do **not** use `{{...}}` here — that
+         * template syntax is for mapping values (`mappings[].map`), not logic conditions,
+         * and would be compared as a literal string.
+         */
+        property: string;
+
+        /**
+         * String compared against the resolved property. Operators that take no value
+         * (`IsFalsy`, `IsTruthy`, `IsNull`, `IsNotNull`, `IsUndefined`, `IsNotUndefined`,
+         * `IsTrue`, `IsFalse`) ignore this field — send `""`.
+         */
+        value: string;
+      }
     }
   }
 }
@@ -946,20 +1669,26 @@ export namespace MappingCreateParams {
      * All child nodes must match. Each child is itself a logic node (leaf `condition`
      * or combinator).
      */
-    AND?: Array<unknown> | null;
+    AND?: Array<{
+      [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+    }> | null;
 
     condition?: Logic.Condition | null;
 
     /**
      * Negates a single child logic node.
      */
-    NOT?: unknown;
+    NOT?: {
+      [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+    } | null;
 
     /**
      * Any child node must match. Each child is itself a logic node (leaf `condition`
      * or combinator).
      */
-    OR?: Array<unknown> | null;
+    OR?: Array<{
+      [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+    }> | null;
   }
 
   export namespace Logic {
@@ -1116,20 +1845,26 @@ export namespace MappingUpdateParams {
      * All child nodes must match. Each child is itself a logic node (leaf `condition`
      * or combinator).
      */
-    AND?: Array<unknown> | null;
+    AND?: Array<{
+      [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+    }> | null;
 
     condition?: Logic.Condition | null;
 
     /**
      * Negates a single child logic node.
      */
-    NOT?: unknown;
+    NOT?: {
+      [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+    } | null;
 
     /**
      * Any child node must match. Each child is itself a logic node (leaf `condition`
      * or combinator).
      */
-    OR?: Array<unknown> | null;
+    OR?: Array<{
+      [key: string]: string | null | number | boolean | Array<unknown> | { [key: string]: unknown };
+    }> | null;
   }
 
   export namespace Logic {
@@ -1246,6 +1981,42 @@ export namespace MappingUpdateParams {
   }
 }
 
+export interface MappingRenamePreviewParams {
+  /**
+   * Allowed event id to preview for this destination.
+   */
+  allowedEventId: string;
+
+  /**
+   * Destination id. Discover renaming support through
+   * `GET /rest/v1/destinations/types`.
+   */
+  destinationId: string;
+}
+
+export interface MappingRenameParams {
+  /**
+   * Allowed event id to rename for this destination.
+   */
+  allowedEventId: string;
+
+  /**
+   * Destination id for the rename.
+   */
+  destinationId: string;
+
+  /**
+   * Name sent to the destination. Send `null` to clear the rename.
+   */
+  renamedEventName: string | null;
+
+  /**
+   * Set to `true` only after preview confirms which allowed events a shared mapper
+   * will change. Defaults to `false`.
+   */
+  confirmCascade?: boolean;
+}
+
 export interface MappingReorderParams {
   /**
    * Mapping ids in their new priority order, low priority index first. All ids must
@@ -1268,6 +2039,8 @@ export declare namespace Mappings {
     type MappingRetrieveResponse as MappingRetrieveResponse,
     type MappingUpdateResponse as MappingUpdateResponse,
     type MappingDeleteResponse as MappingDeleteResponse,
+    type MappingRenamePreviewResponse as MappingRenamePreviewResponse,
+    type MappingRenameResponse as MappingRenameResponse,
     type MappingReorderResponse as MappingReorderResponse,
     type MappingTemplatesResponse as MappingTemplatesResponse,
     type MappingDefaultVariablesResponse as MappingDefaultVariablesResponse,
@@ -1277,6 +2050,8 @@ export declare namespace Mappings {
     type MappingListParams as MappingListParams,
     type MappingCreateParams as MappingCreateParams,
     type MappingUpdateParams as MappingUpdateParams,
+    type MappingRenamePreviewParams as MappingRenamePreviewParams,
+    type MappingRenameParams as MappingRenameParams,
     type MappingReorderParams as MappingReorderParams,
     type MappingTemplatesParams as MappingTemplatesParams,
   };

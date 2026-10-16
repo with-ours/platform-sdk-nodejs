@@ -126,7 +126,7 @@ export interface SourceListResponse {
     | 'WhatConverts'
     | 'iOSNativeApi';
 
-  botControlMode?: string | null;
+  botControlMode?: 'Allow' | 'Block' | 'Threshold' | null;
 
   botScoreThreshold?: number | null;
 
@@ -152,13 +152,20 @@ export interface SourceListResponse {
 
   name?: string | null;
 
-  probabilisticIdentity?: unknown | null;
+  probabilisticIdentity?: SourceListResponse.ProbabilisticIdentity | null;
 
   projectAPIKey?: string | null;
 
   redirectUrl?: string | null;
 
   selectedAccountId?: string | null;
+
+  /**
+   * Type-specific source settings. settings.dataImport contains a draft file,
+   * warehouse or HTTP import definition, with transformation, schedule and
+   * credential references. Account publication activates imports.
+   */
+  settings?: { [key: string]: unknown } | null;
 
   /**
    * Limits which domains can send events to the CDP. When set, only requests from
@@ -168,6 +175,16 @@ export interface SourceListResponse {
   whitelistDomains?: Array<string> | null;
 
   whitelistIps?: Array<string> | null;
+}
+
+export namespace SourceListResponse {
+  export interface ProbabilisticIdentity {
+    enabled: boolean;
+
+    matchWindowMinutes: number;
+
+    maxMatchesPerIp: number;
+  }
 }
 
 export interface SourceCreateResponse {
@@ -223,7 +240,7 @@ export interface SourceCreateResponse {
     | 'WhatConverts'
     | 'iOSNativeApi';
 
-  botControlMode?: string | null;
+  botControlMode?: 'Allow' | 'Block' | 'Threshold' | null;
 
   botScoreThreshold?: number | null;
 
@@ -249,13 +266,20 @@ export interface SourceCreateResponse {
 
   name?: string | null;
 
-  probabilisticIdentity?: unknown | null;
+  probabilisticIdentity?: SourceCreateResponse.ProbabilisticIdentity | null;
 
   projectAPIKey?: string | null;
 
   redirectUrl?: string | null;
 
   selectedAccountId?: string | null;
+
+  /**
+   * Type-specific source settings. settings.dataImport contains a draft file,
+   * warehouse or HTTP import definition, with transformation, schedule and
+   * credential references. Account publication activates imports.
+   */
+  settings?: { [key: string]: unknown } | null;
 
   /**
    * Limits which domains can send events to the CDP. When set, only requests from
@@ -265,6 +289,16 @@ export interface SourceCreateResponse {
   whitelistDomains?: Array<string> | null;
 
   whitelistIps?: Array<string> | null;
+}
+
+export namespace SourceCreateResponse {
+  export interface ProbabilisticIdentity {
+    enabled: boolean;
+
+    matchWindowMinutes: number;
+
+    maxMatchesPerIp: number;
+  }
 }
 
 export interface SourceRetrieveResponse {
@@ -320,7 +354,7 @@ export interface SourceRetrieveResponse {
     | 'WhatConverts'
     | 'iOSNativeApi';
 
-  botControlMode?: string | null;
+  botControlMode?: 'Allow' | 'Block' | 'Threshold' | null;
 
   botScoreThreshold?: number | null;
 
@@ -346,13 +380,20 @@ export interface SourceRetrieveResponse {
 
   name?: string | null;
 
-  probabilisticIdentity?: unknown | null;
+  probabilisticIdentity?: SourceRetrieveResponse.ProbabilisticIdentity | null;
 
   projectAPIKey?: string | null;
 
   redirectUrl?: string | null;
 
   selectedAccountId?: string | null;
+
+  /**
+   * Type-specific source settings. settings.dataImport contains a draft file,
+   * warehouse or HTTP import definition, with transformation, schedule and
+   * credential references. Account publication activates imports.
+   */
+  settings?: { [key: string]: unknown } | null;
 
   /**
    * Limits which domains can send events to the CDP. When set, only requests from
@@ -362,6 +403,16 @@ export interface SourceRetrieveResponse {
   whitelistDomains?: Array<string> | null;
 
   whitelistIps?: Array<string> | null;
+}
+
+export namespace SourceRetrieveResponse {
+  export interface ProbabilisticIdentity {
+    enabled: boolean;
+
+    matchWindowMinutes: number;
+
+    maxMatchesPerIp: number;
+  }
 }
 
 export interface SourceUpdateResponse {
@@ -417,7 +468,7 @@ export interface SourceUpdateResponse {
     | 'WhatConverts'
     | 'iOSNativeApi';
 
-  botControlMode?: string | null;
+  botControlMode?: 'Allow' | 'Block' | 'Threshold' | null;
 
   botScoreThreshold?: number | null;
 
@@ -443,13 +494,20 @@ export interface SourceUpdateResponse {
 
   name?: string | null;
 
-  probabilisticIdentity?: unknown | null;
+  probabilisticIdentity?: SourceUpdateResponse.ProbabilisticIdentity | null;
 
   projectAPIKey?: string | null;
 
   redirectUrl?: string | null;
 
   selectedAccountId?: string | null;
+
+  /**
+   * Type-specific source settings. settings.dataImport contains a draft file,
+   * warehouse or HTTP import definition, with transformation, schedule and
+   * credential references. Account publication activates imports.
+   */
+  settings?: { [key: string]: unknown } | null;
 
   /**
    * Limits which domains can send events to the CDP. When set, only requests from
@@ -459,6 +517,16 @@ export interface SourceUpdateResponse {
   whitelistDomains?: Array<string> | null;
 
   whitelistIps?: Array<string> | null;
+}
+
+export namespace SourceUpdateResponse {
+  export interface ProbabilisticIdentity {
+    enabled: boolean;
+
+    matchWindowMinutes: number;
+
+    maxMatchesPerIp: number;
+  }
 }
 
 export interface SourceDeleteResponse {
@@ -639,7 +707,7 @@ export interface SourceCreateParams {
 }
 
 export interface SourceUpdateParams {
-  botControlMode?: string | null;
+  botControlMode?: 'Allow' | 'Block' | 'Threshold' | null;
 
   botScoreThreshold?: number | null;
 
@@ -647,7 +715,7 @@ export interface SourceUpdateParams {
 
   name?: string | null;
 
-  probabilisticIdentity?: unknown | null;
+  probabilisticIdentity?: SourceUpdateParams.ProbabilisticIdentity | null;
 
   projectAPIKey?: string | null;
 
@@ -655,11 +723,28 @@ export interface SourceUpdateParams {
 
   selectedAccountId?: string | null;
 
-  status?: string | null;
+  /**
+   * Type-specific source settings. Omitted keys remain unchanged; null clears all
+   * settings. settings.dataImport configures an import on an HTTP API source; null
+   * clears just that definition. Publish the source to activate import changes.
+   */
+  settings?: { [key: string]: unknown } | null;
+
+  status?: 'Disabled' | 'Enabled' | null;
 
   whitelistDomains?: Array<string> | null;
 
   whitelistIps?: Array<string> | null;
+}
+
+export namespace SourceUpdateParams {
+  export interface ProbabilisticIdentity {
+    enabled: boolean;
+
+    matchWindowMinutes?: number | null;
+
+    maxMatchesPerIp?: number | null;
+  }
 }
 
 export declare namespace Sources {

@@ -71,6 +71,51 @@ describe('resource mappings', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
+  test('renamePreview: only required params', async () => {
+    const responsePromise = client.mappings.renamePreview({
+      allowedEventId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      destinationId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('renamePreview: required and optional params', async () => {
+    const response = await client.mappings.renamePreview({
+      allowedEventId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      destinationId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+    });
+  });
+
+  test('rename: only required params', async () => {
+    const responsePromise = client.mappings.rename({
+      allowedEventId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      destinationId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      renamedEventName: 'renamedEventName',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('rename: required and optional params', async () => {
+    const response = await client.mappings.rename({
+      allowedEventId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      destinationId: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+      renamedEventName: 'renamedEventName',
+      confirmCascade: true,
+    });
+  });
+
   test('reorder: only required params', async () => {
     const responsePromise = client.mappings.reorder({ uuids: ['string'] });
     const rawResponse = await responsePromise.asResponse();

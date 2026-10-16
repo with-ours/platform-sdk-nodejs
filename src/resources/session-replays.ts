@@ -92,6 +92,12 @@ export interface SessionReplayListParams {
   eventName?: string;
 
   /**
+   * JSON-encoded versioned analytics filter. Uses the shared analytics catalog
+   * property IDs and operators, including event, session, and custom properties.
+   */
+  filter?: string;
+
+  /**
    * Maximum replay sessions to return. Defaults to the report default.
    */
   limit?: number;
