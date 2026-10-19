@@ -117,6 +117,7 @@ export interface DestinationListResponse {
     | 'BingAdsWeb'
     | 'BingRest'
     | 'Braze'
+    | 'BrazeAudience'
     | 'ConvertABTestingEvent'
     | 'Customerio'
     | 'DatabricksWarehouse'
@@ -147,6 +148,7 @@ export interface DestinationListResponse {
     | 'Impact'
     | 'Iterable'
     | 'Klaviyo'
+    | 'LeadSquared'
     | 'LinkedInAdsCAPI'
     | 'LiveIntent'
     | 'LiveRampWarehouse'
@@ -238,6 +240,7 @@ export interface DestinationCreateResponse {
     | 'BingAdsWeb'
     | 'BingRest'
     | 'Braze'
+    | 'BrazeAudience'
     | 'ConvertABTestingEvent'
     | 'Customerio'
     | 'DatabricksWarehouse'
@@ -268,6 +271,7 @@ export interface DestinationCreateResponse {
     | 'Impact'
     | 'Iterable'
     | 'Klaviyo'
+    | 'LeadSquared'
     | 'LinkedInAdsCAPI'
     | 'LiveIntent'
     | 'LiveRampWarehouse'
@@ -359,6 +363,7 @@ export interface DestinationRetrieveResponse {
     | 'BingAdsWeb'
     | 'BingRest'
     | 'Braze'
+    | 'BrazeAudience'
     | 'ConvertABTestingEvent'
     | 'Customerio'
     | 'DatabricksWarehouse'
@@ -389,6 +394,7 @@ export interface DestinationRetrieveResponse {
     | 'Impact'
     | 'Iterable'
     | 'Klaviyo'
+    | 'LeadSquared'
     | 'LinkedInAdsCAPI'
     | 'LiveIntent'
     | 'LiveRampWarehouse'
@@ -480,6 +486,7 @@ export interface DestinationUpdateResponse {
     | 'BingAdsWeb'
     | 'BingRest'
     | 'Braze'
+    | 'BrazeAudience'
     | 'ConvertABTestingEvent'
     | 'Customerio'
     | 'DatabricksWarehouse'
@@ -510,6 +517,7 @@ export interface DestinationUpdateResponse {
     | 'Impact'
     | 'Iterable'
     | 'Klaviyo'
+    | 'LeadSquared'
     | 'LinkedInAdsCAPI'
     | 'LiveIntent'
     | 'LiveRampWarehouse'
@@ -657,7 +665,8 @@ export namespace DestinationTypesResponse {
       | 'ZohoCRM'
       | 'Rokt'
       | 'Fullstory'
-      | 'GravityCAPI';
+      | 'GravityCAPI'
+      | 'LeadSquared';
 
     capabilities: Entity.Capabilities;
 
@@ -838,6 +847,7 @@ export interface DestinationListParams extends CursorParams {
     | 'BingAdsWeb'
     | 'BingRest'
     | 'Braze'
+    | 'BrazeAudience'
     | 'ConvertABTestingEvent'
     | 'Customerio'
     | 'DatabricksWarehouse'
@@ -868,6 +878,7 @@ export interface DestinationListParams extends CursorParams {
     | 'Impact'
     | 'Iterable'
     | 'Klaviyo'
+    | 'LeadSquared'
     | 'LinkedInAdsCAPI'
     | 'LiveIntent'
     | 'LiveRampWarehouse'
@@ -1002,7 +1013,8 @@ export interface DestinationCreateParams {
     | 'ZohoCRM'
     | 'Rokt'
     | 'Fullstory'
-    | 'GravityCAPI';
+    | 'GravityCAPI'
+    | 'LeadSquared';
 
   name?: string | null;
 
