@@ -48,8 +48,10 @@ describe('resource destinations', () => {
   test('create: required and optional params', async () => {
     const response = await client.destinations.create({
       type: 'Audiohook',
+      limitedToSourceIds: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
       name: 'name',
       settings: { foo: 'string' },
+      status: 'Enabled',
     });
   });
 

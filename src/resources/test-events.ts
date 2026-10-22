@@ -650,6 +650,13 @@ export namespace TestEventCreateParams {
     ttclid?: string | null;
 
     /**
+     * The Trade Desk impression ID, captured from a configured ttd_impression_id URL
+     * parameter using the %%TTD_IMPRESSIONID%% creative macro. Sent as imp on
+     * conversions.
+     */
+    ttd_impression_id?: string | null;
+
+    /**
      * The Twitter Click ID. Ex: twclid123
      */
     twclid?: string | null;
@@ -723,6 +730,11 @@ export namespace TestEventCreateParams {
      * Whether the user is in a webview. Ex: true
      */
     webview?: boolean | null;
+
+    /**
+     * The Yelp Click ID from the landing URL, sent unchanged and unhashed.
+     */
+    ylpcid?: string | null;
   }
 }
 

@@ -26,16 +26,18 @@ export class ReplaySettings extends APIResource {
   /**
    * Create the replay configuration for this account. Each account is limited to one
    * replay configuration — calls made when one already exists return HTTP 409 with
-   * the reason in the response `error` field. Requires API-key scope or current
-   * OAuth user permission: replaySettings:create
+   * the reason in the response `error` field. Publish with `POST /versions` for the
+   * configuration to take effect. Requires API-key scope or current OAuth user
+   * permission: replaySettings:create
    */
   create(body: ReplaySettingCreateParams, options?: RequestOptions): APIPromise<ReplaySettingCreateResponse> {
     return this._client.post('/rest/v1/replay-settings', { body, ...options });
   }
 
   /**
-   * Fetch a single replay configuration by ID, including its whitelisted domains and
-   * custom domain. Requires API-key scope or current OAuth user permission:
+   * Fetch a single replay configuration by ID, including its whitelisted domains,
+   * custom domain, and public replay pixel token. Returns HTTP 404 when it does not
+   * exist. Requires API-key scope or current OAuth user permission:
    * replaySettings:find
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<ReplaySettingRetrieveResponse | null> {
@@ -46,6 +48,8 @@ export class ReplaySettings extends APIResource {
    * Update one or more fields on an existing replay configuration. Only the fields
    * you send are changed; omitted fields keep their current value. Note that
    * `whitelistDomains` is replaced wholesale (not merged with the existing list).
+   * Null leaves `name`, `status`, and `whitelistDomains` unchanged; null clears
+   * `customDomain`. Publish with `POST /versions` for changes to take effect.
    * Requires API-key scope or current OAuth user permission: replaySettings:update
    */
   update(
@@ -57,9 +61,9 @@ export class ReplaySettings extends APIResource {
   }
 
   /**
-   * Delete the replay configuration. Capture stops immediately for all whitelisted
-   * domains. Requires API-key scope or current OAuth user permission:
-   * replaySettings:delete
+   * Delete the replay configuration from the draft. Publish with `POST /versions`
+   * for capture to stop on all whitelisted domains. Requires API-key scope or
+   * current OAuth user permission: replaySettings:delete
    */
   delete(id: string, options?: RequestOptions): APIPromise<ReplaySettingDeleteResponse> {
     return this._client.delete(path`/rest/v1/replay-settings/${id}`, options);
@@ -81,14 +85,20 @@ export interface ReplaySettingListResponse {
 
   /**
    * Human-readable label for this replay configuration. Shown in the dashboard. May
-   * be empty.
+   * be empty. On PATCH, `null` leaves it unchanged.
    */
   name: string;
 
   /**
+   * Server-assigned public replay token used by the browser SDK to start session
+   * replay capture.
+   */
+  pixel: string;
+
+  /**
    * Whether session replay capture is currently active. Set to "Enabled" to start
    * capturing replays from whitelisted domains, or "Disabled" to pause capture
-   * without losing the configuration.
+   * without losing the configuration. On PATCH, `null` leaves it unchanged.
    */
   status: 'Disabled' | 'Enabled';
 
@@ -104,9 +114,9 @@ export interface ReplaySettingListResponse {
   updatedAt?: string | null;
 
   /**
-   * Hostnames where session replay capture is permitted. Replays initiated from any
-   * host not in this list are dropped. PATCH replaces the list — partial updates are
-   * not merged.
+   * Bare hostnames (e.g. `example.com`) where session replay capture is permitted.
+   * Replays initiated from any host not in this list are dropped. PATCH replaces the
+   * list; partial updates are not merged. On PATCH, `null` leaves it unchanged.
    */
   whitelistDomains?: Array<string> | null;
 }
@@ -133,14 +143,20 @@ export namespace ReplaySettingCreateResponse {
 
     /**
      * Human-readable label for this replay configuration. Shown in the dashboard. May
-     * be empty.
+     * be empty. On PATCH, `null` leaves it unchanged.
      */
     name: string;
 
     /**
+     * Server-assigned public replay token used by the browser SDK to start session
+     * replay capture.
+     */
+    pixel: string;
+
+    /**
      * Whether session replay capture is currently active. Set to "Enabled" to start
      * capturing replays from whitelisted domains, or "Disabled" to pause capture
-     * without losing the configuration.
+     * without losing the configuration. On PATCH, `null` leaves it unchanged.
      */
     status: 'Disabled' | 'Enabled';
 
@@ -156,9 +172,9 @@ export namespace ReplaySettingCreateResponse {
     updatedAt?: string | null;
 
     /**
-     * Hostnames where session replay capture is permitted. Replays initiated from any
-     * host not in this list are dropped. PATCH replaces the list — partial updates are
-     * not merged.
+     * Bare hostnames (e.g. `example.com`) where session replay capture is permitted.
+     * Replays initiated from any host not in this list are dropped. PATCH replaces the
+     * list; partial updates are not merged. On PATCH, `null` leaves it unchanged.
      */
     whitelistDomains?: Array<string> | null;
   }
@@ -177,14 +193,20 @@ export interface ReplaySettingRetrieveResponse {
 
   /**
    * Human-readable label for this replay configuration. Shown in the dashboard. May
-   * be empty.
+   * be empty. On PATCH, `null` leaves it unchanged.
    */
   name: string;
 
   /**
+   * Server-assigned public replay token used by the browser SDK to start session
+   * replay capture.
+   */
+  pixel: string;
+
+  /**
    * Whether session replay capture is currently active. Set to "Enabled" to start
    * capturing replays from whitelisted domains, or "Disabled" to pause capture
-   * without losing the configuration.
+   * without losing the configuration. On PATCH, `null` leaves it unchanged.
    */
   status: 'Disabled' | 'Enabled';
 
@@ -200,9 +222,9 @@ export interface ReplaySettingRetrieveResponse {
   updatedAt?: string | null;
 
   /**
-   * Hostnames where session replay capture is permitted. Replays initiated from any
-   * host not in this list are dropped. PATCH replaces the list — partial updates are
-   * not merged.
+   * Bare hostnames (e.g. `example.com`) where session replay capture is permitted.
+   * Replays initiated from any host not in this list are dropped. PATCH replaces the
+   * list; partial updates are not merged. On PATCH, `null` leaves it unchanged.
    */
   whitelistDomains?: Array<string> | null;
 }
@@ -229,14 +251,20 @@ export namespace ReplaySettingUpdateResponse {
 
     /**
      * Human-readable label for this replay configuration. Shown in the dashboard. May
-     * be empty.
+     * be empty. On PATCH, `null` leaves it unchanged.
      */
     name: string;
 
     /**
+     * Server-assigned public replay token used by the browser SDK to start session
+     * replay capture.
+     */
+    pixel: string;
+
+    /**
      * Whether session replay capture is currently active. Set to "Enabled" to start
      * capturing replays from whitelisted domains, or "Disabled" to pause capture
-     * without losing the configuration.
+     * without losing the configuration. On PATCH, `null` leaves it unchanged.
      */
     status: 'Disabled' | 'Enabled';
 
@@ -252,9 +280,9 @@ export namespace ReplaySettingUpdateResponse {
     updatedAt?: string | null;
 
     /**
-     * Hostnames where session replay capture is permitted. Replays initiated from any
-     * host not in this list are dropped. PATCH replaces the list — partial updates are
-     * not merged.
+     * Bare hostnames (e.g. `example.com`) where session replay capture is permitted.
+     * Replays initiated from any host not in this list are dropped. PATCH replaces the
+     * list; partial updates are not merged. On PATCH, `null` leaves it unchanged.
      */
     whitelistDomains?: Array<string> | null;
   }
@@ -282,14 +310,20 @@ export namespace ReplaySettingDeleteResponse {
 
     /**
      * Human-readable label for this replay configuration. Shown in the dashboard. May
-     * be empty.
+     * be empty. On PATCH, `null` leaves it unchanged.
      */
     name: string;
 
     /**
+     * Server-assigned public replay token used by the browser SDK to start session
+     * replay capture.
+     */
+    pixel: string;
+
+    /**
      * Whether session replay capture is currently active. Set to "Enabled" to start
      * capturing replays from whitelisted domains, or "Disabled" to pause capture
-     * without losing the configuration.
+     * without losing the configuration. On PATCH, `null` leaves it unchanged.
      */
     status: 'Disabled' | 'Enabled';
 
@@ -305,9 +339,9 @@ export namespace ReplaySettingDeleteResponse {
     updatedAt?: string | null;
 
     /**
-     * Hostnames where session replay capture is permitted. Replays initiated from any
-     * host not in this list are dropped. PATCH replaces the list — partial updates are
-     * not merged.
+     * Bare hostnames (e.g. `example.com`) where session replay capture is permitted.
+     * Replays initiated from any host not in this list are dropped. PATCH replaces the
+     * list; partial updates are not merged. On PATCH, `null` leaves it unchanged.
      */
     whitelistDomains?: Array<string> | null;
   }
@@ -324,21 +358,21 @@ export interface ReplaySettingCreateParams {
 
   /**
    * Human-readable label for this replay configuration. Shown in the dashboard. May
-   * be empty.
+   * be empty. On PATCH, `null` leaves it unchanged.
    */
   name?: string | null;
 
   /**
    * Whether session replay capture is currently active. Set to "Enabled" to start
    * capturing replays from whitelisted domains, or "Disabled" to pause capture
-   * without losing the configuration.
+   * without losing the configuration. On PATCH, `null` leaves it unchanged.
    */
   status?: 'Disabled' | 'Enabled' | null;
 
   /**
-   * Hostnames where session replay capture is permitted. Replays initiated from any
-   * host not in this list are dropped. PATCH replaces the list — partial updates are
-   * not merged.
+   * Bare hostnames (e.g. `example.com`) where session replay capture is permitted.
+   * Replays initiated from any host not in this list are dropped. PATCH replaces the
+   * list; partial updates are not merged. On PATCH, `null` leaves it unchanged.
    */
   whitelistDomains?: Array<string> | null;
 }
@@ -352,21 +386,21 @@ export interface ReplaySettingUpdateParams {
 
   /**
    * Human-readable label for this replay configuration. Shown in the dashboard. May
-   * be empty.
+   * be empty. On PATCH, `null` leaves it unchanged.
    */
   name?: string | null;
 
   /**
    * Whether session replay capture is currently active. Set to "Enabled" to start
    * capturing replays from whitelisted domains, or "Disabled" to pause capture
-   * without losing the configuration.
+   * without losing the configuration. On PATCH, `null` leaves it unchanged.
    */
   status?: 'Disabled' | 'Enabled' | null;
 
   /**
-   * Hostnames where session replay capture is permitted. Replays initiated from any
-   * host not in this list are dropped. PATCH replaces the list — partial updates are
-   * not merged.
+   * Bare hostnames (e.g. `example.com`) where session replay capture is permitted.
+   * Replays initiated from any host not in this list are dropped. PATCH replaces the
+   * list; partial updates are not merged. On PATCH, `null` leaves it unchanged.
    */
   whitelistDomains?: Array<string> | null;
 }
