@@ -84,6 +84,8 @@ export class Versions extends APIResource {
   /**
    * Compare two versions of the account configuration. Returns
    * added/removed/modified entities grouped by collection, plus a total `count`.
+   * Each modified entity includes `changes` with dot paths, redacted old/new values,
+   * whole arrays, and null for absent values.
    *
    * Draft experiments and experiment variants do NOT appear in any diff — only
    * experiments that are already running (or paused/completed) snapshot into
@@ -390,6 +392,8 @@ export namespace VersionDiffResponse {
 
     replaySettings: Differences.ReplaySettings;
 
+    shortLinks: Differences.ShortLinks;
+
     sources: Differences.Sources;
 
     tagManagers: Differences.TagManagers;
@@ -424,8 +428,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -451,12 +455,38 @@ export namespace VersionDiffResponse {
       }
 
       export interface Modified {
+        /**
+         * Changed fields with credentials redacted. Nested objects use dot paths; arrays
+         * are whole values. Missing values are null.
+         */
+        changes: Array<Modified.Change>;
+
         new: Modified.New;
 
         old: Modified.Old;
       }
 
       export namespace Modified {
+        export interface Change {
+          new:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          old:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          path: string;
+        }
+
         export interface New {
           id: string;
 
@@ -465,8 +495,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -499,8 +529,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -534,8 +564,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -583,8 +613,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -610,12 +640,38 @@ export namespace VersionDiffResponse {
       }
 
       export interface Modified {
+        /**
+         * Changed fields with credentials redacted. Nested objects use dot paths; arrays
+         * are whole values. Missing values are null.
+         */
+        changes: Array<Modified.Change>;
+
         new: Modified.New;
 
         old: Modified.Old;
       }
 
       export namespace Modified {
+        export interface Change {
+          new:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          old:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          path: string;
+        }
+
         export interface New {
           id: string;
 
@@ -624,8 +680,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -658,8 +714,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -693,8 +749,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -742,8 +798,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -769,12 +825,38 @@ export namespace VersionDiffResponse {
       }
 
       export interface Modified {
+        /**
+         * Changed fields with credentials redacted. Nested objects use dot paths; arrays
+         * are whole values. Missing values are null.
+         */
+        changes: Array<Modified.Change>;
+
         new: Modified.New;
 
         old: Modified.Old;
       }
 
       export namespace Modified {
+        export interface Change {
+          new:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          old:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          path: string;
+        }
+
         export interface New {
           id: string;
 
@@ -783,8 +865,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -817,8 +899,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -852,8 +934,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -901,8 +983,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -928,12 +1010,38 @@ export namespace VersionDiffResponse {
       }
 
       export interface Modified {
+        /**
+         * Changed fields with credentials redacted. Nested objects use dot paths; arrays
+         * are whole values. Missing values are null.
+         */
+        changes: Array<Modified.Change>;
+
         new: Modified.New;
 
         old: Modified.Old;
       }
 
       export namespace Modified {
+        export interface Change {
+          new:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          old:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          path: string;
+        }
+
         export interface New {
           id: string;
 
@@ -942,8 +1050,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -976,8 +1084,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -1011,8 +1119,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -1060,8 +1168,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -1087,12 +1195,38 @@ export namespace VersionDiffResponse {
       }
 
       export interface Modified {
+        /**
+         * Changed fields with credentials redacted. Nested objects use dot paths; arrays
+         * are whole values. Missing values are null.
+         */
+        changes: Array<Modified.Change>;
+
         new: Modified.New;
 
         old: Modified.Old;
       }
 
       export namespace Modified {
+        export interface Change {
+          new:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          old:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          path: string;
+        }
+
         export interface New {
           id: string;
 
@@ -1101,8 +1235,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -1135,8 +1269,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -1170,8 +1304,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -1219,8 +1353,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -1246,12 +1380,38 @@ export namespace VersionDiffResponse {
       }
 
       export interface Modified {
+        /**
+         * Changed fields with credentials redacted. Nested objects use dot paths; arrays
+         * are whole values. Missing values are null.
+         */
+        changes: Array<Modified.Change>;
+
         new: Modified.New;
 
         old: Modified.Old;
       }
 
       export namespace Modified {
+        export interface Change {
+          new:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          old:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          path: string;
+        }
+
         export interface New {
           id: string;
 
@@ -1260,8 +1420,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -1294,8 +1454,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -1329,8 +1489,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -1378,8 +1538,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -1405,12 +1565,38 @@ export namespace VersionDiffResponse {
       }
 
       export interface Modified {
+        /**
+         * Changed fields with credentials redacted. Nested objects use dot paths; arrays
+         * are whole values. Missing values are null.
+         */
+        changes: Array<Modified.Change>;
+
         new: Modified.New;
 
         old: Modified.Old;
       }
 
       export namespace Modified {
+        export interface Change {
+          new:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          old:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          path: string;
+        }
+
         export interface New {
           id: string;
 
@@ -1419,8 +1605,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -1453,8 +1639,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -1488,8 +1674,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -1537,8 +1723,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -1564,12 +1750,38 @@ export namespace VersionDiffResponse {
       }
 
       export interface Modified {
+        /**
+         * Changed fields with credentials redacted. Nested objects use dot paths; arrays
+         * are whole values. Missing values are null.
+         */
+        changes: Array<Modified.Change>;
+
         new: Modified.New;
 
         old: Modified.Old;
       }
 
       export namespace Modified {
+        export interface Change {
+          new:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          old:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          path: string;
+        }
+
         export interface New {
           id: string;
 
@@ -1578,8 +1790,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -1612,8 +1824,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -1647,8 +1859,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -1696,8 +1908,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -1723,12 +1935,38 @@ export namespace VersionDiffResponse {
       }
 
       export interface Modified {
+        /**
+         * Changed fields with credentials redacted. Nested objects use dot paths; arrays
+         * are whole values. Missing values are null.
+         */
+        changes: Array<Modified.Change>;
+
         new: Modified.New;
 
         old: Modified.Old;
       }
 
       export namespace Modified {
+        export interface Change {
+          new:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          old:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          path: string;
+        }
+
         export interface New {
           id: string;
 
@@ -1737,8 +1975,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -1771,8 +2009,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -1806,8 +2044,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -1855,8 +2093,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -1882,12 +2120,38 @@ export namespace VersionDiffResponse {
       }
 
       export interface Modified {
+        /**
+         * Changed fields with credentials redacted. Nested objects use dot paths; arrays
+         * are whole values. Missing values are null.
+         */
+        changes: Array<Modified.Change>;
+
         new: Modified.New;
 
         old: Modified.Old;
       }
 
       export namespace Modified {
+        export interface Change {
+          new:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          old:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          path: string;
+        }
+
         export interface New {
           id: string;
 
@@ -1896,8 +2160,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -1930,8 +2194,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -1965,8 +2229,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -2014,8 +2278,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -2041,12 +2305,38 @@ export namespace VersionDiffResponse {
       }
 
       export interface Modified {
+        /**
+         * Changed fields with credentials redacted. Nested objects use dot paths; arrays
+         * are whole values. Missing values are null.
+         */
+        changes: Array<Modified.Change>;
+
         new: Modified.New;
 
         old: Modified.Old;
       }
 
       export namespace Modified {
+        export interface Change {
+          new:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          old:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          path: string;
+        }
+
         export interface New {
           id: string;
 
@@ -2055,8 +2345,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -2089,8 +2379,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -2124,8 +2414,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -2173,8 +2463,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -2200,12 +2490,38 @@ export namespace VersionDiffResponse {
       }
 
       export interface Modified {
+        /**
+         * Changed fields with credentials redacted. Nested objects use dot paths; arrays
+         * are whole values. Missing values are null.
+         */
+        changes: Array<Modified.Change>;
+
         new: Modified.New;
 
         old: Modified.Old;
       }
 
       export namespace Modified {
+        export interface Change {
+          new:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          old:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          path: string;
+        }
+
         export interface New {
           id: string;
 
@@ -2214,8 +2530,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -2248,8 +2564,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -2283,8 +2599,193 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
+         */
+        name?: string | null;
+
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
+        summary?: string | null;
+
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
+        tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
+      }
+    }
+
+    export interface ShortLinks {
+      added: Array<ShortLinks.Added>;
+
+      /**
+       * Entities present in both snapshots but with at least one field changed. `old` is
+       * the snapshot of the entity in the baseline (latest published); `new` is the
+       * snapshot in the comparison target (the draft).
+       */
+      modified: Array<ShortLinks.Modified>;
+
+      removed: Array<ShortLinks.Removed>;
+    }
+
+    export namespace ShortLinks {
+      export interface Added {
+        id: string;
+
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
+         */
+        name?: string | null;
+
+        /**
+         * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+         * modifications when the only change is priority reordering — this lets clients
+         * de-emphasize them in change-review UI. `null` for every other diff item.
+         */
+        summary?: string | null;
+
+        /**
+         * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+         * `tagManagerVariables`. `null` for every other collection.
+         */
+        tagManagerId?: string | null;
+
+        /**
+         * Entity subtype when the collection has one — for `sources` it matches the
+         * source's `type` field, letting clients distinguish kinds of source. `null` for
+         * collections without a subtype.
+         */
+        type?: string | null;
+      }
+
+      export interface Modified {
+        /**
+         * Changed fields with credentials redacted. Nested objects use dot paths; arrays
+         * are whole values. Missing values are null.
+         */
+        changes: Array<Modified.Change>;
+
+        new: Modified.New;
+
+        old: Modified.Old;
+      }
+
+      export namespace Modified {
+        export interface Change {
+          new:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          old:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          path: string;
+        }
+
+        export interface New {
+          id: string;
+
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
+           */
+          name?: string | null;
+
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
+          summary?: string | null;
+
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
+          tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
+        }
+
+        export interface Old {
+          id: string;
+
+          /**
+           * Human-readable label for the entity at the snapshot it was captured in. For most
+           * collections this is the entity's `name` field; for `allowedEvents` it is a
+           * computed summary of the event's key fields. Two `modified` items can therefore
+           * have identical `old.name` and `new.name` even though their underlying records
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
+           */
+          name?: string | null;
+
+          /**
+           * Optional change-classifier. Currently set to `'Reordered'` on `mappings`
+           * modifications when the only change is priority reordering — this lets clients
+           * de-emphasize them in change-review UI. `null` for every other diff item.
+           */
+          summary?: string | null;
+
+          /**
+           * Parent tag-manager id for `tagManagerTags`, `tagManagerTriggers`, and
+           * `tagManagerVariables`. `null` for every other collection.
+           */
+          tagManagerId?: string | null;
+
+          /**
+           * Entity subtype when the collection has one — for `sources` it matches the
+           * source's `type` field, letting clients distinguish kinds of source. `null` for
+           * collections without a subtype.
+           */
+          type?: string | null;
+        }
+      }
+
+      export interface Removed {
+        id: string;
+
+        /**
+         * Human-readable label for the entity at the snapshot it was captured in. For most
+         * collections this is the entity's `name` field; for `allowedEvents` it is a
+         * computed summary of the event's key fields. Two `modified` items can therefore
+         * have identical `old.name` and `new.name` even though their underlying records
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -2332,8 +2833,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -2359,12 +2860,38 @@ export namespace VersionDiffResponse {
       }
 
       export interface Modified {
+        /**
+         * Changed fields with credentials redacted. Nested objects use dot paths; arrays
+         * are whole values. Missing values are null.
+         */
+        changes: Array<Modified.Change>;
+
         new: Modified.New;
 
         old: Modified.Old;
       }
 
       export namespace Modified {
+        export interface Change {
+          new:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          old:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          path: string;
+        }
+
         export interface New {
           id: string;
 
@@ -2373,8 +2900,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -2407,8 +2934,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -2442,8 +2969,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -2491,8 +3018,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -2518,12 +3045,38 @@ export namespace VersionDiffResponse {
       }
 
       export interface Modified {
+        /**
+         * Changed fields with credentials redacted. Nested objects use dot paths; arrays
+         * are whole values. Missing values are null.
+         */
+        changes: Array<Modified.Change>;
+
         new: Modified.New;
 
         old: Modified.Old;
       }
 
       export namespace Modified {
+        export interface Change {
+          new:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          old:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          path: string;
+        }
+
         export interface New {
           id: string;
 
@@ -2532,8 +3085,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -2566,8 +3119,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -2601,8 +3154,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -2650,8 +3203,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -2677,12 +3230,38 @@ export namespace VersionDiffResponse {
       }
 
       export interface Modified {
+        /**
+         * Changed fields with credentials redacted. Nested objects use dot paths; arrays
+         * are whole values. Missing values are null.
+         */
+        changes: Array<Modified.Change>;
+
         new: Modified.New;
 
         old: Modified.Old;
       }
 
       export namespace Modified {
+        export interface Change {
+          new:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          old:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          path: string;
+        }
+
         export interface New {
           id: string;
 
@@ -2691,8 +3270,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -2725,8 +3304,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -2760,8 +3339,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -2809,8 +3388,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -2836,12 +3415,38 @@ export namespace VersionDiffResponse {
       }
 
       export interface Modified {
+        /**
+         * Changed fields with credentials redacted. Nested objects use dot paths; arrays
+         * are whole values. Missing values are null.
+         */
+        changes: Array<Modified.Change>;
+
         new: Modified.New;
 
         old: Modified.Old;
       }
 
       export namespace Modified {
+        export interface Change {
+          new:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          old:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          path: string;
+        }
+
         export interface New {
           id: string;
 
@@ -2850,8 +3455,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -2884,8 +3489,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -2919,8 +3524,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -2968,8 +3573,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -2995,12 +3600,38 @@ export namespace VersionDiffResponse {
       }
 
       export interface Modified {
+        /**
+         * Changed fields with credentials redacted. Nested objects use dot paths; arrays
+         * are whole values. Missing values are null.
+         */
+        changes: Array<Modified.Change>;
+
         new: Modified.New;
 
         old: Modified.Old;
       }
 
       export namespace Modified {
+        export interface Change {
+          new:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          old:
+            | string
+            | null
+            | number
+            | boolean
+            | Array<string | null | number | boolean | Array<unknown> | { [key: string]: unknown }>
+            | { [key: string]: unknown };
+
+          path: string;
+        }
+
         export interface New {
           id: string;
 
@@ -3009,8 +3640,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -3043,8 +3674,8 @@ export namespace VersionDiffResponse {
            * collections this is the entity's `name` field; for `allowedEvents` it is a
            * computed summary of the event's key fields. Two `modified` items can therefore
            * have identical `old.name` and `new.name` even though their underlying records
-           * differ — the change is in fields not surfaced by the summary. Use the `id` to
-           * fetch full detail.
+           * differ — the change is in fields not surfaced by the summary. Read `changes` for
+           * the changed fields.
            */
           name?: string | null;
 
@@ -3078,8 +3709,8 @@ export namespace VersionDiffResponse {
          * collections this is the entity's `name` field; for `allowedEvents` it is a
          * computed summary of the event's key fields. Two `modified` items can therefore
          * have identical `old.name` and `new.name` even though their underlying records
-         * differ — the change is in fields not surfaced by the summary. Use the `id` to
-         * fetch full detail.
+         * differ — the change is in fields not surfaced by the summary. Read `changes` for
+         * the changed fields.
          */
         name?: string | null;
 
@@ -3366,8 +3997,14 @@ export interface VersionCreateParams {
    */
   includeTagManagerVariables?: Array<string> | null;
 
+  /**
+   * Optional human-readable label for the new version.
+   */
   name?: string | null;
 
+  /**
+   * Optional release notes describing what changed in this version.
+   */
   notes?: string | null;
 }
 
@@ -3379,10 +4016,11 @@ export interface VersionUpdateParams {
 
 export interface VersionDiffParams {
   /**
-   * Baseline version id to compare the path version against. Omit for the latest
-   * published version. Pass a version UUID to compute a version-vs-version diff.
+   * Baseline version id to compare the path version against. Omit or pass null for
+   * the latest published version. Pass a version UUID to compute a
+   * version-vs-version diff.
    */
-  against?: string;
+  against?: string | null;
 }
 
 export interface VersionStatusParams {

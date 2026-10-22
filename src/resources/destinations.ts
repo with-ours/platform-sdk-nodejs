@@ -927,7 +927,8 @@ export interface DestinationListParams extends CursorParams {
 
 export interface DestinationCreateParams {
   /**
-   * Event-dispatch destination type to create. Warehouse, cloud-storage, and
+   * Event-dispatch destination type to create. Discover valid types and their
+   * settings via GET /rest/v1/destinations/types. Warehouse, cloud-storage, and
    * audience-sync destination types may appear on read responses but are not
    * creatable through POST. Audience destinations receive audience membership from
    * Audience Builder on a daily schedule and are configured in the dashboard.
@@ -1016,29 +1017,65 @@ export interface DestinationCreateParams {
     | 'GravityCAPI'
     | 'LeadSquared';
 
+  /**
+   * Restrict dispatch to these source IDs. Omit on create or send `null` to accept
+   * every source. Unknown or other-account source IDs are dropped and duplicates are
+   * removed. An empty list, including one left after filtering, receives events from
+   * no source.
+   */
+  limitedToSourceIds?: Array<string> | null;
+
+  /**
+   * Human-readable label shown in dashboards. Defaults to the type name when
+   * omitted.
+   */
   name?: string | null;
 
   /**
    * Per-type configuration keys and values. Call GET /rest/v1/destinations/types to
-   * get the valid keys for your destination type.
+   * discover valid keys. On PATCH, omitted keys are preserved and `null` clears a
+   * specific setting.
    */
   settings?: { [key: string]: string | null | number | boolean } | null;
+
+  /**
+   * Initial status. Omit or send `null` for `Enabled`; send `Disabled` to create
+   * paused.
+   */
+  status?: 'Enabled' | 'Disabled' | null;
 }
 
 export interface DestinationUpdateParams {
+  /**
+   * Optional salt used when hashing PII fields before dispatch.
+   */
   hashingSalt?: string | null;
 
+  /**
+   * Restrict dispatch to these source IDs. Omit on create or send `null` to accept
+   * every source. Unknown or other-account source IDs are dropped and duplicates are
+   * removed. An empty list, including one left after filtering, receives events from
+   * no source.
+   */
   limitedToSourceIds?: Array<string> | null;
 
+  /**
+   * Updated human-readable label.
+   */
   name?: string | null;
 
   /**
    * Per-type configuration keys and values. Call GET /rest/v1/destinations/types to
-   * get the valid keys for your destination type.
+   * discover valid keys. On PATCH, omitted keys are preserved and `null` clears a
+   * specific setting.
    */
   settings?: { [key: string]: string | null | number | boolean } | null;
 
-  status?: 'Disabled' | 'Enabled' | null;
+  /**
+   * Set `Enabled` to resume dispatch or `Disabled` to pause. Omit or send `null` to
+   * keep the current status.
+   */
+  status?: 'Enabled' | 'Disabled' | null;
 }
 
 export declare namespace Destinations {
