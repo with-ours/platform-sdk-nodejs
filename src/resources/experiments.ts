@@ -687,7 +687,7 @@ export namespace ExperimentListResponse {
       /**
        * Versioned analytics filter using catalog property IDs and operators.
        */
-      filter?: EventMatcher.Filter;
+      filter?: EventMatcher.Filter | null;
     }
 
     export namespace EventMatcher {
@@ -897,7 +897,7 @@ export namespace ExperimentListResponse {
         /**
          * Versioned analytics filter using catalog property IDs and operators.
          */
-        filter?: EventMatcher.Filter;
+        filter?: EventMatcher.Filter | null;
       }
 
       export namespace EventMatcher {
@@ -1089,7 +1089,7 @@ export namespace ExperimentListResponse {
         /**
          * Versioned analytics filter using catalog property IDs and operators.
          */
-        filter?: EventMatcher.Filter;
+        filter?: EventMatcher.Filter | null;
       }
 
       export namespace EventMatcher {
@@ -1650,7 +1650,7 @@ export namespace ExperimentCreateResponse {
       /**
        * Versioned analytics filter using catalog property IDs and operators.
        */
-      filter?: EventMatcher.Filter;
+      filter?: EventMatcher.Filter | null;
     }
 
     export namespace EventMatcher {
@@ -1860,7 +1860,7 @@ export namespace ExperimentCreateResponse {
         /**
          * Versioned analytics filter using catalog property IDs and operators.
          */
-        filter?: EventMatcher.Filter;
+        filter?: EventMatcher.Filter | null;
       }
 
       export namespace EventMatcher {
@@ -2052,7 +2052,7 @@ export namespace ExperimentCreateResponse {
         /**
          * Versioned analytics filter using catalog property IDs and operators.
          */
-        filter?: EventMatcher.Filter;
+        filter?: EventMatcher.Filter | null;
       }
 
       export namespace EventMatcher {
@@ -2613,7 +2613,7 @@ export namespace ExperimentRetrieveResponse {
       /**
        * Versioned analytics filter using catalog property IDs and operators.
        */
-      filter?: EventMatcher.Filter;
+      filter?: EventMatcher.Filter | null;
     }
 
     export namespace EventMatcher {
@@ -2823,7 +2823,7 @@ export namespace ExperimentRetrieveResponse {
         /**
          * Versioned analytics filter using catalog property IDs and operators.
          */
-        filter?: EventMatcher.Filter;
+        filter?: EventMatcher.Filter | null;
       }
 
       export namespace EventMatcher {
@@ -3015,7 +3015,7 @@ export namespace ExperimentRetrieveResponse {
         /**
          * Versioned analytics filter using catalog property IDs and operators.
          */
-        filter?: EventMatcher.Filter;
+        filter?: EventMatcher.Filter | null;
       }
 
       export namespace EventMatcher {
@@ -3576,7 +3576,7 @@ export namespace ExperimentUpdateResponse {
       /**
        * Versioned analytics filter using catalog property IDs and operators.
        */
-      filter?: EventMatcher.Filter;
+      filter?: EventMatcher.Filter | null;
     }
 
     export namespace EventMatcher {
@@ -3786,7 +3786,7 @@ export namespace ExperimentUpdateResponse {
         /**
          * Versioned analytics filter using catalog property IDs and operators.
          */
-        filter?: EventMatcher.Filter;
+        filter?: EventMatcher.Filter | null;
       }
 
       export namespace EventMatcher {
@@ -3978,7 +3978,7 @@ export namespace ExperimentUpdateResponse {
         /**
          * Versioned analytics filter using catalog property IDs and operators.
          */
-        filter?: EventMatcher.Filter;
+        filter?: EventMatcher.Filter | null;
       }
 
       export namespace EventMatcher {
@@ -4544,7 +4544,7 @@ export namespace ExperimentDuplicateResponse {
       /**
        * Versioned analytics filter using catalog property IDs and operators.
        */
-      filter?: EventMatcher.Filter;
+      filter?: EventMatcher.Filter | null;
     }
 
     export namespace EventMatcher {
@@ -4754,7 +4754,7 @@ export namespace ExperimentDuplicateResponse {
         /**
          * Versioned analytics filter using catalog property IDs and operators.
          */
-        filter?: EventMatcher.Filter;
+        filter?: EventMatcher.Filter | null;
       }
 
       export namespace EventMatcher {
@@ -4946,7 +4946,7 @@ export namespace ExperimentDuplicateResponse {
         /**
          * Versioned analytics filter using catalog property IDs and operators.
          */
-        filter?: EventMatcher.Filter;
+        filter?: EventMatcher.Filter | null;
       }
 
       export namespace EventMatcher {
@@ -5390,7 +5390,7 @@ export namespace ExperimentStartResponse {
         /**
          * Versioned analytics filter using catalog property IDs and operators.
          */
-        filter?: EventMatcher.Filter;
+        filter?: EventMatcher.Filter | null;
       }
 
       export namespace EventMatcher {
@@ -5602,7 +5602,7 @@ export namespace ExperimentStartResponse {
           /**
            * Versioned analytics filter using catalog property IDs and operators.
            */
-          filter?: EventMatcher.Filter;
+          filter?: EventMatcher.Filter | null;
         }
 
         export namespace EventMatcher {
@@ -5794,7 +5794,7 @@ export namespace ExperimentStartResponse {
           /**
            * Versioned analytics filter using catalog property IDs and operators.
            */
-          filter?: EventMatcher.Filter;
+          filter?: EventMatcher.Filter | null;
         }
 
         export namespace EventMatcher {
@@ -6239,7 +6239,7 @@ export namespace ExperimentStopResponse {
         /**
          * Versioned analytics filter using catalog property IDs and operators.
          */
-        filter?: EventMatcher.Filter;
+        filter?: EventMatcher.Filter | null;
       }
 
       export namespace EventMatcher {
@@ -6451,7 +6451,7 @@ export namespace ExperimentStopResponse {
           /**
            * Versioned analytics filter using catalog property IDs and operators.
            */
-          filter?: EventMatcher.Filter;
+          filter?: EventMatcher.Filter | null;
         }
 
         export namespace EventMatcher {
@@ -6643,7 +6643,7 @@ export namespace ExperimentStopResponse {
           /**
            * Versioned analytics filter using catalog property IDs and operators.
            */
-          filter?: EventMatcher.Filter;
+          filter?: EventMatcher.Filter | null;
         }
 
         export namespace EventMatcher {
@@ -7088,7 +7088,7 @@ export namespace ExperimentRolloutResponse {
         /**
          * Versioned analytics filter using catalog property IDs and operators.
          */
-        filter?: EventMatcher.Filter;
+        filter?: EventMatcher.Filter | null;
       }
 
       export namespace EventMatcher {
@@ -7300,7 +7300,7 @@ export namespace ExperimentRolloutResponse {
           /**
            * Versioned analytics filter using catalog property IDs and operators.
            */
-          filter?: EventMatcher.Filter;
+          filter?: EventMatcher.Filter | null;
         }
 
         export namespace EventMatcher {
@@ -7492,7 +7492,7 @@ export namespace ExperimentRolloutResponse {
           /**
            * Versioned analytics filter using catalog property IDs and operators.
            */
-          filter?: EventMatcher.Filter;
+          filter?: EventMatcher.Filter | null;
         }
 
         export namespace EventMatcher {
@@ -7937,7 +7937,7 @@ export namespace ExperimentEndRolloutResponse {
         /**
          * Versioned analytics filter using catalog property IDs and operators.
          */
-        filter?: EventMatcher.Filter;
+        filter?: EventMatcher.Filter | null;
       }
 
       export namespace EventMatcher {
@@ -8149,7 +8149,7 @@ export namespace ExperimentEndRolloutResponse {
           /**
            * Versioned analytics filter using catalog property IDs and operators.
            */
-          filter?: EventMatcher.Filter;
+          filter?: EventMatcher.Filter | null;
         }
 
         export namespace EventMatcher {
@@ -8341,7 +8341,7 @@ export namespace ExperimentEndRolloutResponse {
           /**
            * Versioned analytics filter using catalog property IDs and operators.
            */
-          filter?: EventMatcher.Filter;
+          filter?: EventMatcher.Filter | null;
         }
 
         export namespace EventMatcher {
@@ -8767,7 +8767,7 @@ export namespace ExperimentWinnerResponse {
       /**
        * Versioned analytics filter using catalog property IDs and operators.
        */
-      filter?: EventMatcher.Filter;
+      filter?: EventMatcher.Filter | null;
     }
 
     export namespace EventMatcher {
@@ -8977,7 +8977,7 @@ export namespace ExperimentWinnerResponse {
         /**
          * Versioned analytics filter using catalog property IDs and operators.
          */
-        filter?: EventMatcher.Filter;
+        filter?: EventMatcher.Filter | null;
       }
 
       export namespace EventMatcher {
@@ -9169,7 +9169,7 @@ export namespace ExperimentWinnerResponse {
         /**
          * Versioned analytics filter using catalog property IDs and operators.
          */
-        filter?: EventMatcher.Filter;
+        filter?: EventMatcher.Filter | null;
       }
 
       export namespace EventMatcher {
@@ -9613,7 +9613,7 @@ export namespace ExperimentPauseResponse {
         /**
          * Versioned analytics filter using catalog property IDs and operators.
          */
-        filter?: EventMatcher.Filter;
+        filter?: EventMatcher.Filter | null;
       }
 
       export namespace EventMatcher {
@@ -9825,7 +9825,7 @@ export namespace ExperimentPauseResponse {
           /**
            * Versioned analytics filter using catalog property IDs and operators.
            */
-          filter?: EventMatcher.Filter;
+          filter?: EventMatcher.Filter | null;
         }
 
         export namespace EventMatcher {
@@ -10017,7 +10017,7 @@ export namespace ExperimentPauseResponse {
           /**
            * Versioned analytics filter using catalog property IDs and operators.
            */
-          filter?: EventMatcher.Filter;
+          filter?: EventMatcher.Filter | null;
         }
 
         export namespace EventMatcher {
@@ -10462,7 +10462,7 @@ export namespace ExperimentResumeResponse {
         /**
          * Versioned analytics filter using catalog property IDs and operators.
          */
-        filter?: EventMatcher.Filter;
+        filter?: EventMatcher.Filter | null;
       }
 
       export namespace EventMatcher {
@@ -10674,7 +10674,7 @@ export namespace ExperimentResumeResponse {
           /**
            * Versioned analytics filter using catalog property IDs and operators.
            */
-          filter?: EventMatcher.Filter;
+          filter?: EventMatcher.Filter | null;
         }
 
         export namespace EventMatcher {
@@ -10866,7 +10866,7 @@ export namespace ExperimentResumeResponse {
           /**
            * Versioned analytics filter using catalog property IDs and operators.
            */
-          filter?: EventMatcher.Filter;
+          filter?: EventMatcher.Filter | null;
         }
 
         export namespace EventMatcher {
@@ -11604,7 +11604,7 @@ export namespace ExperimentCreateParams {
         /**
          * Versioned analytics filter using catalog property IDs and operators.
          */
-        filter?: EventMatcher.Filter;
+        filter?: EventMatcher.Filter | null;
       }
 
       export namespace EventMatcher {
@@ -11797,7 +11797,7 @@ export namespace ExperimentCreateParams {
         /**
          * Versioned analytics filter using catalog property IDs and operators.
          */
-        filter?: EventMatcher.Filter;
+        filter?: EventMatcher.Filter | null;
       }
 
       export namespace EventMatcher {
@@ -12170,7 +12170,7 @@ export namespace ExperimentUpdateParams {
         /**
          * Versioned analytics filter using catalog property IDs and operators.
          */
-        filter?: EventMatcher.Filter;
+        filter?: EventMatcher.Filter | null;
       }
 
       export namespace EventMatcher {
@@ -12363,7 +12363,7 @@ export namespace ExperimentUpdateParams {
         /**
          * Versioned analytics filter using catalog property IDs and operators.
          */
-        filter?: EventMatcher.Filter;
+        filter?: EventMatcher.Filter | null;
       }
 
       export namespace EventMatcher {

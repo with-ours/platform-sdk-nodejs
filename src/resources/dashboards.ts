@@ -478,7 +478,7 @@ export interface DashboardCreateResponse {
    * Shared analytics filter, combined with Insight report filters or Funnel and
    * Journey entry filters. Null clears it; report-specific filters remain in effect.
    */
-  filter?: DashboardCreateResponse.Filter;
+  filter?: DashboardCreateResponse.Filter | null;
 }
 
 export namespace DashboardCreateResponse {
@@ -836,7 +836,7 @@ export interface DashboardRetrieveResponse {
    * Shared analytics filter, combined with Insight report filters or Funnel and
    * Journey entry filters. Null clears it; report-specific filters remain in effect.
    */
-  filter?: DashboardRetrieveResponse.Filter;
+  filter?: DashboardRetrieveResponse.Filter | null;
 }
 
 export namespace DashboardRetrieveResponse {
@@ -1194,7 +1194,7 @@ export interface DashboardUpdateResponse {
    * Shared analytics filter, combined with Insight report filters or Funnel and
    * Journey entry filters. Null clears it; report-specific filters remain in effect.
    */
-  filter?: DashboardUpdateResponse.Filter;
+  filter?: DashboardUpdateResponse.Filter | null;
 }
 
 export namespace DashboardUpdateResponse {
@@ -1560,7 +1560,7 @@ export interface DashboardDuplicateResponse {
    * Shared analytics filter, combined with Insight report filters or Funnel and
    * Journey entry filters. Null clears it; report-specific filters remain in effect.
    */
-  filter?: DashboardDuplicateResponse.Filter;
+  filter?: DashboardDuplicateResponse.Filter | null;
 }
 
 export namespace DashboardDuplicateResponse {
@@ -7985,7 +7985,7 @@ export interface DashboardCreateParams {
    * Shared analytics filter, combined with Insight report filters or Funnel and
    * Journey entry filters. Null clears it; report-specific filters remain in effect.
    */
-  filter?: DashboardCreateParams.Filter;
+  filter?: DashboardCreateParams.Filter | null;
 }
 
 export namespace DashboardCreateParams {
@@ -8308,7 +8308,7 @@ export interface DashboardUpdateParams {
    * Shared analytics filter, combined with Insight report filters or Funnel and
    * Journey entry filters. Null clears it; report-specific filters remain in effect.
    */
-  filter?: DashboardUpdateParams.Filter;
+  filter?: DashboardUpdateParams.Filter | null;
 
   /**
    * Display name for the saved Dashboard.
