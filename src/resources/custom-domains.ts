@@ -31,8 +31,9 @@ export class CustomDomains extends APIResource {
 
   /**
    * Replaces the full custom-domain list for this account and returns `setupStatus`
-   * lifecycle guidance. The setup `id` is the path identifier. Each account can have
-   * up to 10 custom domains. An empty `domains` list removes all custom domains.
+   * lifecycle guidance. The setup `id` is the path identifier. The account allowance
+   * is returned as `domainLimit` in the setup response (10 by default, up to 99 with
+   * an increased allowance). An empty `domains` list removes all custom domains.
    * Duplicate domains are rejected. Domains under `oursprivacy.com` are rejected.
    * Domain delivery and certificate settings are managed by Ours Privacy; DNS
    * changes are customer-managed. Requires scope: `distributionTenant:update`.
@@ -85,6 +86,8 @@ export namespace CustomDomainStatusResponse {
     certificateStatus: string | null;
 
     createdAt: string | null;
+
+    domainLimit: number;
 
     domains: Array<Setup.Domain>;
 
@@ -178,6 +181,8 @@ export namespace CustomDomainCreateResponse {
 
     createdAt: string | null;
 
+    domainLimit: number;
+
     domains: Array<Setup.Domain>;
 
     enabled: boolean;
@@ -269,6 +274,8 @@ export namespace CustomDomainReplaceResponse {
     certificateStatus: string | null;
 
     createdAt: string | null;
+
+    domainLimit: number;
 
     domains: Array<Setup.Domain>;
 
@@ -362,6 +369,8 @@ export namespace CustomDomainReconcileCertificateResponse {
 
     createdAt: string | null;
 
+    domainLimit: number;
+
     domains: Array<Setup.Domain>;
 
     enabled: boolean;
@@ -433,8 +442,9 @@ export namespace CustomDomainReconcileCertificateResponse {
 
 export interface CustomDomainReplaceParams {
   /**
-   * Replacement list of up to 10 custom domains. An empty list removes all custom
-   * domains. Domains under oursprivacy.com are rejected.
+   * Replacement list of up to 99 custom domains, subject to the account's
+   * domainLimit (10 by default). An empty list removes all custom domains. Domains
+   * under oursprivacy.com are rejected.
    */
   domains: Array<string>;
 }

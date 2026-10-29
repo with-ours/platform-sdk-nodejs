@@ -63,7 +63,9 @@
     }
   },
   "resolutions": {
-    "minimatch": "^9.0.5"
+    "minimatch": "^9.0.7",
+    "js-yaml": "^4.3.2",
+    "tmp": "^0.2.6"
   },
   "exports": {
     ".": {

@@ -40,14 +40,19 @@ export class ExperimentSettings extends APIResource {
   }
 
   /**
-   * Find a single experiment settings record by ID. Returns 404 when no record
-   * matches the supplied id. Requires API-key scope or current OAuth user
-   * permission: experimentSettings:find
+   * Find an experiment settings record by ID, including its cookie name, public
+   * pixel token, and domain allowlist. Discover the ID with GET
+   * /rest/v1/experiment-settings. Returns 404 when the record is unavailable to this
+   * account; returns 403 when Experimentation is disabled for an otherwise
+   * authorized record. Requires API-key scope or current OAuth user permission:
+   * experimentSettings:find
    *
    * @example
    * ```ts
    * const experimentSetting =
-   *   await client.experimentSettings.retrieve('id');
+   *   await client.experimentSettings.retrieve(
+   *     '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   *   );
    * ```
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<ExperimentSettingRetrieveResponse> {
@@ -110,6 +115,9 @@ export namespace ExperimentSettingListResponse {
      */
     accountId: string;
 
+    /**
+     * ISO 8601 timestamp when this settings record was created.
+     */
     createdAt: string;
 
     /**
@@ -118,8 +126,8 @@ export namespace ExperimentSettingListResponse {
     name: string;
 
     /**
-     * Pixel token used by the experiments runtime and CDN configuration. This is
-     * informative for REST clients; use the settings `id` for createExperiment.
+     * Public pixel token used by the experiments runtime. Use the settings id, rather
+     * than this token, when creating an experiment.
      */
     pixel: string;
 
@@ -128,18 +136,26 @@ export namespace ExperimentSettingListResponse {
      */
     cookieName?: string | null;
 
+    /**
+     * User who created this settings record.
+     */
     createdByUserId?: string | null;
 
+    /**
+     * ISO 8601 timestamp when this settings record was last updated.
+     */
     updatedAt?: string | null;
 
+    /**
+     * User who last updated this settings record.
+     */
     updatedByUserId?: string | null;
 
     /**
      * Limits which domains can load your experiments. When set, experiments using this
      * settings record are only served on these domains; the SDK refuses to load
      * anywhere else and your experiments never run on those hosts. Separate from
-     * source `whitelistDomains`, which limits which domains can send events to the
-     * CDP.
+     * source whitelistDomains, which limits which domains can send events to the CDP.
      */
     whitelistDomains?: Array<string> | null;
   }
@@ -156,6 +172,9 @@ export interface ExperimentSettingCreateResponse {
    */
   accountId: string;
 
+  /**
+   * ISO 8601 timestamp when this settings record was created.
+   */
   createdAt: string;
 
   /**
@@ -164,8 +183,8 @@ export interface ExperimentSettingCreateResponse {
   name: string;
 
   /**
-   * Pixel token used by the experiments runtime and CDN configuration. This is
-   * informative for REST clients; use the settings `id` for createExperiment.
+   * Public pixel token used by the experiments runtime. Use the settings id, rather
+   * than this token, when creating an experiment.
    */
   pixel: string;
 
@@ -174,18 +193,26 @@ export interface ExperimentSettingCreateResponse {
    */
   cookieName?: string | null;
 
+  /**
+   * User who created this settings record.
+   */
   createdByUserId?: string | null;
 
+  /**
+   * ISO 8601 timestamp when this settings record was last updated.
+   */
   updatedAt?: string | null;
 
+  /**
+   * User who last updated this settings record.
+   */
   updatedByUserId?: string | null;
 
   /**
    * Limits which domains can load your experiments. When set, experiments using this
    * settings record are only served on these domains; the SDK refuses to load
    * anywhere else and your experiments never run on those hosts. Separate from
-   * source `whitelistDomains`, which limits which domains can send events to the
-   * CDP.
+   * source whitelistDomains, which limits which domains can send events to the CDP.
    */
   whitelistDomains?: Array<string> | null;
 }
@@ -201,6 +228,9 @@ export interface ExperimentSettingRetrieveResponse {
    */
   accountId: string;
 
+  /**
+   * ISO 8601 timestamp when this settings record was created.
+   */
   createdAt: string;
 
   /**
@@ -209,8 +239,8 @@ export interface ExperimentSettingRetrieveResponse {
   name: string;
 
   /**
-   * Pixel token used by the experiments runtime and CDN configuration. This is
-   * informative for REST clients; use the settings `id` for createExperiment.
+   * Public pixel token used by the experiments runtime. Use the settings id, rather
+   * than this token, when creating an experiment.
    */
   pixel: string;
 
@@ -219,18 +249,26 @@ export interface ExperimentSettingRetrieveResponse {
    */
   cookieName?: string | null;
 
+  /**
+   * User who created this settings record.
+   */
   createdByUserId?: string | null;
 
+  /**
+   * ISO 8601 timestamp when this settings record was last updated.
+   */
   updatedAt?: string | null;
 
+  /**
+   * User who last updated this settings record.
+   */
   updatedByUserId?: string | null;
 
   /**
    * Limits which domains can load your experiments. When set, experiments using this
    * settings record are only served on these domains; the SDK refuses to load
    * anywhere else and your experiments never run on those hosts. Separate from
-   * source `whitelistDomains`, which limits which domains can send events to the
-   * CDP.
+   * source whitelistDomains, which limits which domains can send events to the CDP.
    */
   whitelistDomains?: Array<string> | null;
 }
@@ -246,6 +284,9 @@ export interface ExperimentSettingUpdateResponse {
    */
   accountId: string;
 
+  /**
+   * ISO 8601 timestamp when this settings record was created.
+   */
   createdAt: string;
 
   /**
@@ -254,8 +295,8 @@ export interface ExperimentSettingUpdateResponse {
   name: string;
 
   /**
-   * Pixel token used by the experiments runtime and CDN configuration. This is
-   * informative for REST clients; use the settings `id` for createExperiment.
+   * Public pixel token used by the experiments runtime. Use the settings id, rather
+   * than this token, when creating an experiment.
    */
   pixel: string;
 
@@ -264,18 +305,26 @@ export interface ExperimentSettingUpdateResponse {
    */
   cookieName?: string | null;
 
+  /**
+   * User who created this settings record.
+   */
   createdByUserId?: string | null;
 
+  /**
+   * ISO 8601 timestamp when this settings record was last updated.
+   */
   updatedAt?: string | null;
 
+  /**
+   * User who last updated this settings record.
+   */
   updatedByUserId?: string | null;
 
   /**
    * Limits which domains can load your experiments. When set, experiments using this
    * settings record are only served on these domains; the SDK refuses to load
    * anywhere else and your experiments never run on those hosts. Separate from
-   * source `whitelistDomains`, which limits which domains can send events to the
-   * CDP.
+   * source whitelistDomains, which limits which domains can send events to the CDP.
    */
   whitelistDomains?: Array<string> | null;
 }
@@ -291,6 +340,9 @@ export interface ExperimentSettingDeleteResponse {
    */
   accountId: string;
 
+  /**
+   * ISO 8601 timestamp when this settings record was created.
+   */
   createdAt: string;
 
   /**
@@ -299,8 +351,8 @@ export interface ExperimentSettingDeleteResponse {
   name: string;
 
   /**
-   * Pixel token used by the experiments runtime and CDN configuration. This is
-   * informative for REST clients; use the settings `id` for createExperiment.
+   * Public pixel token used by the experiments runtime. Use the settings id, rather
+   * than this token, when creating an experiment.
    */
   pixel: string;
 
@@ -309,18 +361,26 @@ export interface ExperimentSettingDeleteResponse {
    */
   cookieName?: string | null;
 
+  /**
+   * User who created this settings record.
+   */
   createdByUserId?: string | null;
 
+  /**
+   * ISO 8601 timestamp when this settings record was last updated.
+   */
   updatedAt?: string | null;
 
+  /**
+   * User who last updated this settings record.
+   */
   updatedByUserId?: string | null;
 
   /**
    * Limits which domains can load your experiments. When set, experiments using this
    * settings record are only served on these domains; the SDK refuses to load
    * anywhere else and your experiments never run on those hosts. Separate from
-   * source `whitelistDomains`, which limits which domains can send events to the
-   * CDP.
+   * source whitelistDomains, which limits which domains can send events to the CDP.
    */
   whitelistDomains?: Array<string> | null;
 }

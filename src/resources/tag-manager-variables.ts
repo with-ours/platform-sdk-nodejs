@@ -38,8 +38,10 @@ export class TagManagerVariables extends APIResource {
   }
 
   /**
-   * Find a single tag manager variable by ID. Requires API-key scope or current
-   * OAuth user permission: tagManagers:find
+   * Fetch one variable by id, including its type-specific `parameters`,
+   * `defaultValue`, `lookUpTable`, and read-only `folderId`. A missing id and an id
+   * this credential cannot access return the same 404. Requires API-key scope or
+   * current OAuth user permission: tagManagers:find
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<TagManagerVariableRetrieveResponse> {
     return this._client.get(path`/rest/v1/tag-manager-variables/${id}`, options);
@@ -61,8 +63,11 @@ export class TagManagerVariables extends APIResource {
   }
 
   /**
-   * Delete a tag manager variable. Requires API-key scope or current OAuth user
-   * permission: tagManagers:update
+   * Permanently delete a variable and return `{ id, deleted }`. Tags and triggers
+   * that reference it by name stop resolving it; use PATCH with `enabled: false` to
+   * pause it instead. A missing id and an id this credential cannot access return
+   * the same 404. Requires API-key scope or current OAuth user permission:
+   * tagManagers:update
    */
   delete(id: string, options?: RequestOptions): APIPromise<TagManagerVariableDeleteResponse> {
     return this._client.delete(path`/rest/v1/tag-manager-variables/${id}`, options);
@@ -121,8 +126,8 @@ export interface TagManagerVariableListResponse {
   enabled?: boolean | null;
 
   /**
-   * Folder this variable belongs to. Settable via PATCH — send a folder UUID to
-   * assign, or `null` to remove from its current folder.
+   * Folder this variable belongs to. Read-only here; assign or remove folder
+   * membership with `POST /tag-manager-asset-folders`.
    */
   folderId?: string | null;
 
@@ -178,8 +183,8 @@ export interface TagManagerVariableCreateResponse {
   enabled?: boolean | null;
 
   /**
-   * Folder this variable belongs to. Settable via PATCH — send a folder UUID to
-   * assign, or `null` to remove from its current folder.
+   * Folder this variable belongs to. Read-only here; assign or remove folder
+   * membership with `POST /tag-manager-asset-folders`.
    */
   folderId?: string | null;
 
@@ -235,8 +240,8 @@ export interface TagManagerVariableRetrieveResponse {
   enabled?: boolean | null;
 
   /**
-   * Folder this variable belongs to. Settable via PATCH — send a folder UUID to
-   * assign, or `null` to remove from its current folder.
+   * Folder this variable belongs to. Read-only here; assign or remove folder
+   * membership with `POST /tag-manager-asset-folders`.
    */
   folderId?: string | null;
 
@@ -292,8 +297,8 @@ export interface TagManagerVariableUpdateResponse {
   enabled?: boolean | null;
 
   /**
-   * Folder this variable belongs to. Settable via PATCH — send a folder UUID to
-   * assign, or `null` to remove from its current folder.
+   * Folder this variable belongs to. Read-only here; assign or remove folder
+   * membership with `POST /tag-manager-asset-folders`.
    */
   folderId?: string | null;
 
@@ -312,8 +317,14 @@ export interface TagManagerVariableUpdateResponse {
 }
 
 export interface TagManagerVariableDeleteResponse {
+  /**
+   * The id of the variable that was deleted.
+   */
   id: string;
 
+  /**
+   * True when the variable was deleted.
+   */
   deleted: boolean;
 }
 
@@ -422,7 +433,8 @@ export namespace TagManagerVariableTypesResponse {
 
 export interface TagManagerVariableListParams extends CursorParams {
   /**
-   * Parent tag manager whose variables should be returned.
+   * Parent tag manager whose variables should be returned. Variables are always
+   * scoped to one tag manager; discover ids with `GET /tag-managers`.
    */
   tagManagerId: string;
 }
