@@ -103,6 +103,23 @@ export class ConsentSettings extends APIResource {
   }
 
   /**
+   * Returns daily banner reach, explicit opt-ins and opt-outs, dismissal events, and
+   * consent rates across the account. Includes historical events without a
+   * consent-setting ID. Visitor totals are deduplicated across settings and dates;
+   * dismissals count events. Rates use the larger of banner reach or opt-ins plus
+   * opt-outs plus dismissals as their denominator, matching Consent Analytics.
+   * Requires Analytics access and report:consent-analytics. Limited to 60 included
+   * UTC calendar days. Requires API-key scope or current OAuth user permission:
+   * report:consent-analytics
+   */
+  overview(
+    query: ConsentSettingOverviewParams,
+    options?: RequestOptions,
+  ): APIPromise<ConsentSettingOverviewResponse> {
+    return this._client.get('/rest/v1/consent-settings/analytics-overview', { query, ...options });
+  }
+
+  /**
    * Monthly consent trends over up to 365 included days. Returns unique visitor
    * counts within each UTC calendar month, event counts for dismissals, rates, and
    * partial-month bounds. Uses the same shared analytics filter as the other consent
@@ -8072,6 +8089,92 @@ export namespace ConsentSettingAnalyticsResponse {
   }
 }
 
+export interface ConsentSettingOverviewResponse {
+  items: Array<ConsentSettingOverviewResponse.Item>;
+
+  /**
+   * Whole-window counts; do not sum daily unique visitors.
+   */
+  totals: ConsentSettingOverviewResponse.Totals;
+}
+
+export namespace ConsentSettingOverviewResponse {
+  export interface Item {
+    /**
+     * Unique visitors shown the banner.
+     */
+    bannerViews: number;
+
+    /**
+     * Banner dismissal events.
+     */
+    closeIconClicks: number;
+
+    dateTime: string;
+
+    /**
+     * Unique visitors who accepted all.
+     */
+    explicitOptIns: number;
+
+    /**
+     * Unique visitors who accepted necessary categories only.
+     */
+    explicitOptOuts: number;
+
+    /**
+     * Opt-in percentage using the Consent Analytics denominator.
+     */
+    optInRate: number;
+
+    /**
+     * Opt-out percentage using the Consent Analytics denominator.
+     */
+    optOutRate: number;
+
+    partialPeriod: boolean;
+
+    periodFrom: string;
+
+    periodTo: string;
+  }
+
+  /**
+   * Whole-window counts; do not sum daily unique visitors.
+   */
+  export interface Totals {
+    /**
+     * Unique visitors shown the banner.
+     */
+    bannerViews: number;
+
+    /**
+     * Banner dismissal events.
+     */
+    closeIconClicks: number;
+
+    /**
+     * Unique visitors who accepted all.
+     */
+    explicitOptIns: number;
+
+    /**
+     * Unique visitors who accepted necessary categories only.
+     */
+    explicitOptOuts: number;
+
+    /**
+     * Opt-in percentage using the Consent Analytics denominator.
+     */
+    optInRate: number;
+
+    /**
+     * Opt-out percentage using the Consent Analytics denominator.
+     */
+    optOutRate: number;
+  }
+}
+
 export interface ConsentSettingAnalyticsMonthlyResponse {
   items: Array<ConsentSettingAnalyticsMonthlyResponse.Item>;
 }
@@ -10785,6 +10888,18 @@ export interface ConsentSettingAnalyticsParams {
   granularity?: 'DAILY' | 'HOURLY' | 'MONTHLY' | 'WEEKLY';
 }
 
+export interface ConsentSettingOverviewParams {
+  /**
+   * First included UTC calendar day (YYYY-MM-DD).
+   */
+  from: string;
+
+  /**
+   * Last included UTC calendar day, at most 60 days including from.
+   */
+  to: string;
+}
+
 export interface ConsentSettingAnalyticsMonthlyParams {
   /**
    * Inclusive lower bound of the analytics window, as a UTC calendar day in
@@ -10895,6 +11010,7 @@ export declare namespace ConsentSettings {
     type ConsentSettingUpdateResponse as ConsentSettingUpdateResponse,
     type ConsentSettingDeleteResponse as ConsentSettingDeleteResponse,
     type ConsentSettingAnalyticsResponse as ConsentSettingAnalyticsResponse,
+    type ConsentSettingOverviewResponse as ConsentSettingOverviewResponse,
     type ConsentSettingAnalyticsMonthlyResponse as ConsentSettingAnalyticsMonthlyResponse,
     type ConsentSettingAnalyticsCapabilitiesResponse as ConsentSettingAnalyticsCapabilitiesResponse,
     type ConsentSettingPageAnalysisResponse as ConsentSettingPageAnalysisResponse,
@@ -10902,6 +11018,7 @@ export declare namespace ConsentSettings {
     type ConsentSettingReplaceParams as ConsentSettingReplaceParams,
     type ConsentSettingUpdateParams as ConsentSettingUpdateParams,
     type ConsentSettingAnalyticsParams as ConsentSettingAnalyticsParams,
+    type ConsentSettingOverviewParams as ConsentSettingOverviewParams,
     type ConsentSettingAnalyticsMonthlyParams as ConsentSettingAnalyticsMonthlyParams,
     type ConsentSettingAnalyticsCapabilitiesParams as ConsentSettingAnalyticsCapabilitiesParams,
     type ConsentSettingPageAnalysisParams as ConsentSettingPageAnalysisParams,

@@ -6,6 +6,21 @@ import { RequestOptions } from '../internal/request-options';
 
 export class WebAnalytics extends APIResource {
   /**
+   * Read a fixed Overview report for up to 60 inclusive UTC days. TRAFFIC measures
+   * visitors with page views and page views; BEHAVIOR measures tracked clicks, dead
+   * clicks, and rage clicks. Both include web sources only and use the same counting
+   * and bot/test exclusions as Insights. Requires Analytics access and
+   * web-analytics:view; no custom-variable permission is required. Requires API-key
+   * scope or current OAuth user permission: web-analytics:view
+   */
+  overviewInsight(
+    query: WebAnalyticsOverviewInsightParams,
+    options?: RequestOptions,
+  ): APIPromise<WebAnalyticsOverviewInsightResponse> {
+    return this._client.get('/rest/v1/web-analytics/overview-insight', { query, ...options });
+  }
+
+  /**
    * Return privacy-first traffic metrics and a timeseries for the requested date
    * range. Filter by source, geography, page, campaign, device, or other supported
    * dimensions with the JSON-encoded `filters` query parameter. Requires API-key
@@ -85,6 +100,102 @@ export class WebAnalytics extends APIResource {
     options?: RequestOptions,
   ): APIPromise<WebAnalyticsPathExplorerResponse> {
     return this._client.get('/rest/v1/web-analytics/path-explorer', { query, ...options });
+  }
+}
+
+export interface WebAnalyticsOverviewInsightResponse {
+  engine: 'clickhouse';
+
+  /**
+   * Saved report identifier; null for previews.
+   */
+  reportId: string | null;
+
+  /**
+   * Saved report revision; null for previews.
+   */
+  revision: string | null;
+
+  scope: WebAnalyticsOverviewInsightResponse.Scope;
+
+  semanticVersion: 1;
+
+  series: Array<WebAnalyticsOverviewInsightResponse.Series>;
+
+  sourceLimitations: Array<string>;
+
+  sourcePolicy: string;
+
+  sourceRevision?: string | null;
+}
+
+export namespace WebAnalyticsOverviewInsightResponse {
+  export interface Scope {
+    cumulative: boolean;
+
+    executedAt: string;
+
+    from: string;
+
+    interval: 'day' | 'week' | 'month';
+
+    sourceCompleteness: 'unknown';
+
+    timeZone: 'UTC';
+
+    to: string;
+
+    comparison?: Scope.Comparison | null;
+  }
+
+  export namespace Scope {
+    export interface Comparison {
+      from: string;
+
+      kind: 'previous_period' | 'previous_year' | 'custom';
+
+      to: string;
+    }
+  }
+
+  export interface Series {
+    aggregation: 'event_count' | 'unique_visitors' | 'sum' | 'average';
+
+    breakdownValues: Array<Series.BreakdownValue>;
+
+    comparison: 'previous_period' | 'previous_year' | 'custom' | null;
+
+    key: string;
+
+    label: string;
+
+    metricId: string;
+
+    points: Array<Series.Point>;
+
+    rangeValue: number | null;
+  }
+
+  export namespace Series {
+    export interface BreakdownValue {
+      property: string;
+
+      value: string | null;
+    }
+
+    export interface Point {
+      bucketEnd: string;
+
+      bucketStart: string;
+
+      cumulative: number | null;
+
+      isPartial: boolean;
+
+      raw: number | null;
+
+      smoothed: number | null;
+    }
   }
 }
 
@@ -244,6 +355,23 @@ export namespace WebAnalyticsPathExplorerResponse {
   }
 }
 
+export interface WebAnalyticsOverviewInsightParams {
+  /**
+   * First included UTC calendar day (YYYY-MM-DD).
+   */
+  from: string;
+
+  /**
+   * Built-in traffic or click-behavior report.
+   */
+  preset: 'TRAFFIC' | 'BEHAVIOR';
+
+  /**
+   * Last included UTC calendar day, at most 60 days including from.
+   */
+  to: string;
+}
+
 export interface WebAnalyticsOverviewParams {
   /**
    * Inclusive lower bound of the analysis window as `YYYY-MM-DD`.
@@ -270,12 +398,7 @@ export interface WebAnalyticsOverviewParams {
   excludeBots?: boolean;
 
   /**
-   * Optional JSON-encoded array of up to 20 filters. Dimensions: `page`,
-   * `entry_page`, `exit_page`, `source`, `medium`, `campaign`, `content`, `term`,
-   * `referrer`, `country`, `region`, `city`, `device`, `browser`, `os`. Each filter
-   * has a dimension, optional operator (`IS`, `IS_NOT`, `CONTAINS`, `NOT_CONTAINS`;
-   * defaults to `IS`), and one or more values. Example:
-   * `[{"dimension":"country","values":["United States"]}]`.
+   * JSON-encoded query input.
    */
   filters?: string;
 
@@ -309,12 +432,7 @@ export interface WebAnalyticsSourcesParams {
   excludeBots?: boolean;
 
   /**
-   * Optional JSON-encoded array of up to 20 filters. Dimensions: `page`,
-   * `entry_page`, `exit_page`, `source`, `medium`, `campaign`, `content`, `term`,
-   * `referrer`, `country`, `region`, `city`, `device`, `browser`, `os`. Each filter
-   * has a dimension, optional operator (`IS`, `IS_NOT`, `CONTAINS`, `NOT_CONTAINS`;
-   * defaults to `IS`), and one or more values. Example:
-   * `[{"dimension":"country","values":["United States"]}]`.
+   * JSON-encoded query input.
    */
   filters?: string;
 
@@ -343,12 +461,7 @@ export interface WebAnalyticsPagesParams {
   excludeBots?: boolean;
 
   /**
-   * Optional JSON-encoded array of up to 20 filters. Dimensions: `page`,
-   * `entry_page`, `exit_page`, `source`, `medium`, `campaign`, `content`, `term`,
-   * `referrer`, `country`, `region`, `city`, `device`, `browser`, `os`. Each filter
-   * has a dimension, optional operator (`IS`, `IS_NOT`, `CONTAINS`, `NOT_CONTAINS`;
-   * defaults to `IS`), and one or more values. Example:
-   * `[{"dimension":"country","values":["United States"]}]`.
+   * JSON-encoded query input.
    */
   filters?: string;
 
@@ -377,12 +490,7 @@ export interface WebAnalyticsLocationsParams {
   excludeBots?: boolean;
 
   /**
-   * Optional JSON-encoded array of up to 20 filters. Dimensions: `page`,
-   * `entry_page`, `exit_page`, `source`, `medium`, `campaign`, `content`, `term`,
-   * `referrer`, `country`, `region`, `city`, `device`, `browser`, `os`. Each filter
-   * has a dimension, optional operator (`IS`, `IS_NOT`, `CONTAINS`, `NOT_CONTAINS`;
-   * defaults to `IS`), and one or more values. Example:
-   * `[{"dimension":"country","values":["United States"]}]`.
+   * JSON-encoded query input.
    */
   filters?: string;
 
@@ -411,12 +519,7 @@ export interface WebAnalyticsDevicesParams {
   excludeBots?: boolean;
 
   /**
-   * Optional JSON-encoded array of up to 20 filters. Dimensions: `page`,
-   * `entry_page`, `exit_page`, `source`, `medium`, `campaign`, `content`, `term`,
-   * `referrer`, `country`, `region`, `city`, `device`, `browser`, `os`. Each filter
-   * has a dimension, optional operator (`IS`, `IS_NOT`, `CONTAINS`, `NOT_CONTAINS`;
-   * defaults to `IS`), and one or more values. Example:
-   * `[{"dimension":"country","values":["United States"]}]`.
+   * JSON-encoded query input.
    */
   filters?: string;
 
@@ -440,8 +543,7 @@ export interface WebAnalyticsPathExplorerParams {
   from: string;
 
   /**
-   * JSON-encoded ordered path of opaque path explorer step keys. Use an empty array
-   * to request first-column candidates.
+   * JSON-encoded query input.
    */
   path: string;
 
@@ -458,12 +560,7 @@ export interface WebAnalyticsPathExplorerParams {
   excludeBots?: boolean;
 
   /**
-   * Optional JSON-encoded array of up to 20 cohort filters. Supports web analytics
-   * dimensions plus `event_name`, `ep_currency`, `ep_appointment_id`,
-   * `ep_appointment_status`, `ep_service_line`, `ep_provider_id`, `ep_location_id`,
-   * `ep_booking_channel`, `ep_revenue_type`, `ep_call_outcome`, and `ep_staff_id`.
-   * Each filter has a dimension, optional operator (`IS`, `IS_NOT`, `CONTAINS`,
-   * `NOT_CONTAINS`; defaults to `IS`), and one or more values.
+   * JSON-encoded query input.
    */
   filters?: string;
 
@@ -481,6 +578,7 @@ export interface WebAnalyticsPathExplorerParams {
 
 export declare namespace WebAnalytics {
   export {
+    type WebAnalyticsOverviewInsightResponse as WebAnalyticsOverviewInsightResponse,
     type WebAnalyticsOverviewResponse as WebAnalyticsOverviewResponse,
     type WebAnalyticsSourcesResponse as WebAnalyticsSourcesResponse,
     type WebAnalyticsPagesResponse as WebAnalyticsPagesResponse,
@@ -488,6 +586,7 @@ export declare namespace WebAnalytics {
     type WebAnalyticsDevicesResponse as WebAnalyticsDevicesResponse,
     type WebAnalyticsCurrentVisitorsResponse as WebAnalyticsCurrentVisitorsResponse,
     type WebAnalyticsPathExplorerResponse as WebAnalyticsPathExplorerResponse,
+    type WebAnalyticsOverviewInsightParams as WebAnalyticsOverviewInsightParams,
     type WebAnalyticsOverviewParams as WebAnalyticsOverviewParams,
     type WebAnalyticsSourcesParams as WebAnalyticsSourcesParams,
     type WebAnalyticsPagesParams as WebAnalyticsPagesParams,

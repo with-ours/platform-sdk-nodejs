@@ -391,6 +391,21 @@ describe('resource consentSettings', () => {
     });
   });
 
+  test('overview: only required params', async () => {
+    const responsePromise = client.consentSettings.overview({ from: '2019-12-27', to: '2019-12-27' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('overview: required and optional params', async () => {
+    const response = await client.consentSettings.overview({ from: '2019-12-27', to: '2019-12-27' });
+  });
+
   test('analyticsMonthly: only required params', async () => {
     const responsePromise = client.consentSettings.analyticsMonthly('id', {
       from: '2026-04-01',

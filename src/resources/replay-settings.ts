@@ -62,8 +62,9 @@ export class ReplaySettings extends APIResource {
 
   /**
    * Delete the replay configuration from the draft. Publish with `POST /versions`
-   * for capture to stop on all whitelisted domains. Requires API-key scope or
-   * current OAuth user permission: replaySettings:delete
+   * for capture to stop on all whitelisted domains. Returns the same HTTP 404 when
+   * the configuration is missing or inaccessible. Requires API-key scope or current
+   * OAuth user permission: replaySettings:delete
    */
   delete(id: string, options?: RequestOptions): APIPromise<ReplaySettingDeleteResponse> {
     return this._client.delete(path`/rest/v1/replay-settings/${id}`, options);

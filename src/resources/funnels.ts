@@ -57,7 +57,8 @@ export class Funnels extends APIResource {
   /**
    * Duplicate a funnel configuration in the same account. The copy keeps the
    * canonical definition, receives a new ID, and is named `Copy of …`. Requires
-   * API-key scope or current OAuth user permission: web-analytics:write
+   * API-key scope or current OAuth user permission: web-analytics:write,
+   * web-analytics:view
    */
   duplicate(id: string, options?: RequestOptions): APIPromise<FunnelDuplicateResponse> {
     return this._client.post(path`/rest/v1/funnels/${id}/duplicate`, options);
@@ -118,6 +119,9 @@ export namespace FunnelListResponse {
 
     updatedAt: string;
 
+    /**
+     * Optional description; null clears it.
+     */
     description?: string | null;
 
     reportDateRange?: Entity.ReportDateRange | null;
@@ -342,6 +346,9 @@ export interface FunnelCreateResponse {
 
   updatedAt: string;
 
+  /**
+   * Optional description; null clears it.
+   */
   description?: string | null;
 
   reportDateRange?: FunnelCreateResponse.ReportDateRange | null;
@@ -568,6 +575,9 @@ export interface FunnelRetrieveResponse {
 
   updatedAt: string;
 
+  /**
+   * Optional description; null clears it.
+   */
   description?: string | null;
 
   reportDateRange?: FunnelRetrieveResponse.ReportDateRange | null;
@@ -791,6 +801,9 @@ export interface FunnelUpdateResponse {
 
   updatedAt: string;
 
+  /**
+   * Optional description; null clears it.
+   */
   description?: string | null;
 
   reportDateRange?: FunnelUpdateResponse.ReportDateRange | null;
@@ -1020,6 +1033,9 @@ export interface FunnelDuplicateResponse {
 
   updatedAt: string;
 
+  /**
+   * Optional description; null clears it.
+   */
   description?: string | null;
 
   reportDateRange?: FunnelDuplicateResponse.ReportDateRange | null;
@@ -1233,7 +1249,8 @@ export interface FunnelResultsResponse {
   engine: string;
 
   /**
-   * Conversion rate from first step to last step as a percentage.
+   * Ratio of last-step to first-step volume as a percentage. Event-counting ratios
+   * may exceed 100%.
    */
   overallConversionRate: number;
 
@@ -1242,8 +1259,8 @@ export interface FunnelResultsResponse {
   semanticVersion: 1;
 
   /**
-   * Known Events v3 source limitations: equal-load conflicts, corrections that move
-   * across physical keys, and source completeness are unverified.
+   * Data quality limitations affecting these results. Source completeness and
+   * conflicting event corrections may be unverified.
    */
   sourceLimitations: Array<
     'equal-load-conflicts-unverified' | 'cross-key-corrections-unverified' | 'source-completeness-unverified'
@@ -1257,7 +1274,8 @@ export interface FunnelResultsResponse {
   steps: Array<FunnelResultsResponse.Step>;
 
   /**
-   * Total number of visitors who entered the funnel (entered step 1).
+   * First-step volume using the saved counting method: unique people, sessions, or
+   * events.
    */
   totalVisitors: number;
 
@@ -1293,29 +1311,49 @@ export namespace FunnelResultsResponse {
   export interface Step {
     conversionCount: number;
 
+    /**
+     * Step ratio as a percentage. Event-counting ratios may exceed 100%.
+     */
     conversionRate: number;
 
+    /**
+     * Drop-off percentage for participant counting; zero when the previous step volume
+     * is zero. Not a participant loss measure for event counting.
+     */
     dropOffRate: number;
 
     dropOffSessionIds: Array<string>;
 
     dropOffVisitorIds: Array<string>;
 
+    /**
+     * Ratio to first-step volume as a percentage. Event-counting ratios may exceed
+     * 100%.
+     */
     overallConversionRate: number;
 
     sessionIds: Array<string>;
 
     stepNumber: number;
 
+    /**
+     * Step volume using the saved counting method: unique people, sessions, or events.
+     */
     visitorCount: number;
 
     visitorIds: Array<string>;
 
+    /**
+     * Average incoming hop time from the previous step to this step, in seconds.
+     */
     avgTimeToNextStep?: number | null;
   }
 }
 
 export interface FunnelCreateParams {
+  /**
+   * Display name for the saved funnel.
+   */
   name: string;
 
   /**
@@ -1323,8 +1361,15 @@ export interface FunnelCreateParams {
    */
   queryDefinition: FunnelCreateParams.QueryDefinition;
 
+  /**
+   * Optional description; null clears it.
+   */
   description?: string | null;
 
+  /**
+   * Whether funnel monitoring is enabled. Requires notifications to be enabled for
+   * this account.
+   */
   watched?: boolean | null;
 }
 
@@ -1523,8 +1568,14 @@ export namespace FunnelCreateParams {
 }
 
 export interface FunnelUpdateParams {
+  /**
+   * Optional description; null clears it.
+   */
   description?: string | null;
 
+  /**
+   * Display name for the saved funnel.
+   */
   name?: string;
 
   /**
@@ -1532,6 +1583,10 @@ export interface FunnelUpdateParams {
    */
   queryDefinition?: FunnelUpdateParams.QueryDefinition;
 
+  /**
+   * Whether funnel monitoring is enabled. Requires notifications to be enabled for
+   * this account.
+   */
   watched?: boolean | null;
 }
 
@@ -1745,8 +1800,10 @@ export interface FunnelResultsParams {
   to: string;
 
   /**
-   * Require this saved definition revision. Returns a conflict if the funnel has
-   * changed.
+   * Use the saved funnel response's updatedAt from GET /funnels/{id} (MCP:
+   * get_funnel.updatedAt) to require that definition revision. Results return the
+   * same revision as definitionUpdatedAt. Returns a conflict if the funnel has
+   * changed; omit to use the latest saved definition.
    */
   expectedDefinitionUpdatedAt?: string;
 }

@@ -8,6 +8,29 @@ const client = new OursPrivacyPlatform({
 });
 
 describe('resource webAnalytics', () => {
+  test('overviewInsight: only required params', async () => {
+    const responsePromise = client.webAnalytics.overviewInsight({
+      from: '2019-12-27',
+      preset: 'TRAFFIC',
+      to: '2019-12-27',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('overviewInsight: required and optional params', async () => {
+    const response = await client.webAnalytics.overviewInsight({
+      from: '2019-12-27',
+      preset: 'TRAFFIC',
+      to: '2019-12-27',
+    });
+  });
+
   test('overview: only required params', async () => {
     const responsePromise = client.webAnalytics.overview({
       from: '2026-07-01',

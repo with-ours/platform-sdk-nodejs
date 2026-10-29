@@ -147,8 +147,9 @@ export class WebScanners extends APIResource {
    * Queue an isolated verification capture for one exact in-scope page. This does
    * not update monitor history, inventory counts, or the monitor-wide last-scanned
    * timestamp. Poll the verification-run endpoint with the returned id for terminal
-   * evidence. Requires API-key scope or current OAuth user permission:
-   * webScanner:trigger
+   * evidence. Limited to one request per minute per account across all scanners and
+   * callers; retry a cooldown conflict after 60 seconds. Requires API-key scope or
+   * current OAuth user permission: webScanner:trigger
    *
    * @example
    * ```ts
