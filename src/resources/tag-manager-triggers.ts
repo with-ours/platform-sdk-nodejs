@@ -70,10 +70,12 @@ export class TagManagerTriggers extends APIResource {
   /**
    * Lists every trigger template the platform supports — what `type` discriminator
    * to send on create/patch, and the shape of the type-specific `parameters`
-   * payload. Trigger `conditions` are evaluated at runtime (per-trigger, see the
-   * resource docs) and are not part of this descriptor. Account-agnostic: the
-   * response is the same for every API key. Requires API-key scope or current OAuth
-   * user permission: tagManagers:find
+   * payload. Also returns `conditionOperators` (`id`, `name`, `takesExpected`) and
+   * `builtInVariables` (`name`, `reference`, `description`, `category`). Use an
+   * operator `id` for `comparison` and an exact built-in `reference` such as
+   * `{{Page Path}}` for `actual`; built-ins need no variable creation.
+   * Account-agnostic: the response is the same for every API key. Requires API-key
+   * scope or current OAuth user permission: tagManagers:find
    */
   types(options?: RequestOptions): APIPromise<TagManagerTriggerTypesResponse> {
     return this._client.get('/rest/v1/tag-manager-triggers/types', options);
@@ -269,10 +271,59 @@ export interface TagManagerTriggerDeleteResponse {
 }
 
 export interface TagManagerTriggerTypesResponse {
+  /**
+   * Built-in variables available to tags, triggers, and variables.
+   */
+  builtInVariables: Array<TagManagerTriggerTypesResponse.BuiltInVariable>;
+
+  /**
+   * Supported comparisons for trigger conditions.
+   */
+  conditionOperators: Array<TagManagerTriggerTypesResponse.ConditionOperator>;
+
   entities: Array<TagManagerTriggerTypesResponse.Entity>;
 }
 
 export namespace TagManagerTriggerTypesResponse {
+  export interface BuiltInVariable {
+    /**
+     * Variable group, or null when uncategorized.
+     */
+    category: string | null;
+
+    /**
+     * Value supplied by this built-in variable.
+     */
+    description: string;
+
+    /**
+     * Case-sensitive built-in variable name. No variable creation is needed.
+     */
+    name: string;
+
+    /**
+     * Reference to use in conditions and template parameters, such as {{Page Path}}.
+     */
+    reference: string;
+  }
+
+  export interface ConditionOperator {
+    /**
+     * Exact comparison value for trigger conditions.
+     */
+    id: string;
+
+    /**
+     * Display name of the comparison.
+     */
+    name: string;
+
+    /**
+     * Whether this operator compares actual against an expected value.
+     */
+    takesExpected: boolean;
+  }
+
   export interface Entity {
     /**
      * Type discriminator — pass this as `type` on create/patch.

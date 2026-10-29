@@ -8,14 +8,13 @@ import { path } from '../internal/utils/path';
 
 export class DataGovernance extends APIResource {
   /**
-   * List the data-governance record(s) on this account. Each account has at most one
-   * record, so this list returns either an empty array or a single entity. Cursor
-   * pagination is exposed for consistency with other list endpoints but is rarely
-   * meaningful here. Data governance is the second stage of the dispatch flow
-   * (Source → Allowed Events → Data Governance → Mappings → Destination) — it
-   * evaluates each event against the configured category logic and stops dispatch to
-   * the destinations on any matching category. Requires API-key scope or current
-   * OAuth user permission: globalDispatch:list
+   * List data-governance records as { entities, pagination }. Supports limit and
+   * cursor; pass pagination.nextCursor to retrieve the next page. Records are
+   * ordered newest first, with stable id ordering for equal creation times. Each
+   * account currently has at most one record, so entities is empty or contains one
+   * record. Categories stop dispatch to their destinationIds when their logic
+   * matches. Requires API-key scope or current OAuth user permission:
+   * globalDispatch:list
    */
   list(
     query: DataGovernanceListParams | null | undefined = {},
@@ -42,10 +41,11 @@ export class DataGovernance extends APIResource {
 
   /**
    * Fetch the data-governance record by id, including its categories (logic,
-   * destinations, priority). Returns 404 when no record matches. Requires API-key
-   * scope or current OAuth user permission: globalDispatch:find
+   * destinations, priority). Returns the same 404 when the record is missing or
+   * inaccessible. Requires API-key scope or current OAuth user permission:
+   * globalDispatch:find
    */
-  retrieve(id: string, options?: RequestOptions): APIPromise<DataGovernanceRetrieveResponse | null> {
+  retrieve(id: string, options?: RequestOptions): APIPromise<DataGovernanceRetrieveResponse> {
     return this._client.get(path`/rest/v1/data-governance/${id}`, options);
   }
 
@@ -74,9 +74,10 @@ export class DataGovernance extends APIResource {
   }
 
   /**
-   * Delete the data-governance record. After deletion, inbound events flow through
-   * to destinations without category-level gating. Create a new record with POST to
-   * reinstate governance. Requires API-key scope or current OAuth user permission:
+   * Delete the data-governance record from the draft. Publish a version for inbound
+   * events to flow through without category-level gating. Create a new record with
+   * POST to reinstate governance. Returns the same 404 when the record is missing or
+   * inaccessible. Requires API-key scope or current OAuth user permission:
    * globalDispatch:delete
    */
   delete(id: string, options?: RequestOptions): APIPromise<DataGovernanceDeleteResponse> {
@@ -104,9 +105,7 @@ export interface DataGovernanceListResponse {
   isEnabled: boolean;
 
   /**
-   * Discriminator for the entity type. Always "dataGovernance" on the REST surface.
-   * The underlying storage discriminator is "globalDispatchCenter" — REST translates
-   * it on the way out.
+   * Discriminator for this resource. Always "dataGovernance".
    */
   kind: string;
 
@@ -305,9 +304,7 @@ export interface DataGovernanceCreateResponse {
   isEnabled: boolean;
 
   /**
-   * Discriminator for the entity type. Always "dataGovernance" on the REST surface.
-   * The underlying storage discriminator is "globalDispatchCenter" — REST translates
-   * it on the way out.
+   * Discriminator for this resource. Always "dataGovernance".
    */
   kind: string;
 
@@ -506,9 +503,7 @@ export interface DataGovernanceRetrieveResponse {
   isEnabled: boolean;
 
   /**
-   * Discriminator for the entity type. Always "dataGovernance" on the REST surface.
-   * The underlying storage discriminator is "globalDispatchCenter" — REST translates
-   * it on the way out.
+   * Discriminator for this resource. Always "dataGovernance".
    */
   kind: string;
 
@@ -707,9 +702,7 @@ export interface DataGovernanceUpdateResponse {
   isEnabled: boolean;
 
   /**
-   * Discriminator for the entity type. Always "dataGovernance" on the REST surface.
-   * The underlying storage discriminator is "globalDispatchCenter" — REST translates
-   * it on the way out.
+   * Discriminator for this resource. Always "dataGovernance".
    */
   kind: string;
 

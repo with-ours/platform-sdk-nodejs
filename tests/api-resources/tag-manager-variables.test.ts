@@ -56,7 +56,7 @@ describe('resource tagManagerVariables', () => {
   });
 
   test('retrieve', async () => {
-    const responsePromise = client.tagManagerVariables.retrieve('id');
+    const responsePromise = client.tagManagerVariables.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -67,7 +67,7 @@ describe('resource tagManagerVariables', () => {
   });
 
   test('update', async () => {
-    const responsePromise = client.tagManagerVariables.update('id', {});
+    const responsePromise = client.tagManagerVariables.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -78,7 +78,7 @@ describe('resource tagManagerVariables', () => {
   });
 
   test('delete', async () => {
-    const responsePromise = client.tagManagerVariables.delete('id');
+    const responsePromise = client.tagManagerVariables.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

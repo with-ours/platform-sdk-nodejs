@@ -21,7 +21,7 @@ describe('resource audienceConversionReports', () => {
 
   test('create: only required params', async () => {
     const responsePromise = client.audienceConversionReports.create({
-      attributionWindow: '30',
+      attributionWindow: '8',
       eventName: 'x',
       name: 'x',
       valueProperty: 'x',
@@ -37,7 +37,7 @@ describe('resource audienceConversionReports', () => {
 
   test('create: required and optional params', async () => {
     const response = await client.audienceConversionReports.create({
-      attributionWindow: '30',
+      attributionWindow: '8',
       eventName: 'x',
       name: 'x',
       valueProperty: 'x',

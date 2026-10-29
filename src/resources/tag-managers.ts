@@ -7,6 +7,17 @@ import { path } from '../internal/utils/path';
 
 export class TagManagers extends APIResource {
   /**
+   * Return the HTML to install this tag manager in the page head. Uses its public
+   * pixel and the first ready custom domain, or the default CDN. Find the container
+   * with GET /rest/v1/tag-managers. Publish its configuration before expecting tags
+   * to run. Returns 404 for an unavailable container. Requires API-key scope or
+   * current OAuth user permission: tagManagers:find
+   */
+  installSnippet(id: string, options?: RequestOptions): APIPromise<TagManagerInstallSnippetResponse> {
+    return this._client.get(path`/rest/v1/tag-managers/${id}/install-snippet`, options);
+  }
+
+  /**
    * Create a one-hour link to preview this container’s unpublished tags on your
    * website. Requires permission to view the tag manager. Requires API-key scope or
    * current OAuth user permission: tagManagers:find
@@ -75,6 +86,15 @@ export class TagManagers extends APIResource {
   delete(id: string, options?: RequestOptions): APIPromise<TagManagerDeleteResponse> {
     return this._client.delete(path`/rest/v1/tag-managers/${id}`, options);
   }
+}
+
+export interface TagManagerInstallSnippetResponse {
+  /**
+   * Paste-ready HTML for the page head: main.js followed by tag-manager-init with
+   * this container’s public pixel. Uses the first ready custom domain, or the
+   * default CDN. Publish the container before expecting tags to run.
+   */
+  installScript: string;
 }
 
 export interface TagManagerPreviewResponse {
@@ -291,6 +311,7 @@ export interface TagManagerUpdateParams {
 
 export declare namespace TagManagers {
   export {
+    type TagManagerInstallSnippetResponse as TagManagerInstallSnippetResponse,
     type TagManagerPreviewResponse as TagManagerPreviewResponse,
     type TagManagerListResponse as TagManagerListResponse,
     type TagManagerCreateResponse as TagManagerCreateResponse,

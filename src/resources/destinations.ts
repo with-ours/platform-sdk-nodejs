@@ -181,6 +181,7 @@ export interface DestinationListResponse {
     | 'TatariCAPI'
     | 'TheTradeDesk'
     | 'TikTok'
+    | 'Trybe'
     | 'UniversalAds'
     | 'VWO'
     | 'Viant'
@@ -304,6 +305,7 @@ export interface DestinationCreateResponse {
     | 'TatariCAPI'
     | 'TheTradeDesk'
     | 'TikTok'
+    | 'Trybe'
     | 'UniversalAds'
     | 'VWO'
     | 'Viant'
@@ -427,6 +429,7 @@ export interface DestinationRetrieveResponse {
     | 'TatariCAPI'
     | 'TheTradeDesk'
     | 'TikTok'
+    | 'Trybe'
     | 'UniversalAds'
     | 'VWO'
     | 'Viant'
@@ -550,6 +553,7 @@ export interface DestinationUpdateResponse {
     | 'TatariCAPI'
     | 'TheTradeDesk'
     | 'TikTok'
+    | 'Trybe'
     | 'UniversalAds'
     | 'VWO'
     | 'Viant'
@@ -666,7 +670,8 @@ export namespace DestinationTypesResponse {
       | 'Rokt'
       | 'Fullstory'
       | 'GravityCAPI'
-      | 'LeadSquared';
+      | 'LeadSquared'
+      | 'Trybe';
 
     capabilities: Entity.Capabilities;
 
@@ -911,6 +916,7 @@ export interface DestinationListParams extends CursorParams {
     | 'TatariCAPI'
     | 'TheTradeDesk'
     | 'TikTok'
+    | 'Trybe'
     | 'UniversalAds'
     | 'VWO'
     | 'Viant'
@@ -1015,7 +1021,8 @@ export interface DestinationCreateParams {
     | 'Rokt'
     | 'Fullstory'
     | 'GravityCAPI'
-    | 'LeadSquared';
+    | 'LeadSquared'
+    | 'Trybe';
 
   /**
    * Restrict dispatch to these source IDs. Omit on create or send `null` to accept

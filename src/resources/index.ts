@@ -55,6 +55,7 @@ export {
   type ConsentSettingUpdateResponse,
   type ConsentSettingDeleteResponse,
   type ConsentSettingAnalyticsResponse,
+  type ConsentSettingOverviewResponse,
   type ConsentSettingAnalyticsMonthlyResponse,
   type ConsentSettingAnalyticsCapabilitiesResponse,
   type ConsentSettingPageAnalysisResponse,
@@ -62,6 +63,7 @@ export {
   type ConsentSettingReplaceParams,
   type ConsentSettingUpdateParams,
   type ConsentSettingAnalyticsParams,
+  type ConsentSettingOverviewParams,
   type ConsentSettingAnalyticsMonthlyParams,
   type ConsentSettingAnalyticsCapabilitiesParams,
   type ConsentSettingPageAnalysisParams,
@@ -87,6 +89,29 @@ export {
   type CustomDomainReconcileCertificateResponse,
   type CustomDomainReplaceParams,
 } from './custom-domains';
+export {
+  Dashboards,
+  type DashboardListResponse,
+  type DashboardCreateResponse,
+  type DashboardRetrieveResponse,
+  type DashboardUpdateResponse,
+  type DashboardDeleteResponse,
+  type DashboardDuplicateResponse,
+  type DashboardPreviewResponse,
+  type DashboardResultsResponse,
+  type DashboardReplayTileResultResponse,
+  type DashboardReplayPreviewResponse,
+  type DashboardListParams,
+  type DashboardCreateParams,
+  type DashboardUpdateParams,
+  type DashboardDeleteParams,
+  type DashboardDuplicateParams,
+  type DashboardPreviewParams,
+  type DashboardResultsParams,
+  type DashboardReplayTileResultParams,
+  type DashboardReplayPreviewParams,
+  type DashboardListResponsesCursor,
+} from './dashboards';
 export {
   DataGovernance,
   type DataGovernanceListResponse,
@@ -198,6 +223,24 @@ export {
   type HeatmapPageListResponsesCursor,
 } from './heatmap-pages';
 export {
+  Insights,
+  type InsightListResponse,
+  type InsightCreateResponse,
+  type InsightRetrieveResponse,
+  type InsightUpdateResponse,
+  type InsightDeleteResponse,
+  type InsightCapabilitiesResponse,
+  type InsightResultsResponse,
+  type InsightPreviewResponse,
+  type InsightListParams,
+  type InsightCreateParams,
+  type InsightUpdateParams,
+  type InsightDeleteParams,
+  type InsightResultsParams,
+  type InsightPreviewParams,
+  type InsightListResponsesCursor,
+} from './insights';
+export {
   JourneyFlows,
   type JourneyFlowListResponse,
   type JourneyFlowCreateResponse,
@@ -275,6 +318,14 @@ export {
   type ReplaySettingUpdateParams,
   type ReplaySettingListResponsesCursor,
 } from './replay-settings';
+export {
+  ReportBranding,
+  type ReportBrandingRetrieveResponse,
+  type ReportBrandingReplaceResponse,
+  type ReportBrandingDeleteResponse,
+  type ReportBrandingRetrieveParams,
+  type ReportBrandingReplaceParams,
+} from './report-branding';
 export {
   SessionReplays,
   type SessionReplayListResponse,
@@ -368,6 +419,7 @@ export {
 } from './tag-manager-variables';
 export {
   TagManagers,
+  type TagManagerInstallSnippetResponse,
   type TagManagerPreviewResponse,
   type TagManagerListResponse,
   type TagManagerCreateResponse,
@@ -464,6 +516,7 @@ export {
 } from './videos';
 export {
   WebAnalytics,
+  type WebAnalyticsOverviewInsightResponse,
   type WebAnalyticsOverviewResponse,
   type WebAnalyticsSourcesResponse,
   type WebAnalyticsPagesResponse,
@@ -471,6 +524,7 @@ export {
   type WebAnalyticsDevicesResponse,
   type WebAnalyticsCurrentVisitorsResponse,
   type WebAnalyticsPathExplorerResponse,
+  type WebAnalyticsOverviewInsightParams,
   type WebAnalyticsOverviewParams,
   type WebAnalyticsSourcesParams,
   type WebAnalyticsPagesParams,

@@ -75,6 +75,7 @@ Types:
 - <code><a href="./src/resources/consent-settings.ts">ConsentSettingUpdateResponse</a></code>
 - <code><a href="./src/resources/consent-settings.ts">ConsentSettingDeleteResponse</a></code>
 - <code><a href="./src/resources/consent-settings.ts">ConsentSettingAnalyticsResponse</a></code>
+- <code><a href="./src/resources/consent-settings.ts">ConsentSettingOverviewResponse</a></code>
 - <code><a href="./src/resources/consent-settings.ts">ConsentSettingAnalyticsMonthlyResponse</a></code>
 - <code><a href="./src/resources/consent-settings.ts">ConsentSettingAnalyticsCapabilitiesResponse</a></code>
 - <code><a href="./src/resources/consent-settings.ts">ConsentSettingPageAnalysisResponse</a></code>
@@ -89,6 +90,7 @@ Methods:
 - <code title="patch /rest/v1/consent-settings/{id}">client.consentSettings.<a href="./src/resources/consent-settings.ts">update</a>(id, { ...params }) -> ConsentSettingUpdateResponse</code>
 - <code title="delete /rest/v1/consent-settings/{id}">client.consentSettings.<a href="./src/resources/consent-settings.ts">delete</a>(id) -> ConsentSettingDeleteResponse</code>
 - <code title="get /rest/v1/consent-settings/{id}/analytics">client.consentSettings.<a href="./src/resources/consent-settings.ts">analytics</a>(id, { ...params }) -> ConsentSettingAnalyticsResponse</code>
+- <code title="get /rest/v1/consent-settings/analytics-overview">client.consentSettings.<a href="./src/resources/consent-settings.ts">overview</a>({ ...params }) -> ConsentSettingOverviewResponse</code>
 - <code title="get /rest/v1/consent-settings/{id}/analytics-monthly">client.consentSettings.<a href="./src/resources/consent-settings.ts">analyticsMonthly</a>(id, { ...params }) -> ConsentSettingAnalyticsMonthlyResponse</code>
 - <code title="get /rest/v1/consent-settings/analytics-capabilities">client.consentSettings.<a href="./src/resources/consent-settings.ts">analyticsCapabilities</a>({ ...params }) -> ConsentSettingAnalyticsCapabilitiesResponse</code>
 - <code title="get /rest/v1/consent-settings/{id}/page-analysis">client.consentSettings.<a href="./src/resources/consent-settings.ts">pageAnalysis</a>(id, { ...params }) -> ConsentSettingPageAnalysisResponse</code>
@@ -126,7 +128,7 @@ Methods:
 
 - <code title="get /rest/v1/data-governance">client.dataGovernance.<a href="./src/resources/data-governance.ts">list</a>({ ...params }) -> DataGovernanceListResponsesCursor</code>
 - <code title="post /rest/v1/data-governance">client.dataGovernance.<a href="./src/resources/data-governance.ts">create</a>({ ...params }) -> DataGovernanceCreateResponse</code>
-- <code title="get /rest/v1/data-governance/{id}">client.dataGovernance.<a href="./src/resources/data-governance.ts">retrieve</a>(id) -> DataGovernanceRetrieveResponse | null</code>
+- <code title="get /rest/v1/data-governance/{id}">client.dataGovernance.<a href="./src/resources/data-governance.ts">retrieve</a>(id) -> DataGovernanceRetrieveResponse</code>
 - <code title="patch /rest/v1/data-governance/{id}">client.dataGovernance.<a href="./src/resources/data-governance.ts">update</a>(id, { ...params }) -> DataGovernanceUpdateResponse</code>
 - <code title="delete /rest/v1/data-governance/{id}">client.dataGovernance.<a href="./src/resources/data-governance.ts">delete</a>(id) -> DataGovernanceDeleteResponse</code>
 
@@ -402,6 +404,7 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/tag-managers.ts">TagManagerInstallSnippetResponse</a></code>
 - <code><a href="./src/resources/tag-managers.ts">TagManagerPreviewResponse</a></code>
 - <code><a href="./src/resources/tag-managers.ts">TagManagerListResponse</a></code>
 - <code><a href="./src/resources/tag-managers.ts">TagManagerCreateResponse</a></code>
@@ -411,6 +414,7 @@ Types:
 
 Methods:
 
+- <code title="get /rest/v1/tag-managers/{id}/install-snippet">client.tagManagers.<a href="./src/resources/tag-managers.ts">installSnippet</a>(id) -> TagManagerInstallSnippetResponse</code>
 - <code title="post /rest/v1/tag-managers/{id}/preview">client.tagManagers.<a href="./src/resources/tag-managers.ts">preview</a>(id, { ...params }) -> TagManagerPreviewResponse</code>
 - <code title="get /rest/v1/tag-managers">client.tagManagers.<a href="./src/resources/tag-managers.ts">list</a>() -> TagManagerListResponse</code>
 - <code title="post /rest/v1/tag-managers">client.tagManagers.<a href="./src/resources/tag-managers.ts">create</a>({ ...params }) -> TagManagerCreateResponse</code>
@@ -612,6 +616,7 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/web-analytics.ts">WebAnalyticsOverviewInsightResponse</a></code>
 - <code><a href="./src/resources/web-analytics.ts">WebAnalyticsOverviewResponse</a></code>
 - <code><a href="./src/resources/web-analytics.ts">WebAnalyticsSourcesResponse</a></code>
 - <code><a href="./src/resources/web-analytics.ts">WebAnalyticsPagesResponse</a></code>
@@ -622,6 +627,7 @@ Types:
 
 Methods:
 
+- <code title="get /rest/v1/web-analytics/overview-insight">client.webAnalytics.<a href="./src/resources/web-analytics.ts">overviewInsight</a>({ ...params }) -> WebAnalyticsOverviewInsightResponse</code>
 - <code title="get /rest/v1/web-analytics/overview">client.webAnalytics.<a href="./src/resources/web-analytics.ts">overview</a>({ ...params }) -> WebAnalyticsOverviewResponse</code>
 - <code title="get /rest/v1/web-analytics/sources">client.webAnalytics.<a href="./src/resources/web-analytics.ts">sources</a>({ ...params }) -> WebAnalyticsSourcesResponse</code>
 - <code title="get /rest/v1/web-analytics/pages">client.webAnalytics.<a href="./src/resources/web-analytics.ts">pages</a>({ ...params }) -> WebAnalyticsPagesResponse</code>
@@ -741,6 +747,72 @@ Methods:
 
 - <code title="get /rest/v1/analytics/query-catalog">client.analytics.<a href="./src/resources/analytics.ts">queryCatalog</a>() -> AnalyticsQueryCatalogResponse</code>
 - <code title="get /rest/v1/analytics/property-suggestions">client.analytics.<a href="./src/resources/analytics.ts">propertySuggestions</a>({ ...params }) -> AnalyticsPropertySuggestionsResponse</code>
+
+# Dashboards
+
+Types:
+
+- <code><a href="./src/resources/dashboards.ts">DashboardListResponse</a></code>
+- <code><a href="./src/resources/dashboards.ts">DashboardCreateResponse</a></code>
+- <code><a href="./src/resources/dashboards.ts">DashboardRetrieveResponse</a></code>
+- <code><a href="./src/resources/dashboards.ts">DashboardUpdateResponse</a></code>
+- <code><a href="./src/resources/dashboards.ts">DashboardDeleteResponse</a></code>
+- <code><a href="./src/resources/dashboards.ts">DashboardDuplicateResponse</a></code>
+- <code><a href="./src/resources/dashboards.ts">DashboardPreviewResponse</a></code>
+- <code><a href="./src/resources/dashboards.ts">DashboardResultsResponse</a></code>
+- <code><a href="./src/resources/dashboards.ts">DashboardReplayTileResultResponse</a></code>
+- <code><a href="./src/resources/dashboards.ts">DashboardReplayPreviewResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/dashboards">client.dashboards.<a href="./src/resources/dashboards.ts">list</a>({ ...params }) -> DashboardListResponsesCursor</code>
+- <code title="post /rest/v1/dashboards">client.dashboards.<a href="./src/resources/dashboards.ts">create</a>({ ...params }) -> DashboardCreateResponse</code>
+- <code title="get /rest/v1/dashboards/{id}">client.dashboards.<a href="./src/resources/dashboards.ts">retrieve</a>(id) -> DashboardRetrieveResponse</code>
+- <code title="patch /rest/v1/dashboards/{id}">client.dashboards.<a href="./src/resources/dashboards.ts">update</a>(id, { ...params }) -> DashboardUpdateResponse</code>
+- <code title="delete /rest/v1/dashboards/{id}">client.dashboards.<a href="./src/resources/dashboards.ts">delete</a>(id, { ...params }) -> DashboardDeleteResponse</code>
+- <code title="post /rest/v1/dashboards/{id}/duplicate">client.dashboards.<a href="./src/resources/dashboards.ts">duplicate</a>(id, { ...params }) -> DashboardDuplicateResponse</code>
+- <code title="get /rest/v1/dashboards/preview">client.dashboards.<a href="./src/resources/dashboards.ts">preview</a>({ ...params }) -> DashboardPreviewResponse</code>
+- <code title="get /rest/v1/dashboards/{id}/tile-result">client.dashboards.<a href="./src/resources/dashboards.ts">results</a>(id, { ...params }) -> DashboardResultsResponse</code>
+- <code title="get /rest/v1/dashboards/{id}/replay-tile-result">client.dashboards.<a href="./src/resources/dashboards.ts">replayTileResult</a>(id, { ...params }) -> DashboardReplayTileResultResponse</code>
+- <code title="get /rest/v1/dashboards/replay-preview">client.dashboards.<a href="./src/resources/dashboards.ts">replayPreview</a>({ ...params }) -> DashboardReplayPreviewResponse</code>
+
+# ReportBranding
+
+Types:
+
+- <code><a href="./src/resources/report-branding.ts">ReportBrandingRetrieveResponse</a></code>
+- <code><a href="./src/resources/report-branding.ts">ReportBrandingReplaceResponse</a></code>
+- <code><a href="./src/resources/report-branding.ts">ReportBrandingDeleteResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/report-branding/logo">client.reportBranding.<a href="./src/resources/report-branding.ts">retrieve</a>({ ...params }) -> ReportBrandingRetrieveResponse</code>
+- <code title="put /rest/v1/report-branding/logo">client.reportBranding.<a href="./src/resources/report-branding.ts">replace</a>({ ...params }) -> ReportBrandingReplaceResponse</code>
+- <code title="delete /rest/v1/report-branding/logo">client.reportBranding.<a href="./src/resources/report-branding.ts">delete</a>() -> ReportBrandingDeleteResponse</code>
+
+# Insights
+
+Types:
+
+- <code><a href="./src/resources/insights.ts">InsightListResponse</a></code>
+- <code><a href="./src/resources/insights.ts">InsightCreateResponse</a></code>
+- <code><a href="./src/resources/insights.ts">InsightRetrieveResponse</a></code>
+- <code><a href="./src/resources/insights.ts">InsightUpdateResponse</a></code>
+- <code><a href="./src/resources/insights.ts">InsightDeleteResponse</a></code>
+- <code><a href="./src/resources/insights.ts">InsightCapabilitiesResponse</a></code>
+- <code><a href="./src/resources/insights.ts">InsightResultsResponse</a></code>
+- <code><a href="./src/resources/insights.ts">InsightPreviewResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/insights">client.insights.<a href="./src/resources/insights.ts">list</a>({ ...params }) -> InsightListResponsesCursor</code>
+- <code title="post /rest/v1/insights">client.insights.<a href="./src/resources/insights.ts">create</a>({ ...params }) -> InsightCreateResponse</code>
+- <code title="get /rest/v1/insights/{id}">client.insights.<a href="./src/resources/insights.ts">retrieve</a>(id) -> InsightRetrieveResponse</code>
+- <code title="patch /rest/v1/insights/{id}">client.insights.<a href="./src/resources/insights.ts">update</a>(id, { ...params }) -> InsightUpdateResponse</code>
+- <code title="delete /rest/v1/insights/{id}">client.insights.<a href="./src/resources/insights.ts">delete</a>(id, { ...params }) -> InsightDeleteResponse</code>
+- <code title="get /rest/v1/insights/capabilities">client.insights.<a href="./src/resources/insights.ts">capabilities</a>() -> InsightCapabilitiesResponse</code>
+- <code title="get /rest/v1/insights/{id}/result">client.insights.<a href="./src/resources/insights.ts">results</a>(id, { ...params }) -> InsightResultsResponse</code>
+- <code title="get /rest/v1/insights/preview">client.insights.<a href="./src/resources/insights.ts">preview</a>({ ...params }) -> InsightPreviewResponse</code>
 
 # JourneyFlows
 

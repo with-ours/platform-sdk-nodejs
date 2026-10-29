@@ -77,6 +77,8 @@ import {
   ConsentSettingCreateResponse,
   ConsentSettingDeleteResponse,
   ConsentSettingListResponse,
+  ConsentSettingOverviewParams,
+  ConsentSettingOverviewResponse,
   ConsentSettingPageAnalysisParams,
   ConsentSettingPageAnalysisResponse,
   ConsentSettingReplaceParams,
@@ -106,6 +108,29 @@ import {
   CustomDomainStatusResponse,
   CustomDomains,
 } from './resources/custom-domains';
+import {
+  DashboardCreateParams,
+  DashboardCreateResponse,
+  DashboardDeleteParams,
+  DashboardDeleteResponse,
+  DashboardDuplicateParams,
+  DashboardDuplicateResponse,
+  DashboardListParams,
+  DashboardListResponse,
+  DashboardListResponsesCursor,
+  DashboardPreviewParams,
+  DashboardPreviewResponse,
+  DashboardReplayPreviewParams,
+  DashboardReplayPreviewResponse,
+  DashboardReplayTileResultParams,
+  DashboardReplayTileResultResponse,
+  DashboardResultsParams,
+  DashboardResultsResponse,
+  DashboardRetrieveResponse,
+  DashboardUpdateParams,
+  DashboardUpdateResponse,
+  Dashboards,
+} from './resources/dashboards';
 import {
   DataGovernance,
   DataGovernanceCreateParams,
@@ -217,6 +242,24 @@ import {
   HeatmapPages,
 } from './resources/heatmap-pages';
 import {
+  InsightCapabilitiesResponse,
+  InsightCreateParams,
+  InsightCreateResponse,
+  InsightDeleteParams,
+  InsightDeleteResponse,
+  InsightListParams,
+  InsightListResponse,
+  InsightListResponsesCursor,
+  InsightPreviewParams,
+  InsightPreviewResponse,
+  InsightResultsParams,
+  InsightResultsResponse,
+  InsightRetrieveResponse,
+  InsightUpdateParams,
+  InsightUpdateResponse,
+  Insights,
+} from './resources/insights';
+import {
   JourneyFlowCapabilitiesResponse,
   JourneyFlowCreateParams,
   JourneyFlowCreateResponse,
@@ -294,6 +337,14 @@ import {
   ReplaySettingUpdateResponse,
   ReplaySettings,
 } from './resources/replay-settings';
+import {
+  ReportBranding,
+  ReportBrandingDeleteResponse,
+  ReportBrandingReplaceParams,
+  ReportBrandingReplaceResponse,
+  ReportBrandingRetrieveParams,
+  ReportBrandingRetrieveResponse,
+} from './resources/report-branding';
 import {
   SessionReplayListParams,
   SessionReplayListResponse,
@@ -389,6 +440,7 @@ import {
   TagManagerCreateParams,
   TagManagerCreateResponse,
   TagManagerDeleteResponse,
+  TagManagerInstallSnippetResponse,
   TagManagerListResponse,
   TagManagerPreviewParams,
   TagManagerPreviewResponse,
@@ -489,6 +541,8 @@ import {
   WebAnalyticsDevicesResponse,
   WebAnalyticsLocationsParams,
   WebAnalyticsLocationsResponse,
+  WebAnalyticsOverviewInsightParams,
+  WebAnalyticsOverviewInsightResponse,
   WebAnalyticsOverviewParams,
   WebAnalyticsOverviewResponse,
   WebAnalyticsPagesParams,
@@ -674,7 +728,7 @@ export class OursPrivacyPlatform {
     };
 
     this.baseURL = options.baseURL!;
-    this.timeout = options.timeout ?? OursPrivacyPlatform.DEFAULT_TIMEOUT /* 1 minute */;
+    this.timeout = options.timeout ?? OursPrivacyPlatform.DEFAULT_TIMEOUT; /* 1 minute */
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
     // Set default logLevel early so that we can log a warning in parseLogLevel.
@@ -934,9 +988,7 @@ export class OursPrivacyPlatform {
       throw new Errors.APIConnectionError({ cause: response });
     }
 
-    const responseInfo = `[${requestLogID}${retryLogStr}] ${req.method} ${url} ${
-      response.ok ? 'succeeded' : 'failed'
-    } with status ${response.status} in ${headersTime - startTime}ms`;
+    const responseInfo = `[${requestLogID}${retryLogStr}] ${req.method} ${url} ${response.ok ? 'succeeded' : 'failed'} with status ${response.status} in ${headersTime - startTime}ms`;
 
     if (!response.ok) {
       const shouldRetry = await this.shouldRetry(response);
@@ -1319,6 +1371,9 @@ export class OursPrivacyPlatform {
   personalizationProperties: API.PersonalizationProperties = new API.PersonalizationProperties(this);
   customDomains: API.CustomDomains = new API.CustomDomains(this);
   analytics: API.Analytics = new API.Analytics(this);
+  dashboards: API.Dashboards = new API.Dashboards(this);
+  reportBranding: API.ReportBranding = new API.ReportBranding(this);
+  insights: API.Insights = new API.Insights(this);
   journeyFlows: API.JourneyFlows = new API.JourneyFlows(this);
   testEvents: API.TestEvents = new API.TestEvents(this);
 }
@@ -1360,6 +1415,9 @@ OursPrivacyPlatform.Me = Me;
 OursPrivacyPlatform.PersonalizationProperties = PersonalizationProperties;
 OursPrivacyPlatform.CustomDomains = CustomDomains;
 OursPrivacyPlatform.Analytics = Analytics;
+OursPrivacyPlatform.Dashboards = Dashboards;
+OursPrivacyPlatform.ReportBranding = ReportBranding;
+OursPrivacyPlatform.Insights = Insights;
 OursPrivacyPlatform.JourneyFlows = JourneyFlows;
 OursPrivacyPlatform.TestEvents = TestEvents;
 
@@ -1422,6 +1480,7 @@ export declare namespace OursPrivacyPlatform {
     type ConsentSettingUpdateResponse as ConsentSettingUpdateResponse,
     type ConsentSettingDeleteResponse as ConsentSettingDeleteResponse,
     type ConsentSettingAnalyticsResponse as ConsentSettingAnalyticsResponse,
+    type ConsentSettingOverviewResponse as ConsentSettingOverviewResponse,
     type ConsentSettingAnalyticsMonthlyResponse as ConsentSettingAnalyticsMonthlyResponse,
     type ConsentSettingAnalyticsCapabilitiesResponse as ConsentSettingAnalyticsCapabilitiesResponse,
     type ConsentSettingPageAnalysisResponse as ConsentSettingPageAnalysisResponse,
@@ -1429,6 +1488,7 @@ export declare namespace OursPrivacyPlatform {
     type ConsentSettingReplaceParams as ConsentSettingReplaceParams,
     type ConsentSettingUpdateParams as ConsentSettingUpdateParams,
     type ConsentSettingAnalyticsParams as ConsentSettingAnalyticsParams,
+    type ConsentSettingOverviewParams as ConsentSettingOverviewParams,
     type ConsentSettingAnalyticsMonthlyParams as ConsentSettingAnalyticsMonthlyParams,
     type ConsentSettingAnalyticsCapabilitiesParams as ConsentSettingAnalyticsCapabilitiesParams,
     type ConsentSettingPageAnalysisParams as ConsentSettingPageAnalysisParams,
@@ -1654,6 +1714,7 @@ export declare namespace OursPrivacyPlatform {
 
   export {
     TagManagers as TagManagers,
+    type TagManagerInstallSnippetResponse as TagManagerInstallSnippetResponse,
     type TagManagerPreviewResponse as TagManagerPreviewResponse,
     type TagManagerListResponse as TagManagerListResponse,
     type TagManagerCreateResponse as TagManagerCreateResponse,
@@ -1806,6 +1867,7 @@ export declare namespace OursPrivacyPlatform {
 
   export {
     WebAnalytics as WebAnalytics,
+    type WebAnalyticsOverviewInsightResponse as WebAnalyticsOverviewInsightResponse,
     type WebAnalyticsOverviewResponse as WebAnalyticsOverviewResponse,
     type WebAnalyticsSourcesResponse as WebAnalyticsSourcesResponse,
     type WebAnalyticsPagesResponse as WebAnalyticsPagesResponse,
@@ -1813,6 +1875,7 @@ export declare namespace OursPrivacyPlatform {
     type WebAnalyticsDevicesResponse as WebAnalyticsDevicesResponse,
     type WebAnalyticsCurrentVisitorsResponse as WebAnalyticsCurrentVisitorsResponse,
     type WebAnalyticsPathExplorerResponse as WebAnalyticsPathExplorerResponse,
+    type WebAnalyticsOverviewInsightParams as WebAnalyticsOverviewInsightParams,
     type WebAnalyticsOverviewParams as WebAnalyticsOverviewParams,
     type WebAnalyticsSourcesParams as WebAnalyticsSourcesParams,
     type WebAnalyticsPagesParams as WebAnalyticsPagesParams,
@@ -1893,6 +1956,58 @@ export declare namespace OursPrivacyPlatform {
     type AnalyticsQueryCatalogResponse as AnalyticsQueryCatalogResponse,
     type AnalyticsPropertySuggestionsResponse as AnalyticsPropertySuggestionsResponse,
     type AnalyticsPropertySuggestionsParams as AnalyticsPropertySuggestionsParams,
+  };
+
+  export {
+    Dashboards as Dashboards,
+    type DashboardListResponse as DashboardListResponse,
+    type DashboardCreateResponse as DashboardCreateResponse,
+    type DashboardRetrieveResponse as DashboardRetrieveResponse,
+    type DashboardUpdateResponse as DashboardUpdateResponse,
+    type DashboardDeleteResponse as DashboardDeleteResponse,
+    type DashboardDuplicateResponse as DashboardDuplicateResponse,
+    type DashboardPreviewResponse as DashboardPreviewResponse,
+    type DashboardResultsResponse as DashboardResultsResponse,
+    type DashboardReplayTileResultResponse as DashboardReplayTileResultResponse,
+    type DashboardReplayPreviewResponse as DashboardReplayPreviewResponse,
+    type DashboardListResponsesCursor as DashboardListResponsesCursor,
+    type DashboardListParams as DashboardListParams,
+    type DashboardCreateParams as DashboardCreateParams,
+    type DashboardUpdateParams as DashboardUpdateParams,
+    type DashboardDeleteParams as DashboardDeleteParams,
+    type DashboardDuplicateParams as DashboardDuplicateParams,
+    type DashboardPreviewParams as DashboardPreviewParams,
+    type DashboardResultsParams as DashboardResultsParams,
+    type DashboardReplayTileResultParams as DashboardReplayTileResultParams,
+    type DashboardReplayPreviewParams as DashboardReplayPreviewParams,
+  };
+
+  export {
+    ReportBranding as ReportBranding,
+    type ReportBrandingRetrieveResponse as ReportBrandingRetrieveResponse,
+    type ReportBrandingReplaceResponse as ReportBrandingReplaceResponse,
+    type ReportBrandingDeleteResponse as ReportBrandingDeleteResponse,
+    type ReportBrandingRetrieveParams as ReportBrandingRetrieveParams,
+    type ReportBrandingReplaceParams as ReportBrandingReplaceParams,
+  };
+
+  export {
+    Insights as Insights,
+    type InsightListResponse as InsightListResponse,
+    type InsightCreateResponse as InsightCreateResponse,
+    type InsightRetrieveResponse as InsightRetrieveResponse,
+    type InsightUpdateResponse as InsightUpdateResponse,
+    type InsightDeleteResponse as InsightDeleteResponse,
+    type InsightCapabilitiesResponse as InsightCapabilitiesResponse,
+    type InsightResultsResponse as InsightResultsResponse,
+    type InsightPreviewResponse as InsightPreviewResponse,
+    type InsightListResponsesCursor as InsightListResponsesCursor,
+    type InsightListParams as InsightListParams,
+    type InsightCreateParams as InsightCreateParams,
+    type InsightUpdateParams as InsightUpdateParams,
+    type InsightDeleteParams as InsightDeleteParams,
+    type InsightResultsParams as InsightResultsParams,
+    type InsightPreviewParams as InsightPreviewParams,
   };
 
   export {

@@ -23,10 +23,10 @@ export class JourneyFlows extends APIResource {
   }
 
   /**
-   * Save a validated Journey Flow configuration. Source ownership, UTC scope,
-   * bounded entry dates, and compiler-supported semantics are enforced by the
-   * GraphQL domain path. Requires API-key scope or current OAuth user permission:
-   * web-analytics:write
+   * Save a validated Journey Flow configuration. Source ownership, UTC dates, and
+   * supported journey settings are validated before saving. Reports selecting
+   * specific sources also require source:view permission. Requires API-key scope or
+   * current OAuth user permission: web-analytics:write
    */
   create(body: JourneyFlowCreateParams, options?: RequestOptions): APIPromise<JourneyFlowCreateResponse> {
     return this._client.post('/rest/v1/journey-flows', { body, ...options });
@@ -44,8 +44,9 @@ export class JourneyFlows extends APIResource {
   /**
    * Partially update a Journey Flow using expectedRevision for optimistic
    * concurrency. Omitted top-level fields remain unchanged; nested values replace
-   * the complete nested value. Requires API-key scope or current OAuth user
-   * permission: web-analytics:write
+   * the complete nested value. Reports selecting specific sources also require
+   * source:view permission. Requires API-key scope or current OAuth user permission:
+   * web-analytics:write
    */
   update(
     id: string,
@@ -82,9 +83,11 @@ export class JourneyFlows extends APIResource {
   }
 
   /**
-   * Compute a saved Journey Flow result on demand. Requires expectedRevision and
-   * permits an optional complete report context override. Requires API-key scope or
-   * current OAuth user permission: web-analytics:view
+   * Compute a saved Journey Flow result. Pass refresh=true to recompute instead of
+   * serving a cached result for identical inputs. Requires expectedRevision and
+   * permits an optional complete report context override. Reports selecting specific
+   * sources also require source:view permission. Requires API-key scope or current
+   * OAuth user permission: web-analytics:view
    */
   results(
     id: string,
@@ -98,8 +101,9 @@ export class JourneyFlows extends APIResource {
    * Export the saved Journey Flow as CSV with its effective scope, exact aggregate
    * counts, timing, graph and bounded Top Paths. Requires expectedRevision; display
    * limits and omitted path weight are included. The response contains the CSV
-   * content and filename. Visitor and session samples are not included. Requires
-   * API-key scope or current OAuth user permission: web-analytics:view
+   * content and filename. Visitor and session samples are not included. Reports
+   * selecting specific sources also require source:view permission. Requires API-key
+   * scope or current OAuth user permission: web-analytics:view
    */
   export(
     id: string,
@@ -112,8 +116,8 @@ export class JourneyFlows extends APIResource {
   /**
    * Compute a bounded preview from a serialized Journey Flow definition, report
    * context, and view. Use GraphQL when the serialized input exceeds the HTTP URL
-   * budget. Requires API-key scope or current OAuth user permission:
-   * web-analytics:view
+   * budget. Reports selecting specific sources also require source:view permission.
+   * Requires API-key scope or current OAuth user permission: web-analytics:view
    */
   preview(query: JourneyFlowPreviewParams, options?: RequestOptions): APIPromise<JourneyFlowPreviewResponse> {
     return this._client.get('/rest/v1/journey-flows/preview', { query, ...options });
@@ -129,10 +133,18 @@ export interface JourneyFlowListResponse {
 
   createdByUserId: string;
 
+  /**
+   * Version 1 Journey Flow definition with anchors, event or page matchers,
+   * counting, scope, and exploration settings. Selecting specific sourceIds also
+   * requires source:view permission.
+   */
   definition: JourneyFlowListResponse.Definition;
 
   name: string;
 
+  /**
+   * Complete UTC date range and comparisons for this Journey Flow.
+   */
   reportContext: JourneyFlowListResponse.ReportContext;
 
   revision: string;
@@ -141,12 +153,24 @@ export interface JourneyFlowListResponse {
 
   updatedByUserId: string;
 
+  /**
+   * Complete visualization settings. Supplied view replaces the saved value on
+   * PATCH.
+   */
   view: JourneyFlowListResponse.View;
 
+  /**
+   * Optional description; null clears it.
+   */
   description?: string | null;
 }
 
 export namespace JourneyFlowListResponse {
+  /**
+   * Version 1 Journey Flow definition with anchors, event or page matchers,
+   * counting, scope, and exploration settings. Selecting specific sourceIds also
+   * requires source:view permission.
+   */
   export interface Definition {
     anchors: Array<Definition.Anchor>;
 
@@ -1176,6 +1200,9 @@ export namespace JourneyFlowListResponse {
     }
   }
 
+  /**
+   * Complete UTC date range and comparisons for this Journey Flow.
+   */
   export interface ReportContext {
     dateRange: ReportContext.DateRange;
 
@@ -1316,6 +1343,10 @@ export namespace JourneyFlowListResponse {
     }
   }
 
+  /**
+   * Complete visualization settings. Supplied view replaces the saved value on
+   * PATCH.
+   */
   export interface View {
     showDropOff?: boolean;
 
@@ -1336,10 +1367,18 @@ export interface JourneyFlowCreateResponse {
 
   createdByUserId: string;
 
+  /**
+   * Version 1 Journey Flow definition with anchors, event or page matchers,
+   * counting, scope, and exploration settings. Selecting specific sourceIds also
+   * requires source:view permission.
+   */
   definition: JourneyFlowCreateResponse.Definition;
 
   name: string;
 
+  /**
+   * Complete UTC date range and comparisons for this Journey Flow.
+   */
   reportContext: JourneyFlowCreateResponse.ReportContext;
 
   revision: string;
@@ -1348,12 +1387,24 @@ export interface JourneyFlowCreateResponse {
 
   updatedByUserId: string;
 
+  /**
+   * Complete visualization settings. Supplied view replaces the saved value on
+   * PATCH.
+   */
   view: JourneyFlowCreateResponse.View;
 
+  /**
+   * Optional description; null clears it.
+   */
   description?: string | null;
 }
 
 export namespace JourneyFlowCreateResponse {
+  /**
+   * Version 1 Journey Flow definition with anchors, event or page matchers,
+   * counting, scope, and exploration settings. Selecting specific sourceIds also
+   * requires source:view permission.
+   */
   export interface Definition {
     anchors: Array<Definition.Anchor>;
 
@@ -2383,6 +2434,9 @@ export namespace JourneyFlowCreateResponse {
     }
   }
 
+  /**
+   * Complete UTC date range and comparisons for this Journey Flow.
+   */
   export interface ReportContext {
     dateRange: ReportContext.DateRange;
 
@@ -2523,6 +2577,10 @@ export namespace JourneyFlowCreateResponse {
     }
   }
 
+  /**
+   * Complete visualization settings. Supplied view replaces the saved value on
+   * PATCH.
+   */
   export interface View {
     showDropOff?: boolean;
 
@@ -2543,10 +2601,18 @@ export interface JourneyFlowRetrieveResponse {
 
   createdByUserId: string;
 
+  /**
+   * Version 1 Journey Flow definition with anchors, event or page matchers,
+   * counting, scope, and exploration settings. Selecting specific sourceIds also
+   * requires source:view permission.
+   */
   definition: JourneyFlowRetrieveResponse.Definition;
 
   name: string;
 
+  /**
+   * Complete UTC date range and comparisons for this Journey Flow.
+   */
   reportContext: JourneyFlowRetrieveResponse.ReportContext;
 
   revision: string;
@@ -2555,12 +2621,24 @@ export interface JourneyFlowRetrieveResponse {
 
   updatedByUserId: string;
 
+  /**
+   * Complete visualization settings. Supplied view replaces the saved value on
+   * PATCH.
+   */
   view: JourneyFlowRetrieveResponse.View;
 
+  /**
+   * Optional description; null clears it.
+   */
   description?: string | null;
 }
 
 export namespace JourneyFlowRetrieveResponse {
+  /**
+   * Version 1 Journey Flow definition with anchors, event or page matchers,
+   * counting, scope, and exploration settings. Selecting specific sourceIds also
+   * requires source:view permission.
+   */
   export interface Definition {
     anchors: Array<Definition.Anchor>;
 
@@ -3590,6 +3668,9 @@ export namespace JourneyFlowRetrieveResponse {
     }
   }
 
+  /**
+   * Complete UTC date range and comparisons for this Journey Flow.
+   */
   export interface ReportContext {
     dateRange: ReportContext.DateRange;
 
@@ -3730,6 +3811,10 @@ export namespace JourneyFlowRetrieveResponse {
     }
   }
 
+  /**
+   * Complete visualization settings. Supplied view replaces the saved value on
+   * PATCH.
+   */
   export interface View {
     showDropOff?: boolean;
 
@@ -3750,10 +3835,18 @@ export interface JourneyFlowUpdateResponse {
 
   createdByUserId: string;
 
+  /**
+   * Version 1 Journey Flow definition with anchors, event or page matchers,
+   * counting, scope, and exploration settings. Selecting specific sourceIds also
+   * requires source:view permission.
+   */
   definition: JourneyFlowUpdateResponse.Definition;
 
   name: string;
 
+  /**
+   * Complete UTC date range and comparisons for this Journey Flow.
+   */
   reportContext: JourneyFlowUpdateResponse.ReportContext;
 
   revision: string;
@@ -3762,12 +3855,24 @@ export interface JourneyFlowUpdateResponse {
 
   updatedByUserId: string;
 
+  /**
+   * Complete visualization settings. Supplied view replaces the saved value on
+   * PATCH.
+   */
   view: JourneyFlowUpdateResponse.View;
 
+  /**
+   * Optional description; null clears it.
+   */
   description?: string | null;
 }
 
 export namespace JourneyFlowUpdateResponse {
+  /**
+   * Version 1 Journey Flow definition with anchors, event or page matchers,
+   * counting, scope, and exploration settings. Selecting specific sourceIds also
+   * requires source:view permission.
+   */
   export interface Definition {
     anchors: Array<Definition.Anchor>;
 
@@ -4797,6 +4902,9 @@ export namespace JourneyFlowUpdateResponse {
     }
   }
 
+  /**
+   * Complete UTC date range and comparisons for this Journey Flow.
+   */
   export interface ReportContext {
     dateRange: ReportContext.DateRange;
 
@@ -4937,6 +5045,10 @@ export namespace JourneyFlowUpdateResponse {
     }
   }
 
+  /**
+   * Complete visualization settings. Supplied view replaces the saved value on
+   * PATCH.
+   */
   export interface View {
     showDropOff?: boolean;
 
@@ -7005,22 +7117,48 @@ export namespace JourneyFlowPreviewResponse {
 }
 
 export interface JourneyFlowListParams extends CursorParams {
+  /**
+   * Case-insensitive search in the name and description.
+   */
   search?: string;
 }
 
 export interface JourneyFlowCreateParams {
+  /**
+   * Version 1 Journey Flow definition with anchors, event or page matchers,
+   * counting, scope, and exploration settings. Selecting specific sourceIds also
+   * requires source:view permission.
+   */
   definition: JourneyFlowCreateParams.Definition;
 
+  /**
+   * Display name for the saved Journey Flow.
+   */
   name: string;
 
+  /**
+   * Complete UTC date range and comparisons for this Journey Flow.
+   */
   reportContext: JourneyFlowCreateParams.ReportContext;
 
+  /**
+   * Complete visualization settings. Supplied view replaces the saved value on
+   * PATCH.
+   */
   view: JourneyFlowCreateParams.View;
 
+  /**
+   * Optional description; null clears it.
+   */
   description?: string | null;
 }
 
 export namespace JourneyFlowCreateParams {
+  /**
+   * Version 1 Journey Flow definition with anchors, event or page matchers,
+   * counting, scope, and exploration settings. Selecting specific sourceIds also
+   * requires source:view permission.
+   */
   export interface Definition {
     anchors: Array<Definition.Anchor>;
 
@@ -8050,6 +8188,9 @@ export namespace JourneyFlowCreateParams {
     }
   }
 
+  /**
+   * Complete UTC date range and comparisons for this Journey Flow.
+   */
   export interface ReportContext {
     dateRange: ReportContext.DateRange;
 
@@ -8190,6 +8331,10 @@ export namespace JourneyFlowCreateParams {
     }
   }
 
+  /**
+   * Complete visualization settings. Supplied view replaces the saved value on
+   * PATCH.
+   */
   export interface View {
     showDropOff?: boolean;
 
@@ -8204,20 +8349,47 @@ export namespace JourneyFlowCreateParams {
 }
 
 export interface JourneyFlowUpdateParams {
+  /**
+   * Revision returned by get/list or the last write. A stale revision returns 409;
+   * reload before retrying.
+   */
   expectedRevision: string;
 
+  /**
+   * Version 1 Journey Flow definition with anchors, event or page matchers,
+   * counting, scope, and exploration settings. Selecting specific sourceIds also
+   * requires source:view permission.
+   */
   definition?: JourneyFlowUpdateParams.Definition;
 
+  /**
+   * Optional description; null clears it.
+   */
   description?: string | null;
 
+  /**
+   * Display name for the saved Journey Flow.
+   */
   name?: string;
 
+  /**
+   * Complete UTC date range and comparisons for this Journey Flow.
+   */
   reportContext?: JourneyFlowUpdateParams.ReportContext;
 
+  /**
+   * Complete visualization settings. Supplied view replaces the saved value on
+   * PATCH.
+   */
   view?: JourneyFlowUpdateParams.View;
 }
 
 export namespace JourneyFlowUpdateParams {
+  /**
+   * Version 1 Journey Flow definition with anchors, event or page matchers,
+   * counting, scope, and exploration settings. Selecting specific sourceIds also
+   * requires source:view permission.
+   */
   export interface Definition {
     anchors: Array<Definition.Anchor>;
 
@@ -9247,6 +9419,9 @@ export namespace JourneyFlowUpdateParams {
     }
   }
 
+  /**
+   * Complete UTC date range and comparisons for this Journey Flow.
+   */
   export interface ReportContext {
     dateRange: ReportContext.DateRange;
 
@@ -9387,6 +9562,10 @@ export namespace JourneyFlowUpdateParams {
     }
   }
 
+  /**
+   * Complete visualization settings. Supplied view replaces the saved value on
+   * PATCH.
+   */
   export interface View {
     showDropOff?: boolean;
 
@@ -9401,35 +9580,53 @@ export namespace JourneyFlowUpdateParams {
 }
 
 export interface JourneyFlowDeleteParams {
+  /**
+   * Revision returned by get/list or the last write. A stale revision returns 409;
+   * reload before retrying.
+   */
   expectedRevision: string;
 }
 
 export interface JourneyFlowResultsParams {
+  /**
+   * Revision returned by get/list or the last write. A stale revision returns 409;
+   * reload before retrying.
+   */
   expectedRevision: string;
 
+  /**
+   * Recompute instead of serving a cached result for identical inputs.
+   */
   refresh?: boolean;
 
   /**
-   * Optional JSON-encoded complete report context override.
+   * Complete report context override; JSON-encoded in the REST query string.
    */
   reportContextOverride?: string;
 }
 
 export interface JourneyFlowExportParams {
+  /**
+   * Revision returned by get/list or the last write. A stale revision returns 409;
+   * reload before retrying.
+   */
   expectedRevision: string;
 
+  /**
+   * Recompute instead of serving a cached result for identical inputs.
+   */
   refresh?: boolean;
 
   /**
-   * Optional JSON-encoded complete report context override.
+   * Complete report context override; JSON-encoded in the REST query string.
    */
   reportContextOverride?: string;
 }
 
 export interface JourneyFlowPreviewParams {
   /**
-   * JSON-encoded Journey Flow preview input. Use GraphQL when this exceeds the URL
-   * budget.
+   * Object with required definition, reportContext, and view, plus optional refresh.
+   * JSON-encode input in the REST query string; maximum 16384 bytes.
    */
   input: string;
 }

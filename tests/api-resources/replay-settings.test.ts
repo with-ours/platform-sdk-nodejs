@@ -60,7 +60,7 @@ describe('resource replaySettings', () => {
   });
 
   test('delete', async () => {
-    const responsePromise = client.replaySettings.delete('id');
+    const responsePromise = client.replaySettings.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
