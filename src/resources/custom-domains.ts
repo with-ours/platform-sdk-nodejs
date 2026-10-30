@@ -11,7 +11,11 @@ export class CustomDomains extends APIResource {
    * lifecycle guidance, including readiness, blocking domains, and the next
    * recommended action. Reading status also advances certificate setup: it starts
    * certificate validation once DNS is configured and activates the certificate once
-   * it is issued. The setup is `null` until created. Requires scope:
+   * it is issued. Terminal certificate failures include `certificateFailure` with a
+   * provider code, explanation, and failed validation domains; a successful status
+   * read still returns HTTP 200. DNS blockers can coexist with a certificate
+   * failure. Refresh does not restart a terminal failed request; contact support
+   * after remediation. The setup is `null` until created. Requires scope:
    * `distributionTenant:find`. Requires API-key scope or current OAuth user
    * permission: distributionTenant:find
    */
@@ -21,9 +25,10 @@ export class CustomDomains extends APIResource {
 
   /**
    * Creates the account custom-domain setup and returns its `setupStatus` lifecycle
-   * guidance. Each account can have one setup; an existing setup returns HTTP 409.
-   * Requires scope: `distributionTenant:create`. Requires API-key scope or current
-   * OAuth user permission: distributionTenant:create
+   * guidance with `certificateFailure: null`. Each account can have one setup; an
+   * existing setup returns HTTP 409. Requires scope: `distributionTenant:create`.
+   * Requires API-key scope or current OAuth user permission:
+   * distributionTenant:create
    */
   create(options?: RequestOptions): APIPromise<CustomDomainCreateResponse> {
     return this._client.post('/rest/v1/custom-domains', options);
@@ -52,9 +57,10 @@ export class CustomDomains extends APIResource {
    * Checks DNS and certificate status, applies any required certificate changes, and
    * returns updated `setupStatus` lifecycle guidance. Optional: reading the setup
    * status performs the same steps automatically. Use it to retry immediately after
-   * configuring the required CNAME or after the certificate is issued. Requires
-   * scope: `distributionTenant:update`. Requires API-key scope or current OAuth user
-   * permission: distributionTenant:update
+   * configuring the required CNAME or after the certificate is issued. It does not
+   * restart a terminal failed certificate request; contact support after correcting
+   * the reported problem. Requires scope: `distributionTenant:update`. Requires
+   * API-key scope or current OAuth user permission: distributionTenant:update
    */
   reconcileCertificate(
     id: string,
@@ -81,16 +87,34 @@ export namespace CustomDomainStatusResponse {
     certificateActive: boolean;
 
     /**
+     * Current terminal certificate failure. Null for new, pending, or issued requests;
+     * independent of DNS lifecycle blockers.
+     */
+    certificateFailure: Setup.CertificateFailure | null;
+
+    /**
      * Managed certificate issuance status.
      */
     certificateStatus: string | null;
 
+    /**
+     * ISO 8601 timestamp when the setup was created.
+     */
     createdAt: string | null;
 
+    /**
+     * Maximum number of custom domains this account can attach.
+     */
     domainLimit: number;
 
+    /**
+     * Custom domains attached to the setup.
+     */
     domains: Array<Setup.Domain>;
 
+    /**
+     * Whether the setup is enabled to serve traffic.
+     */
     enabled: boolean;
 
     /**
@@ -98,12 +122,41 @@ export namespace CustomDomainStatusResponse {
      */
     setupStatus: Setup.SetupStatus;
 
+    /**
+     * Delivery deployment status, or null when unavailable.
+     */
     status: string | null;
 
+    /**
+     * ISO 8601 timestamp when the setup was last updated.
+     */
     updatedAt: string | null;
   }
 
   export namespace Setup {
+    /**
+     * Current terminal certificate failure. Null for new, pending, or issued requests;
+     * independent of DNS lifecycle blockers.
+     */
+    export interface CertificateFailure {
+      /**
+       * Certificate failure reason, such as CAA_ERROR when DNS CAA records do not
+       * authorize the issuer. Other values may appear. Null when unavailable.
+       */
+      code: string | null;
+
+      /**
+       * Customer domains with failed certificate validation, not individually proven CAA
+       * policy defects. An empty list means none were identified.
+       */
+      domains: Array<string>;
+
+      /**
+       * Certificate failure explanation and next steps.
+       */
+      message: string;
+    }
+
     export interface Domain {
       /**
        * Required CNAME target for this domain.
@@ -135,15 +188,31 @@ export namespace CustomDomainStatusResponse {
      * Current custom-domain setup progress and next action.
      */
     export interface SetupStatus {
+      /**
+       * Custom domains whose DNS currently blocks setup. Empty when DNS is not the
+       * blocker.
+       */
       blockingDomains: Array<string>;
 
+      /**
+       * Whether every custom domain is ready to serve traffic.
+       */
       isReady: boolean;
 
+      /**
+       * Customer-facing explanation of the current stage.
+       */
       message: string;
 
+      /**
+       * Recommended next step to move setup forward.
+       */
       nextAction:
         'ADD_DOMAINS' | 'CONFIGURE_DNS' | 'RECONCILE_CERTIFICATE' | 'WAIT' | 'CONTACT_SUPPORT' | 'NONE';
 
+      /**
+       * Current setup stage. READY means every custom domain can serve traffic.
+       */
       state:
         | 'NO_DOMAINS'
         | 'DNS_REQUIRED'
@@ -175,16 +244,34 @@ export namespace CustomDomainCreateResponse {
     certificateActive: boolean;
 
     /**
+     * Current terminal certificate failure. Null for new, pending, or issued requests;
+     * independent of DNS lifecycle blockers.
+     */
+    certificateFailure: Setup.CertificateFailure | null;
+
+    /**
      * Managed certificate issuance status.
      */
     certificateStatus: string | null;
 
+    /**
+     * ISO 8601 timestamp when the setup was created.
+     */
     createdAt: string | null;
 
+    /**
+     * Maximum number of custom domains this account can attach.
+     */
     domainLimit: number;
 
+    /**
+     * Custom domains attached to the setup.
+     */
     domains: Array<Setup.Domain>;
 
+    /**
+     * Whether the setup is enabled to serve traffic.
+     */
     enabled: boolean;
 
     /**
@@ -192,12 +279,41 @@ export namespace CustomDomainCreateResponse {
      */
     setupStatus: Setup.SetupStatus;
 
+    /**
+     * Delivery deployment status, or null when unavailable.
+     */
     status: string | null;
 
+    /**
+     * ISO 8601 timestamp when the setup was last updated.
+     */
     updatedAt: string | null;
   }
 
   export namespace Setup {
+    /**
+     * Current terminal certificate failure. Null for new, pending, or issued requests;
+     * independent of DNS lifecycle blockers.
+     */
+    export interface CertificateFailure {
+      /**
+       * Certificate failure reason, such as CAA_ERROR when DNS CAA records do not
+       * authorize the issuer. Other values may appear. Null when unavailable.
+       */
+      code: string | null;
+
+      /**
+       * Customer domains with failed certificate validation, not individually proven CAA
+       * policy defects. An empty list means none were identified.
+       */
+      domains: Array<string>;
+
+      /**
+       * Certificate failure explanation and next steps.
+       */
+      message: string;
+    }
+
     export interface Domain {
       /**
        * Required CNAME target for this domain.
@@ -229,15 +345,31 @@ export namespace CustomDomainCreateResponse {
      * Current custom-domain setup progress and next action.
      */
     export interface SetupStatus {
+      /**
+       * Custom domains whose DNS currently blocks setup. Empty when DNS is not the
+       * blocker.
+       */
       blockingDomains: Array<string>;
 
+      /**
+       * Whether every custom domain is ready to serve traffic.
+       */
       isReady: boolean;
 
+      /**
+       * Customer-facing explanation of the current stage.
+       */
       message: string;
 
+      /**
+       * Recommended next step to move setup forward.
+       */
       nextAction:
         'ADD_DOMAINS' | 'CONFIGURE_DNS' | 'RECONCILE_CERTIFICATE' | 'WAIT' | 'CONTACT_SUPPORT' | 'NONE';
 
+      /**
+       * Current setup stage. READY means every custom domain can serve traffic.
+       */
       state:
         | 'NO_DOMAINS'
         | 'DNS_REQUIRED'
@@ -269,16 +401,34 @@ export namespace CustomDomainReplaceResponse {
     certificateActive: boolean;
 
     /**
+     * Current terminal certificate failure. Null for new, pending, or issued requests;
+     * independent of DNS lifecycle blockers.
+     */
+    certificateFailure: Setup.CertificateFailure | null;
+
+    /**
      * Managed certificate issuance status.
      */
     certificateStatus: string | null;
 
+    /**
+     * ISO 8601 timestamp when the setup was created.
+     */
     createdAt: string | null;
 
+    /**
+     * Maximum number of custom domains this account can attach.
+     */
     domainLimit: number;
 
+    /**
+     * Custom domains attached to the setup.
+     */
     domains: Array<Setup.Domain>;
 
+    /**
+     * Whether the setup is enabled to serve traffic.
+     */
     enabled: boolean;
 
     /**
@@ -286,12 +436,41 @@ export namespace CustomDomainReplaceResponse {
      */
     setupStatus: Setup.SetupStatus;
 
+    /**
+     * Delivery deployment status, or null when unavailable.
+     */
     status: string | null;
 
+    /**
+     * ISO 8601 timestamp when the setup was last updated.
+     */
     updatedAt: string | null;
   }
 
   export namespace Setup {
+    /**
+     * Current terminal certificate failure. Null for new, pending, or issued requests;
+     * independent of DNS lifecycle blockers.
+     */
+    export interface CertificateFailure {
+      /**
+       * Certificate failure reason, such as CAA_ERROR when DNS CAA records do not
+       * authorize the issuer. Other values may appear. Null when unavailable.
+       */
+      code: string | null;
+
+      /**
+       * Customer domains with failed certificate validation, not individually proven CAA
+       * policy defects. An empty list means none were identified.
+       */
+      domains: Array<string>;
+
+      /**
+       * Certificate failure explanation and next steps.
+       */
+      message: string;
+    }
+
     export interface Domain {
       /**
        * Required CNAME target for this domain.
@@ -323,15 +502,31 @@ export namespace CustomDomainReplaceResponse {
      * Current custom-domain setup progress and next action.
      */
     export interface SetupStatus {
+      /**
+       * Custom domains whose DNS currently blocks setup. Empty when DNS is not the
+       * blocker.
+       */
       blockingDomains: Array<string>;
 
+      /**
+       * Whether every custom domain is ready to serve traffic.
+       */
       isReady: boolean;
 
+      /**
+       * Customer-facing explanation of the current stage.
+       */
       message: string;
 
+      /**
+       * Recommended next step to move setup forward.
+       */
       nextAction:
         'ADD_DOMAINS' | 'CONFIGURE_DNS' | 'RECONCILE_CERTIFICATE' | 'WAIT' | 'CONTACT_SUPPORT' | 'NONE';
 
+      /**
+       * Current setup stage. READY means every custom domain can serve traffic.
+       */
       state:
         | 'NO_DOMAINS'
         | 'DNS_REQUIRED'
@@ -363,16 +558,34 @@ export namespace CustomDomainReconcileCertificateResponse {
     certificateActive: boolean;
 
     /**
+     * Current terminal certificate failure. Null for new, pending, or issued requests;
+     * independent of DNS lifecycle blockers.
+     */
+    certificateFailure: Setup.CertificateFailure | null;
+
+    /**
      * Managed certificate issuance status.
      */
     certificateStatus: string | null;
 
+    /**
+     * ISO 8601 timestamp when the setup was created.
+     */
     createdAt: string | null;
 
+    /**
+     * Maximum number of custom domains this account can attach.
+     */
     domainLimit: number;
 
+    /**
+     * Custom domains attached to the setup.
+     */
     domains: Array<Setup.Domain>;
 
+    /**
+     * Whether the setup is enabled to serve traffic.
+     */
     enabled: boolean;
 
     /**
@@ -380,12 +593,41 @@ export namespace CustomDomainReconcileCertificateResponse {
      */
     setupStatus: Setup.SetupStatus;
 
+    /**
+     * Delivery deployment status, or null when unavailable.
+     */
     status: string | null;
 
+    /**
+     * ISO 8601 timestamp when the setup was last updated.
+     */
     updatedAt: string | null;
   }
 
   export namespace Setup {
+    /**
+     * Current terminal certificate failure. Null for new, pending, or issued requests;
+     * independent of DNS lifecycle blockers.
+     */
+    export interface CertificateFailure {
+      /**
+       * Certificate failure reason, such as CAA_ERROR when DNS CAA records do not
+       * authorize the issuer. Other values may appear. Null when unavailable.
+       */
+      code: string | null;
+
+      /**
+       * Customer domains with failed certificate validation, not individually proven CAA
+       * policy defects. An empty list means none were identified.
+       */
+      domains: Array<string>;
+
+      /**
+       * Certificate failure explanation and next steps.
+       */
+      message: string;
+    }
+
     export interface Domain {
       /**
        * Required CNAME target for this domain.
@@ -417,15 +659,31 @@ export namespace CustomDomainReconcileCertificateResponse {
      * Current custom-domain setup progress and next action.
      */
     export interface SetupStatus {
+      /**
+       * Custom domains whose DNS currently blocks setup. Empty when DNS is not the
+       * blocker.
+       */
       blockingDomains: Array<string>;
 
+      /**
+       * Whether every custom domain is ready to serve traffic.
+       */
       isReady: boolean;
 
+      /**
+       * Customer-facing explanation of the current stage.
+       */
       message: string;
 
+      /**
+       * Recommended next step to move setup forward.
+       */
       nextAction:
         'ADD_DOMAINS' | 'CONFIGURE_DNS' | 'RECONCILE_CERTIFICATE' | 'WAIT' | 'CONTACT_SUPPORT' | 'NONE';
 
+      /**
+       * Current setup stage. READY means every custom domain can serve traffic.
+       */
       state:
         | 'NO_DOMAINS'
         | 'DNS_REQUIRED'

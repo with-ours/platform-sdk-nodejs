@@ -268,14 +268,18 @@ export class WebScanners extends APIResource {
    * privacy policies and host coverage, a breakdown by risk and by category,
    * coverage (how many hosts are already covered by a CMP consent service or a
    * suppression rule vs. how many still need a decision), the new/removed host delta
-   * versus the previous run, and up to 10 highest-risk hosts that still need a
-   * decision. A null privacyPolicyUrl means that no policy was captured for the
-   * hostname. Defaults to the latest run; pass `date` (an ISO-8601 timestamp; only
-   * the calendar day is used to select the run) to read an earlier run. Clear a host
-   * that needs a decision by adding it to a CMP consent service or creating a
-   * suppression rule with `POST /rest/v1/web-scanner-rules`. When the scanner has no
-   * completed runs, every count is 0 and `runDate` is null. Requires API-key scope
-   * or current OAuth user permission: webScanner:find
+   * versus the previous run, up to 10 highest-risk hosts that still need a decision,
+   * the homepage consent check (which third parties were contacted before any
+   * choice, after Reject all, and with Global Privacy Control on), and the
+   * Content-Security-Policy gap for each first-party hostname. After a consent or
+   * CSP fix, trigger a full scan with `POST /rest/v1/web-scanners/{id}/trigger` and
+   * read this summary again to confirm it. A null privacyPolicyUrl means that no
+   * policy was captured for the hostname. Defaults to the latest run; pass `date`
+   * (an ISO-8601 timestamp; only the calendar day is used to select the run) to read
+   * an earlier run. Clear a host that needs a decision by adding it to a CMP consent
+   * service or creating a suppression rule with `POST /rest/v1/web-scanner-rules`.
+   * When the scanner has no completed runs, every count is 0 and `runDate` is null.
+   * Requires API-key scope or current OAuth user permission: webScanner:find
    *
    * @example
    * ```ts
@@ -965,6 +969,12 @@ export interface WebScannerSummaryResponse {
 
   coverage: WebScannerSummaryResponse.Coverage;
 
+  /**
+   * Content-Security-Policy result for each crawled first-party hostname, most
+   * serious gap first.
+   */
+  csp: Array<WebScannerSummaryResponse.Csp>;
+
   hostCount: number;
 
   localStorageCount: number;
@@ -1011,6 +1021,13 @@ export interface WebScannerSummaryResponse {
    */
   accessibility?: WebScannerSummaryResponse.Accessibility | null;
 
+  /**
+   * Consent check for this run: the homepage loaded before any choice, after Reject
+   * all, after Accept all, and with Global Privacy Control on. Null when the run had
+   * no consent check.
+   */
+  consentProbe?: WebScannerSummaryResponse.ConsentProbe | null;
+
   coverageRevision?: string | null;
 
   delta?: WebScannerSummaryResponse.Delta | null;
@@ -1045,6 +1062,29 @@ export namespace WebScannerSummaryResponse {
     needsDecisionHostCount: number;
 
     totalHostCount: number;
+  }
+
+  export interface Csp {
+    /**
+     * Third-party domains contacted from this hostname that the policy does not allow.
+     */
+    domainsNotInCsp: Array<string>;
+
+    /**
+     * Whether pages on this hostname sent a Content-Security-Policy.
+     */
+    hasCsp: boolean;
+
+    /**
+     * A crawled first-party hostname.
+     */
+    hostname: string;
+
+    /**
+     * The most serious policy gap, graded the same way as the dashboard and PDF
+     * report. Null when the policy allows every third-party domain the scan observed.
+     */
+    gap?: 'no_policy' | 'missing_script_src' | 'missing_connect_src' | 'unallowed_domains' | null;
   }
 
   export interface PrivacyPolicy {
@@ -1238,6 +1278,79 @@ export namespace WebScannerSummaryResponse {
 
         failureSummary?: string | null;
       }
+    }
+  }
+
+  /**
+   * Consent check for this run: the homepage loaded before any choice, after Reject
+   * all, after Accept all, and with Global Privacy Control on. Null when the run had
+   * no consent check.
+   */
+  export interface ConsentProbe {
+    /**
+     * Hosts contacted in a state where the visitor had not agreed. Empty when none
+     * were observed. The Ours Privacy consent script host is never listed, since the
+     * banner needs it; other contacted hosts may still be strictly necessary.
+     */
+    findings: Array<ConsentProbe.Finding>;
+
+    /**
+     * The page loaded in each consent state.
+     */
+    requestedUrl: string;
+
+    /**
+     * What each state captured. Empty until the check finishes.
+     */
+    states: Array<ConsentProbe.State>;
+
+    /**
+     * ours_consent_not_installed means the page has no Ours Privacy Consent
+     * Management, so the Reject all and Accept all states could not be driven; the
+     * baseline and gpc states are still captured. A failed check, or one where Ours
+     * Consent is not installed, is never a clean result.
+     */
+    status: 'queued' | 'in_progress' | 'completed' | 'ours_consent_not_installed' | 'failed';
+
+    /**
+     * Why the check failed, or why Reject all and Accept all could not be tested.
+     */
+    cause?: string | null;
+
+    completedAt?: string | null;
+  }
+
+  export namespace ConsentProbe {
+    export interface Finding {
+      hostnames: Array<string>;
+
+      /**
+       * tracker_before_consent: contacted before any choice; reject_not_honored:
+       * contacted after Reject all; gpc_not_honored: contacted with Global Privacy
+       * Control on.
+       */
+      kind: 'tracker_before_consent' | 'reject_not_honored' | 'gpc_not_honored';
+    }
+
+    export interface State {
+      outcome: 'completed' | 'ours_consent_not_installed' | 'failed';
+
+      /**
+       * baseline is before any consent choice; reject_all and accept_all follow the
+       * matching banner choice; gpc loads with Global Privacy Control on.
+       */
+      state: 'baseline' | 'reject_all' | 'accept_all' | 'gpc';
+
+      cause?: string | null;
+
+      cookieNames?: Array<string> | null;
+
+      /**
+       * Third-party hosts contacted in this state.
+       */
+      requestHostnames?: Array<string> | null;
+
+      storageKeys?: Array<string> | null;
     }
   }
 
