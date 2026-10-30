@@ -210,7 +210,7 @@ export interface DashboardListResponse {
    * Shared analytics filter, combined with Insight report filters or Funnel and
    * Journey entry filters. Null clears it; report-specific filters remain in effect.
    */
-  filter?: DashboardListResponse.Filter;
+  filter?: DashboardListResponse.Filter | null;
 }
 
 export namespace DashboardListResponse {
@@ -383,15 +383,105 @@ export namespace DashboardListResponse {
 
   export namespace Filter {
     export interface UnionMember0 {
-      children: Array<unknown>;
+      children: Array<UnionMember0.UnionMember0 | UnionMember0.UnionMember1 | UnionMember0.UnionMember2>;
 
       kind: 'and' | 'or';
     }
 
+    export namespace UnionMember0 {
+      export interface UnionMember0 {
+        children: Array<unknown>;
+
+        kind: 'and' | 'or';
+      }
+
+      export interface UnionMember1 {
+        child: unknown;
+
+        kind: 'not';
+      }
+
+      export interface UnionMember2 {
+        kind: 'predicate';
+
+        operator:
+          | 'eq'
+          | 'neq'
+          | 'gt'
+          | 'gte'
+          | 'lt'
+          | 'lte'
+          | 'contains'
+          | 'not_contains'
+          | 'contains_ci'
+          | 'not_contains_ci'
+          | 'starts_with'
+          | 'ends_with'
+          | 'in'
+          | 'not_in'
+          | 'exists'
+          | 'missing'
+          | 'is_null';
+
+        property: string;
+
+        path?: Array<string>;
+
+        type?: 'string' | 'number' | 'boolean';
+
+        value?: string | number | boolean | Array<string | number | boolean>;
+      }
+    }
+
     export interface UnionMember1 {
-      child: unknown;
+      child: UnionMember1.UnionMember0 | UnionMember1.UnionMember1 | UnionMember1.UnionMember2;
 
       kind: 'not';
+    }
+
+    export namespace UnionMember1 {
+      export interface UnionMember0 {
+        children: Array<unknown>;
+
+        kind: 'and' | 'or';
+      }
+
+      export interface UnionMember1 {
+        child: unknown;
+
+        kind: 'not';
+      }
+
+      export interface UnionMember2 {
+        kind: 'predicate';
+
+        operator:
+          | 'eq'
+          | 'neq'
+          | 'gt'
+          | 'gte'
+          | 'lt'
+          | 'lte'
+          | 'contains'
+          | 'not_contains'
+          | 'contains_ci'
+          | 'not_contains_ci'
+          | 'starts_with'
+          | 'ends_with'
+          | 'in'
+          | 'not_in'
+          | 'exists'
+          | 'missing'
+          | 'is_null';
+
+        property: string;
+
+        path?: Array<string>;
+
+        type?: 'string' | 'number' | 'boolean';
+
+        value?: string | number | boolean | Array<string | number | boolean>;
+      }
     }
 
     export interface UnionMember2 {
