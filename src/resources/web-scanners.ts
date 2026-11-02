@@ -246,11 +246,14 @@ export class WebScanners extends APIResource {
    * used to select the run) to read an earlier run. Cookies paginate with `limit`
    * and `offset` (a documented exception to the cursor-pagination standard, since
    * each run is an immutable snapshot); local-storage entries are returned in full.
+   * A missing id and an id this credential cannot access return the same 404.
    * Requires API-key scope or current OAuth user permission: webScanner:find
    *
    * @example
    * ```ts
-   * const response = await client.webScanners.cookies('id');
+   * const response = await client.webScanners.cookies(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   * );
    * ```
    */
   cookies(
@@ -1625,12 +1628,12 @@ export interface WebScannerCookiesParams {
   date?: string;
 
   /**
-   * Maximum number of findings to return. Defaults to 25; clamped to 1–100.
+   * Maximum number of cookies to return, from 1 to 100. Defaults to 25.
    */
   limit?: number;
 
   /**
-   * Skip this many findings before returning. Use with `limit` for load-more paging.
+   * Skip this many cookies before returning. Use with `limit` for load-more paging.
    */
   offset?: number | null;
 }
