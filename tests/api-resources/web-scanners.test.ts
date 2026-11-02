@@ -202,7 +202,7 @@ describe('resource webScanners', () => {
   });
 
   test('cookies', async () => {
-    const responsePromise = client.webScanners.cookies('id');
+    const responsePromise = client.webScanners.cookies('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -216,7 +216,7 @@ describe('resource webScanners', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.webScanners.cookies(
-        'id',
+        '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
         {
           date: '2026-05-15T00:00:00Z',
           limit: 1,
