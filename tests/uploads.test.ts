@@ -19,14 +19,14 @@ describe('toFile', () => {
       // @ts-expect-error intentionally mismatched type
       toFile({ foo: 'string' }),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Unexpected data type: object; constructor: Object; props: ["foo"]"`,
+      `[Error: Unexpected data type: object; constructor: Object; props: ["foo"]]`,
     );
 
     await expect(
       // @ts-expect-error intentionally mismatched type
       toFile(new MyClass()),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Unexpected data type: object; constructor: MyClass; props: ["name"]"`,
+      `[Error: Unexpected data type: object; constructor: MyClass; props: ["name"]]`,
     );
   });
 
@@ -78,7 +78,7 @@ describe('missing File error message', () => {
   beforeEach(() => {
     // The file shim captures the global File object when it's first imported.
     // Reset modules before each test so we can test the error thrown when it's undefined.
-    jest.resetModules();
+    vi.resetModules();
     const buffer = require('node:buffer');
     // @ts-ignore
     prevGlobalFile = globalThis.File;
@@ -92,7 +92,7 @@ describe('missing File error message', () => {
     // @ts-ignore
     globalThis.File = prevGlobalFile;
     require('node:buffer').File = prevNodeFile;
-    jest.resetModules();
+    vi.resetModules();
   });
 
   test('is thrown', async () => {

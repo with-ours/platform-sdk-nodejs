@@ -59,4 +59,4 @@ if [ -n "${STAINLESS_MOCK_PORT:-}" ] && ! is_overriding_api_base_url ; then
 fi
 
 echo "==> Running tests"
-./node_modules/.bin/jest "$@"
+./node_modules/.bin/vitest run "$@"
