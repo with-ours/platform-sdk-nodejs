@@ -27,6 +27,7 @@ describe('resource heatmapPages', () => {
       country: 'x',
       cursor: 'cursor',
       limit: 25,
+      queryParameterFilter: 'queryParameterFilter',
       region: 'x',
       search: '/pricing',
       sortBy: 'CLICKS',
@@ -36,7 +37,7 @@ describe('resource heatmapPages', () => {
 
   test('summary: only required params', async () => {
     const responsePromise = client.heatmapPages.summary({
-      breakpoint: 'desktop',
+      breakpoint: 'mobile',
       from: '2026-04-01',
       pageKey: 'https://example.com/pricing',
       to: '2026-04-30',
@@ -52,12 +53,13 @@ describe('resource heatmapPages', () => {
 
   test('summary: required and optional params', async () => {
     const response = await client.heatmapPages.summary({
-      breakpoint: 'desktop',
+      breakpoint: 'mobile',
       from: '2026-04-01',
       pageKey: 'https://example.com/pricing',
       to: '2026-04-30',
       browserName: 'Chrome',
       country: 'x',
+      queryParameterFilter: 'queryParameterFilter',
       region: 'x',
     });
   });

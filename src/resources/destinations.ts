@@ -104,6 +104,7 @@ export interface DestinationListResponse {
     | 'ActiveCampaignApi'
     | 'Admitad'
     | 'AdobeAnalytics'
+    | 'Affiliatly'
     | 'AmazonDSP'
     | 'Amplitude'
     | 'AppLovin'
@@ -228,6 +229,7 @@ export interface DestinationCreateResponse {
     | 'ActiveCampaignApi'
     | 'Admitad'
     | 'AdobeAnalytics'
+    | 'Affiliatly'
     | 'AmazonDSP'
     | 'Amplitude'
     | 'AppLovin'
@@ -352,6 +354,7 @@ export interface DestinationRetrieveResponse {
     | 'ActiveCampaignApi'
     | 'Admitad'
     | 'AdobeAnalytics'
+    | 'Affiliatly'
     | 'AmazonDSP'
     | 'Amplitude'
     | 'AppLovin'
@@ -476,6 +479,7 @@ export interface DestinationUpdateResponse {
     | 'ActiveCampaignApi'
     | 'Admitad'
     | 'AdobeAnalytics'
+    | 'Affiliatly'
     | 'AmazonDSP'
     | 'Amplitude'
     | 'AppLovin'
@@ -671,7 +675,8 @@ export namespace DestinationTypesResponse {
       | 'Fullstory'
       | 'GravityCAPI'
       | 'LeadSquared'
-      | 'Trybe';
+      | 'Trybe'
+      | 'Affiliatly';
 
     capabilities: Entity.Capabilities;
 
@@ -839,6 +844,7 @@ export interface DestinationListParams extends CursorParams {
     | 'ActiveCampaignApi'
     | 'Admitad'
     | 'AdobeAnalytics'
+    | 'Affiliatly'
     | 'AmazonDSP'
     | 'Amplitude'
     | 'AppLovin'
@@ -1022,7 +1028,8 @@ export interface DestinationCreateParams {
     | 'Fullstory'
     | 'GravityCAPI'
     | 'LeadSquared'
-    | 'Trybe';
+    | 'Trybe'
+    | 'Affiliatly';
 
   /**
    * Restrict dispatch to these source IDs. Omit on create or send `null` to accept
