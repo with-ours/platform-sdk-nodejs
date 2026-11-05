@@ -42,7 +42,7 @@ describe('resource experimentSettings', () => {
   });
 
   test('update', async () => {
-    const responsePromise = client.experimentSettings.update('id', {});
+    const responsePromise = client.experimentSettings.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

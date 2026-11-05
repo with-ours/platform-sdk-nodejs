@@ -175,6 +175,68 @@ describe('instantiate client', () => {
       expect(debugMock).not.toHaveBeenCalled();
     });
 
+    test('keeps secrets out of debug output without changing the request', async () => {
+      const secret = 'SENTINEL_SECRET_DO_NOT_LOG';
+      const body = {
+        event: 'still_visible',
+        token: secret,
+        nested: [{ token: secret }],
+      };
+      const lines: unknown[] = [];
+      const log = (...args: unknown[]) => lines.push(args);
+      const sent: unknown[] = [];
+      const client = new OursPrivacyPlatform({
+        logger: { debug: log, info: log, warn: log, error: log },
+        logLevel: 'debug',
+        maxRetries: 0,
+        fetch: async (_url: string | URL | Request, init: RequestInit = {}) => {
+          sent.push(init.body);
+          return new Response(JSON.stringify(body), { headers: { 'Content-Type': 'application/json' } });
+        },
+        apiKey: 'My API Key',
+      });
+
+      await client.post('/foo', { body, headers: { Authorization: `Bearer ${secret}` } });
+
+      const output = JSON.stringify(lines);
+      expect(output).not.toContain(secret);
+      expect(output).toContain('still_visible');
+      expect(output).toContain('***');
+      expect(String(sent[0])).toContain(secret);
+    });
+
+    test('keeps secrets the API echoes out of error messages', async () => {
+      const secret = 'SENTINEL_SECRET_DO_NOT_LOG';
+      const client = new OursPrivacyPlatform({
+        maxRetries: 0,
+        fetch: async () =>
+          new Response(JSON.stringify({ token: secret, code: 'still_visible' }), {
+            status: 400,
+            headers: { 'Content-Type': 'application/json' },
+          }),
+        apiKey: 'My API Key',
+      });
+
+      const error: Error = await client.post('/foo').then(
+        () => {
+          throw new Error('expected a rejection');
+        },
+        (e) => e,
+      );
+      expect(error.message).not.toContain(secret);
+      expect(error.message).toContain('still_visible');
+    });
+
+    test('keeps credentials out of util.inspect', async () => {
+      const { inspect } = await import('node:util');
+      const secret = 'SENTINEL_SECRET_DO_NOT_LOG';
+      const client = new OursPrivacyPlatform({ apiKey: secret });
+
+      const output = inspect(client, { depth: 8 });
+      expect(output).not.toContain(secret);
+      expect(output).toContain('***');
+    });
+
     test('no warning logged for invalid env var level + valid client level', async () => {
       const warnMock = vi.fn();
       const logger = {

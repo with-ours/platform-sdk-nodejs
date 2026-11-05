@@ -60,14 +60,18 @@ export class ExperimentSettings extends APIResource {
   }
 
   /**
-   * Partially update an experiment settings. Only the fields you send are changed.
-   * Requires API-key scope or current OAuth user permission:
-   * experimentSettings:update
+   * Partially update an experiment settings record. Only the fields you send change.
+   * Discover the ID with GET /rest/v1/experiment-settings. Missing IDs and IDs this
+   * credential cannot access return the same 404; returns 403 when Experimentation
+   * is disabled for an otherwise authorized record. Requires API-key scope or
+   * current OAuth user permission: experimentSettings:update
    *
    * @example
    * ```ts
    * const experimentSetting =
-   *   await client.experimentSettings.update('id');
+   *   await client.experimentSettings.update(
+   *     '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   *   );
    * ```
    */
   update(
@@ -388,22 +392,25 @@ export interface ExperimentSettingDeleteResponse {
 export interface ExperimentSettingCreateParams {
   /**
    * Cookie name used to persist sticky variant assignments in the browser. Defaults
-   * to `_cord_exp` when omitted on create.
+   * to `_cord_exp` when omitted on create; omitted or null keeps the saved value on
+   * update.
    */
   cookieName?: string | null;
 
   /**
    * Human-readable name for this experimentation configuration. Defaults to
-   * `Experiment Settings` when omitted on create.
+   * `Experiment Settings` when omitted on create; omitted or null keeps the saved
+   * value on update.
    */
   name?: string | null;
 
   /**
    * Limits which domains can load your experiments. When set, experiments using this
    * settings record are only served on these domains; the SDK refuses to load
-   * anywhere else and your experiments never run on those hosts. Separate from
-   * source `whitelistDomains`, which limits which domains can send events to the
-   * CDP.
+   * anywhere else and your experiments never run on those hosts. On update, an empty
+   * array clears the allowlist (all domains served), and omitted or null keeps the
+   * saved value. Separate from source `whitelistDomains`, which limits which domains
+   * can send events to the CDP.
    */
   whitelistDomains?: Array<string> | null;
 }
@@ -411,22 +418,25 @@ export interface ExperimentSettingCreateParams {
 export interface ExperimentSettingUpdateParams {
   /**
    * Cookie name used to persist sticky variant assignments in the browser. Defaults
-   * to `_cord_exp` when omitted on create.
+   * to `_cord_exp` when omitted on create; omitted or null keeps the saved value on
+   * update.
    */
   cookieName?: string | null;
 
   /**
    * Human-readable name for this experimentation configuration. Defaults to
-   * `Experiment Settings` when omitted on create.
+   * `Experiment Settings` when omitted on create; omitted or null keeps the saved
+   * value on update.
    */
   name?: string | null;
 
   /**
    * Limits which domains can load your experiments. When set, experiments using this
    * settings record are only served on these domains; the SDK refuses to load
-   * anywhere else and your experiments never run on those hosts. Separate from
-   * source `whitelistDomains`, which limits which domains can send events to the
-   * CDP.
+   * anywhere else and your experiments never run on those hosts. On update, an empty
+   * array clears the allowlist (all domains served), and omitted or null keeps the
+   * saved value. Separate from source `whitelistDomains`, which limits which domains
+   * can send events to the CDP.
    */
   whitelistDomains?: Array<string> | null;
 }
