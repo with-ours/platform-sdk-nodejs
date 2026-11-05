@@ -46,6 +46,7 @@ describe('resource testEvents', () => {
         ad_id: 'ad_id',
         admitad_uid: 'admitad_uid',
         adset_id: 'adset_id',
+        affiliatly_v3: 'affiliatly_v3',
         alart: 'alart',
         aleid: 'aleid',
         axwrt: 'axwrt',

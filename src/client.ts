@@ -778,6 +778,16 @@ export class OursPrivacyPlatform {
     return client;
   }
 
+  [Symbol.for('nodejs.util.inspect.custom')](): Record<string, unknown> {
+    return {
+      baseURL: this.baseURL,
+      maxRetries: this.maxRetries,
+      timeout: this.timeout,
+      logLevel: this.logLevel,
+      apiKey: '***',
+    };
+  }
+
   /**
    * Check whether the base URL is set to its default.
    */
