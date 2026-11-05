@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { castToError } from '../internal/errors';
+import { redactSensitiveFields } from '../internal/utils/log';
 
 export class OursPrivacyPlatformError extends Error {}
 
@@ -29,7 +30,7 @@ export class APIError<
         typeof error.message === 'string' ?
           error.message
         : JSON.stringify(error.message)
-      : error ? JSON.stringify(error)
+      : error ? JSON.stringify(redactSensitiveFields(error))
       : message;
 
     if (status && msg) {
