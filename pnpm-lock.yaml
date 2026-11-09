@@ -5,8 +5,6 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  js-yaml: ^4.3.2
-  tmp: ^0.2.6
   eslint>minimatch: ^11.0.4
   '@eslint/config-array>minimatch': ^11.0.4
   '@typescript-eslint/typescript-estree>minimatch': ^11.0.4
