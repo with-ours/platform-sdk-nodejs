@@ -211,18 +211,38 @@ export class WebScanners extends APIResource {
   }
 
   /**
+   * List the scan runs recorded for this scanner, newest first, one per UTC day.
+   * Pass an entry's `runDate` as `date` to read that run from the summary, findings,
+   * cookies, or decision queue. A missing id and an id this credential cannot access
+   * return the same 404. Requires API-key scope or current OAuth user permission:
+   * webScanner:find
+   *
+   * @example
+   * ```ts
+   * const response = await client.webScanners.runs('id');
+   * ```
+   */
+  runs(
+    id: string,
+    query: WebScannerRunsParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<WebScannerRunsResponse> {
+    return this._client.get(path`/rest/v1/web-scanners/${id}/runs`, { query, ...options });
+  }
+
+  /**
    * List the third-party trackers (requests) found on a scan run, with their risk,
    * category, the pages they were seen on, redacted deterministic PII/PHI data-flow
    * metadata, and whether each host is already covered by a CMP consent service.
    * Data-flow findings include only recipient metadata, categories, source
    * locations, safe query/body field names when available, and counts; matched
    * query, body, and pathname values are never returned. Defaults to the latest run;
-   * pass `date` (an ISO-8601 timestamp; only the calendar day is used to select the
-   * run) to read an earlier run. Documented exception to the cursor-pagination
-   * standard: paginates with `limit` and `offset` because each run is an immutable
-   * snapshot. A host that is neither covered (`coveredByCmp: false`) nor matched by
-   * a suppression rule still needs a triage decision — resolve it by adding the host
-   * to a CMP consent service or by creating a suppression rule with
+   * pass `date` (a day listed by `GET /rest/v1/web-scanners/{id}/runs`) to read an
+   * earlier run. Documented exception to the cursor-pagination standard: paginates
+   * with `limit` and `offset` because each run is an immutable snapshot. A host that
+   * is neither covered (`coveredByCmp: false`) nor matched by a suppression rule
+   * still needs a triage decision — resolve it by adding the host to a CMP consent
+   * service or by creating a suppression rule with
    * `POST /rest/v1/web-scanner-rules`. Use `GET /rest/v1/web-scanners/{id}/summary`
    * for the rolled-up counts. Requires API-key scope or current OAuth user
    * permission: webScanner:find
@@ -242,12 +262,13 @@ export class WebScanners extends APIResource {
 
   /**
    * List the cookies and local-storage entries observed on a scan run. Defaults to
-   * the latest run; pass `date` (an ISO-8601 timestamp; only the calendar day is
-   * used to select the run) to read an earlier run. Cookies paginate with `limit`
-   * and `offset` (a documented exception to the cursor-pagination standard, since
-   * each run is an immutable snapshot); local-storage entries are returned in full.
-   * A missing id and an id this credential cannot access return the same 404.
-   * Requires API-key scope or current OAuth user permission: webScanner:find
+   * the latest run; pass `date` (a day listed by
+   * `GET /rest/v1/web-scanners/{id}/runs`) to read an earlier run. Cookies paginate
+   * with `limit` and `offset` (a documented exception to the cursor-pagination
+   * standard, since each run is an immutable snapshot); local-storage entries are
+   * returned in full. A missing id and an id this credential cannot access return
+   * the same 404. Requires API-key scope or current OAuth user permission:
+   * webScanner:find
    *
    * @example
    * ```ts
@@ -277,12 +298,12 @@ export class WebScanners extends APIResource {
    * Content-Security-Policy gap for each first-party hostname. After a consent or
    * CSP fix, trigger a full scan with `POST /rest/v1/web-scanners/{id}/trigger` and
    * read this summary again to confirm it. A null privacyPolicyUrl means that no
-   * policy was captured for the hostname. Defaults to the latest run; pass `date`
-   * (an ISO-8601 timestamp; only the calendar day is used to select the run) to read
-   * an earlier run. Clear a host that needs a decision by adding it to a CMP consent
-   * service or creating a suppression rule with `POST /rest/v1/web-scanner-rules`.
-   * When the scanner has no completed runs, every count is 0 and `runDate` is null.
-   * Requires API-key scope or current OAuth user permission: webScanner:find
+   * policy was captured for the hostname. Defaults to the latest run; pass `date` (a
+   * day listed by `GET /rest/v1/web-scanners/{id}/runs`) to read an earlier run.
+   * Clear a host that needs a decision by adding it to a CMP consent service or
+   * creating a suppression rule with `POST /rest/v1/web-scanner-rules`. When the
+   * scanner has no completed runs, every count is 0 and `runDate` is null. Requires
+   * API-key scope or current OAuth user permission: webScanner:find
    *
    * @example
    * ```ts
@@ -788,6 +809,27 @@ export namespace WebScannerVerificationRunsResponse {
   }
 }
 
+export interface WebScannerRunsResponse {
+  entities: Array<WebScannerRunsResponse.Entity>;
+
+  pagination: WebScannerRunsResponse.Pagination;
+}
+
+export namespace WebScannerRunsResponse {
+  export interface Entity {
+    /**
+     * When the run was recorded. Pass it as `date` to read that run.
+     */
+    runDate: string;
+  }
+
+  export interface Pagination {
+    hasMore: boolean;
+
+    nextCursor?: string | null;
+  }
+}
+
 export interface WebScannerFindingsResponse {
   /**
    * True when more findings are available beyond the current window.
@@ -1038,6 +1080,13 @@ export interface WebScannerSummaryResponse {
   runDate?: string | null;
 
   runRevision?: string | null;
+
+  /**
+   * Pages the run crawled successfully. 0 means the run captured no pages, so zero
+   * hosts is not a clean result. Null when there is no run or no crawl record for
+   * it.
+   */
+  successUrlCount?: number | null;
 }
 
 export namespace WebScannerSummaryResponse {
@@ -1600,16 +1649,31 @@ export interface WebScannerVerificationRunsParams {
   limit?: number;
 }
 
+export interface WebScannerRunsParams {
+  /**
+   * Opaque pagination cursor from pagination.nextCursor in the previous response. Do
+   * not decode or modify it. Malformed cursors return 400 Bad Request.
+   */
+  cursor?: string;
+
+  /**
+   * Maximum number of items to return. Defaults to 25; values below 1 are clamped to
+   * 1 and values above 100 are clamped to 100.
+   */
+  limit?: number | null;
+}
+
 export interface WebScannerFindingsParams {
   /**
-   * Which scan run to read, as an ISO-8601 timestamp. Only the UTC calendar day is
-   * used to select the run; the time component is ignored. Defaults to the most
-   * recent run when omitted.
+   * Which scan run to read: a day (`2026-05-15`) or an ISO-8601 timestamp, of which
+   * only the UTC day is used. A day with no run returns 400; list run days with
+   * `GET /rest/v1/web-scanners/{id}/runs`. Defaults to the most recent run when
+   * omitted.
    */
   date?: string;
 
   /**
-   * Maximum number of findings to return. Defaults to 25; clamped to 1–100.
+   * Maximum number of findings to return. Defaults to 25; must be between 1 and 100.
    */
   limit?: number;
 
@@ -1621,9 +1685,10 @@ export interface WebScannerFindingsParams {
 
 export interface WebScannerCookiesParams {
   /**
-   * Which scan run to read, as an ISO-8601 timestamp. Only the UTC calendar day is
-   * used to select the run; the time component is ignored. Defaults to the most
-   * recent run when omitted.
+   * Which scan run to read: a day (`2026-05-15`) or an ISO-8601 timestamp, of which
+   * only the UTC day is used. A day with no run returns 400; list run days with
+   * `GET /rest/v1/web-scanners/{id}/runs`. Defaults to the most recent run when
+   * omitted.
    */
   date?: string;
 
@@ -1642,9 +1707,10 @@ export interface WebScannerSummaryParams {
   coverageRevision?: string;
 
   /**
-   * Which scan run to read, as an ISO-8601 timestamp. Only the UTC calendar day is
-   * used to select the run; the time component is ignored. Defaults to the most
-   * recent run when omitted.
+   * Which scan run to read: a day (`2026-05-15`) or an ISO-8601 timestamp, of which
+   * only the UTC day is used. A day with no run returns 400; list run days with
+   * `GET /rest/v1/web-scanners/{id}/runs`. Defaults to the most recent run when
+   * omitted.
    */
   date?: string;
 
@@ -1661,9 +1727,10 @@ export interface WebScannerDecisionQueueParams {
   cursor?: string;
 
   /**
-   * Which scan run to read, as an ISO-8601 timestamp. Only the UTC calendar day is
-   * used to select the run; the time component is ignored. Defaults to the most
-   * recent run when omitted.
+   * Which scan run to read: a day (`2026-05-15`) or an ISO-8601 timestamp, of which
+   * only the UTC day is used. A day with no run returns 400; list run days with
+   * `GET /rest/v1/web-scanners/{id}/runs`. Defaults to the most recent run when
+   * omitted.
    */
   date?: string;
 
@@ -1710,6 +1777,7 @@ export declare namespace WebScanners {
     type WebScannerTargetedScanResponse as WebScannerTargetedScanResponse,
     type WebScannerVerificationRunResponse as WebScannerVerificationRunResponse,
     type WebScannerVerificationRunsResponse as WebScannerVerificationRunsResponse,
+    type WebScannerRunsResponse as WebScannerRunsResponse,
     type WebScannerFindingsResponse as WebScannerFindingsResponse,
     type WebScannerCookiesResponse as WebScannerCookiesResponse,
     type WebScannerSummaryResponse as WebScannerSummaryResponse,
@@ -1721,6 +1789,7 @@ export declare namespace WebScanners {
     type WebScannerTargetedScanParams as WebScannerTargetedScanParams,
     type WebScannerVerificationRunParams as WebScannerVerificationRunParams,
     type WebScannerVerificationRunsParams as WebScannerVerificationRunsParams,
+    type WebScannerRunsParams as WebScannerRunsParams,
     type WebScannerFindingsParams as WebScannerFindingsParams,
     type WebScannerCookiesParams as WebScannerCookiesParams,
     type WebScannerSummaryParams as WebScannerSummaryParams,

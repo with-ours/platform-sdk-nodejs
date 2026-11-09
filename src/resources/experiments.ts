@@ -499,8 +499,8 @@ export namespace ExperimentListResponse {
     name: string;
 
     /**
-     * Relative traffic weight used when assigning visitors among variants in an active
-     * experiment.
+     * Share of the experiment's traffic as a percentage (0–100). Weights across all
+     * variants total 100; the control's weight is the remainder after the treatments.
      */
     weight: number;
 
@@ -550,31 +550,28 @@ export namespace ExperimentListResponse {
        * Canonical action payload. For `setText` / `setHtml` / `customCss` / `customJs` /
        * `setImage` / `insertBefore` / `insertAfter` this is the literal
        * text/HTML/CSS/JS/URL. For `setStyle` and `setAttribute` it is a JSON-stringified
-       * `{key: value}` object — prefer the structured `styles` / `attribute` fields
-       * below to avoid manual JSON encoding.
+       * `{key: value}` object; the structured `styles` / `attribute` fields carry the
+       * same data.
        */
       value: string;
 
       /**
-       * Populated on read for `setAttribute` modifications, parsed from `value`.
-       * Customers may also send this field instead of a JSON-stringified `value` on
-       * write — see `domModificationInputSchema`.
+       * Populated on read for `setAttribute` modifications, parsed from `value`. May
+       * also be sent instead of a JSON-stringified `value` on write.
        */
       attribute?: DomModification.Attribute | null;
 
       /**
-       * Populated on read for `setStyle` modifications, parsed from `value`. Customers
-       * may also send this field instead of a JSON-stringified `value` on write — see
-       * `domModificationInputSchema`.
+       * Populated on read for `setStyle` modifications, parsed from `value`. May also be
+       * sent instead of a JSON-stringified `value` on write.
        */
       styles?: Array<DomModification.Style> | null;
     }
 
     export namespace DomModification {
       /**
-       * Populated on read for `setAttribute` modifications, parsed from `value`.
-       * Customers may also send this field instead of a JSON-stringified `value` on
-       * write — see `domModificationInputSchema`.
+       * Populated on read for `setAttribute` modifications, parsed from `value`. May
+       * also be sent instead of a JSON-stringified `value` on write.
        */
       export interface Attribute {
         /**
@@ -1462,8 +1459,8 @@ export namespace ExperimentCreateResponse {
     name: string;
 
     /**
-     * Relative traffic weight used when assigning visitors among variants in an active
-     * experiment.
+     * Share of the experiment's traffic as a percentage (0–100). Weights across all
+     * variants total 100; the control's weight is the remainder after the treatments.
      */
     weight: number;
 
@@ -1513,31 +1510,28 @@ export namespace ExperimentCreateResponse {
        * Canonical action payload. For `setText` / `setHtml` / `customCss` / `customJs` /
        * `setImage` / `insertBefore` / `insertAfter` this is the literal
        * text/HTML/CSS/JS/URL. For `setStyle` and `setAttribute` it is a JSON-stringified
-       * `{key: value}` object — prefer the structured `styles` / `attribute` fields
-       * below to avoid manual JSON encoding.
+       * `{key: value}` object; the structured `styles` / `attribute` fields carry the
+       * same data.
        */
       value: string;
 
       /**
-       * Populated on read for `setAttribute` modifications, parsed from `value`.
-       * Customers may also send this field instead of a JSON-stringified `value` on
-       * write — see `domModificationInputSchema`.
+       * Populated on read for `setAttribute` modifications, parsed from `value`. May
+       * also be sent instead of a JSON-stringified `value` on write.
        */
       attribute?: DomModification.Attribute | null;
 
       /**
-       * Populated on read for `setStyle` modifications, parsed from `value`. Customers
-       * may also send this field instead of a JSON-stringified `value` on write — see
-       * `domModificationInputSchema`.
+       * Populated on read for `setStyle` modifications, parsed from `value`. May also be
+       * sent instead of a JSON-stringified `value` on write.
        */
       styles?: Array<DomModification.Style> | null;
     }
 
     export namespace DomModification {
       /**
-       * Populated on read for `setAttribute` modifications, parsed from `value`.
-       * Customers may also send this field instead of a JSON-stringified `value` on
-       * write — see `domModificationInputSchema`.
+       * Populated on read for `setAttribute` modifications, parsed from `value`. May
+       * also be sent instead of a JSON-stringified `value` on write.
        */
       export interface Attribute {
         /**
@@ -2425,8 +2419,8 @@ export namespace ExperimentRetrieveResponse {
     name: string;
 
     /**
-     * Relative traffic weight used when assigning visitors among variants in an active
-     * experiment.
+     * Share of the experiment's traffic as a percentage (0–100). Weights across all
+     * variants total 100; the control's weight is the remainder after the treatments.
      */
     weight: number;
 
@@ -2476,31 +2470,28 @@ export namespace ExperimentRetrieveResponse {
        * Canonical action payload. For `setText` / `setHtml` / `customCss` / `customJs` /
        * `setImage` / `insertBefore` / `insertAfter` this is the literal
        * text/HTML/CSS/JS/URL. For `setStyle` and `setAttribute` it is a JSON-stringified
-       * `{key: value}` object — prefer the structured `styles` / `attribute` fields
-       * below to avoid manual JSON encoding.
+       * `{key: value}` object; the structured `styles` / `attribute` fields carry the
+       * same data.
        */
       value: string;
 
       /**
-       * Populated on read for `setAttribute` modifications, parsed from `value`.
-       * Customers may also send this field instead of a JSON-stringified `value` on
-       * write — see `domModificationInputSchema`.
+       * Populated on read for `setAttribute` modifications, parsed from `value`. May
+       * also be sent instead of a JSON-stringified `value` on write.
        */
       attribute?: DomModification.Attribute | null;
 
       /**
-       * Populated on read for `setStyle` modifications, parsed from `value`. Customers
-       * may also send this field instead of a JSON-stringified `value` on write — see
-       * `domModificationInputSchema`.
+       * Populated on read for `setStyle` modifications, parsed from `value`. May also be
+       * sent instead of a JSON-stringified `value` on write.
        */
       styles?: Array<DomModification.Style> | null;
     }
 
     export namespace DomModification {
       /**
-       * Populated on read for `setAttribute` modifications, parsed from `value`.
-       * Customers may also send this field instead of a JSON-stringified `value` on
-       * write — see `domModificationInputSchema`.
+       * Populated on read for `setAttribute` modifications, parsed from `value`. May
+       * also be sent instead of a JSON-stringified `value` on write.
        */
       export interface Attribute {
         /**
@@ -3388,8 +3379,8 @@ export namespace ExperimentUpdateResponse {
     name: string;
 
     /**
-     * Relative traffic weight used when assigning visitors among variants in an active
-     * experiment.
+     * Share of the experiment's traffic as a percentage (0–100). Weights across all
+     * variants total 100; the control's weight is the remainder after the treatments.
      */
     weight: number;
 
@@ -3439,31 +3430,28 @@ export namespace ExperimentUpdateResponse {
        * Canonical action payload. For `setText` / `setHtml` / `customCss` / `customJs` /
        * `setImage` / `insertBefore` / `insertAfter` this is the literal
        * text/HTML/CSS/JS/URL. For `setStyle` and `setAttribute` it is a JSON-stringified
-       * `{key: value}` object — prefer the structured `styles` / `attribute` fields
-       * below to avoid manual JSON encoding.
+       * `{key: value}` object; the structured `styles` / `attribute` fields carry the
+       * same data.
        */
       value: string;
 
       /**
-       * Populated on read for `setAttribute` modifications, parsed from `value`.
-       * Customers may also send this field instead of a JSON-stringified `value` on
-       * write — see `domModificationInputSchema`.
+       * Populated on read for `setAttribute` modifications, parsed from `value`. May
+       * also be sent instead of a JSON-stringified `value` on write.
        */
       attribute?: DomModification.Attribute | null;
 
       /**
-       * Populated on read for `setStyle` modifications, parsed from `value`. Customers
-       * may also send this field instead of a JSON-stringified `value` on write — see
-       * `domModificationInputSchema`.
+       * Populated on read for `setStyle` modifications, parsed from `value`. May also be
+       * sent instead of a JSON-stringified `value` on write.
        */
       styles?: Array<DomModification.Style> | null;
     }
 
     export namespace DomModification {
       /**
-       * Populated on read for `setAttribute` modifications, parsed from `value`.
-       * Customers may also send this field instead of a JSON-stringified `value` on
-       * write — see `domModificationInputSchema`.
+       * Populated on read for `setAttribute` modifications, parsed from `value`. May
+       * also be sent instead of a JSON-stringified `value` on write.
        */
       export interface Attribute {
         /**
@@ -4356,8 +4344,8 @@ export namespace ExperimentDuplicateResponse {
     name: string;
 
     /**
-     * Relative traffic weight used when assigning visitors among variants in an active
-     * experiment.
+     * Share of the experiment's traffic as a percentage (0–100). Weights across all
+     * variants total 100; the control's weight is the remainder after the treatments.
      */
     weight: number;
 
@@ -4407,31 +4395,28 @@ export namespace ExperimentDuplicateResponse {
        * Canonical action payload. For `setText` / `setHtml` / `customCss` / `customJs` /
        * `setImage` / `insertBefore` / `insertAfter` this is the literal
        * text/HTML/CSS/JS/URL. For `setStyle` and `setAttribute` it is a JSON-stringified
-       * `{key: value}` object — prefer the structured `styles` / `attribute` fields
-       * below to avoid manual JSON encoding.
+       * `{key: value}` object; the structured `styles` / `attribute` fields carry the
+       * same data.
        */
       value: string;
 
       /**
-       * Populated on read for `setAttribute` modifications, parsed from `value`.
-       * Customers may also send this field instead of a JSON-stringified `value` on
-       * write — see `domModificationInputSchema`.
+       * Populated on read for `setAttribute` modifications, parsed from `value`. May
+       * also be sent instead of a JSON-stringified `value` on write.
        */
       attribute?: DomModification.Attribute | null;
 
       /**
-       * Populated on read for `setStyle` modifications, parsed from `value`. Customers
-       * may also send this field instead of a JSON-stringified `value` on write — see
-       * `domModificationInputSchema`.
+       * Populated on read for `setStyle` modifications, parsed from `value`. May also be
+       * sent instead of a JSON-stringified `value` on write.
        */
       styles?: Array<DomModification.Style> | null;
     }
 
     export namespace DomModification {
       /**
-       * Populated on read for `setAttribute` modifications, parsed from `value`.
-       * Customers may also send this field instead of a JSON-stringified `value` on
-       * write — see `domModificationInputSchema`.
+       * Populated on read for `setAttribute` modifications, parsed from `value`. May
+       * also be sent instead of a JSON-stringified `value` on write.
        */
       export interface Attribute {
         /**
