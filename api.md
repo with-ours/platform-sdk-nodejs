@@ -668,6 +668,7 @@ Types:
 - <code><a href="./src/resources/web-scanners.ts">WebScannerTargetedScanResponse</a></code>
 - <code><a href="./src/resources/web-scanners.ts">WebScannerVerificationRunResponse</a></code>
 - <code><a href="./src/resources/web-scanners.ts">WebScannerVerificationRunsResponse</a></code>
+- <code><a href="./src/resources/web-scanners.ts">WebScannerRunsResponse</a></code>
 - <code><a href="./src/resources/web-scanners.ts">WebScannerFindingsResponse</a></code>
 - <code><a href="./src/resources/web-scanners.ts">WebScannerCookiesResponse</a></code>
 - <code><a href="./src/resources/web-scanners.ts">WebScannerSummaryResponse</a></code>
@@ -686,6 +687,7 @@ Methods:
 - <code title="post /rest/v1/web-scanners/{id}/targeted-scan">client.webScanners.<a href="./src/resources/web-scanners.ts">targetedScan</a>(id, { ...params }) -> WebScannerTargetedScanResponse</code>
 - <code title="get /rest/v1/web-scanners/{id}/verification-run">client.webScanners.<a href="./src/resources/web-scanners.ts">verificationRun</a>(id, { ...params }) -> WebScannerVerificationRunResponse</code>
 - <code title="get /rest/v1/web-scanners/{id}/verification-runs">client.webScanners.<a href="./src/resources/web-scanners.ts">verificationRuns</a>(id, { ...params }) -> WebScannerVerificationRunsResponse</code>
+- <code title="get /rest/v1/web-scanners/{id}/runs">client.webScanners.<a href="./src/resources/web-scanners.ts">runs</a>(id, { ...params }) -> WebScannerRunsResponse</code>
 - <code title="get /rest/v1/web-scanners/{id}/findings">client.webScanners.<a href="./src/resources/web-scanners.ts">findings</a>(id, { ...params }) -> WebScannerFindingsResponse</code>
 - <code title="get /rest/v1/web-scanners/{id}/cookies">client.webScanners.<a href="./src/resources/web-scanners.ts">cookies</a>(id, { ...params }) -> WebScannerCookiesResponse</code>
 - <code title="get /rest/v1/web-scanners/{id}/summary">client.webScanners.<a href="./src/resources/web-scanners.ts">summary</a>(id, { ...params }) -> WebScannerSummaryResponse</code>
@@ -789,6 +791,32 @@ Methods:
 - <code title="get /rest/v1/report-branding/logo">client.reportBranding.<a href="./src/resources/report-branding.ts">retrieve</a>({ ...params }) -> ReportBrandingRetrieveResponse</code>
 - <code title="put /rest/v1/report-branding/logo">client.reportBranding.<a href="./src/resources/report-branding.ts">replace</a>({ ...params }) -> ReportBrandingReplaceResponse</code>
 - <code title="delete /rest/v1/report-branding/logo">client.reportBranding.<a href="./src/resources/report-branding.ts">delete</a>() -> ReportBrandingDeleteResponse</code>
+
+# AttributionReports
+
+Types:
+
+- <code><a href="./src/resources/attribution-reports.ts">AttributionReportListResponse</a></code>
+- <code><a href="./src/resources/attribution-reports.ts">AttributionReportCreateResponse</a></code>
+- <code><a href="./src/resources/attribution-reports.ts">AttributionReportRetrieveResponse</a></code>
+- <code><a href="./src/resources/attribution-reports.ts">AttributionReportUpdateResponse</a></code>
+- <code><a href="./src/resources/attribution-reports.ts">AttributionReportDeleteResponse</a></code>
+- <code><a href="./src/resources/attribution-reports.ts">AttributionReportDuplicateResponse</a></code>
+- <code><a href="./src/resources/attribution-reports.ts">AttributionReportPreviewResponse</a></code>
+- <code><a href="./src/resources/attribution-reports.ts">AttributionReportVisitorsResponse</a></code>
+- <code><a href="./src/resources/attribution-reports.ts">AttributionReportInsightsResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/attribution-reports">client.attributionReports.<a href="./src/resources/attribution-reports.ts">list</a>({ ...params }) -> AttributionReportListResponsesCursor</code>
+- <code title="post /rest/v1/attribution-reports">client.attributionReports.<a href="./src/resources/attribution-reports.ts">create</a>({ ...params }) -> AttributionReportCreateResponse</code>
+- <code title="get /rest/v1/attribution-reports/{id}">client.attributionReports.<a href="./src/resources/attribution-reports.ts">retrieve</a>(id) -> AttributionReportRetrieveResponse</code>
+- <code title="patch /rest/v1/attribution-reports/{id}">client.attributionReports.<a href="./src/resources/attribution-reports.ts">update</a>(id, { ...params }) -> AttributionReportUpdateResponse</code>
+- <code title="delete /rest/v1/attribution-reports/{id}">client.attributionReports.<a href="./src/resources/attribution-reports.ts">delete</a>(id, { ...params }) -> AttributionReportDeleteResponse</code>
+- <code title="post /rest/v1/attribution-reports/{id}/duplicate">client.attributionReports.<a href="./src/resources/attribution-reports.ts">duplicate</a>(id, { ...params }) -> AttributionReportDuplicateResponse</code>
+- <code title="get /rest/v1/attribution-reports/preview">client.attributionReports.<a href="./src/resources/attribution-reports.ts">preview</a>({ ...params }) -> AttributionReportPreviewResponse</code>
+- <code title="get /rest/v1/attribution-reports/visitors">client.attributionReports.<a href="./src/resources/attribution-reports.ts">visitors</a>({ ...params }) -> AttributionReportVisitorsResponse</code>
+- <code title="get /rest/v1/attribution-reports/insights">client.attributionReports.<a href="./src/resources/attribution-reports.ts">insights</a>({ ...params }) -> AttributionReportInsightsResponse</code>
 
 # Insights
 

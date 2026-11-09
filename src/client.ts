@@ -49,6 +49,27 @@ import {
   AttributionUtmComparisonResponse,
 } from './resources/attribution';
 import {
+  AttributionReportCreateParams,
+  AttributionReportCreateResponse,
+  AttributionReportDeleteParams,
+  AttributionReportDeleteResponse,
+  AttributionReportDuplicateParams,
+  AttributionReportDuplicateResponse,
+  AttributionReportInsightsParams,
+  AttributionReportInsightsResponse,
+  AttributionReportListParams,
+  AttributionReportListResponse,
+  AttributionReportListResponsesCursor,
+  AttributionReportPreviewParams,
+  AttributionReportPreviewResponse,
+  AttributionReportRetrieveResponse,
+  AttributionReportUpdateParams,
+  AttributionReportUpdateResponse,
+  AttributionReportVisitorsParams,
+  AttributionReportVisitorsResponse,
+  AttributionReports,
+} from './resources/attribution-reports';
+import {
   AudienceConversionReportCreateParams,
   AudienceConversionReportCreateResponse,
   AudienceConversionReportDeleteResponse,
@@ -579,6 +600,8 @@ import {
   WebScannerResolveCoverageGapParams,
   WebScannerResolveCoverageGapResponse,
   WebScannerRetrieveResponse,
+  WebScannerRunsParams,
+  WebScannerRunsResponse,
   WebScannerSummaryParams,
   WebScannerSummaryResponse,
   WebScannerTargetedScanParams,
@@ -1383,6 +1406,7 @@ export class OursPrivacyPlatform {
   analytics: API.Analytics = new API.Analytics(this);
   dashboards: API.Dashboards = new API.Dashboards(this);
   reportBranding: API.ReportBranding = new API.ReportBranding(this);
+  attributionReports: API.AttributionReports = new API.AttributionReports(this);
   insights: API.Insights = new API.Insights(this);
   journeyFlows: API.JourneyFlows = new API.JourneyFlows(this);
   testEvents: API.TestEvents = new API.TestEvents(this);
@@ -1427,6 +1451,7 @@ OursPrivacyPlatform.CustomDomains = CustomDomains;
 OursPrivacyPlatform.Analytics = Analytics;
 OursPrivacyPlatform.Dashboards = Dashboards;
 OursPrivacyPlatform.ReportBranding = ReportBranding;
+OursPrivacyPlatform.AttributionReports = AttributionReports;
 OursPrivacyPlatform.Insights = Insights;
 OursPrivacyPlatform.JourneyFlows = JourneyFlows;
 OursPrivacyPlatform.TestEvents = TestEvents;
@@ -1919,6 +1944,7 @@ export declare namespace OursPrivacyPlatform {
     type WebScannerTargetedScanResponse as WebScannerTargetedScanResponse,
     type WebScannerVerificationRunResponse as WebScannerVerificationRunResponse,
     type WebScannerVerificationRunsResponse as WebScannerVerificationRunsResponse,
+    type WebScannerRunsResponse as WebScannerRunsResponse,
     type WebScannerFindingsResponse as WebScannerFindingsResponse,
     type WebScannerCookiesResponse as WebScannerCookiesResponse,
     type WebScannerSummaryResponse as WebScannerSummaryResponse,
@@ -1930,6 +1956,7 @@ export declare namespace OursPrivacyPlatform {
     type WebScannerTargetedScanParams as WebScannerTargetedScanParams,
     type WebScannerVerificationRunParams as WebScannerVerificationRunParams,
     type WebScannerVerificationRunsParams as WebScannerVerificationRunsParams,
+    type WebScannerRunsParams as WebScannerRunsParams,
     type WebScannerFindingsParams as WebScannerFindingsParams,
     type WebScannerCookiesParams as WebScannerCookiesParams,
     type WebScannerSummaryParams as WebScannerSummaryParams,
@@ -1999,6 +2026,28 @@ export declare namespace OursPrivacyPlatform {
     type ReportBrandingDeleteResponse as ReportBrandingDeleteResponse,
     type ReportBrandingRetrieveParams as ReportBrandingRetrieveParams,
     type ReportBrandingReplaceParams as ReportBrandingReplaceParams,
+  };
+
+  export {
+    AttributionReports as AttributionReports,
+    type AttributionReportListResponse as AttributionReportListResponse,
+    type AttributionReportCreateResponse as AttributionReportCreateResponse,
+    type AttributionReportRetrieveResponse as AttributionReportRetrieveResponse,
+    type AttributionReportUpdateResponse as AttributionReportUpdateResponse,
+    type AttributionReportDeleteResponse as AttributionReportDeleteResponse,
+    type AttributionReportDuplicateResponse as AttributionReportDuplicateResponse,
+    type AttributionReportPreviewResponse as AttributionReportPreviewResponse,
+    type AttributionReportVisitorsResponse as AttributionReportVisitorsResponse,
+    type AttributionReportInsightsResponse as AttributionReportInsightsResponse,
+    type AttributionReportListResponsesCursor as AttributionReportListResponsesCursor,
+    type AttributionReportListParams as AttributionReportListParams,
+    type AttributionReportCreateParams as AttributionReportCreateParams,
+    type AttributionReportUpdateParams as AttributionReportUpdateParams,
+    type AttributionReportDeleteParams as AttributionReportDeleteParams,
+    type AttributionReportDuplicateParams as AttributionReportDuplicateParams,
+    type AttributionReportPreviewParams as AttributionReportPreviewParams,
+    type AttributionReportVisitorsParams as AttributionReportVisitorsParams,
+    type AttributionReportInsightsParams as AttributionReportInsightsParams,
   };
 
   export {
