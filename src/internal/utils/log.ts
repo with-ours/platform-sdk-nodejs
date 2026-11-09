@@ -82,6 +82,58 @@ export function loggerFor(client: OursPrivacyPlatform): Logger {
   return levelLogger;
 }
 
+const sensitiveFields = new Set<string>([
+  'accesstoken',
+  'apikey',
+  'clientsecret',
+  'credentials',
+  'ingesturl',
+  'installscript',
+  'password',
+  'projectapikey',
+  'refreshtoken',
+  'samplecurl',
+  'testingesturl',
+  'testinstallscript',
+  'testtoken',
+  'token',
+  'websdktoken',
+]);
+
+const redactValue = (value: unknown): unknown => {
+  if (Array.isArray(value)) {
+    return value.map(redactValue);
+  }
+  if (typeof value !== 'object' || value === null) {
+    return value;
+  }
+  const prototype = Object.getPrototypeOf(value);
+  if (prototype !== Object.prototype && prototype !== null) {
+    return value;
+  }
+  return Object.fromEntries(
+    Object.entries(value).map(([name, field]) => [
+      name,
+      sensitiveFields.has(name.toLowerCase().replace(/[-_]/g, '')) ? '***' : redactValue(field),
+    ]),
+  );
+};
+
+/**
+ * Returns a copy of a request or response body with sensitive field values replaced, for debug output only.
+ * A string is treated as serialized JSON.
+ */
+export const redactSensitiveFields = (value: unknown): unknown => {
+  if (typeof value !== 'string') {
+    return redactValue(value);
+  }
+  try {
+    return JSON.stringify(redactValue(JSON.parse(value)));
+  } catch {
+    return value;
+  }
+};
+
 export const formatRequestDetails = (details: {
   options?: RequestOptions | undefined;
   headers?: Headers | Record<string, string> | undefined;
@@ -97,6 +149,18 @@ export const formatRequestDetails = (details: {
   if (details.options) {
     details.options = { ...details.options };
     delete details.options['headers']; // redundant + leaks internals
+    if ('body' in details.options) {
+      details.options.body = redactSensitiveFields(details.options.body);
+    }
+    if ('query' in details.options) {
+      details.options.query = redactSensitiveFields(details.options.query) as typeof details.options.query;
+    }
+  }
+  if ('body' in details) {
+    details.body = redactSensitiveFields(details.body);
+  }
+  if ('message' in details) {
+    details.message = redactSensitiveFields(details.message);
   }
   if (details.headers) {
     details.headers = Object.fromEntries(

@@ -4,7 +4,11 @@
 
 This library provides convenient access to the Ours Privacy Platform REST API from server-side TypeScript or JavaScript.
 
-The REST API documentation can be found on [docs.oursprivacy.com](https://docs.oursprivacy.com/docs/api). The full API of this library can be found in [api.md](api.md).
+Create an API key under Settings → API Keys and set it as `OURS_PRIVACY_API_KEY`. See [Authentication](https://docs.oursprivacy.com/docs/platform-api/authentication).
+
+See the [SDK guide](https://docs.oursprivacy.com/docs/platform-nodejs) and the runnable code in [`examples`](examples).
+
+The REST API documentation can be found on [docs.oursprivacy.com](https://docs.oursprivacy.com/docs/platform-api). The full API of this library can be found in [api.md](api.md).
 
 ## Installation
 
@@ -24,11 +28,52 @@ const client = new OursPrivacyPlatform({
   apiKey: process.env['OURS_PRIVACY_API_KEY'], // This is the default and can be omitted
 });
 
-const page = await client.sources.list();
+const page = await client.sources.list({ limit: 20 });
 const sourceListResponse = page.entities[0];
 
 console.log(sourceListResponse.id);
 ```
+
+### Get a source's tokens
+
+Fetch the install or ingest tokens for a source; the response depends on the source's type.
+
+```ts
+import OursPrivacyPlatform from '@oursprivacy/platform-sdk';
+
+const client = new OursPrivacyPlatform({
+  apiKey: process.env['OURS_PRIVACY_API_KEY'], // This is the default and can be omitted
+});
+
+const response = await client.sources.tokens('YOUR_SOURCE_ID');
+```
+
+### Check a destination's health
+
+Fetch a snapshot of a destination's dispatches over the trailing 24 hours.
+
+```ts
+import OursPrivacyPlatform from '@oursprivacy/platform-sdk';
+
+const client = new OursPrivacyPlatform({
+  apiKey: process.env['OURS_PRIVACY_API_KEY'], // This is the default and can be omitted
+});
+
+const response = await client.destinations.health('YOUR_DESTINATION_ID');
+
+console.log(response.status);
+```
+
+### Publish draft changes
+
+Creating a version (`POST /rest/v1/versions`) publishes your current draft, other than experiments, to your live deployment, so read the [versions guide](https://docs.oursprivacy.com/docs/platform-api/versions) before you call it.
+
+### Further reading
+
+The docs cover the rest of the Platform API.
+
+- [Quickstart](https://docs.oursprivacy.com/docs/platform-api/quickstart)
+- [SDKs and MCP](https://docs.oursprivacy.com/docs/platform-api/sdks-and-mcp)
 
 ### Request & Response types
 
@@ -42,7 +87,7 @@ const client = new OursPrivacyPlatform({
   apiKey: process.env['OURS_PRIVACY_API_KEY'], // This is the default and can be omitted
 });
 
-const [sourceListResponse]: [OursPrivacyPlatform.SourceListResponse] = await client.sources.list();
+const page: OursPrivacyPlatform.SourceListResponsesCursor = await client.sources.list();
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -95,7 +140,7 @@ const client = new OursPrivacyPlatform({
 });
 
 // Or, configure per-request:
-await client.sources.list({
+await client.sources.list({}, {
   maxRetries: 5,
 });
 ```
@@ -112,7 +157,7 @@ const client = new OursPrivacyPlatform({
 });
 
 // Override per-request:
-await client.sources.list({
+await client.sources.list({}, {
   timeout: 5 * 1000,
 });
 ```
@@ -127,10 +172,10 @@ List methods in the OursPrivacyPlatform API are paginated.
 You can use the `for await … of` syntax to iterate through items across all pages:
 
 ```ts
-async function fetchAllSourceListResponses(params) {
+async function fetchAllSourceListResponses() {
   const allSourceListResponses = [];
   // Automatically fetches more pages as needed.
-  for await (const sourceListResponse of client.sources.list()) {
+  for await (const sourceListResponse of client.sources.list({ limit: 20 })) {
     allSourceListResponses.push(sourceListResponse);
   }
   return allSourceListResponses;
@@ -140,7 +185,7 @@ async function fetchAllSourceListResponses(params) {
 Alternatively, you can request a single page at a time:
 
 ```ts
-let page = await client.sources.list();
+let page = await client.sources.list({ limit: 20 });
 for (const sourceListResponse of page.entities) {
   console.log(sourceListResponse);
 }
@@ -166,9 +211,9 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new OursPrivacyPlatform();
 
-const response = await client.sources.list().asResponse();
-console.log(response.headers.get('X-My-Header'));
-console.log(response.statusText); // access the underlying Response object
+const rawResponse = await client.sources.list().asResponse();
+console.log(rawResponse.headers.get('X-My-Header'));
+console.log(rawResponse.statusText); // access the underlying Response object
 
 const { data: page, response: raw } = await client.sources.list().withResponse();
 console.log(raw.headers.get('X-My-Header'));
@@ -207,8 +252,8 @@ Available log levels, from most to least verbose:
 - `'off'` - Disable all logging
 
 At the `'debug'` level, all HTTP requests and responses are logged, including headers and bodies.
-Some authentication-related headers are redacted, but sensitive data in request and response bodies
-may still be visible.
+Authentication-related headers and known secret fields in JSON bodies are redacted, but other sensitive
+data in request and response bodies may still be visible.
 
 #### Custom logger
 
@@ -351,8 +396,6 @@ const client = new OursPrivacyPlatform({
   },
 });
 ```
-
-## Frequently Asked Questions
 
 ## Semantic versioning
 
