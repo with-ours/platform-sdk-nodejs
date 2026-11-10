@@ -137,12 +137,12 @@ describe('resource videos', () => {
     const response = await client.videos.updateTranscript('id', {
       content: 'x',
       format: 'SRT',
-      languageCode: 'languageCode',
+      languageCode: 'af',
     });
   });
 
   test('requestCaptionTranslation: only required params', async () => {
-    const responsePromise = client.videos.requestCaptionTranslation('id', { languageCode: 'languageCode' });
+    const responsePromise = client.videos.requestCaptionTranslation('id', { languageCode: 'af' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -154,13 +154,13 @@ describe('resource videos', () => {
 
   test('requestCaptionTranslation: required and optional params', async () => {
     const response = await client.videos.requestCaptionTranslation('id', {
-      languageCode: 'languageCode',
+      languageCode: 'af',
       replace: true,
     });
   });
 
   test('cancelCaptionTranslation: only required params', async () => {
-    const responsePromise = client.videos.cancelCaptionTranslation('id', { languageCode: 'languageCode' });
+    const responsePromise = client.videos.cancelCaptionTranslation('id', { languageCode: 'af' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -171,7 +171,7 @@ describe('resource videos', () => {
   });
 
   test('cancelCaptionTranslation: required and optional params', async () => {
-    const response = await client.videos.cancelCaptionTranslation('id', { languageCode: 'languageCode' });
+    const response = await client.videos.cancelCaptionTranslation('id', { languageCode: 'af' });
   });
 
   test('analytics: only required params', async () => {
