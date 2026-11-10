@@ -76,7 +76,9 @@ export class ExperimentVariants extends APIResource {
    * @example
    * ```ts
    * const experimentVariant =
-   *   await client.experimentVariants.update('id');
+   *   await client.experimentVariants.update(
+   *     '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   *   );
    * ```
    */
   update(
@@ -126,8 +128,8 @@ export interface ExperimentVariantListResponse {
   name: string;
 
   /**
-   * Relative traffic weight used when assigning visitors among variants in an active
-   * experiment.
+   * Share of the experiment's traffic as a percentage (0–100). Weights across all
+   * variants total 100; the control's weight is the remainder after the treatments.
    */
   weight: number;
 
@@ -177,31 +179,28 @@ export namespace ExperimentVariantListResponse {
      * Canonical action payload. For `setText` / `setHtml` / `customCss` / `customJs` /
      * `setImage` / `insertBefore` / `insertAfter` this is the literal
      * text/HTML/CSS/JS/URL. For `setStyle` and `setAttribute` it is a JSON-stringified
-     * `{key: value}` object — prefer the structured `styles` / `attribute` fields
-     * below to avoid manual JSON encoding.
+     * `{key: value}` object; the structured `styles` / `attribute` fields carry the
+     * same data.
      */
     value: string;
 
     /**
-     * Populated on read for `setAttribute` modifications, parsed from `value`.
-     * Customers may also send this field instead of a JSON-stringified `value` on
-     * write — see `domModificationInputSchema`.
+     * Populated on read for `setAttribute` modifications, parsed from `value`. May
+     * also be sent instead of a JSON-stringified `value` on write.
      */
     attribute?: DomModification.Attribute | null;
 
     /**
-     * Populated on read for `setStyle` modifications, parsed from `value`. Customers
-     * may also send this field instead of a JSON-stringified `value` on write — see
-     * `domModificationInputSchema`.
+     * Populated on read for `setStyle` modifications, parsed from `value`. May also be
+     * sent instead of a JSON-stringified `value` on write.
      */
     styles?: Array<DomModification.Style> | null;
   }
 
   export namespace DomModification {
     /**
-     * Populated on read for `setAttribute` modifications, parsed from `value`.
-     * Customers may also send this field instead of a JSON-stringified `value` on
-     * write — see `domModificationInputSchema`.
+     * Populated on read for `setAttribute` modifications, parsed from `value`. May
+     * also be sent instead of a JSON-stringified `value` on write.
      */
     export interface Attribute {
       /**
@@ -251,8 +250,8 @@ export interface ExperimentVariantCreateResponse {
   name: string;
 
   /**
-   * Relative traffic weight used when assigning visitors among variants in an active
-   * experiment.
+   * Share of the experiment's traffic as a percentage (0–100). Weights across all
+   * variants total 100; the control's weight is the remainder after the treatments.
    */
   weight: number;
 
@@ -302,31 +301,28 @@ export namespace ExperimentVariantCreateResponse {
      * Canonical action payload. For `setText` / `setHtml` / `customCss` / `customJs` /
      * `setImage` / `insertBefore` / `insertAfter` this is the literal
      * text/HTML/CSS/JS/URL. For `setStyle` and `setAttribute` it is a JSON-stringified
-     * `{key: value}` object — prefer the structured `styles` / `attribute` fields
-     * below to avoid manual JSON encoding.
+     * `{key: value}` object; the structured `styles` / `attribute` fields carry the
+     * same data.
      */
     value: string;
 
     /**
-     * Populated on read for `setAttribute` modifications, parsed from `value`.
-     * Customers may also send this field instead of a JSON-stringified `value` on
-     * write — see `domModificationInputSchema`.
+     * Populated on read for `setAttribute` modifications, parsed from `value`. May
+     * also be sent instead of a JSON-stringified `value` on write.
      */
     attribute?: DomModification.Attribute | null;
 
     /**
-     * Populated on read for `setStyle` modifications, parsed from `value`. Customers
-     * may also send this field instead of a JSON-stringified `value` on write — see
-     * `domModificationInputSchema`.
+     * Populated on read for `setStyle` modifications, parsed from `value`. May also be
+     * sent instead of a JSON-stringified `value` on write.
      */
     styles?: Array<DomModification.Style> | null;
   }
 
   export namespace DomModification {
     /**
-     * Populated on read for `setAttribute` modifications, parsed from `value`.
-     * Customers may also send this field instead of a JSON-stringified `value` on
-     * write — see `domModificationInputSchema`.
+     * Populated on read for `setAttribute` modifications, parsed from `value`. May
+     * also be sent instead of a JSON-stringified `value` on write.
      */
     export interface Attribute {
       /**
@@ -376,8 +372,8 @@ export interface ExperimentVariantRetrieveResponse {
   name: string;
 
   /**
-   * Relative traffic weight used when assigning visitors among variants in an active
-   * experiment.
+   * Share of the experiment's traffic as a percentage (0–100). Weights across all
+   * variants total 100; the control's weight is the remainder after the treatments.
    */
   weight: number;
 
@@ -427,31 +423,28 @@ export namespace ExperimentVariantRetrieveResponse {
      * Canonical action payload. For `setText` / `setHtml` / `customCss` / `customJs` /
      * `setImage` / `insertBefore` / `insertAfter` this is the literal
      * text/HTML/CSS/JS/URL. For `setStyle` and `setAttribute` it is a JSON-stringified
-     * `{key: value}` object — prefer the structured `styles` / `attribute` fields
-     * below to avoid manual JSON encoding.
+     * `{key: value}` object; the structured `styles` / `attribute` fields carry the
+     * same data.
      */
     value: string;
 
     /**
-     * Populated on read for `setAttribute` modifications, parsed from `value`.
-     * Customers may also send this field instead of a JSON-stringified `value` on
-     * write — see `domModificationInputSchema`.
+     * Populated on read for `setAttribute` modifications, parsed from `value`. May
+     * also be sent instead of a JSON-stringified `value` on write.
      */
     attribute?: DomModification.Attribute | null;
 
     /**
-     * Populated on read for `setStyle` modifications, parsed from `value`. Customers
-     * may also send this field instead of a JSON-stringified `value` on write — see
-     * `domModificationInputSchema`.
+     * Populated on read for `setStyle` modifications, parsed from `value`. May also be
+     * sent instead of a JSON-stringified `value` on write.
      */
     styles?: Array<DomModification.Style> | null;
   }
 
   export namespace DomModification {
     /**
-     * Populated on read for `setAttribute` modifications, parsed from `value`.
-     * Customers may also send this field instead of a JSON-stringified `value` on
-     * write — see `domModificationInputSchema`.
+     * Populated on read for `setAttribute` modifications, parsed from `value`. May
+     * also be sent instead of a JSON-stringified `value` on write.
      */
     export interface Attribute {
       /**
@@ -501,8 +494,8 @@ export interface ExperimentVariantUpdateResponse {
   name: string;
 
   /**
-   * Relative traffic weight used when assigning visitors among variants in an active
-   * experiment.
+   * Share of the experiment's traffic as a percentage (0–100). Weights across all
+   * variants total 100; the control's weight is the remainder after the treatments.
    */
   weight: number;
 
@@ -552,31 +545,28 @@ export namespace ExperimentVariantUpdateResponse {
      * Canonical action payload. For `setText` / `setHtml` / `customCss` / `customJs` /
      * `setImage` / `insertBefore` / `insertAfter` this is the literal
      * text/HTML/CSS/JS/URL. For `setStyle` and `setAttribute` it is a JSON-stringified
-     * `{key: value}` object — prefer the structured `styles` / `attribute` fields
-     * below to avoid manual JSON encoding.
+     * `{key: value}` object; the structured `styles` / `attribute` fields carry the
+     * same data.
      */
     value: string;
 
     /**
-     * Populated on read for `setAttribute` modifications, parsed from `value`.
-     * Customers may also send this field instead of a JSON-stringified `value` on
-     * write — see `domModificationInputSchema`.
+     * Populated on read for `setAttribute` modifications, parsed from `value`. May
+     * also be sent instead of a JSON-stringified `value` on write.
      */
     attribute?: DomModification.Attribute | null;
 
     /**
-     * Populated on read for `setStyle` modifications, parsed from `value`. Customers
-     * may also send this field instead of a JSON-stringified `value` on write — see
-     * `domModificationInputSchema`.
+     * Populated on read for `setStyle` modifications, parsed from `value`. May also be
+     * sent instead of a JSON-stringified `value` on write.
      */
     styles?: Array<DomModification.Style> | null;
   }
 
   export namespace DomModification {
     /**
-     * Populated on read for `setAttribute` modifications, parsed from `value`.
-     * Customers may also send this field instead of a JSON-stringified `value` on
-     * write — see `domModificationInputSchema`.
+     * Populated on read for `setAttribute` modifications, parsed from `value`. May
+     * also be sent instead of a JSON-stringified `value` on write.
      */
     export interface Attribute {
       /**
@@ -626,8 +616,8 @@ export interface ExperimentVariantDeleteResponse {
   name: string;
 
   /**
-   * Relative traffic weight used when assigning visitors among variants in an active
-   * experiment.
+   * Share of the experiment's traffic as a percentage (0–100). Weights across all
+   * variants total 100; the control's weight is the remainder after the treatments.
    */
   weight: number;
 
@@ -677,31 +667,28 @@ export namespace ExperimentVariantDeleteResponse {
      * Canonical action payload. For `setText` / `setHtml` / `customCss` / `customJs` /
      * `setImage` / `insertBefore` / `insertAfter` this is the literal
      * text/HTML/CSS/JS/URL. For `setStyle` and `setAttribute` it is a JSON-stringified
-     * `{key: value}` object — prefer the structured `styles` / `attribute` fields
-     * below to avoid manual JSON encoding.
+     * `{key: value}` object; the structured `styles` / `attribute` fields carry the
+     * same data.
      */
     value: string;
 
     /**
-     * Populated on read for `setAttribute` modifications, parsed from `value`.
-     * Customers may also send this field instead of a JSON-stringified `value` on
-     * write — see `domModificationInputSchema`.
+     * Populated on read for `setAttribute` modifications, parsed from `value`. May
+     * also be sent instead of a JSON-stringified `value` on write.
      */
     attribute?: DomModification.Attribute | null;
 
     /**
-     * Populated on read for `setStyle` modifications, parsed from `value`. Customers
-     * may also send this field instead of a JSON-stringified `value` on write — see
-     * `domModificationInputSchema`.
+     * Populated on read for `setStyle` modifications, parsed from `value`. May also be
+     * sent instead of a JSON-stringified `value` on write.
      */
     styles?: Array<DomModification.Style> | null;
   }
 
   export namespace DomModification {
     /**
-     * Populated on read for `setAttribute` modifications, parsed from `value`.
-     * Customers may also send this field instead of a JSON-stringified `value` on
-     * write — see `domModificationInputSchema`.
+     * Populated on read for `setAttribute` modifications, parsed from `value`. May
+     * also be sent instead of a JSON-stringified `value` on write.
      */
     export interface Attribute {
       /**
@@ -748,12 +735,12 @@ export interface ExperimentVariantCreateParams {
   name: string;
 
   /**
-   * Traffic weight for this variant as a percentage (0–100). Treatment weights are
-   * percentages of the split and must total 99% or less to leave room for the
-   * auto-created control; the control is the remainder (100 − Σ treatment weights,
-   * always ≥ 1%). A personalization experience always serves its first non-control
-   * treatment to matching visitors, regardless of traffic allocation or variant
-   * weights.
+   * This treatment's share of the experiment's traffic as a whole-number percentage
+   * (0–100), not a relative weight. Treatment weights must total 99 or less; the
+   * auto-created control receives the remainder (100 − the treatment total, always
+   * at least 1). For a 50/50 test, send `weight: 50`. A personalization experience
+   * always serves its first non-control treatment to matching visitors, regardless
+   * of traffic allocation or variant weights.
    */
   weight: number;
 
@@ -764,12 +751,10 @@ export interface ExperimentVariantCreateParams {
   domModifications?: Array<ExperimentVariantCreateParams.DomModification> | null;
 
   /**
-   * Mark this variant as the experiment control. Defaults to `false`. The API
-   * rejects the request with 409 if the experiment already has a control variant.
-   * Every experiment keeps exactly one control whose weight is the auto-derived
-   * remainder of the split, so the control cannot be cleared while it would leave
-   * the treatments at 100% (no room for a control). DELETE on the control
-   * returns 409.
+   * Mark this variant as the experiment control. Defaults to `false`. Every
+   * experiment already has an auto-created control that cannot be demoted or
+   * deleted, so creating a second control is rejected with 409; edit the existing
+   * control instead.
    */
   isControl?: boolean | null;
 
@@ -838,8 +823,8 @@ export namespace ExperimentVariantCreateParams {
      * Canonical action payload. For `setText` / `setHtml` / `customCss` / `customJs` /
      * `setImage` / `insertBefore` / `insertAfter` this is the literal
      * text/HTML/CSS/JS/URL. For `setStyle` and `setAttribute` it is a JSON-stringified
-     * `{key: value}` object — or you can supply the structured `styles` / `attribute`
-     * field instead and the server will normalize.
+     * `{key: value}` object — or supply the structured `styles` / `attribute` field
+     * instead and the server will normalize.
      */
     value?: string | null;
   }
@@ -883,10 +868,9 @@ export interface ExperimentVariantUpdateParams {
   domModifications?: Array<ExperimentVariantUpdateParams.DomModification> | null;
 
   /**
-   * Promote or demote this variant as the control. Promoting a second variant while
-   * another already has `isControl: true` is rejected with 409. Demoting the control
-   * (`isControl: false`) is rejected — an experiment must always keep a control.
-   * Null leaves the control flag unchanged.
+   * Promote this variant to control. Rejected with 409 while another variant is the
+   * control, and demoting the control (`false`) is rejected because an experiment
+   * must always keep one. Null leaves the control flag unchanged.
    */
   isControl?: boolean | null;
 
@@ -903,17 +887,24 @@ export interface ExperimentVariantUpdateParams {
   redirectUrl?: string | null;
 
   /**
-   * Updated variant delivery mechanism. `dom_modifications` mutates the current page
-   * in-place; `redirect` sends the visitor to a different URL — pick based on
-   * whether the _page_ or the _content_ is the variable. Changing this also requires
-   * updating the matching payload field (`redirectUrl` or `domModifications`).
+   * Updated delivery mechanism. Variant delivery mechanism. `dom_modifications`
+   * mutates the current page in-place at SDK runtime — use it for
+   * copy/style/image/HTML changes that keep visitors on the same URL (headline copy
+   * tests, button color, hero image swap). `redirect` routes the visitor to a
+   * different URL entirely — use it for landing-page A/B tests, alternate pricing
+   * pages, or any test where the _page itself_ is the variable. They are not
+   * interchangeable: a redirect variant cannot also tweak DOM, and a
+   * dom_modifications variant cannot send the visitor elsewhere. Changing this also
+   * requires updating the matching payload field (`redirectUrl` or
+   * `domModifications`).
    */
   variantType?: 'dom_modifications' | 'redirect' | null;
 
   /**
-   * Updated traffic weight as a percentage (0–100). The control variant weight is
-   * derived from the treatments (it is the remainder of the split) and cannot be set
-   * directly.
+   * Updated share of the experiment's traffic as a whole-number percentage (0–100),
+   * not a relative weight. Treatment weights must total 99 or less. The control's
+   * weight is the remainder of the split and cannot be set directly; change a
+   * treatment instead. Omitted or null keeps the saved weight.
    */
   weight?: number | null;
 }
@@ -963,8 +954,8 @@ export namespace ExperimentVariantUpdateParams {
      * Canonical action payload. For `setText` / `setHtml` / `customCss` / `customJs` /
      * `setImage` / `insertBefore` / `insertAfter` this is the literal
      * text/HTML/CSS/JS/URL. For `setStyle` and `setAttribute` it is a JSON-stringified
-     * `{key: value}` object — or you can supply the structured `styles` / `attribute`
-     * field instead and the server will normalize.
+     * `{key: value}` object — or supply the structured `styles` / `attribute` field
+     * instead and the server will normalize.
      */
     value?: string | null;
   }
