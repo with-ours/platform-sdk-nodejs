@@ -175,6 +175,24 @@ describe('resource webScanners', () => {
     ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
   });
 
+  test('runs', async () => {
+    const responsePromise = client.webScanners.runs('id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('runs: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.webScanners.runs('id', { cursor: 'cursor', limit: 0 }, { path: '/_stainless_unknown_path' }),
+    ).rejects.toThrow(OursPrivacyPlatform.NotFoundError);
+  });
+
   test('findings', async () => {
     const responsePromise = client.webScanners.findings('id');
     const rawResponse = await responsePromise.asResponse();
@@ -192,7 +210,7 @@ describe('resource webScanners', () => {
       client.webScanners.findings(
         'id',
         {
-          date: '2026-05-15T00:00:00Z',
+          date: '2026-05-15',
           limit: 1,
           offset: 0,
         },
@@ -218,7 +236,7 @@ describe('resource webScanners', () => {
       client.webScanners.cookies(
         '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
         {
-          date: '2026-05-15T00:00:00Z',
+          date: '2026-05-15',
           limit: 1,
           offset: 0,
         },
@@ -245,7 +263,7 @@ describe('resource webScanners', () => {
         'id',
         {
           coverageRevision: 'coverageRevision',
-          date: '2026-05-15T00:00:00Z',
+          date: '2026-05-15',
           runRevision: 'runRevision',
         },
         { path: '/_stainless_unknown_path' },
@@ -272,7 +290,7 @@ describe('resource webScanners', () => {
         {
           coverageRevision: 'coverageRevision',
           cursor: 'cursor',
-          date: '2026-05-15T00:00:00Z',
+          date: '2026-05-15',
           limit: 25,
           runRevision: 'runRevision',
         },

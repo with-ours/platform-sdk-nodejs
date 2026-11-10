@@ -25,7 +25,7 @@ describe('resource personalizationProperties', () => {
     const response = await client.personalizationProperties.list({
       experimentSettingsId: '08524dc8-5289-48e8-bf40-b3a7cfa6ca0a',
       cursor: 'cursor',
-      limit: 25,
+      limit: 1000,
     });
   });
 
