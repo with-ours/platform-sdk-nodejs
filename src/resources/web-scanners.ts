@@ -320,12 +320,15 @@ export class WebScanners extends APIResource {
 
   /**
    * List every normalized host in the selected scan run that is neither covered by a
-   * current CMP consent service nor matched by an active suppression rule. Results
-   * are sorted by risk and hostname. Continue with pagination.nextCursor while
-   * preserving runRevision and coverageRevision; changed evidence returns HTTP 400
-   * and requires restarting from the first page. Historical runs are evaluated
-   * against current coverage configuration. Requires API-key scope or current OAuth
-   * user permission: webScanner:find
+   * current CMP consent service nor matched by an active suppression rule. A host
+   * the run's consent check contacted before any choice, after Reject all, or with
+   * Global Privacy Control on is included even when the crawl did not request it,
+   * with `consentViolations` naming those states. Results are sorted by risk and
+   * hostname. Continue with pagination.nextCursor while preserving runRevision and
+   * coverageRevision; changed evidence, including a consent check that finishes
+   * mid-read, returns HTTP 400 and requires restarting from the first page.
+   * Historical runs are evaluated against current coverage configuration. Requires
+   * API-key scope or current OAuth user permission: webScanner:find
    *
    * @example
    * ```ts
@@ -1431,6 +1434,14 @@ export interface WebScannerDecisionQueueResponse {
 
 export namespace WebScannerDecisionQueueResponse {
   export interface Entity {
+    /**
+     * Consent states in which this host was contacted although the visitor had not
+     * agreed. Empty when none. A host can be listed from the consent check alone,
+     * without crawl evidence; cover it in the consent banner or add a rule to clear
+     * it, the same as any other row.
+     */
+    consentViolations: Array<'tracker_before_consent' | 'reject_not_honored' | 'gpc_not_honored'>;
+
     hostname: string;
 
     seenOn: Array<string>;

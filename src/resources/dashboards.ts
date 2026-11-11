@@ -2043,6 +2043,10 @@ export namespace DashboardPreviewResponse {
 
       export namespace Definition {
         export interface Metric {
+          /**
+           * UUID that identifies this metric within the definition. Generate a new random
+           * UUID when adding a metric; it is not an event or metric name.
+           */
           id: string;
 
           aggregation: 'event_count' | 'unique_visitors' | 'sum' | 'average';
@@ -5014,6 +5018,10 @@ export namespace DashboardResultsResponse {
 
       export namespace Definition {
         export interface Metric {
+          /**
+           * UUID that identifies this metric within the definition. Generate a new random
+           * UUID when adding a metric; it is not an event or metric name.
+           */
           id: string;
 
           aggregation: 'event_count' | 'unique_visitors' | 'sum' | 'average';
