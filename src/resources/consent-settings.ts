@@ -494,9 +494,9 @@ export namespace ConsentSettingListResponse {
             privacyPolicyLabel?: string | null;
 
             /**
-             * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
-             * (/legal/privacy) so one config can run across multiple domains. javascript:,
-             * data:, and vbscript: schemes are rejected.
+             * Privacy policy link. Accepts absolute HTTP or HTTPS URLs, or a path starting
+             * with a single / (such as /legal/privacy). Other schemes, protocol-relative URLs,
+             * and bare relative paths are rejected.
              */
             privacyPolicyUrl?: string | null;
 
@@ -511,8 +511,8 @@ export namespace ConsentSettingListResponse {
             termsOfServiceLabel?: string | null;
 
             /**
-             * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
-             * relative path only.
+             * Terms of service link. Same rules as privacyPolicyUrl: absolute HTTP or HTTPS
+             * URL, or a path starting with a single /.
              */
             termsOfServiceUrl?: string | null;
           }
@@ -1081,9 +1081,9 @@ export namespace ConsentSettingListResponse {
               privacyPolicyLabel?: string | null;
 
               /**
-               * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
-               * (/legal/privacy) so one config can run across multiple domains. javascript:,
-               * data:, and vbscript: schemes are rejected.
+               * Privacy policy link. Accepts absolute HTTP or HTTPS URLs, or a path starting
+               * with a single / (such as /legal/privacy). Other schemes, protocol-relative URLs,
+               * and bare relative paths are rejected.
                */
               privacyPolicyUrl?: string | null;
 
@@ -1098,8 +1098,8 @@ export namespace ConsentSettingListResponse {
               termsOfServiceLabel?: string | null;
 
               /**
-               * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
-               * relative path only.
+               * Terms of service link. Same rules as privacyPolicyUrl: absolute HTTP or HTTPS
+               * URL, or a path starting with a single /.
                */
               termsOfServiceUrl?: string | null;
             }
@@ -1800,9 +1800,9 @@ export namespace ConsentSettingCreateResponse {
           privacyPolicyLabel?: string | null;
 
           /**
-           * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
-           * (/legal/privacy) so one config can run across multiple domains. javascript:,
-           * data:, and vbscript: schemes are rejected.
+           * Privacy policy link. Accepts absolute HTTP or HTTPS URLs, or a path starting
+           * with a single / (such as /legal/privacy). Other schemes, protocol-relative URLs,
+           * and bare relative paths are rejected.
            */
           privacyPolicyUrl?: string | null;
 
@@ -1817,8 +1817,8 @@ export namespace ConsentSettingCreateResponse {
           termsOfServiceLabel?: string | null;
 
           /**
-           * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
-           * relative path only.
+           * Terms of service link. Same rules as privacyPolicyUrl: absolute HTTP or HTTPS
+           * URL, or a path starting with a single /.
            */
           termsOfServiceUrl?: string | null;
         }
@@ -2387,9 +2387,9 @@ export namespace ConsentSettingCreateResponse {
             privacyPolicyLabel?: string | null;
 
             /**
-             * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
-             * (/legal/privacy) so one config can run across multiple domains. javascript:,
-             * data:, and vbscript: schemes are rejected.
+             * Privacy policy link. Accepts absolute HTTP or HTTPS URLs, or a path starting
+             * with a single / (such as /legal/privacy). Other schemes, protocol-relative URLs,
+             * and bare relative paths are rejected.
              */
             privacyPolicyUrl?: string | null;
 
@@ -2404,8 +2404,8 @@ export namespace ConsentSettingCreateResponse {
             termsOfServiceLabel?: string | null;
 
             /**
-             * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
-             * relative path only.
+             * Terms of service link. Same rules as privacyPolicyUrl: absolute HTTP or HTTPS
+             * URL, or a path starting with a single /.
              */
             termsOfServiceUrl?: string | null;
           }
@@ -3104,9 +3104,9 @@ export namespace ConsentSettingRetrieveResponse {
           privacyPolicyLabel?: string | null;
 
           /**
-           * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
-           * (/legal/privacy) so one config can run across multiple domains. javascript:,
-           * data:, and vbscript: schemes are rejected.
+           * Privacy policy link. Accepts absolute HTTP or HTTPS URLs, or a path starting
+           * with a single / (such as /legal/privacy). Other schemes, protocol-relative URLs,
+           * and bare relative paths are rejected.
            */
           privacyPolicyUrl?: string | null;
 
@@ -3121,8 +3121,8 @@ export namespace ConsentSettingRetrieveResponse {
           termsOfServiceLabel?: string | null;
 
           /**
-           * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
-           * relative path only.
+           * Terms of service link. Same rules as privacyPolicyUrl: absolute HTTP or HTTPS
+           * URL, or a path starting with a single /.
            */
           termsOfServiceUrl?: string | null;
         }
@@ -3691,9 +3691,9 @@ export namespace ConsentSettingRetrieveResponse {
             privacyPolicyLabel?: string | null;
 
             /**
-             * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
-             * (/legal/privacy) so one config can run across multiple domains. javascript:,
-             * data:, and vbscript: schemes are rejected.
+             * Privacy policy link. Accepts absolute HTTP or HTTPS URLs, or a path starting
+             * with a single / (such as /legal/privacy). Other schemes, protocol-relative URLs,
+             * and bare relative paths are rejected.
              */
             privacyPolicyUrl?: string | null;
 
@@ -3708,8 +3708,8 @@ export namespace ConsentSettingRetrieveResponse {
             termsOfServiceLabel?: string | null;
 
             /**
-             * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
-             * relative path only.
+             * Terms of service link. Same rules as privacyPolicyUrl: absolute HTTP or HTTPS
+             * URL, or a path starting with a single /.
              */
             termsOfServiceUrl?: string | null;
           }
@@ -4408,9 +4408,9 @@ export namespace ConsentSettingReplaceResponse {
           privacyPolicyLabel?: string | null;
 
           /**
-           * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
-           * (/legal/privacy) so one config can run across multiple domains. javascript:,
-           * data:, and vbscript: schemes are rejected.
+           * Privacy policy link. Accepts absolute HTTP or HTTPS URLs, or a path starting
+           * with a single / (such as /legal/privacy). Other schemes, protocol-relative URLs,
+           * and bare relative paths are rejected.
            */
           privacyPolicyUrl?: string | null;
 
@@ -4425,8 +4425,8 @@ export namespace ConsentSettingReplaceResponse {
           termsOfServiceLabel?: string | null;
 
           /**
-           * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
-           * relative path only.
+           * Terms of service link. Same rules as privacyPolicyUrl: absolute HTTP or HTTPS
+           * URL, or a path starting with a single /.
            */
           termsOfServiceUrl?: string | null;
         }
@@ -4995,9 +4995,9 @@ export namespace ConsentSettingReplaceResponse {
             privacyPolicyLabel?: string | null;
 
             /**
-             * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
-             * (/legal/privacy) so one config can run across multiple domains. javascript:,
-             * data:, and vbscript: schemes are rejected.
+             * Privacy policy link. Accepts absolute HTTP or HTTPS URLs, or a path starting
+             * with a single / (such as /legal/privacy). Other schemes, protocol-relative URLs,
+             * and bare relative paths are rejected.
              */
             privacyPolicyUrl?: string | null;
 
@@ -5012,8 +5012,8 @@ export namespace ConsentSettingReplaceResponse {
             termsOfServiceLabel?: string | null;
 
             /**
-             * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
-             * relative path only.
+             * Terms of service link. Same rules as privacyPolicyUrl: absolute HTTP or HTTPS
+             * URL, or a path starting with a single /.
              */
             termsOfServiceUrl?: string | null;
           }
@@ -5712,9 +5712,9 @@ export namespace ConsentSettingUpdateResponse {
           privacyPolicyLabel?: string | null;
 
           /**
-           * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
-           * (/legal/privacy) so one config can run across multiple domains. javascript:,
-           * data:, and vbscript: schemes are rejected.
+           * Privacy policy link. Accepts absolute HTTP or HTTPS URLs, or a path starting
+           * with a single / (such as /legal/privacy). Other schemes, protocol-relative URLs,
+           * and bare relative paths are rejected.
            */
           privacyPolicyUrl?: string | null;
 
@@ -5729,8 +5729,8 @@ export namespace ConsentSettingUpdateResponse {
           termsOfServiceLabel?: string | null;
 
           /**
-           * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
-           * relative path only.
+           * Terms of service link. Same rules as privacyPolicyUrl: absolute HTTP or HTTPS
+           * URL, or a path starting with a single /.
            */
           termsOfServiceUrl?: string | null;
         }
@@ -6299,9 +6299,9 @@ export namespace ConsentSettingUpdateResponse {
             privacyPolicyLabel?: string | null;
 
             /**
-             * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
-             * (/legal/privacy) so one config can run across multiple domains. javascript:,
-             * data:, and vbscript: schemes are rejected.
+             * Privacy policy link. Accepts absolute HTTP or HTTPS URLs, or a path starting
+             * with a single / (such as /legal/privacy). Other schemes, protocol-relative URLs,
+             * and bare relative paths are rejected.
              */
             privacyPolicyUrl?: string | null;
 
@@ -6316,8 +6316,8 @@ export namespace ConsentSettingUpdateResponse {
             termsOfServiceLabel?: string | null;
 
             /**
-             * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
-             * relative path only.
+             * Terms of service link. Same rules as privacyPolicyUrl: absolute HTTP or HTTPS
+             * URL, or a path starting with a single /.
              */
             termsOfServiceUrl?: string | null;
           }
@@ -7016,9 +7016,9 @@ export namespace ConsentSettingDeleteResponse {
           privacyPolicyLabel?: string | null;
 
           /**
-           * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
-           * (/legal/privacy) so one config can run across multiple domains. javascript:,
-           * data:, and vbscript: schemes are rejected.
+           * Privacy policy link. Accepts absolute HTTP or HTTPS URLs, or a path starting
+           * with a single / (such as /legal/privacy). Other schemes, protocol-relative URLs,
+           * and bare relative paths are rejected.
            */
           privacyPolicyUrl?: string | null;
 
@@ -7033,8 +7033,8 @@ export namespace ConsentSettingDeleteResponse {
           termsOfServiceLabel?: string | null;
 
           /**
-           * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
-           * relative path only.
+           * Terms of service link. Same rules as privacyPolicyUrl: absolute HTTP or HTTPS
+           * URL, or a path starting with a single /.
            */
           termsOfServiceUrl?: string | null;
         }
@@ -7603,9 +7603,9 @@ export namespace ConsentSettingDeleteResponse {
             privacyPolicyLabel?: string | null;
 
             /**
-             * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
-             * (/legal/privacy) so one config can run across multiple domains. javascript:,
-             * data:, and vbscript: schemes are rejected.
+             * Privacy policy link. Accepts absolute HTTP or HTTPS URLs, or a path starting
+             * with a single / (such as /legal/privacy). Other schemes, protocol-relative URLs,
+             * and bare relative paths are rejected.
              */
             privacyPolicyUrl?: string | null;
 
@@ -7620,8 +7620,8 @@ export namespace ConsentSettingDeleteResponse {
             termsOfServiceLabel?: string | null;
 
             /**
-             * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
-             * relative path only.
+             * Terms of service link. Same rules as privacyPolicyUrl: absolute HTTP or HTTPS
+             * URL, or a path starting with a single /.
              */
             termsOfServiceUrl?: string | null;
           }
@@ -8553,9 +8553,9 @@ export namespace ConsentSettingReplaceParams {
           privacyPolicyLabel?: string | null;
 
           /**
-           * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
-           * (/legal/privacy) so one config can run across multiple domains. javascript:,
-           * data:, and vbscript: schemes are rejected.
+           * Privacy policy link. Accepts absolute HTTP or HTTPS URLs, or a path starting
+           * with a single / (such as /legal/privacy). Other schemes, protocol-relative URLs,
+           * and bare relative paths are rejected.
            */
           privacyPolicyUrl?: string | null;
 
@@ -8570,8 +8570,8 @@ export namespace ConsentSettingReplaceParams {
           termsOfServiceLabel?: string | null;
 
           /**
-           * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
-           * relative path only.
+           * Terms of service link. Same rules as privacyPolicyUrl: absolute HTTP or HTTPS
+           * URL, or a path starting with a single /.
            */
           termsOfServiceUrl?: string | null;
         }
@@ -9140,9 +9140,9 @@ export namespace ConsentSettingReplaceParams {
             privacyPolicyLabel?: string | null;
 
             /**
-             * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
-             * (/legal/privacy) so one config can run across multiple domains. javascript:,
-             * data:, and vbscript: schemes are rejected.
+             * Privacy policy link. Accepts absolute HTTP or HTTPS URLs, or a path starting
+             * with a single / (such as /legal/privacy). Other schemes, protocol-relative URLs,
+             * and bare relative paths are rejected.
              */
             privacyPolicyUrl?: string | null;
 
@@ -9157,8 +9157,8 @@ export namespace ConsentSettingReplaceParams {
             termsOfServiceLabel?: string | null;
 
             /**
-             * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
-             * relative path only.
+             * Terms of service link. Same rules as privacyPolicyUrl: absolute HTTP or HTTPS
+             * URL, or a path starting with a single /.
              */
             termsOfServiceUrl?: string | null;
           }
@@ -9830,9 +9830,9 @@ export namespace ConsentSettingUpdateParams {
           privacyPolicyLabel?: string | null;
 
           /**
-           * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
-           * (/legal/privacy) so one config can run across multiple domains. javascript:,
-           * data:, and vbscript: schemes are rejected.
+           * Privacy policy link. Accepts absolute HTTP or HTTPS URLs, or a path starting
+           * with a single / (such as /legal/privacy). Other schemes, protocol-relative URLs,
+           * and bare relative paths are rejected.
            */
           privacyPolicyUrl?: string | null;
 
@@ -9847,8 +9847,8 @@ export namespace ConsentSettingUpdateParams {
           termsOfServiceLabel?: string | null;
 
           /**
-           * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
-           * relative path only.
+           * Terms of service link. Same rules as privacyPolicyUrl: absolute HTTP or HTTPS
+           * URL, or a path starting with a single /.
            */
           termsOfServiceUrl?: string | null;
         }
@@ -10417,9 +10417,9 @@ export namespace ConsentSettingUpdateParams {
             privacyPolicyLabel?: string | null;
 
             /**
-             * Privacy policy link. Accepts an absolute URL (https://...) or a relative path
-             * (/legal/privacy) so one config can run across multiple domains. javascript:,
-             * data:, and vbscript: schemes are rejected.
+             * Privacy policy link. Accepts absolute HTTP or HTTPS URLs, or a path starting
+             * with a single / (such as /legal/privacy). Other schemes, protocol-relative URLs,
+             * and bare relative paths are rejected.
              */
             privacyPolicyUrl?: string | null;
 
@@ -10434,8 +10434,8 @@ export namespace ConsentSettingUpdateParams {
             termsOfServiceLabel?: string | null;
 
             /**
-             * Terms of service link. Same scheme rules as privacyPolicyUrl: absolute or
-             * relative path only.
+             * Terms of service link. Same rules as privacyPolicyUrl: absolute HTTP or HTTPS
+             * URL, or a path starting with a single /.
              */
             termsOfServiceUrl?: string | null;
           }
