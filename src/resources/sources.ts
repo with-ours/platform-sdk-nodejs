@@ -102,6 +102,7 @@ export interface SourceListResponse {
     | 'CallTrackingMetrics'
     | 'DotNetApi'
     | 'FacebookLeadAds'
+    | 'FlutterApi'
     | 'FormsortWebhooks'
     | 'Formstack'
     | 'GoLangApi'
@@ -137,18 +138,6 @@ export interface SourceListResponse {
    * not published will not accept events.
    */
   isPublished?: boolean | null;
-
-  /**
-   * ISO-8601 timestamp of the most recent event from this source successfully
-   * dispatched to a destination.
-   */
-  lastDispatchedAt?: string | null;
-
-  /**
-   * ISO-8601 timestamp of the most recent inbound request received by this source.
-   * Useful for debugging "is my webhook even reaching us?"
-   */
-  lastTriggeredAt?: string | null;
 
   name?: string | null;
 
@@ -216,6 +205,7 @@ export interface SourceCreateResponse {
     | 'CallTrackingMetrics'
     | 'DotNetApi'
     | 'FacebookLeadAds'
+    | 'FlutterApi'
     | 'FormsortWebhooks'
     | 'Formstack'
     | 'GoLangApi'
@@ -251,18 +241,6 @@ export interface SourceCreateResponse {
    * not published will not accept events.
    */
   isPublished?: boolean | null;
-
-  /**
-   * ISO-8601 timestamp of the most recent event from this source successfully
-   * dispatched to a destination.
-   */
-  lastDispatchedAt?: string | null;
-
-  /**
-   * ISO-8601 timestamp of the most recent inbound request received by this source.
-   * Useful for debugging "is my webhook even reaching us?"
-   */
-  lastTriggeredAt?: string | null;
 
   name?: string | null;
 
@@ -330,6 +308,7 @@ export interface SourceRetrieveResponse {
     | 'CallTrackingMetrics'
     | 'DotNetApi'
     | 'FacebookLeadAds'
+    | 'FlutterApi'
     | 'FormsortWebhooks'
     | 'Formstack'
     | 'GoLangApi'
@@ -365,18 +344,6 @@ export interface SourceRetrieveResponse {
    * not published will not accept events.
    */
   isPublished?: boolean | null;
-
-  /**
-   * ISO-8601 timestamp of the most recent event from this source successfully
-   * dispatched to a destination.
-   */
-  lastDispatchedAt?: string | null;
-
-  /**
-   * ISO-8601 timestamp of the most recent inbound request received by this source.
-   * Useful for debugging "is my webhook even reaching us?"
-   */
-  lastTriggeredAt?: string | null;
 
   name?: string | null;
 
@@ -444,6 +411,7 @@ export interface SourceUpdateResponse {
     | 'CallTrackingMetrics'
     | 'DotNetApi'
     | 'FacebookLeadAds'
+    | 'FlutterApi'
     | 'FormsortWebhooks'
     | 'Formstack'
     | 'GoLangApi'
@@ -479,18 +447,6 @@ export interface SourceUpdateResponse {
    * not published will not accept events.
    */
   isPublished?: boolean | null;
-
-  /**
-   * ISO-8601 timestamp of the most recent event from this source successfully
-   * dispatched to a destination.
-   */
-  lastDispatchedAt?: string | null;
-
-  /**
-   * ISO-8601 timestamp of the most recent inbound request received by this source.
-   * Useful for debugging "is my webhook even reaching us?"
-   */
-  lastTriggeredAt?: string | null;
 
   name?: string | null;
 
@@ -636,6 +592,7 @@ export interface SourceListParams extends CursorParams {
     | 'CallTrackingMetrics'
     | 'DotNetApi'
     | 'FacebookLeadAds'
+    | 'FlutterApi'
     | 'FormsortWebhooks'
     | 'Formstack'
     | 'GoLangApi'
@@ -673,6 +630,7 @@ export interface SourceCreateParams {
     | 'CallTrackingMetrics'
     | 'DotNetApi'
     | 'FacebookLeadAds'
+    | 'FlutterApi'
     | 'FormsortWebhooks'
     | 'Formstack'
     | 'GoLangApi'
