@@ -825,7 +825,8 @@ export interface DestinationHealthResponse {
   windowStart: string;
 
   /**
-   * Timestamp of the most recent dispatch attempt to this destination, if any.
+   * ISO 8601 timestamp of the most recent successful dispatch to this destination
+   * within the health window. Null when none succeeded in the window.
    */
   lastDispatchedAt?: string | null;
 
@@ -1067,8 +1068,8 @@ export interface DestinationCreateParams {
   settings?: { [key: string]: string | null | number | boolean } | null;
 
   /**
-   * Initial status. Omit or send `null` for `Enabled`; send `Disabled` to create
-   * paused.
+   * Initial status. Omit or send `null` for `Disabled`; send `Enabled` to create
+   * active.
    */
   status?: 'Enabled' | 'Disabled' | null;
 }
