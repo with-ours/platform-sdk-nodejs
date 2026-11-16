@@ -154,20 +154,6 @@ export interface AllowedEventCreateResponse {
   name: string;
 
   /**
-   * ISO 8601 timestamp of the most recent successful dispatch to any destination on
-   * `destinationIds`. Lags `lastTriggeredAt` when consent or governance rules drop
-   * the event before dispatch.
-   */
-  lastDispatchedAt?: string | null;
-
-  /**
-   * ISO 8601 timestamp of the most recent inbound event observed for this name.
-   * Useful for spotting events that were configured but never fired. Null when never
-   * observed.
-   */
-  lastTriggeredAt?: string | null;
-
-  /**
    * Optional free-form trigger description. Not used by the dispatch pipeline —
    * surfaced in the dashboard so teams can record where each event fires.
    */
@@ -205,20 +191,6 @@ export interface AllowedEventRetrieveResponse {
   name: string;
 
   /**
-   * ISO 8601 timestamp of the most recent successful dispatch to any destination on
-   * `destinationIds`. Lags `lastTriggeredAt` when consent or governance rules drop
-   * the event before dispatch.
-   */
-  lastDispatchedAt?: string | null;
-
-  /**
-   * ISO 8601 timestamp of the most recent inbound event observed for this name.
-   * Useful for spotting events that were configured but never fired. Null when never
-   * observed.
-   */
-  lastTriggeredAt?: string | null;
-
-  /**
    * Optional free-form trigger description. Not used by the dispatch pipeline —
    * surfaced in the dashboard so teams can record where each event fires.
    */
@@ -254,20 +226,6 @@ export interface AllowedEventUpdateResponse {
    * are system events and cannot be created (except `$identify`).
    */
   name: string;
-
-  /**
-   * ISO 8601 timestamp of the most recent successful dispatch to any destination on
-   * `destinationIds`. Lags `lastTriggeredAt` when consent or governance rules drop
-   * the event before dispatch.
-   */
-  lastDispatchedAt?: string | null;
-
-  /**
-   * ISO 8601 timestamp of the most recent inbound event observed for this name.
-   * Useful for spotting events that were configured but never fired. Null when never
-   * observed.
-   */
-  lastTriggeredAt?: string | null;
 
   /**
    * Optional free-form trigger description. Not used by the dispatch pipeline —
