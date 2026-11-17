@@ -306,9 +306,9 @@ export class Experiments extends APIResource {
    * inclusive) to set the window; both default to the full experiment runtime when
    * omitted, so the no-arg call returns every day from start to today (or to
    * `stoppedAt` for completed experiments). The response orders days oldest-first
-   * and omits days with no impressions, so an empty `days` array means there was no
-   * measured traffic in the window. Requires API-key scope or current OAuth user
-   * permission: experiment:find
+   * and omits days with neither impressions nor goal events, so an empty `days`
+   * array means there was no measured traffic in the window. Requires API-key scope
+   * or current OAuth user permission: experiment:find
    *
    * @example
    * ```ts
