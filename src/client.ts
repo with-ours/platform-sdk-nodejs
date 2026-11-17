@@ -31,6 +31,7 @@ import {
 } from './resources/allowed-events';
 import {
   Analytics,
+  AnalyticsEventNamesResponse,
   AnalyticsPropertySuggestionsParams,
   AnalyticsPropertySuggestionsResponse,
   AnalyticsQueryCatalogResponse,
@@ -1992,6 +1993,7 @@ export declare namespace OursPrivacyPlatform {
     Analytics as Analytics,
     type AnalyticsQueryCatalogResponse as AnalyticsQueryCatalogResponse,
     type AnalyticsPropertySuggestionsResponse as AnalyticsPropertySuggestionsResponse,
+    type AnalyticsEventNamesResponse as AnalyticsEventNamesResponse,
     type AnalyticsPropertySuggestionsParams as AnalyticsPropertySuggestionsParams,
   };
 
