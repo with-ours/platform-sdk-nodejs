@@ -14,6 +14,7 @@ export {
   Analytics,
   type AnalyticsQueryCatalogResponse,
   type AnalyticsPropertySuggestionsResponse,
+  type AnalyticsEventNamesResponse,
   type AnalyticsPropertySuggestionsParams,
 } from './analytics';
 export {

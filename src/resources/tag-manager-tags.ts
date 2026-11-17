@@ -119,7 +119,8 @@ export interface TagManagerTagListResponse {
   type: string;
 
   /**
-   * Triggers that suppress this tag when they match — evaluated after fire triggers.
+   * Exception triggers: the tag does not fire on an event one of these matches, like
+   * GTM exceptions.
    */
   blockTriggerIds?: Array<string> | null;
 
@@ -183,7 +184,8 @@ export interface TagManagerTagCreateResponse {
   type: string;
 
   /**
-   * Triggers that suppress this tag when they match — evaluated after fire triggers.
+   * Exception triggers: the tag does not fire on an event one of these matches, like
+   * GTM exceptions.
    */
   blockTriggerIds?: Array<string> | null;
 
@@ -247,7 +249,8 @@ export interface TagManagerTagRetrieveResponse {
   type: string;
 
   /**
-   * Triggers that suppress this tag when they match — evaluated after fire triggers.
+   * Exception triggers: the tag does not fire on an event one of these matches, like
+   * GTM exceptions.
    */
   blockTriggerIds?: Array<string> | null;
 
@@ -311,7 +314,8 @@ export interface TagManagerTagUpdateResponse {
   type: string;
 
   /**
-   * Triggers that suppress this tag when they match — evaluated after fire triggers.
+   * Exception triggers: the tag does not fire on an event one of these matches, like
+   * GTM exceptions.
    */
   blockTriggerIds?: Array<string> | null;
 

@@ -744,11 +744,13 @@ Types:
 
 - <code><a href="./src/resources/analytics.ts">AnalyticsQueryCatalogResponse</a></code>
 - <code><a href="./src/resources/analytics.ts">AnalyticsPropertySuggestionsResponse</a></code>
+- <code><a href="./src/resources/analytics.ts">AnalyticsEventNamesResponse</a></code>
 
 Methods:
 
 - <code title="get /rest/v1/analytics/query-catalog">client.analytics.<a href="./src/resources/analytics.ts">queryCatalog</a>() -> AnalyticsQueryCatalogResponse</code>
 - <code title="get /rest/v1/analytics/property-suggestions">client.analytics.<a href="./src/resources/analytics.ts">propertySuggestions</a>({ ...params }) -> AnalyticsPropertySuggestionsResponse</code>
+- <code title="get /rest/v1/analytics/event-names">client.analytics.<a href="./src/resources/analytics.ts">eventNames</a>() -> AnalyticsEventNamesResponse</code>
 
 # Dashboards
 
