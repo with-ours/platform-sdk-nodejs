@@ -137,7 +137,7 @@ export namespace WebAnalyticsOverviewInsightResponse {
 
     from: string;
 
-    interval: 'day' | 'week' | 'month';
+    interval: 'hour' | 'day' | 'week' | 'month';
 
     sourceCompleteness: 'unknown';
 
