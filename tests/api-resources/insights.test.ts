@@ -36,7 +36,7 @@ describe('resource insights', () => {
   test('create: only required params', async () => {
     const responsePromise = client.insights.create({
       definition: {
-        interval: 'day',
+        interval: 'hour',
         kind: 'insight',
         metrics: [
           {
@@ -64,7 +64,7 @@ describe('resource insights', () => {
   test('create: required and optional params', async () => {
     const response = await client.insights.create({
       definition: {
-        interval: 'day',
+        interval: 'hour',
         kind: 'insight',
         metrics: [
           {
@@ -72,6 +72,7 @@ describe('resource insights', () => {
             aggregation: 'event_count',
             eventNames: ['x'],
             name: 'x',
+            allEvents: true,
             filter: {
               filter: { children: [], kind: 'and' },
               version: 1,
@@ -88,6 +89,7 @@ describe('resource insights', () => {
           filter: { children: [], kind: 'and' },
           version: 1,
         },
+        includeBots: true,
       },
       name: 'x',
       reportContext: {
@@ -145,7 +147,7 @@ describe('resource insights', () => {
     const response = await client.insights.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {
       expectedRevision: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
       definition: {
-        interval: 'day',
+        interval: 'hour',
         kind: 'insight',
         metrics: [
           {
@@ -153,6 +155,7 @@ describe('resource insights', () => {
             aggregation: 'event_count',
             eventNames: ['x'],
             name: 'x',
+            allEvents: true,
             filter: {
               filter: { children: [], kind: 'and' },
               version: 1,
@@ -169,6 +172,7 @@ describe('resource insights', () => {
           filter: { children: [], kind: 'and' },
           version: 1,
         },
+        includeBots: true,
       },
       description: 'description',
       name: 'x',
