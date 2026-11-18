@@ -329,6 +329,28 @@ export {
   type PersonalizationPropertyListResponsesCursor,
 } from './personalization-properties';
 export {
+  QueryEvents,
+  type QueryEventListResponse,
+  type QueryEventCapabilitiesResponse,
+  type QueryEventCatalogResponse,
+  type QueryEventPropertySuggestionsResponse,
+  type QueryEventEventNamesResponse,
+  type QueryEventOccurrenceResponse,
+  type QueryEventExportResponse,
+  type QueryEventListParams,
+  type QueryEventPropertySuggestionsParams,
+  type QueryEventOccurrenceParams,
+  type QueryEventExportParams,
+} from './query-events';
+export {
+  QueryVisitors,
+  type QueryVisitorListResponse,
+  type QueryVisitorCapabilitiesResponse,
+  type QueryVisitorProfileSearchResponse,
+  type QueryVisitorListParams,
+  type QueryVisitorProfileSearchParams,
+} from './query-visitors';
+export {
   ReplaySettings,
   type ReplaySettingListResponse,
   type ReplaySettingCreateResponse,

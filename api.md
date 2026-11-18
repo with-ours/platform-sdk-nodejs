@@ -820,6 +820,42 @@ Methods:
 - <code title="get /rest/v1/attribution-reports/visitors">client.attributionReports.<a href="./src/resources/attribution-reports.ts">visitors</a>({ ...params }) -> AttributionReportVisitorsResponse</code>
 - <code title="get /rest/v1/attribution-reports/insights">client.attributionReports.<a href="./src/resources/attribution-reports.ts">insights</a>({ ...params }) -> AttributionReportInsightsResponse</code>
 
+# QueryEvents
+
+Types:
+
+- <code><a href="./src/resources/query-events.ts">QueryEventListResponse</a></code>
+- <code><a href="./src/resources/query-events.ts">QueryEventCapabilitiesResponse</a></code>
+- <code><a href="./src/resources/query-events.ts">QueryEventCatalogResponse</a></code>
+- <code><a href="./src/resources/query-events.ts">QueryEventPropertySuggestionsResponse</a></code>
+- <code><a href="./src/resources/query-events.ts">QueryEventEventNamesResponse</a></code>
+- <code><a href="./src/resources/query-events.ts">QueryEventOccurrenceResponse</a></code>
+- <code><a href="./src/resources/query-events.ts">QueryEventExportResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/query-events">client.queryEvents.<a href="./src/resources/query-events.ts">list</a>({ ...params }) -> QueryEventListResponse</code>
+- <code title="get /rest/v1/query-events/capabilities">client.queryEvents.<a href="./src/resources/query-events.ts">capabilities</a>() -> QueryEventCapabilitiesResponse</code>
+- <code title="get /rest/v1/query-events/query-catalog">client.queryEvents.<a href="./src/resources/query-events.ts">catalog</a>() -> QueryEventCatalogResponse</code>
+- <code title="get /rest/v1/query-events/property-suggestions">client.queryEvents.<a href="./src/resources/query-events.ts">propertySuggestions</a>({ ...params }) -> QueryEventPropertySuggestionsResponse</code>
+- <code title="get /rest/v1/query-events/event-names">client.queryEvents.<a href="./src/resources/query-events.ts">eventNames</a>() -> QueryEventEventNamesResponse</code>
+- <code title="get /rest/v1/query-events/occurrence">client.queryEvents.<a href="./src/resources/query-events.ts">occurrence</a>({ ...params }) -> QueryEventOccurrenceResponse | null</code>
+- <code title="get /rest/v1/query-events/export">client.queryEvents.<a href="./src/resources/query-events.ts">export</a>({ ...params }) -> QueryEventExportResponse</code>
+
+# QueryVisitors
+
+Types:
+
+- <code><a href="./src/resources/query-visitors.ts">QueryVisitorListResponse</a></code>
+- <code><a href="./src/resources/query-visitors.ts">QueryVisitorCapabilitiesResponse</a></code>
+- <code><a href="./src/resources/query-visitors.ts">QueryVisitorProfileSearchResponse</a></code>
+
+Methods:
+
+- <code title="get /rest/v1/query-visitors">client.queryVisitors.<a href="./src/resources/query-visitors.ts">list</a>({ ...params }) -> QueryVisitorListResponse</code>
+- <code title="get /rest/v1/query-visitors/capabilities">client.queryVisitors.<a href="./src/resources/query-visitors.ts">capabilities</a>() -> QueryVisitorCapabilitiesResponse</code>
+- <code title="get /rest/v1/query-visitors/profile-search">client.queryVisitors.<a href="./src/resources/query-visitors.ts">profileSearch</a>({ ...params }) -> QueryVisitorProfileSearchResponse</code>
+
 # Insights
 
 Types:

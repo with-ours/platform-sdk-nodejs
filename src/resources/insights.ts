@@ -107,9 +107,10 @@ export interface InsightListResponse {
   createdByUserId: string;
 
   /**
-   * Version 1 Insight definition: one to ten metrics and a day, week, or month
-   * interval. Sum and average require a numeric event property. Filters use the
-   * analytics property catalog.
+   * Version 1 Insight definition: one to ten metrics and an hour, day, week, or
+   * month interval (up to 366 buckets). Sum and average require a numeric event
+   * property. Metrics select eventNames or allEvents. includeBots defaults to false.
+   * Filters use the analytics property catalog.
    */
   definition: InsightListResponse.Definition;
 
@@ -144,12 +145,13 @@ export interface InsightListResponse {
 
 export namespace InsightListResponse {
   /**
-   * Version 1 Insight definition: one to ten metrics and a day, week, or month
-   * interval. Sum and average require a numeric event property. Filters use the
-   * analytics property catalog.
+   * Version 1 Insight definition: one to ten metrics and an hour, day, week, or
+   * month interval (up to 366 buckets). Sum and average require a numeric event
+   * property. Metrics select eventNames or allEvents. includeBots defaults to false.
+   * Filters use the analytics property catalog.
    */
   export interface Definition {
-    interval: 'day' | 'week' | 'month';
+    interval: 'hour' | 'day' | 'week' | 'month';
 
     kind: 'insight';
 
@@ -158,6 +160,11 @@ export namespace InsightListResponse {
     version: 1;
 
     filter?: Definition.Filter;
+
+    /**
+     * Include bot events and sessions; test events remain excluded. Defaults to false.
+     */
+    includeBots?: boolean;
   }
 
   export namespace Definition {
@@ -173,6 +180,11 @@ export namespace InsightListResponse {
       eventNames: Array<string>;
 
       name: string;
+
+      /**
+       * Count every event name. Requires an empty eventNames array.
+       */
+      allEvents?: boolean;
 
       filter?: Metric.Filter;
 
@@ -372,9 +384,10 @@ export interface InsightCreateResponse {
   createdByUserId: string;
 
   /**
-   * Version 1 Insight definition: one to ten metrics and a day, week, or month
-   * interval. Sum and average require a numeric event property. Filters use the
-   * analytics property catalog.
+   * Version 1 Insight definition: one to ten metrics and an hour, day, week, or
+   * month interval (up to 366 buckets). Sum and average require a numeric event
+   * property. Metrics select eventNames or allEvents. includeBots defaults to false.
+   * Filters use the analytics property catalog.
    */
   definition: InsightCreateResponse.Definition;
 
@@ -409,12 +422,13 @@ export interface InsightCreateResponse {
 
 export namespace InsightCreateResponse {
   /**
-   * Version 1 Insight definition: one to ten metrics and a day, week, or month
-   * interval. Sum and average require a numeric event property. Filters use the
-   * analytics property catalog.
+   * Version 1 Insight definition: one to ten metrics and an hour, day, week, or
+   * month interval (up to 366 buckets). Sum and average require a numeric event
+   * property. Metrics select eventNames or allEvents. includeBots defaults to false.
+   * Filters use the analytics property catalog.
    */
   export interface Definition {
-    interval: 'day' | 'week' | 'month';
+    interval: 'hour' | 'day' | 'week' | 'month';
 
     kind: 'insight';
 
@@ -423,6 +437,11 @@ export namespace InsightCreateResponse {
     version: 1;
 
     filter?: Definition.Filter;
+
+    /**
+     * Include bot events and sessions; test events remain excluded. Defaults to false.
+     */
+    includeBots?: boolean;
   }
 
   export namespace Definition {
@@ -438,6 +457,11 @@ export namespace InsightCreateResponse {
       eventNames: Array<string>;
 
       name: string;
+
+      /**
+       * Count every event name. Requires an empty eventNames array.
+       */
+      allEvents?: boolean;
 
       filter?: Metric.Filter;
 
@@ -637,9 +661,10 @@ export interface InsightRetrieveResponse {
   createdByUserId: string;
 
   /**
-   * Version 1 Insight definition: one to ten metrics and a day, week, or month
-   * interval. Sum and average require a numeric event property. Filters use the
-   * analytics property catalog.
+   * Version 1 Insight definition: one to ten metrics and an hour, day, week, or
+   * month interval (up to 366 buckets). Sum and average require a numeric event
+   * property. Metrics select eventNames or allEvents. includeBots defaults to false.
+   * Filters use the analytics property catalog.
    */
   definition: InsightRetrieveResponse.Definition;
 
@@ -674,12 +699,13 @@ export interface InsightRetrieveResponse {
 
 export namespace InsightRetrieveResponse {
   /**
-   * Version 1 Insight definition: one to ten metrics and a day, week, or month
-   * interval. Sum and average require a numeric event property. Filters use the
-   * analytics property catalog.
+   * Version 1 Insight definition: one to ten metrics and an hour, day, week, or
+   * month interval (up to 366 buckets). Sum and average require a numeric event
+   * property. Metrics select eventNames or allEvents. includeBots defaults to false.
+   * Filters use the analytics property catalog.
    */
   export interface Definition {
-    interval: 'day' | 'week' | 'month';
+    interval: 'hour' | 'day' | 'week' | 'month';
 
     kind: 'insight';
 
@@ -688,6 +714,11 @@ export namespace InsightRetrieveResponse {
     version: 1;
 
     filter?: Definition.Filter;
+
+    /**
+     * Include bot events and sessions; test events remain excluded. Defaults to false.
+     */
+    includeBots?: boolean;
   }
 
   export namespace Definition {
@@ -703,6 +734,11 @@ export namespace InsightRetrieveResponse {
       eventNames: Array<string>;
 
       name: string;
+
+      /**
+       * Count every event name. Requires an empty eventNames array.
+       */
+      allEvents?: boolean;
 
       filter?: Metric.Filter;
 
@@ -902,9 +938,10 @@ export interface InsightUpdateResponse {
   createdByUserId: string;
 
   /**
-   * Version 1 Insight definition: one to ten metrics and a day, week, or month
-   * interval. Sum and average require a numeric event property. Filters use the
-   * analytics property catalog.
+   * Version 1 Insight definition: one to ten metrics and an hour, day, week, or
+   * month interval (up to 366 buckets). Sum and average require a numeric event
+   * property. Metrics select eventNames or allEvents. includeBots defaults to false.
+   * Filters use the analytics property catalog.
    */
   definition: InsightUpdateResponse.Definition;
 
@@ -939,12 +976,13 @@ export interface InsightUpdateResponse {
 
 export namespace InsightUpdateResponse {
   /**
-   * Version 1 Insight definition: one to ten metrics and a day, week, or month
-   * interval. Sum and average require a numeric event property. Filters use the
-   * analytics property catalog.
+   * Version 1 Insight definition: one to ten metrics and an hour, day, week, or
+   * month interval (up to 366 buckets). Sum and average require a numeric event
+   * property. Metrics select eventNames or allEvents. includeBots defaults to false.
+   * Filters use the analytics property catalog.
    */
   export interface Definition {
-    interval: 'day' | 'week' | 'month';
+    interval: 'hour' | 'day' | 'week' | 'month';
 
     kind: 'insight';
 
@@ -953,6 +991,11 @@ export namespace InsightUpdateResponse {
     version: 1;
 
     filter?: Definition.Filter;
+
+    /**
+     * Include bot events and sessions; test events remain excluded. Defaults to false.
+     */
+    includeBots?: boolean;
   }
 
   export namespace Definition {
@@ -968,6 +1011,11 @@ export namespace InsightUpdateResponse {
       eventNames: Array<string>;
 
       name: string;
+
+      /**
+       * Count every event name. Requires an empty eventNames array.
+       */
+      allEvents?: boolean;
 
       filter?: Metric.Filter;
 
@@ -1200,7 +1248,7 @@ export interface InsightCapabilitiesResponse {
     | 'year_to_date'
   >;
 
-  supportedIntervals: Array<'day' | 'week' | 'month'>;
+  supportedIntervals: Array<'hour' | 'day' | 'week' | 'month'>;
 
   supportedSmoothing: Array<'none' | 'rolling_average'>;
 
@@ -1253,7 +1301,7 @@ export namespace InsightResultsResponse {
 
     from: string;
 
-    interval: 'day' | 'week' | 'month';
+    interval: 'hour' | 'day' | 'week' | 'month';
 
     sourceCompleteness: 'unknown';
 
@@ -1349,7 +1397,7 @@ export namespace InsightPreviewResponse {
 
     from: string;
 
-    interval: 'day' | 'week' | 'month';
+    interval: 'hour' | 'day' | 'week' | 'month';
 
     sourceCompleteness: 'unknown';
 
@@ -1420,9 +1468,10 @@ export interface InsightListParams extends CursorParams {
 
 export interface InsightCreateParams {
   /**
-   * Version 1 Insight definition: one to ten metrics and a day, week, or month
-   * interval. Sum and average require a numeric event property. Filters use the
-   * analytics property catalog.
+   * Version 1 Insight definition: one to ten metrics and an hour, day, week, or
+   * month interval (up to 366 buckets). Sum and average require a numeric event
+   * property. Metrics select eventNames or allEvents. includeBots defaults to false.
+   * Filters use the analytics property catalog.
    */
   definition: InsightCreateParams.Definition;
 
@@ -1451,12 +1500,13 @@ export interface InsightCreateParams {
 
 export namespace InsightCreateParams {
   /**
-   * Version 1 Insight definition: one to ten metrics and a day, week, or month
-   * interval. Sum and average require a numeric event property. Filters use the
-   * analytics property catalog.
+   * Version 1 Insight definition: one to ten metrics and an hour, day, week, or
+   * month interval (up to 366 buckets). Sum and average require a numeric event
+   * property. Metrics select eventNames or allEvents. includeBots defaults to false.
+   * Filters use the analytics property catalog.
    */
   export interface Definition {
-    interval: 'day' | 'week' | 'month';
+    interval: 'hour' | 'day' | 'week' | 'month';
 
     kind: 'insight';
 
@@ -1465,6 +1515,11 @@ export namespace InsightCreateParams {
     version: 1;
 
     filter?: Definition.Filter;
+
+    /**
+     * Include bot events and sessions; test events remain excluded. Defaults to false.
+     */
+    includeBots?: boolean;
   }
 
   export namespace Definition {
@@ -1480,6 +1535,11 @@ export namespace InsightCreateParams {
       eventNames: Array<string>;
 
       name: string;
+
+      /**
+       * Count every event name. Requires an empty eventNames array.
+       */
+      allEvents?: boolean;
 
       filter?: Metric.Filter;
 
@@ -1679,9 +1739,10 @@ export interface InsightUpdateParams {
   expectedRevision: string;
 
   /**
-   * Version 1 Insight definition: one to ten metrics and a day, week, or month
-   * interval. Sum and average require a numeric event property. Filters use the
-   * analytics property catalog.
+   * Version 1 Insight definition: one to ten metrics and an hour, day, week, or
+   * month interval (up to 366 buckets). Sum and average require a numeric event
+   * property. Metrics select eventNames or allEvents. includeBots defaults to false.
+   * Filters use the analytics property catalog.
    */
   definition?: InsightUpdateParams.Definition;
 
@@ -1710,12 +1771,13 @@ export interface InsightUpdateParams {
 
 export namespace InsightUpdateParams {
   /**
-   * Version 1 Insight definition: one to ten metrics and a day, week, or month
-   * interval. Sum and average require a numeric event property. Filters use the
-   * analytics property catalog.
+   * Version 1 Insight definition: one to ten metrics and an hour, day, week, or
+   * month interval (up to 366 buckets). Sum and average require a numeric event
+   * property. Metrics select eventNames or allEvents. includeBots defaults to false.
+   * Filters use the analytics property catalog.
    */
   export interface Definition {
-    interval: 'day' | 'week' | 'month';
+    interval: 'hour' | 'day' | 'week' | 'month';
 
     kind: 'insight';
 
@@ -1724,6 +1786,11 @@ export namespace InsightUpdateParams {
     version: 1;
 
     filter?: Definition.Filter;
+
+    /**
+     * Include bot events and sessions; test events remain excluded. Defaults to false.
+     */
+    includeBots?: boolean;
   }
 
   export namespace Definition {
@@ -1739,6 +1806,11 @@ export namespace InsightUpdateParams {
       eventNames: Array<string>;
 
       name: string;
+
+      /**
+       * Count every event name. Requires an empty eventNames array.
+       */
+      allEvents?: boolean;
 
       filter?: Metric.Filter;
 

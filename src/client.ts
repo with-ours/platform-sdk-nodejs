@@ -348,6 +348,28 @@ import {
   PersonalizationPropertyUpdateResponse,
 } from './resources/personalization-properties';
 import {
+  QueryEventCapabilitiesResponse,
+  QueryEventCatalogResponse,
+  QueryEventEventNamesResponse,
+  QueryEventExportParams,
+  QueryEventExportResponse,
+  QueryEventListParams,
+  QueryEventListResponse,
+  QueryEventOccurrenceParams,
+  QueryEventOccurrenceResponse,
+  QueryEventPropertySuggestionsParams,
+  QueryEventPropertySuggestionsResponse,
+  QueryEvents,
+} from './resources/query-events';
+import {
+  QueryVisitorCapabilitiesResponse,
+  QueryVisitorListParams,
+  QueryVisitorListResponse,
+  QueryVisitorProfileSearchParams,
+  QueryVisitorProfileSearchResponse,
+  QueryVisitors,
+} from './resources/query-visitors';
+import {
   ReplaySettingCreateParams,
   ReplaySettingCreateResponse,
   ReplaySettingDeleteResponse,
@@ -1408,6 +1430,8 @@ export class OursPrivacyPlatform {
   dashboards: API.Dashboards = new API.Dashboards(this);
   reportBranding: API.ReportBranding = new API.ReportBranding(this);
   attributionReports: API.AttributionReports = new API.AttributionReports(this);
+  queryEvents: API.QueryEvents = new API.QueryEvents(this);
+  queryVisitors: API.QueryVisitors = new API.QueryVisitors(this);
   insights: API.Insights = new API.Insights(this);
   journeyFlows: API.JourneyFlows = new API.JourneyFlows(this);
   testEvents: API.TestEvents = new API.TestEvents(this);
@@ -1453,6 +1477,8 @@ OursPrivacyPlatform.Analytics = Analytics;
 OursPrivacyPlatform.Dashboards = Dashboards;
 OursPrivacyPlatform.ReportBranding = ReportBranding;
 OursPrivacyPlatform.AttributionReports = AttributionReports;
+OursPrivacyPlatform.QueryEvents = QueryEvents;
+OursPrivacyPlatform.QueryVisitors = QueryVisitors;
 OursPrivacyPlatform.Insights = Insights;
 OursPrivacyPlatform.JourneyFlows = JourneyFlows;
 OursPrivacyPlatform.TestEvents = TestEvents;
@@ -2050,6 +2076,30 @@ export declare namespace OursPrivacyPlatform {
     type AttributionReportPreviewParams as AttributionReportPreviewParams,
     type AttributionReportVisitorsParams as AttributionReportVisitorsParams,
     type AttributionReportInsightsParams as AttributionReportInsightsParams,
+  };
+
+  export {
+    QueryEvents as QueryEvents,
+    type QueryEventListResponse as QueryEventListResponse,
+    type QueryEventCapabilitiesResponse as QueryEventCapabilitiesResponse,
+    type QueryEventCatalogResponse as QueryEventCatalogResponse,
+    type QueryEventPropertySuggestionsResponse as QueryEventPropertySuggestionsResponse,
+    type QueryEventEventNamesResponse as QueryEventEventNamesResponse,
+    type QueryEventOccurrenceResponse as QueryEventOccurrenceResponse,
+    type QueryEventExportResponse as QueryEventExportResponse,
+    type QueryEventListParams as QueryEventListParams,
+    type QueryEventPropertySuggestionsParams as QueryEventPropertySuggestionsParams,
+    type QueryEventOccurrenceParams as QueryEventOccurrenceParams,
+    type QueryEventExportParams as QueryEventExportParams,
+  };
+
+  export {
+    QueryVisitors as QueryVisitors,
+    type QueryVisitorListResponse as QueryVisitorListResponse,
+    type QueryVisitorCapabilitiesResponse as QueryVisitorCapabilitiesResponse,
+    type QueryVisitorProfileSearchResponse as QueryVisitorProfileSearchResponse,
+    type QueryVisitorListParams as QueryVisitorListParams,
+    type QueryVisitorProfileSearchParams as QueryVisitorProfileSearchParams,
   };
 
   export {
