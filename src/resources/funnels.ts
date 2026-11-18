@@ -72,7 +72,7 @@ export class Funnels extends APIResource {
    * data at request time; ad hoc filter, saved-scope, and web-source overrides are
    * not accepted. Observation completeness is null when the source coverage
    * watermark is unavailable. `to` must be on or after `from`, and the window may
-   * span at most 91 days including both endpoints. Requires API-key scope or current
+   * span at most 93 days including both endpoints. Requires API-key scope or current
    * OAuth user permission: web-analytics:view
    */
   results(
@@ -1787,7 +1787,7 @@ export namespace FunnelUpdateParams {
 export interface FunnelResultsParams {
   /**
    * Inclusive lower bound of the analysis window, as a UTC calendar day in
-   * `YYYY-MM-DD` format. The window may span at most 91 days including both
+   * `YYYY-MM-DD` format. The window may span at most 93 days including both
    * endpoints.
    */
   from: string;
@@ -1795,7 +1795,7 @@ export interface FunnelResultsParams {
   /**
    * Inclusive upper bound of the analysis window, as a UTC calendar day in
    * `YYYY-MM-DD` format. Must be on or after `from`, and the window may span at most
-   * 91 days including both endpoints.
+   * 93 days including both endpoints.
    */
   to: string;
 

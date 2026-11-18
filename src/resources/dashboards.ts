@@ -173,7 +173,7 @@ export interface DashboardListResponse {
 
   /**
    * Complete UTC date context. Replaces the saved context on PATCH. Funnel and
-   * Journey tiles support up to 91 inclusive days; Insights retain their native
+   * Journey tiles support up to 93 inclusive days; Insights retain their native
    * range limit.
    */
   reportContext: DashboardListResponse.ReportContext;
@@ -216,7 +216,7 @@ export interface DashboardListResponse {
 export namespace DashboardListResponse {
   /**
    * Complete UTC date context. Replaces the saved context on PATCH. Funnel and
-   * Journey tiles support up to 91 inclusive days; Insights retain their native
+   * Journey tiles support up to 93 inclusive days; Insights retain their native
    * range limit.
    */
   export interface ReportContext {
@@ -531,7 +531,7 @@ export interface DashboardCreateResponse {
 
   /**
    * Complete UTC date context. Replaces the saved context on PATCH. Funnel and
-   * Journey tiles support up to 91 inclusive days; Insights retain their native
+   * Journey tiles support up to 93 inclusive days; Insights retain their native
    * range limit.
    */
   reportContext: DashboardCreateResponse.ReportContext;
@@ -574,7 +574,7 @@ export interface DashboardCreateResponse {
 export namespace DashboardCreateResponse {
   /**
    * Complete UTC date context. Replaces the saved context on PATCH. Funnel and
-   * Journey tiles support up to 91 inclusive days; Insights retain their native
+   * Journey tiles support up to 93 inclusive days; Insights retain their native
    * range limit.
    */
   export interface ReportContext {
@@ -889,7 +889,7 @@ export interface DashboardRetrieveResponse {
 
   /**
    * Complete UTC date context. Replaces the saved context on PATCH. Funnel and
-   * Journey tiles support up to 91 inclusive days; Insights retain their native
+   * Journey tiles support up to 93 inclusive days; Insights retain their native
    * range limit.
    */
   reportContext: DashboardRetrieveResponse.ReportContext;
@@ -932,7 +932,7 @@ export interface DashboardRetrieveResponse {
 export namespace DashboardRetrieveResponse {
   /**
    * Complete UTC date context. Replaces the saved context on PATCH. Funnel and
-   * Journey tiles support up to 91 inclusive days; Insights retain their native
+   * Journey tiles support up to 93 inclusive days; Insights retain their native
    * range limit.
    */
   export interface ReportContext {
@@ -1247,7 +1247,7 @@ export interface DashboardUpdateResponse {
 
   /**
    * Complete UTC date context. Replaces the saved context on PATCH. Funnel and
-   * Journey tiles support up to 91 inclusive days; Insights retain their native
+   * Journey tiles support up to 93 inclusive days; Insights retain their native
    * range limit.
    */
   reportContext: DashboardUpdateResponse.ReportContext;
@@ -1290,7 +1290,7 @@ export interface DashboardUpdateResponse {
 export namespace DashboardUpdateResponse {
   /**
    * Complete UTC date context. Replaces the saved context on PATCH. Funnel and
-   * Journey tiles support up to 91 inclusive days; Insights retain their native
+   * Journey tiles support up to 93 inclusive days; Insights retain their native
    * range limit.
    */
   export interface ReportContext {
@@ -1613,7 +1613,7 @@ export interface DashboardDuplicateResponse {
 
   /**
    * Complete UTC date context. Replaces the saved context on PATCH. Funnel and
-   * Journey tiles support up to 91 inclusive days; Insights retain their native
+   * Journey tiles support up to 93 inclusive days; Insights retain their native
    * range limit.
    */
   reportContext: DashboardDuplicateResponse.ReportContext;
@@ -1656,7 +1656,7 @@ export interface DashboardDuplicateResponse {
 export namespace DashboardDuplicateResponse {
   /**
    * Complete UTC date context. Replaces the saved context on PATCH. Funnel and
-   * Journey tiles support up to 91 inclusive days; Insights retain their native
+   * Journey tiles support up to 93 inclusive days; Insights retain their native
    * range limit.
    */
   export interface ReportContext {
@@ -1988,9 +1988,10 @@ export namespace DashboardPreviewResponse {
       createdByUserId: string;
 
       /**
-       * Version 1 Insight definition: one to ten metrics and a day, week, or month
-       * interval. Sum and average require a numeric event property. Filters use the
-       * analytics property catalog.
+       * Version 1 Insight definition: one to ten metrics and an hour, day, week, or
+       * month interval (up to 366 buckets). Sum and average require a numeric event
+       * property. Metrics select eventNames or allEvents. includeBots defaults to false.
+       * Filters use the analytics property catalog.
        */
       definition: Report.Definition;
 
@@ -2025,12 +2026,13 @@ export namespace DashboardPreviewResponse {
 
     export namespace Report {
       /**
-       * Version 1 Insight definition: one to ten metrics and a day, week, or month
-       * interval. Sum and average require a numeric event property. Filters use the
-       * analytics property catalog.
+       * Version 1 Insight definition: one to ten metrics and an hour, day, week, or
+       * month interval (up to 366 buckets). Sum and average require a numeric event
+       * property. Metrics select eventNames or allEvents. includeBots defaults to false.
+       * Filters use the analytics property catalog.
        */
       export interface Definition {
-        interval: 'day' | 'week' | 'month';
+        interval: 'hour' | 'day' | 'week' | 'month';
 
         kind: 'insight';
 
@@ -2039,6 +2041,11 @@ export namespace DashboardPreviewResponse {
         version: 1;
 
         filter?: Definition.Filter;
+
+        /**
+         * Include bot events and sessions; test events remain excluded. Defaults to false.
+         */
+        includeBots?: boolean;
       }
 
       export namespace Definition {
@@ -2054,6 +2061,11 @@ export namespace DashboardPreviewResponse {
           eventNames: Array<string>;
 
           name: string;
+
+          /**
+           * Count every event name. Requires an empty eventNames array.
+           */
+          allEvents?: boolean;
 
           filter?: Metric.Filter;
 
@@ -2279,7 +2291,7 @@ export namespace DashboardPreviewResponse {
 
         from: string;
 
-        interval: 'day' | 'week' | 'month';
+        interval: 'hour' | 'day' | 'week' | 'month';
 
         sourceCompleteness: 'unknown';
 
@@ -4963,9 +4975,10 @@ export namespace DashboardResultsResponse {
       createdByUserId: string;
 
       /**
-       * Version 1 Insight definition: one to ten metrics and a day, week, or month
-       * interval. Sum and average require a numeric event property. Filters use the
-       * analytics property catalog.
+       * Version 1 Insight definition: one to ten metrics and an hour, day, week, or
+       * month interval (up to 366 buckets). Sum and average require a numeric event
+       * property. Metrics select eventNames or allEvents. includeBots defaults to false.
+       * Filters use the analytics property catalog.
        */
       definition: Report.Definition;
 
@@ -5000,12 +5013,13 @@ export namespace DashboardResultsResponse {
 
     export namespace Report {
       /**
-       * Version 1 Insight definition: one to ten metrics and a day, week, or month
-       * interval. Sum and average require a numeric event property. Filters use the
-       * analytics property catalog.
+       * Version 1 Insight definition: one to ten metrics and an hour, day, week, or
+       * month interval (up to 366 buckets). Sum and average require a numeric event
+       * property. Metrics select eventNames or allEvents. includeBots defaults to false.
+       * Filters use the analytics property catalog.
        */
       export interface Definition {
-        interval: 'day' | 'week' | 'month';
+        interval: 'hour' | 'day' | 'week' | 'month';
 
         kind: 'insight';
 
@@ -5014,6 +5028,11 @@ export namespace DashboardResultsResponse {
         version: 1;
 
         filter?: Definition.Filter;
+
+        /**
+         * Include bot events and sessions; test events remain excluded. Defaults to false.
+         */
+        includeBots?: boolean;
       }
 
       export namespace Definition {
@@ -5029,6 +5048,11 @@ export namespace DashboardResultsResponse {
           eventNames: Array<string>;
 
           name: string;
+
+          /**
+           * Count every event name. Requires an empty eventNames array.
+           */
+          allEvents?: boolean;
 
           filter?: Metric.Filter;
 
@@ -5254,7 +5278,7 @@ export namespace DashboardResultsResponse {
 
         from: string;
 
-        interval: 'day' | 'week' | 'month';
+        interval: 'hour' | 'day' | 'week' | 'month';
 
         sourceCompleteness: 'unknown';
 
@@ -8052,7 +8076,7 @@ export interface DashboardCreateParams {
 
   /**
    * Complete UTC date context. Replaces the saved context on PATCH. Funnel and
-   * Journey tiles support up to 91 inclusive days; Insights retain their native
+   * Journey tiles support up to 93 inclusive days; Insights retain their native
    * range limit.
    */
   reportContext: DashboardCreateParams.ReportContext;
@@ -8089,7 +8113,7 @@ export interface DashboardCreateParams {
 export namespace DashboardCreateParams {
   /**
    * Complete UTC date context. Replaces the saved context on PATCH. Funnel and
-   * Journey tiles support up to 91 inclusive days; Insights retain their native
+   * Journey tiles support up to 93 inclusive days; Insights retain their native
    * range limit.
    */
   export interface ReportContext {
@@ -8415,7 +8439,7 @@ export interface DashboardUpdateParams {
 
   /**
    * Complete UTC date context. Replaces the saved context on PATCH. Funnel and
-   * Journey tiles support up to 91 inclusive days; Insights retain their native
+   * Journey tiles support up to 93 inclusive days; Insights retain their native
    * range limit.
    */
   reportContext?: DashboardUpdateParams.ReportContext;
@@ -8586,7 +8610,7 @@ export namespace DashboardUpdateParams {
 
   /**
    * Complete UTC date context. Replaces the saved context on PATCH. Funnel and
-   * Journey tiles support up to 91 inclusive days; Insights retain their native
+   * Journey tiles support up to 93 inclusive days; Insights retain their native
    * range limit.
    */
   export interface ReportContext {
